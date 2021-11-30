@@ -1,0 +1,70 @@
+
+# @urlPrefix = http://localhost:9000
+@urlPrefix = https://bold-resonance-3890.us-east1.akkaserverless.app
+@customerId = customer-1
+@cartId = cart-1
+@productId = product-1
+@productName = product name 1
+@quantity = 1
+# @checkedOutUtc = 2020-01-01T00:00:00.000-0500
+@checkedOutUtc =
+# @shippedUtc = 2020-01-01T00:00:00.000-0500
+@shippedUtc = 2021-11-30T00:00:00.000-0500
+# @deliveredUtc = 2020-01-01T00:00:00.000-0500
+@deliveredUtc =
+# @deletedUtc = 2020-01-01T00:00:00.000-0500
+@deletedUtc =
+
+### io.shopping.cart.ShoppingCartService.AddItem
+
+curl -XPOST -H "Content-Type: application/json" -d '{
+  "customer_id":"{{customerId}}",
+  "product_id":"{{productId}}",
+  "product_name":"{{productName}}",
+  "quantity":{{quantity}}
+  }' {{urlPrefix}}/cart/{{cartId}}/items/add
+
+### io.shopping.cart.ShoppingCartService.ChangeItem
+
+curl -XPUT -H "Content-Type: application/json" -d '{
+  "quantity":{{quantity}}
+  }' {{urlPrefix}}/cart/{{cartId}}/items/{{productId}}/change
+
+### io.shopping.cart.ShoppingCartService.RemoveItem
+
+curl -XDELETE -H "Content-Type: application/json"
+  {{urlPrefix}}/cart/{{cartId}}/items/{{productId}}/remove
+
+### io.shopping.cart.ShoppingCartService.CheckoutCart
+
+curl -XPUT -H "Content-Type: application/json"
+  {{urlPrefix}}/cart/{{cartId}}/checkout
+
+### io.shopping.cart.ShoppingCartService.ShippedCart
+
+curl -XPUT -H "Content-Type: application/json"
+  {{urlPrefix}}/cart/{{cartId}}/shipped
+
+### io.shopping.cart.ShoppingCartService.DeliveredCart
+
+curl -XPUT -H "Content-Type: application/json"
+  {{urlPrefix}}/cart/{{cartId}}/delivered
+
+### io.shopping.cart.ShoppingCartService.DeleteCart
+
+curl -XDELETE -H "Content-Type: application/json"
+  {{urlPrefix}}/cart/{{cartId}}/delete
+
+### io.shopping.cart.ShoppingCartService.SetDates
+
+curl -XPUT -H "Content-Type: application/json" -d '{
+  "checked_out_utc":"{{checkedOutUtc}}",
+  "shipped_utc":"{{shippedUtc}}",
+  "delivered_utc":"{{deliveredUtc}}",
+  "deleted_utc":"{{deletedUtc}}"
+  }' {{urlPrefix}}/cart/{{cartId}}/dates
+
+### io.shopping.cart.ShoppingCartService.GetCart
+
+curl -XGET -H "Content-Type: application/json"
+  {{urlPrefix}}/cart/{{cartId}}

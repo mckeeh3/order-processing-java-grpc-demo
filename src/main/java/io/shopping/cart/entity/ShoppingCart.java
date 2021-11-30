@@ -16,9 +16,6 @@ import com.google.protobuf.Empty;
 import com.google.protobuf.Timestamp;
 
 import io.shopping.cart.CartApi;
-import io.shopping.cart.CartApi.SetShoppingCartDates;
-import io.shopping.cart.entity.CartEntity.CartState;
-import io.shopping.cart.entity.CartEntity.DatesChanged;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
 //
@@ -27,7 +24,7 @@ import io.shopping.cart.entity.CartEntity.DatesChanged;
 
 /** An event sourced entity. */
 public class ShoppingCart extends AbstractShoppingCart {
-  private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+  private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 
   public ShoppingCart(EventSourcedEntityContext context) {
   }
@@ -39,47 +36,47 @@ public class ShoppingCart extends AbstractShoppingCart {
 
   @Override
   public Effect<Empty> addItem(CartEntity.CartState state, CartApi.AddLineItem command) {
-    return reject(state, command).orElse(handle(state, command));
+    return reject(state, command).orElseGet(() -> handle(state, command));
   }
 
   @Override
   public Effect<Empty> changeItem(CartEntity.CartState state, CartApi.ChangeLineItem command) {
-    return reject(state, command).orElse(handle(state, command));
+    return reject(state, command).orElseGet(() -> handle(state, command));
   }
 
   @Override
   public Effect<Empty> removeItem(CartEntity.CartState state, CartApi.RemoveLineItem command) {
-    return reject(state, command).orElse(handle(state, command));
+    return reject(state, command).orElseGet(() -> handle(state, command));
   }
 
   @Override
   public Effect<Empty> checkoutCart(CartEntity.CartState state, CartApi.CheckoutShoppingCart command) {
-    return reject(state, command).orElse(handle(state, command));
+    return reject(state, command).orElseGet(() -> handle(state, command));
   }
 
   @Override
   public Effect<Empty> shippedCart(CartEntity.CartState state, CartApi.ShippedShoppingCart command) {
-    return reject(state, command).orElse(handle(state, command));
+    return reject(state, command).orElseGet(() -> handle(state, command));
   }
 
   @Override
   public Effect<Empty> deliveredCart(CartEntity.CartState state, CartApi.DeliveredShoppingCart command) {
-    return reject(state, command).orElse(handle(state, command));
+    return reject(state, command).orElseGet(() -> handle(state, command));
   }
 
   @Override
   public Effect<Empty> deleteCart(CartEntity.CartState state, CartApi.DeleteShoppingCart command) {
-    return reject(state, command).orElse(handle(state, command));
+    return reject(state, command).orElseGet(() -> handle(state, command));
   }
 
   @Override
-  public Effect<CartApi.ShoppingCart> setDates(CartState state, SetShoppingCartDates command) {
-    return reject(state, command).orElse(handle(state, command));
+  public Effect<CartApi.ShoppingCart> setDates(CartEntity.CartState state, CartApi.SetShoppingCartDates command) {
+    return reject(state, command).orElseGet(() -> handle(state, command));
   }
 
   @Override
   public Effect<CartApi.ShoppingCart> getCart(CartEntity.CartState state, CartApi.GetShoppingCart command) {
-    return reject(state, command).orElse(handle(state, command));
+    return reject(state, command).orElseGet(() -> handle(state, command));
   }
 
   @Override
@@ -249,9 +246,24 @@ public class ShoppingCart extends AbstractShoppingCart {
     return Optional.empty();
   }
 
-  private Optional<Effect<CartApi.ShoppingCart>> reject(CartState state, SetShoppingCartDates command) {
-    // no validation required, zero input timestamps do not change the state
-    return Optional.empty();
+  private Optional<Effect<CartApi.ShoppingCart>> reject(CartEntity.CartState state, CartApi.SetShoppingCartDates command) {
+    return reject(command.getCheckedOutUtc(), "checked out")
+        .or(() -> reject(command.getShippedUtc(), "shipped"))
+        .or(() -> reject(command.getDeliveredUtc(), "delivered"))
+        .or(() -> reject(command.getDeletedUtc(), "deleted"))
+        .or(() -> Optional.empty());
+  }
+
+  private Optional<Effect<CartApi.ShoppingCart>> reject(String utc, String name) {
+    if (utc.trim().isEmpty()) {
+      return Optional.empty();
+    }
+    try {
+      dateFormat.parse(utc);
+      return Optional.empty();
+    } catch (ParseException e) {
+      return Optional.of(effects().error(String.format("Invalid %s date: %s", name, e.getMessage())));
+    }
   }
 
   private Optional<Effect<CartApi.ShoppingCart>> reject(CartEntity.CartState state, CartApi.GetShoppingCart command) {
@@ -303,7 +315,7 @@ public class ShoppingCart extends AbstractShoppingCart {
         .thenReply(newState -> Empty.getDefaultInstance());
   }
 
-  private Effect<CartApi.ShoppingCart> handle(CartState state, SetShoppingCartDates command) {
+  private Effect<CartApi.ShoppingCart> handle(CartEntity.CartState state, CartApi.SetShoppingCartDates command) {
     return effects()
         .emitEvent(event(state, command))
         .thenReply(newState -> toApi(newState));
@@ -376,7 +388,7 @@ public class ShoppingCart extends AbstractShoppingCart {
         .build();
   }
 
-  private static CartEntity.DatesChanged event(CartState state, SetShoppingCartDates command) {
+  private static CartEntity.DatesChanged event(CartEntity.CartState state, CartApi.SetShoppingCartDates command) {
     return CartEntity.DatesChanged
         .newBuilder()
         .setCartId(state.getCartId())
@@ -523,7 +535,7 @@ public class ShoppingCart extends AbstractShoppingCart {
       return this;
     }
 
-    Cart handle(DatesChanged event) {
+    Cart handle(CartEntity.DatesChanged event) {
       state = state
           .toBuilder()
           .setCheckedOutUtc(fromStateOrEvent(state.getCheckedOutUtc(), event.getCheckedOutUtc()))
