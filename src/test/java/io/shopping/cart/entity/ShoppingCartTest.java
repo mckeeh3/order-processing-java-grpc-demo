@@ -12,9 +12,7 @@ import com.google.protobuf.Timestamp;
 
 import org.junit.Test;
 
-import io.shopping.cart.CartApi;
-import io.shopping.cart.CartApi.SetShoppingCartDates;
-import io.shopping.cart.entity.CartEntity.CartState;
+import io.shopping.cart.api.CartApi;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
 //
@@ -123,7 +121,7 @@ public class ShoppingCartTest {
     assertEquals("handled", resp);
   }
 
-  private String handle(CartState state, SetShoppingCartDates command) {
+  private String handle(CartEntity.CartState state, CartApi.SetShoppingCartDates command) {
     return "handled";
   }
 

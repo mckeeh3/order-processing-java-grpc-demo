@@ -15,7 +15,7 @@ import com.akkaserverless.javasdk.eventsourcedentity.EventSourcedEntityContext;
 import com.google.protobuf.Empty;
 import com.google.protobuf.Timestamp;
 
-import io.shopping.cart.CartApi;
+import io.shopping.cart.api.CartApi;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
 //
