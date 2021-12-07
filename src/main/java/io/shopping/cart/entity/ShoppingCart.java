@@ -16,6 +16,7 @@ import com.google.protobuf.Empty;
 import com.google.protobuf.Timestamp;
 
 import io.shopping.cart.api.CartApi;
+import io.shopping.cart.entity.CartEntity.LineItem;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
 //
@@ -430,7 +431,7 @@ public class ShoppingCart extends AbstractShoppingCart {
     return dateFormat.format(new Date(timestamp.getSeconds() * 1000 + timestamp.getNanos() / 1000000));
   }
 
-  static Timestamp toTimeStamp(String utc) {
+  private static Timestamp toTimeStamp(String utc) {
     if (utc.isEmpty()) {
       return Timestamp.newBuilder().build();
     }
@@ -459,18 +460,9 @@ public class ShoppingCart extends AbstractShoppingCart {
     }
 
     Cart handle(CartEntity.ItemAdded event) {
-      lineItems.computeIfPresent(event.getLineItem().getProductId(),
-          (productId, lineItem) -> lineItem
-              .toBuilder()
-              .setQuantity(lineItem.getQuantity() + event.getLineItem().getQuantity())
-              .build());
-      lineItems.computeIfAbsent(event.getLineItem().getProductId(),
-          productId -> CartEntity.LineItem
-              .newBuilder()
-              .setProductId(event.getLineItem().getProductId())
-              .setProductName(event.getLineItem().getProductName())
-              .setQuantity(event.getLineItem().getQuantity())
-              .build());
+      lineItems.computeIfPresent(event.getLineItem().getProductId(), (productId, lineItem) -> incrementQuantity(event, lineItem));
+      lineItems.computeIfAbsent(event.getLineItem().getProductId(), productId -> toLineItem(event));
+
       state = state.toBuilder()
           .setCartId(event.getCartId())
           .setCustomerId(event.getCustomerId())
@@ -480,12 +472,25 @@ public class ShoppingCart extends AbstractShoppingCart {
       return this;
     }
 
+    static LineItem incrementQuantity(CartEntity.ItemAdded event, LineItem lineItem) {
+      return lineItem
+          .toBuilder()
+          .setQuantity(lineItem.getQuantity() + event.getLineItem().getQuantity())
+          .build();
+    }
+
+    static LineItem toLineItem(CartEntity.ItemAdded event) {
+      return CartEntity.LineItem
+          .newBuilder()
+          .setProductId(event.getLineItem().getProductId())
+          .setProductName(event.getLineItem().getProductName())
+          .setQuantity(event.getLineItem().getQuantity())
+          .build();
+    }
+
     Cart handle(CartEntity.ItemChanged event) {
-      lineItems.computeIfPresent(event.getProductId(),
-          (productId, lineItem) -> lineItem
-              .toBuilder()
-              .setQuantity(event.getQuantity())
-              .build());
+      lineItems.computeIfPresent(event.getProductId(), (productId, lineItem) -> changeQuantity(event, lineItem));
+
       state = state.toBuilder()
           .clearLineItems()
           .addAllLineItems(lineItems.values())
@@ -493,8 +498,16 @@ public class ShoppingCart extends AbstractShoppingCart {
       return this;
     }
 
+    static LineItem changeQuantity(CartEntity.ItemChanged event, LineItem lineItem) {
+      return lineItem
+          .toBuilder()
+          .setQuantity(event.getQuantity())
+          .build();
+    }
+
     Cart handle(CartEntity.ItemRemoved event) {
       lineItems.remove(event.getProductId());
+
       state = state
           .toBuilder()
           .clearLineItems()
