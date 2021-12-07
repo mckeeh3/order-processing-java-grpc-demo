@@ -6,14 +6,16 @@
 @productId = product-1
 @productName = product name 1
 @quantity = 1
-# @checkedOutUtc = 2020-01-01T00:00:00.000-0500
-@checkedOutUtc =
-# @shippedUtc = 2020-01-01T00:00:00.000-0500
-@shippedUtc = 2021-11-30T00:00:00.000-0500
-# @deliveredUtc = 2020-01-01T00:00:00.000-0500
-@deliveredUtc =
+@checkedOutUtc = 2020-01-01T00:00:00.000-0500
+# @checkedOutUtc =
+@shippedUtc = 2020-01-01T00:00:00.000-0500
+# @shippedUtc =
+@deliveredUtc = 2020-01-01T00:00:00.000-0500
+# @deliveredUtc =
 # @deletedUtc = 2020-01-01T00:00:00.000-0500
 @deletedUtc =
+@from_date = 2021-01-01T00:00:00.000-0500
+@to_date = 2022-01-01T00:00:00.000-0500
 
 ### io.shopping.cart.ShoppingCartService.AddItem
 
@@ -68,3 +70,8 @@ curl -XPUT -H "Content-Type: application/json" -d '{
 
 curl -XGET -H "Content-Type: application/json"
   {{urlPrefix}}/cart/{{cartId}}
+
+### io.shopping.cart.view.CustomerView.GetCustomerOrders
+
+curl -XGET -H "Content-Type: application/json"
+  '{{urlPrefix}}/customer/orders?customer_id={{customerId}}&from_date={{from_date}}&to_date={{to_date}}'

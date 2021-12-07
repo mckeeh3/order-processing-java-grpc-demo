@@ -208,6 +208,9 @@ public class ShoppingCart extends AbstractShoppingCart {
     if (state.getDeletedUtc().getSeconds() > 0) {
       return Optional.of(effects().error("Shopping cart is deleted"));
     }
+    if (state.getCheckedOutUtc().getSeconds() > 0) {
+      return Optional.of(effects().error("Shopping cart already checked out"));
+    }
     return Optional.empty();
   }
 
@@ -217,6 +220,9 @@ public class ShoppingCart extends AbstractShoppingCart {
     }
     if (state.getCheckedOutUtc().getSeconds() == 0) {
       return Optional.of(effects().error("Shopping cart is not checked out"));
+    }
+    if (state.getShippedUtc().getSeconds() > 0) {
+      return Optional.of(effects().error("Shopping cart already shipped"));
     }
     return Optional.empty();
   }
@@ -231,6 +237,9 @@ public class ShoppingCart extends AbstractShoppingCart {
     if (state.getShippedUtc().getSeconds() == 0) {
       return Optional.of(effects().error("Shopping cart is not shipped"));
     }
+    if (state.getDeliveredUtc().getSeconds() > 0) {
+      return Optional.of(effects().error("Shopping cart already delivered"));
+    }
     return Optional.empty();
   }
 
@@ -243,6 +252,9 @@ public class ShoppingCart extends AbstractShoppingCart {
     }
     if (state.getCheckedOutUtc().getSeconds() > 0) {
       return Optional.of(effects().error("Cannot delete checked out order"));
+    }
+    if (state.getDeletedUtc().getSeconds() > 0) {
+      return Optional.of(effects().error("Shopping cart already deleted"));
     }
     return Optional.empty();
   }

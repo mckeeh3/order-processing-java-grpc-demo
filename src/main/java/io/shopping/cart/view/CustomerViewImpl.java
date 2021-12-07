@@ -29,7 +29,7 @@ public class CustomerViewImpl extends AbstractCustomerView {
 
   @Override
   public CartApi.ShoppingCart emptyState() {
-    throw new UnsupportedOperationException("Not implemented yet, replace with your empty view state");
+    return CartApi.ShoppingCart.getDefaultInstance();
   }
 
   @Override
