@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+package io.shopping.cart.view;
+
+import "google/api/annotations.proto";
+import "google/protobuf/any.proto";
+import "akkaserverless/annotations.proto";
+import "io/shopping/cart/entity/shopping_cart_entity.proto";
+
+option java_outer_classname = "PurchasedProductsView";
+
+service ProductsView {
+  option (akkaserverless.service) = {
+    type: SERVICE_TYPE_VIEW
+  };
+
+  rpc GetPurchasedProducts(GetPurchasedProductsRequest) returns (GetPurchasedProductsResponse) {
+    option (akkaserverless.method).view.query = {
+      query: "SELECT * AS purchased_products FROM purchased_products WHERE product_id = :product_id AND purchased_utc >= :from_date AND purchased_utc <= :to_date"
+    };
+    option (google.api.http) = {
+      get: "/purchased-products/{product_id}"
+    };
+  }
+
+  rpc ProcessItemCheckedOut(entity.ItemCheckedOut) returns (PurchasedProduct) {
+    option (akkaserverless.method).eventing.in = {
+      event_sourced_entity: "shopping_cart"
+    };
+    option (akkaserverless.method).view.update = {
+      table: "purchased_products"
+      transform_updates: true
+    };
+  }
+
+  rpc IgnoreOtherEvents(google.protobuf.Any) returns (PurchasedProduct) {
+    option (akkaserverless.method).eventing.in = {
+      event_sourced_entity: "shopping_cart"
+    };
+    option (akkaserverless.method).view.update = {
+      table: "purchased_products"
+      transform_updates: true
+    };
+  }
+}
+
+message GetPurchasedProductsRequest {
+  string product_id = 1;
+  string from_date = 2;
+  string to_date = 3;
+}
+
+message GetPurchasedProductsResponse {
+  repeated PurchasedProduct purchased_products = 1;
+}
+
+message PurchasedProduct {
+  string customer_id = 1;
+  string cart_id = 2;
+  string product_id = 3;
+  string product_name = 4;
+  int32 quantity = 5;
+  string purchased_utc = 6;
+}

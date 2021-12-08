@@ -2,7 +2,9 @@ package io.shopping.cart;
 
 import com.akkaserverless.javasdk.AkkaServerless;
 import io.shopping.cart.entity.ShoppingCart;
-import io.shopping.cart.view.CustomerViewImpl;
+import io.shopping.cart.view.CustomerCartViewByDateImpl;
+import io.shopping.cart.view.CustomerCartViewImpl;
+import io.shopping.cart.view.ProductsViewImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +24,9 @@ public final class Main {
     // `new AkkaServerless()` instance.
     return AkkaServerlessFactory.withComponents(
       ShoppingCart::new,
-      CustomerViewImpl::new);
+      CustomerCartViewImpl::new,
+      CustomerCartViewByDateImpl::new,
+      ProductsViewImpl::new);
   }
 
   public static void main(String[] args) throws Exception {

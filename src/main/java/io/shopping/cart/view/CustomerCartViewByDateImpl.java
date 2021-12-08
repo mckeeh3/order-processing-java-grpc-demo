@@ -4,7 +4,6 @@ import com.akkaserverless.javasdk.view.ViewContext;
 import com.google.protobuf.Timestamp;
 
 import io.shopping.cart.api.CartApi;
-import io.shopping.cart.api.CartApi.LineItem;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -14,17 +13,16 @@ import java.util.Map;
 
 import com.akkaserverless.javasdk.view.View;
 import io.shopping.cart.entity.CartEntity;
-import io.shopping.cart.entity.CartEntity.ItemChanged;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
 //
 // As long as this file exists it will not be overwritten: you can maintain it yourself,
 // or delete it so it is regenerated as needed.
 
-public class CustomerViewImpl extends AbstractCustomerView {
+public class CustomerCartViewByDateImpl extends AbstractCustomerCartViewByDateView {
   private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 
-  public CustomerViewImpl(ViewContext context) {
+  public CustomerCartViewByDateImpl(ViewContext context) {
   }
 
   @Override
@@ -63,7 +61,7 @@ public class CustomerViewImpl extends AbstractCustomerView {
   }
 
   @Override
-  public View.UpdateEffect<CartApi.ShoppingCart> processCartCheckedOut(CartApi.ShoppingCart state, CartEntity.CartCheckedOut event) {
+  public View.UpdateEffect<CartApi.ShoppingCart> processItemCheckedOut(CartApi.ShoppingCart state, CartEntity.ItemCheckedOut event) {
     return effects()
         .updateState(
             ShoppingCart
@@ -168,7 +166,7 @@ public class CustomerViewImpl extends AbstractCustomerView {
       return this;
     }
 
-    private CartApi.LineItem changeQuantity(ItemChanged event, LineItem lineItem) {
+    private CartApi.LineItem changeQuantity(CartEntity.ItemChanged event, CartApi.LineItem lineItem) {
       return lineItem
           .toBuilder()
           .setQuantity(event.getQuantity())
@@ -185,7 +183,7 @@ public class CustomerViewImpl extends AbstractCustomerView {
       return this;
     }
 
-    public ShoppingCart handle(CartEntity.CartCheckedOut event) {
+    public ShoppingCart handle(CartEntity.ItemCheckedOut event) {
       state = state.toBuilder()
           .setCheckedOutUtc(toUtc(event.getCheckedOutUtc()))
           .build();

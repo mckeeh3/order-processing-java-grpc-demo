@@ -4,7 +4,7 @@
 
   <groupId>io.shopping.cart</groupId>
   <artifactId>shopping-cart-esaas-with-views-java</artifactId>
-  <version>v5</version>
+  <version>v1</version>
   <packaging>jar</packaging>
 
   <name>shopping-cart-esaas-with-views-java</name>

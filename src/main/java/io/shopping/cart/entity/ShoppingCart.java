@@ -16,7 +16,6 @@ import com.google.protobuf.Empty;
 import com.google.protobuf.Timestamp;
 
 import io.shopping.cart.api.CartApi;
-import io.shopping.cart.entity.CartEntity.LineItem;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
 //
@@ -105,7 +104,7 @@ public class ShoppingCart extends AbstractShoppingCart {
   }
 
   @Override
-  public CartEntity.CartState cartCheckedOut(CartEntity.CartState state, CartEntity.CartCheckedOut event) {
+  public CartEntity.CartState itemCheckedOut(CartEntity.CartState state, CartEntity.ItemCheckedOut event) {
     return Cart
         .fromState(state)
         .handle(event)
@@ -306,7 +305,7 @@ public class ShoppingCart extends AbstractShoppingCart {
 
   private Effect<Empty> handle(CartEntity.CartState state, CartApi.CheckoutShoppingCart command) {
     return effects()
-        .emitEvent(event(state, command))
+        .emitEvents(event(state, command))
         .thenReply(newState -> Empty.getDefaultInstance());
   }
 
@@ -369,12 +368,19 @@ public class ShoppingCart extends AbstractShoppingCart {
         .build();
   }
 
-  private static CartEntity.CartCheckedOut event(CartEntity.CartState state, CartApi.CheckoutShoppingCart command) {
-    return CartEntity.CartCheckedOut
-        .newBuilder()
-        .setCartId(state.getCartId())
-        .setCheckedOutUtc(Cart.timestampNow())
-        .build();
+  private static List<CartEntity.ItemCheckedOut> event(CartEntity.CartState state, CartApi.CheckoutShoppingCart command) {
+    var timeNow = Cart.timestampNow();
+    var items = state.getLineItemsList()
+        .stream()
+        .map(lineItem -> CartEntity.ItemCheckedOut
+            .newBuilder()
+            .setCartId(state.getCartId())
+            .setCustomerId(state.getCustomerId())
+            .setLineItem(lineItem)
+            .setCheckedOutUtc(timeNow)
+            .build())
+        .collect(Collectors.toList());
+    return items;
   }
 
   private static CartEntity.CartShipped event(CartEntity.CartState state, CartApi.ShippedShoppingCart command) {
@@ -484,14 +490,14 @@ public class ShoppingCart extends AbstractShoppingCart {
       return this;
     }
 
-    static LineItem incrementQuantity(CartEntity.ItemAdded event, LineItem lineItem) {
+    static CartEntity.LineItem incrementQuantity(CartEntity.ItemAdded event, CartEntity.LineItem lineItem) {
       return lineItem
           .toBuilder()
           .setQuantity(lineItem.getQuantity() + event.getLineItem().getQuantity())
           .build();
     }
 
-    static LineItem toLineItem(CartEntity.ItemAdded event) {
+    static CartEntity.LineItem toLineItem(CartEntity.ItemAdded event) {
       return CartEntity.LineItem
           .newBuilder()
           .setProductId(event.getLineItem().getProductId())
@@ -510,7 +516,7 @@ public class ShoppingCart extends AbstractShoppingCart {
       return this;
     }
 
-    static LineItem changeQuantity(CartEntity.ItemChanged event, LineItem lineItem) {
+    static CartEntity.LineItem changeQuantity(CartEntity.ItemChanged event, CartEntity.LineItem lineItem) {
       return lineItem
           .toBuilder()
           .setQuantity(event.getQuantity())
@@ -528,7 +534,7 @@ public class ShoppingCart extends AbstractShoppingCart {
       return this;
     }
 
-    Cart handle(CartEntity.CartCheckedOut event) {
+    Cart handle(CartEntity.ItemCheckedOut event) {
       state = state
           .toBuilder()
           .setCheckedOutUtc(timestampNow())

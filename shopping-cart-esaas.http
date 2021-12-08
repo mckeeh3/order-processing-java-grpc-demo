@@ -14,8 +14,8 @@
 # @deliveredUtc =
 # @deletedUtc = 2020-01-01T00:00:00.000-0500
 @deletedUtc =
-@from_date = 2021-01-01T00:00:00.000-0500
-@to_date = 2022-01-01T00:00:00.000-0500
+@fromDate = 2021-01-01T00:00:00.000-0500
+@toDate = 2022-01-01T00:00:00.000-0500
 
 ### io.shopping.cart.ShoppingCartService.AddItem
 
@@ -71,7 +71,17 @@ curl -XPUT -H "Content-Type: application/json" -d '{
 curl -XGET -H "Content-Type: application/json"
   {{urlPrefix}}/cart/{{cartId}}
 
-### io.shopping.cart.view.CustomerView.GetCustomerOrders
+### io.shopping.cart.view.CustomerCartView.GetCustomerOrders
 
 curl -XGET -H "Content-Type: application/json"
-  '{{urlPrefix}}/customer/orders?customer_id={{customerId}}&from_date={{from_date}}&to_date={{to_date}}'
+  '{{urlPrefix}}/customer/orders?customer_id={{customerId}}'
+
+### io.shopping.cart.view.CustomerCartViewByDate.GetCustomerOrders
+
+curl -XGET -H "Content-Type: application/json"
+  '{{urlPrefix}}/customer/orders-by-date?customer_id={{customerId}}&from_date={{fromDate}}&to_date={{toDate}}'
+
+### io.shopping.cart.view.ProductsView.GetPurchasedProducts
+
+curl -XGET -H "Content-Type: application/json"
+  '{{urlPrefix}}/purchased-products/{{productId}}?from_date={{fromDate}}&to_date={{toDate}}'
