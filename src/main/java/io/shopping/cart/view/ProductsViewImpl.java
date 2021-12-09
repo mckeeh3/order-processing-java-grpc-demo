@@ -4,7 +4,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.akkaserverless.javasdk.view.View;
 import com.akkaserverless.javasdk.view.ViewContext;
 import com.google.protobuf.Any;
 import com.google.protobuf.Timestamp;
@@ -12,7 +11,6 @@ import com.google.protobuf.Timestamp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.shopping.cart.api.PurchasedProductApi;
 import io.shopping.cart.entity.PurchasedProductEntity;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
@@ -28,31 +26,31 @@ public class ProductsViewImpl extends AbstractProductsView {
   }
 
   @Override
-  public PurchasedProductApi.PurchasedProduct emptyState() {
-    return PurchasedProductApi.PurchasedProduct.getDefaultInstance();
+  public PurchasedProductsView.PurchasedProduct emptyState() {
+    return PurchasedProductsView.PurchasedProduct.getDefaultInstance();
   }
 
   @Override
-  public View.UpdateEffect<PurchasedProductApi.PurchasedProduct> processItemCheckedOut(PurchasedProductApi.PurchasedProduct state, PurchasedProductEntity.PurchasedProductState event) {
+  public UpdateEffect<PurchasedProductsView.PurchasedProduct> processItemCheckedOut(PurchasedProductsView.PurchasedProduct state, PurchasedProductEntity.PurchasedProductState command) {
     if (state.getProductId().isEmpty()) {
-      log.info("+Insert {}, {}, {}", event.getCustomerId(), event.getCartId(), event.getProductId());
+      log.info("+Insert {}, {}, {}", command.getCustomerId(), command.getCartId(), command.getProductId());
     } else {
       log.info("-Update {}, {}, {}", state.getCustomerId(), state.getCartId(), state.getProductId());
-      log.info(">Update {}, {}, {}", event.getCustomerId(), event.getCartId(), event.getProductId());
+      log.info(">Update {}, {}, {}", command.getCustomerId(), command.getCartId(), command.getProductId());
     }
     return effects().updateState(
         state.toBuilder()
-            .setCustomerId(event.getCustomerId())
-            .setCartId(event.getCartId())
-            .setProductId(event.getProductId())
-            .setProductName(event.getProductName())
-            .setQuantity(event.getQuantity())
-            .setPurchasedUtc(event.getPurchasedUtc())
+            .setCustomerId(command.getCustomerId())
+            .setCartId(command.getCartId())
+            .setProductId(command.getProductId())
+            .setProductName(command.getProductName())
+            .setQuantity(command.getQuantity())
+            .setPurchasedUtc(toUtc(command.getPurchasedUtc()))
             .build());
   }
 
   @Override
-  public UpdateEffect<PurchasedProductApi.PurchasedProduct> ignoreOtherEvents(PurchasedProductApi.PurchasedProduct state, Any any) {
+  public UpdateEffect<PurchasedProductsView.PurchasedProduct> ignoreOtherEvents(PurchasedProductsView.PurchasedProduct state, Any any) {
     return effects().ignore();
   }
 

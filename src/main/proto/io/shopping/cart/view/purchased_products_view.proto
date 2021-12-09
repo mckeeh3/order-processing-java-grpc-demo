@@ -24,7 +24,7 @@ service ProductsView {
     };
   }
 
-  rpc ProcessItemCheckedOut(entity.PurchasedProductState) returns (api.PurchasedProduct) {
+  rpc ProcessItemCheckedOut(entity.PurchasedProductState) returns (PurchasedProduct) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "purchased_product"
     };
@@ -34,7 +34,7 @@ service ProductsView {
     };
   }
 
-  rpc IgnoreOtherEvents(google.protobuf.Any) returns (api.PurchasedProduct) {
+  rpc IgnoreOtherEvents(google.protobuf.Any) returns (PurchasedProduct) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "purchased_product"
     };
@@ -52,5 +52,14 @@ message GetPurchasedProductsRequest {
 }
 
 message GetPurchasedProductsResponse {
-  repeated api.PurchasedProduct purchased_products = 1;
+  repeated PurchasedProduct purchased_products = 1;
+}
+
+message PurchasedProduct {
+  string customer_id = 1;
+  string cart_id = 2;
+  string product_id = 3;
+  string product_name = 4;
+  int32 quantity = 5;
+  string purchased_utc = 6;
 }
