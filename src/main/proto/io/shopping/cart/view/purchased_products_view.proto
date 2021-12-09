@@ -5,7 +5,8 @@ package io.shopping.cart.view;
 import "google/api/annotations.proto";
 import "google/protobuf/any.proto";
 import "akkaserverless/annotations.proto";
-import "io/shopping/cart/entity/shopping_cart_entity.proto";
+import "io/shopping/cart/api/purchased_product_api.proto";
+import "io/shopping/cart/entity/purchased_product_entity.proto";
 
 option java_outer_classname = "PurchasedProductsView";
 
@@ -23,9 +24,9 @@ service ProductsView {
     };
   }
 
-  rpc ProcessItemCheckedOut(entity.ItemCheckedOut) returns (PurchasedProduct) {
+  rpc ProcessItemCheckedOut(entity.PurchasedProductState) returns (api.PurchasedProduct) {
     option (akkaserverless.method).eventing.in = {
-      event_sourced_entity: "shopping_cart"
+      event_sourced_entity: "purchased_product"
     };
     option (akkaserverless.method).view.update = {
       table: "purchased_products"
@@ -33,9 +34,9 @@ service ProductsView {
     };
   }
 
-  rpc IgnoreOtherEvents(google.protobuf.Any) returns (PurchasedProduct) {
+  rpc IgnoreOtherEvents(google.protobuf.Any) returns (api.PurchasedProduct) {
     option (akkaserverless.method).eventing.in = {
-      event_sourced_entity: "shopping_cart"
+      event_sourced_entity: "purchased_product"
     };
     option (akkaserverless.method).view.update = {
       table: "purchased_products"
@@ -51,14 +52,5 @@ message GetPurchasedProductsRequest {
 }
 
 message GetPurchasedProductsResponse {
-  repeated PurchasedProduct purchased_products = 1;
-}
-
-message PurchasedProduct {
-  string customer_id = 1;
-  string cart_id = 2;
-  string product_id = 3;
-  string product_name = 4;
-  int32 quantity = 5;
-  string purchased_utc = 6;
+  repeated api.PurchasedProduct purchased_products = 1;
 }

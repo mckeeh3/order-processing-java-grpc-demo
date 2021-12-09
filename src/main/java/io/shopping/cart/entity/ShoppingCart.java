@@ -22,7 +22,6 @@ import io.shopping.cart.api.CartApi;
 // As long as this file exists it will not be overwritten: you can maintain it yourself,
 // or delete it so it is regenerated as needed.
 
-/** An event sourced entity. */
 public class ShoppingCart extends AbstractShoppingCart {
   private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 

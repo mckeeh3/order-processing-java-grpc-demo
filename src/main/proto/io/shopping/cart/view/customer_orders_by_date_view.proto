@@ -2,8 +2,8 @@ syntax = "proto3";
 
 package io.shopping.cart.view;
 
-import "google/api/annotations.proto";
 import "akkaserverless/annotations.proto";
+import "google/api/annotations.proto";
 import "io/shopping/cart/entity/shopping_cart_entity.proto";
 import "io/shopping/cart/api/shopping_cart_api.proto";
 
