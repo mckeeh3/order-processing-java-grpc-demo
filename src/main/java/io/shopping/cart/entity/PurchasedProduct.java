@@ -36,6 +36,7 @@ public class PurchasedProduct extends AbstractPurchasedProduct {
         .setProductId(command.getProductId())
         .setProductName(command.getProductName())
         .setQuantity(command.getQuantity())
+        .setPurchasedUtc(command.getPurchasedUtc())
         .build();
   }
 }

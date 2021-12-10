@@ -1,6 +1,7 @@
 package io.shopping.cart.action;
 
 import com.akkaserverless.javasdk.action.ActionCreationContext;
+import com.google.protobuf.Any;
 import com.google.protobuf.Empty;
 
 import io.shopping.cart.api.PurchasedProductApi;
@@ -25,8 +26,14 @@ public class CartToPurchasedProductAction extends AbstractCartToPurchasedProduct
         .setProductId(itemCheckedOut.getLineItem().getProductId())
         .setProductName(itemCheckedOut.getLineItem().getProductName())
         .setQuantity(itemCheckedOut.getLineItem().getQuantity())
+        .setPurchasedUtc(itemCheckedOut.getCheckedOutUtc())
         .build();
 
     return effects().forward(components().purchasedProduct().addPurchasedProduct(purchasedProduct));
+  }
+
+  @Override
+  public Effect<Empty> ignoreOtherEvents(Any any) {
+    return effects().reply(Empty.getDefaultInstance());
   }
 }

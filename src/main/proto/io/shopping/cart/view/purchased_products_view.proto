@@ -26,7 +26,7 @@ service ProductsView {
 
   rpc ProcessItemCheckedOut(entity.PurchasedProductState) returns (PurchasedProduct) {
     option (akkaserverless.method).eventing.in = {
-      event_sourced_entity: "purchased_product"
+      value_entity: "purchased_product"
     };
     option (akkaserverless.method).view.update = {
       table: "purchased_products"
@@ -36,7 +36,7 @@ service ProductsView {
 
   rpc IgnoreOtherEvents(google.protobuf.Any) returns (PurchasedProduct) {
     option (akkaserverless.method).eventing.in = {
-      event_sourced_entity: "purchased_product"
+      value_entity: "purchased_product"
     };
     option (akkaserverless.method).view.update = {
       table: "purchased_products"

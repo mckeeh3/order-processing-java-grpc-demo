@@ -33,7 +33,7 @@ public class ProductsViewImpl extends AbstractProductsView {
   @Override
   public UpdateEffect<PurchasedProductsView.PurchasedProduct> processItemCheckedOut(PurchasedProductsView.PurchasedProduct state, PurchasedProductEntity.PurchasedProductState command) {
     if (state.getProductId().isEmpty()) {
-      log.info("+Insert {}, {}, {}", command.getCustomerId(), command.getCartId(), command.getProductId());
+      log.info("+Insert {}, {}, {}, {}", command.getCustomerId(), command.getCartId(), command.getProductId(), toUtc(command.getPurchasedUtc()));
     } else {
       log.info("-Update {}, {}, {}", state.getCustomerId(), state.getCartId(), state.getProductId());
       log.info(">Update {}, {}, {}", command.getCustomerId(), command.getCartId(), command.getProductId());

@@ -4,6 +4,7 @@ package io.shopping.cart.action;
 
 import "akkaserverless/annotations.proto";
 import "google/protobuf/empty.proto";
+import "google/protobuf/any.proto";
 import "io/shopping/cart/entity/shopping_cart_entity.proto";
 
 option java_outer_classname = "CartToPurchasedProductProto";
@@ -14,6 +15,12 @@ service CartToPurchasedProduct {
   };
 
   rpc OnItemCheckedOut(entity.ItemCheckedOut) returns (google.protobuf.Empty) {
+    option (akkaserverless.method).eventing.in = {
+      event_sourced_entity: "shopping_cart"
+    };
+  }
+
+  rpc IgnoreOtherEvents(google.protobuf.Any) returns (google.protobuf.Empty) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "shopping_cart"
     };
