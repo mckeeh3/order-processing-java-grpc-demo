@@ -85,3 +85,8 @@ curl -XGET -H "Content-Type: application/json"
 
 curl -XGET -H "Content-Type: application/json"
   '{{urlPrefix}}/purchased-products/{{productId}}?from_date={{fromDate}}&to_date={{toDate}}'
+
+###
+
+curl -XGET -H "Content-Type: application/json"
+  '{{urlPrefix}}/orders-by-date?from_date={{fromDate}}&to_date={{toDate}}'

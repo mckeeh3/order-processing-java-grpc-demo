@@ -6,6 +6,7 @@ import io.shopping.cart.entity.PurchasedProduct;
 import io.shopping.cart.entity.ShoppingCart;
 import io.shopping.cart.view.CustomerCartViewByDateImpl;
 import io.shopping.cart.view.CustomerCartViewImpl;
+import io.shopping.cart.view.OrdersByDateView;
 import io.shopping.cart.view.ProductsViewImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +31,7 @@ public final class Main {
       CartToPurchasedProductAction::new,
       CustomerCartViewImpl::new,
       CustomerCartViewByDateImpl::new,
+      OrdersByDateView::new,
       ProductsViewImpl::new);
   }
 
