@@ -4,8 +4,8 @@ import com.akkaserverless.javasdk.AkkaServerless;
 import io.shopping.cart.action.CartToPurchasedProductAction;
 import io.shopping.cart.entity.PurchasedProduct;
 import io.shopping.cart.entity.ShoppingCart;
-import io.shopping.cart.view.CustomerCartViewByDateImpl;
-import io.shopping.cart.view.CustomerCartViewImpl;
+import io.shopping.cart.view.CustomerOrdersByDateView;
+import io.shopping.cart.view.CustomerShoppingCartsViewImpl;
 import io.shopping.cart.view.OrdersByDateView;
 import io.shopping.cart.view.ProductsViewImpl;
 import org.slf4j.Logger;
@@ -29,8 +29,8 @@ public final class Main {
       PurchasedProduct::new,
       ShoppingCart::new,
       CartToPurchasedProductAction::new,
-      CustomerCartViewImpl::new,
-      CustomerCartViewByDateImpl::new,
+      CustomerOrdersByDateView::new,
+      CustomerShoppingCartsViewImpl::new,
       OrdersByDateView::new,
       ProductsViewImpl::new);
   }

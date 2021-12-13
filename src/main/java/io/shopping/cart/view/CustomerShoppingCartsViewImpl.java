@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.akkaserverless.javasdk.view.View;
+import com.akkaserverless.javasdk.view.ViewContext;
 import com.google.protobuf.Timestamp;
 
 import io.shopping.cart.api.CartApi;
@@ -17,8 +18,11 @@ import io.shopping.cart.entity.CartEntity;
 // As long as this file exists it will not be overwritten: you can maintain it yourself,
 // or delete it so it is regenerated as needed.
 
-public abstract class AbstractOrdersView extends AbstractCustomerCartView {
+public class CustomerShoppingCartsViewImpl extends AbstractCustomerShoppingCartsView {
   private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+
+  public CustomerShoppingCartsViewImpl(ViewContext context) {
+  }
 
   @Override
   public CartApi.ShoppingCart emptyState() {
@@ -118,11 +122,11 @@ public abstract class AbstractOrdersView extends AbstractCustomerCartView {
       return new ShoppingCart(state);
     }
 
-    public CartApi.ShoppingCart toState() {
+    CartApi.ShoppingCart toState() {
       return state;
     }
 
-    public ShoppingCart handle(CartEntity.ItemAdded event) {
+    ShoppingCart handle(CartEntity.ItemAdded event) {
       items.computeIfPresent(event.getLineItem().getProductId(), (productId, lineItem) -> incrementQuantity(event, lineItem));
       items.computeIfAbsent(event.getLineItem().getProductId(), productId -> toLineItem(event.getLineItem()));
 
@@ -151,7 +155,7 @@ public abstract class AbstractOrdersView extends AbstractCustomerCartView {
           .build();
     }
 
-    public ShoppingCart handle(CartEntity.ItemChanged event) {
+    ShoppingCart handle(CartEntity.ItemChanged event) {
       items.computeIfPresent(event.getProductId(), (productId, lineItem) -> changeQuantity(event, lineItem));
 
       state = state.toBuilder()
@@ -168,7 +172,7 @@ public abstract class AbstractOrdersView extends AbstractCustomerCartView {
           .build();
     }
 
-    public ShoppingCart handle(CartEntity.ItemRemoved event) {
+    ShoppingCart handle(CartEntity.ItemRemoved event) {
       items.remove(event.getProductId());
 
       state = state.toBuilder()
@@ -178,35 +182,35 @@ public abstract class AbstractOrdersView extends AbstractCustomerCartView {
       return this;
     }
 
-    public ShoppingCart handle(CartEntity.CartCheckedOut event) {
+    ShoppingCart handle(CartEntity.CartCheckedOut event) {
       state = state.toBuilder()
           .setCheckedOutUtc(toUtc(event.getCartState().getCheckedOutUtc()))
           .build();
       return this;
     }
 
-    public ShoppingCart handle(CartEntity.CartShipped event) {
+    ShoppingCart handle(CartEntity.CartShipped event) {
       state = state.toBuilder()
           .setShippedUtc(toUtc(event.getShippedUtc()))
           .build();
       return this;
     }
 
-    public ShoppingCart handle(CartEntity.CartDelivered event) {
+    ShoppingCart handle(CartEntity.CartDelivered event) {
       state = state.toBuilder()
           .setDeliveredUtc(toUtc(event.getDeliveredUtc()))
           .build();
       return this;
     }
 
-    public ShoppingCart handle(CartEntity.CartDeleted event) {
+    ShoppingCart handle(CartEntity.CartDeleted event) {
       state = state.toBuilder()
           .setDeletedUtc(toUtc(event.getDeletedUtc()))
           .build();
       return this;
     }
 
-    public ShoppingCart handle(CartEntity.DatesChanged event) {
+    ShoppingCart handle(CartEntity.DatesChanged event) {
       state = state.toBuilder()
           .setCheckedOutUtc(toUtc(event.getCheckedOutUtc()))
           .setShippedUtc(toUtc(event.getShippedUtc()))

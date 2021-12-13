@@ -7,19 +7,19 @@ import "google/api/annotations.proto";
 import "io/shopping/cart/entity/shopping_cart_entity.proto";
 import "io/shopping/cart/api/shopping_cart_api.proto";
 
-option java_outer_classname = "CustomerOrdersView";
+option java_outer_classname = "CustomerShoppingCartsOuter";
 
-service CustomerCartView {
+service CustomerShoppingCartsView {
   option (akkaserverless.service) = {
     type: SERVICE_TYPE_VIEW
   };
 
-  rpc GetCustomerOrders(GetCustomerOrdersRequest) returns (GetCustomerOrdersResponse) {
+  rpc GetShoppingCarts(GetShoppingCartsRequest) returns (GetShoppingCartsResponse) {
     option (akkaserverless.method).view.query = {
-      query: "SELECT * AS shopping_carts FROM customer_orders WHERE customer_id = :customer_id"
+      query: "SELECT * AS shopping_carts FROM shopping-carts WHERE customer_id = :customer_id"
     };
     option (google.api.http) = {
-      get: "/customer/orders"
+      get: "/shoppng-carts"
     };
   }
 
@@ -28,7 +28,7 @@ service CustomerCartView {
       event_sourced_entity: "shopping_cart"
     };
     option (akkaserverless.method).view.update = {
-      table: "customer_orders"
+      table: "shopping-carts"
       transform_updates: true
     };
   }
@@ -38,7 +38,7 @@ service CustomerCartView {
       event_sourced_entity: "shopping_cart"
     };
     option (akkaserverless.method).view.update = {
-      table: "customer_orders"
+      table: "shopping-carts"
       transform_updates: true
     };
   }
@@ -48,7 +48,7 @@ service CustomerCartView {
       event_sourced_entity: "shopping_cart"
     };
     option (akkaserverless.method).view.update = {
-      table: "customer_orders"
+      table: "shopping-carts"
       transform_updates: true
     };
   }
@@ -58,7 +58,7 @@ service CustomerCartView {
       event_sourced_entity: "shopping_cart"
     };
     option (akkaserverless.method).view.update = {
-      table: "customer_orders"
+      table: "shopping-carts"
       transform_updates: true
     };
   }
@@ -68,7 +68,7 @@ service CustomerCartView {
       event_sourced_entity: "shopping_cart"
     };
     option (akkaserverless.method).view.update = {
-      table: "customer_orders"
+      table: "shopping-carts"
       transform_updates: true
     };
   }
@@ -78,7 +78,7 @@ service CustomerCartView {
       event_sourced_entity: "shopping_cart"
     };
     option (akkaserverless.method).view.update = {
-      table: "customer_orders"
+      table: "shopping-carts"
       transform_updates: true
     };
   }
@@ -88,7 +88,7 @@ service CustomerCartView {
       event_sourced_entity: "shopping_cart"
     };
     option (akkaserverless.method).view.update = {
-      table: "customer_orders"
+      table: "shopping-carts"
       transform_updates: true
     };
   }
@@ -98,16 +98,16 @@ service CustomerCartView {
       event_sourced_entity: "shopping_cart"
     };
     option (akkaserverless.method).view.update = {
-      table: "customer_orders"
+      table: "shopping-carts"
       transform_updates: true
     };
   }
 }
 
-message GetCustomerOrdersRequest {
+message GetShoppingCartsRequest {
   string customer_id = 1;
 }
 
-message GetCustomerOrdersResponse {
+message GetShoppingCartsResponse {
   repeated api.ShoppingCart shopping_carts = 1;
 }

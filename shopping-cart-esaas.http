@@ -86,7 +86,7 @@ curl -XGET -H "Content-Type: application/json"
 curl -XGET -H "Content-Type: application/json"
   '{{urlPrefix}}/purchased-products/{{productId}}?from_date={{fromDate}}&to_date={{toDate}}'
 
-###
+### io.shopping.cart.view.OrdersByDate.GetOrdersByDate
 
 curl -XGET -H "Content-Type: application/json"
   '{{urlPrefix}}/orders-by-date?from_date={{fromDate}}&to_date={{toDate}}'
