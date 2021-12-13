@@ -103,7 +103,7 @@ public class ShoppingCart extends AbstractShoppingCart {
   }
 
   @Override
-  public CartEntity.CartState itemCheckedOut(CartEntity.CartState state, CartEntity.ItemCheckedOut event) {
+  public CartEntity.CartState cartCheckedOut(CartEntity.CartState state, CartEntity.CartCheckedOut event) {
     return Cart
         .fromState(state)
         .handle(event)
@@ -304,7 +304,7 @@ public class ShoppingCart extends AbstractShoppingCart {
 
   private Effect<Empty> handle(CartEntity.CartState state, CartApi.CheckoutShoppingCart command) {
     return effects()
-        .emitEvents(event(state, command))
+        .emitEvent(event(state, command))
         .thenReply(newState -> Empty.getDefaultInstance());
   }
 
@@ -367,19 +367,14 @@ public class ShoppingCart extends AbstractShoppingCart {
         .build();
   }
 
-  private static List<CartEntity.ItemCheckedOut> event(CartEntity.CartState state, CartApi.CheckoutShoppingCart command) {
-    var timeNow = Cart.timestampNow();
-    var items = state.getLineItemsList()
-        .stream()
-        .map(lineItem -> CartEntity.ItemCheckedOut
-            .newBuilder()
-            .setCartId(state.getCartId())
-            .setCustomerId(state.getCustomerId())
-            .setLineItem(lineItem)
-            .setCheckedOutUtc(timeNow)
-            .build())
-        .collect(Collectors.toList());
-    return items;
+  private static CartEntity.CartCheckedOut event(CartEntity.CartState state, CartApi.CheckoutShoppingCart command) {
+    var checkedOutState = state.toBuilder()
+        .setCheckedOutUtc(Cart.timestampNow())
+        .build();
+    return CartEntity.CartCheckedOut
+        .newBuilder()
+        .mergeCartState(checkedOutState)
+        .build();
   }
 
   private static CartEntity.CartShipped event(CartEntity.CartState state, CartApi.ShippedShoppingCart command) {
@@ -533,7 +528,7 @@ public class ShoppingCart extends AbstractShoppingCart {
       return this;
     }
 
-    Cart handle(CartEntity.ItemCheckedOut event) {
+    Cart handle(CartEntity.CartCheckedOut event) {
       state = state
           .toBuilder()
           .setCheckedOutUtc(timestampNow())

@@ -1,6 +1,7 @@
 package io.shopping.cart.action;
 
 import com.akkaserverless.javasdk.action.ActionCreationContext;
+import com.akkaserverless.javasdk.action.Action.Effect;
 import com.google.protobuf.Any;
 import com.google.protobuf.Empty;
 
@@ -18,18 +19,19 @@ public class CartToPurchasedProductAction extends AbstractCartToPurchasedProduct
   }
 
   @Override
-  public Effect<Empty> onItemCheckedOut(CartEntity.ItemCheckedOut itemCheckedOut) {
-    var purchasedProduct = PurchasedProductApi.PurchasedProduct
-        .newBuilder()
-        .setCustomerId(itemCheckedOut.getCustomerId())
-        .setCartId(itemCheckedOut.getCartId())
-        .setProductId(itemCheckedOut.getLineItem().getProductId())
-        .setProductName(itemCheckedOut.getLineItem().getProductName())
-        .setQuantity(itemCheckedOut.getLineItem().getQuantity())
-        .setPurchasedUtc(itemCheckedOut.getCheckedOutUtc())
-        .build();
+  public Effect<Empty> onCartCheckedOut(CartEntity.CartCheckedOut cartCheckedOut) {
+    cartCheckedOut.getCartState().getLineItemsList().stream()
+        .map(lineItem -> PurchasedProductApi.PurchasedProduct.newBuilder()
+            .setCustomerId(cartCheckedOut.getCartState().getCustomerId())
+            .setCartId(cartCheckedOut.getCartState().getCartId())
+            .setProductId(lineItem.getProductId())
+            .setProductName(lineItem.getProductName())
+            .setQuantity(lineItem.getQuantity())
+            .setPurchasedUtc(cartCheckedOut.getCartState().getCheckedOutUtc())
+            .build())
+        .forEach(purchasedProduct -> effects().forward(components().purchasedProduct().addPurchasedProduct(purchasedProduct)));
 
-    return effects().forward(components().purchasedProduct().addPurchasedProduct(purchasedProduct));
+    return effects().reply(Empty.getDefaultInstance());
   }
 
   @Override

@@ -14,7 +14,7 @@ service CartToPurchasedProduct {
     type: SERVICE_TYPE_ACTION
   };
 
-  rpc OnItemCheckedOut(entity.ItemCheckedOut) returns (google.protobuf.Empty) {
+  rpc OnCartCheckedOut(entity.CartCheckedOut) returns (google.protobuf.Empty) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "shopping_cart"
     };

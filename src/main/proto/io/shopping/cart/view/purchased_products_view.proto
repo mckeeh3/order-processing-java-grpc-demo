@@ -5,7 +5,6 @@ package io.shopping.cart.view;
 import "google/api/annotations.proto";
 import "google/protobuf/any.proto";
 import "akkaserverless/annotations.proto";
-import "io/shopping/cart/api/purchased_product_api.proto";
 import "io/shopping/cart/entity/purchased_product_entity.proto";
 
 option java_outer_classname = "PurchasedProductsView";

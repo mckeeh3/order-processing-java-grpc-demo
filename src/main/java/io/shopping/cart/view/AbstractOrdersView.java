@@ -56,7 +56,7 @@ public abstract class AbstractOrdersView extends AbstractCustomerCartView {
   }
 
   @Override
-  public View.UpdateEffect<CartApi.ShoppingCart> processItemCheckedOut(CartApi.ShoppingCart state, CartEntity.ItemCheckedOut event) {
+  public View.UpdateEffect<CartApi.ShoppingCart> processCartCheckedOut(CartApi.ShoppingCart state, CartEntity.CartCheckedOut event) {
     return effects()
         .updateState(
             ShoppingCart
@@ -178,9 +178,9 @@ public abstract class AbstractOrdersView extends AbstractCustomerCartView {
       return this;
     }
 
-    public ShoppingCart handle(CartEntity.ItemCheckedOut event) {
+    public ShoppingCart handle(CartEntity.CartCheckedOut event) {
       state = state.toBuilder()
-          .setCheckedOutUtc(toUtc(event.getCheckedOutUtc()))
+          .setCheckedOutUtc(toUtc(event.getCartState().getCheckedOutUtc()))
           .build();
       return this;
     }

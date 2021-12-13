@@ -53,7 +53,7 @@ service OrdersByDate {
     };
   }
 
-  rpc ProcessItemCheckedOut(entity.ItemCheckedOut) returns (api.ShoppingCart) {
+  rpc ProcessCartCheckedOut(entity.CartCheckedOut) returns (api.ShoppingCart) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "shopping_cart"
     };
