@@ -1,9 +1,14 @@
 package io.shopping.cart.action;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
+
 import com.akkaserverless.javasdk.action.ActionCreationContext;
-import com.akkaserverless.javasdk.action.Action.Effect;
 import com.google.protobuf.Any;
 import com.google.protobuf.Empty;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.shopping.cart.api.PurchasedProductApi;
 import io.shopping.cart.entity.CartEntity;
@@ -14,13 +19,16 @@ import io.shopping.cart.entity.CartEntity;
 // or delete it so it is regenerated as needed.
 
 public class CartToPurchasedProductAction extends AbstractCartToPurchasedProductAction {
+  private static final Logger log = LoggerFactory.getLogger(CartToPurchasedProductAction.class);
 
   public CartToPurchasedProductAction(ActionCreationContext creationContext) {
   }
 
   @Override
   public Effect<Empty> onCartCheckedOut(CartEntity.CartCheckedOut cartCheckedOut) {
-    cartCheckedOut.getCartState().getLineItemsList().stream()
+    log.info("{}", cartCheckedOut);
+
+    var results = cartCheckedOut.getCartState().getLineItemsList().stream()
         .map(lineItem -> PurchasedProductApi.PurchasedProduct.newBuilder()
             .setCustomerId(cartCheckedOut.getCartState().getCustomerId())
             .setCartId(cartCheckedOut.getCartState().getCartId())
@@ -29,9 +37,17 @@ public class CartToPurchasedProductAction extends AbstractCartToPurchasedProduct
             .setQuantity(lineItem.getQuantity())
             .setPurchasedUtc(cartCheckedOut.getCartState().getCheckedOutUtc())
             .build())
-        .forEach(purchasedProduct -> effects().forward(components().purchasedProduct().addPurchasedProduct(purchasedProduct)));
+        .map(purchasedProduct -> components().purchasedProduct().addPurchasedProduct(purchasedProduct).execute())
+        .collect(Collectors.toList());
 
-    return effects().reply(Empty.getDefaultInstance());
+    var result = CompletableFuture.completedFuture(effects().reply(Empty.getDefaultInstance()));
+    CompletableFuture.allOf(results.toArray(new CompletableFuture[results.size()])).whenComplete((v, e) -> {
+      if (e != null) {
+        throw new RuntimeException(e);
+      }
+    }).join();
+
+    return effects().asyncEffect(result);
   }
 
   @Override

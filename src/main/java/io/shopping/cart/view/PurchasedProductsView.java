@@ -18,20 +18,20 @@ import io.shopping.cart.entity.PurchasedProductEntity;
 // As long as this file exists it will not be overwritten: you can maintain it yourself,
 // or delete it so it is regenerated as needed.
 
-public class ProductsViewImpl extends AbstractProductsView {
-  private static final Logger log = LoggerFactory.getLogger(ProductsViewImpl.class);
+public class PurchasedProductsView extends AbstractPurchasedProductsView {
+  private static final Logger log = LoggerFactory.getLogger(PurchasedProductsView.class);
   private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 
-  public ProductsViewImpl(ViewContext context) {
+  public PurchasedProductsView(ViewContext context) {
   }
 
   @Override
-  public PurchasedProductsView.PurchasedProduct emptyState() {
-    return PurchasedProductsView.PurchasedProduct.getDefaultInstance();
+  public PurchasedProductsOuter.PurchasedProduct emptyState() {
+    return PurchasedProductsOuter.PurchasedProduct.getDefaultInstance();
   }
 
   @Override
-  public UpdateEffect<PurchasedProductsView.PurchasedProduct> processItemCheckedOut(PurchasedProductsView.PurchasedProduct state, PurchasedProductEntity.PurchasedProductState command) {
+  public UpdateEffect<PurchasedProductsOuter.PurchasedProduct> processItemCheckedOut(PurchasedProductsOuter.PurchasedProduct state, PurchasedProductEntity.PurchasedProductState command) {
     if (state.getProductId().isEmpty()) {
       log.info("+Insert {}, {}, {}, {}", command.getCustomerId(), command.getCartId(), command.getProductId(), toUtc(command.getPurchasedUtc()));
     } else {
@@ -50,7 +50,7 @@ public class ProductsViewImpl extends AbstractProductsView {
   }
 
   @Override
-  public UpdateEffect<PurchasedProductsView.PurchasedProduct> ignoreOtherEvents(PurchasedProductsView.PurchasedProduct state, Any any) {
+  public UpdateEffect<PurchasedProductsOuter.PurchasedProduct> ignoreOtherEvents(PurchasedProductsOuter.PurchasedProduct state, Any any) {
     return effects().ignore();
   }
 

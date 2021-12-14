@@ -4,9 +4,12 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.akkaserverless.javasdk.view.ViewContext;
+import com.google.protobuf.Any;
 import com.google.protobuf.Timestamp;
 
 import io.shopping.cart.api.CartApi;
@@ -78,6 +81,11 @@ public class CustomerOrdersByDateView extends AbstractCustomerOrdersByDateView {
                 .toState());
   }
 
+  @Override
+  public UpdateEffect<CartApi.ShoppingCart> ignoreOtherEvents(CartApi.ShoppingCart state, Any any) {
+    return effects().ignore();
+  }
+
   static class ShoppingCart {
     CartApi.ShoppingCart state;
     final Map<String, CartApi.LineItem> items = new LinkedHashMap<>();
@@ -97,9 +105,22 @@ public class CustomerOrdersByDateView extends AbstractCustomerOrdersByDateView {
 
     ShoppingCart handle(CartEntity.CartCheckedOut event) {
       state = state.toBuilder()
+          .setCustomerId(event.getCartState().getCustomerId())
+          .setCartId(event.getCartState().getCartId())
           .setCheckedOutUtc(toUtc(event.getCartState().getCheckedOutUtc()))
+          .addAllLineItems(toApi(event.getCartState().getLineItemsList()))
           .build();
       return this;
+    }
+
+    private Iterable<? extends CartApi.LineItem> toApi(List<CartEntity.LineItem> lineItems) {
+      return lineItems.stream()
+          .map(lineItem -> CartApi.LineItem.newBuilder()
+              .setProductId(lineItem.getProductId())
+              .setProductName(lineItem.getProductName())
+              .setQuantity(lineItem.getQuantity())
+              .build())
+          .collect(Collectors.toList());
     }
 
     ShoppingCart handle(CartEntity.CartShipped event) {

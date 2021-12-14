@@ -18,10 +18,10 @@ import io.shopping.cart.entity.CartEntity;
 // As long as this file exists it will not be overwritten: you can maintain it yourself,
 // or delete it so it is regenerated as needed.
 
-public class CustomerShoppingCartsViewImpl extends AbstractCustomerShoppingCartsView {
+public class CustomerShoppingCartsView extends AbstractCustomerShoppingCartsView {
   private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 
-  public CustomerShoppingCartsViewImpl(ViewContext context) {
+  public CustomerShoppingCartsView(ViewContext context) {
   }
 
   @Override

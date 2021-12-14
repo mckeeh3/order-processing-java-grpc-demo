@@ -5,9 +5,9 @@ import io.shopping.cart.action.CartToPurchasedProductAction;
 import io.shopping.cart.entity.PurchasedProduct;
 import io.shopping.cart.entity.ShoppingCart;
 import io.shopping.cart.view.CustomerOrdersByDateView;
-import io.shopping.cart.view.CustomerShoppingCartsViewImpl;
+import io.shopping.cart.view.CustomerShoppingCartsView;
 import io.shopping.cart.view.OrdersByDateView;
-import io.shopping.cart.view.ProductsViewImpl;
+import io.shopping.cart.view.PurchasedProductsView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,9 +30,9 @@ public final class Main {
       ShoppingCart::new,
       CartToPurchasedProductAction::new,
       CustomerOrdersByDateView::new,
-      CustomerShoppingCartsViewImpl::new,
+      CustomerShoppingCartsView::new,
       OrdersByDateView::new,
-      ProductsViewImpl::new);
+      PurchasedProductsView::new);
   }
 
   public static void main(String[] args) throws Exception {

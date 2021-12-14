@@ -373,7 +373,7 @@ public class ShoppingCart extends AbstractShoppingCart {
         .build();
     return CartEntity.CartCheckedOut
         .newBuilder()
-        .mergeCartState(checkedOutState)
+        .setCartState(checkedOutState)
         .build();
   }
 
