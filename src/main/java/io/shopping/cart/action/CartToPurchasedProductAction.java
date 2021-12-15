@@ -40,12 +40,8 @@ public class CartToPurchasedProductAction extends AbstractCartToPurchasedProduct
         .map(purchasedProduct -> components().purchasedProduct().addPurchasedProduct(purchasedProduct).execute())
         .collect(Collectors.toList());
 
-    var result = CompletableFuture.completedFuture(effects().reply(Empty.getDefaultInstance()));
-    CompletableFuture.allOf(results.toArray(new CompletableFuture[results.size()])).whenComplete((v, e) -> {
-      if (e != null) {
-        throw new RuntimeException(e);
-      }
-    }).join();
+    var result = CompletableFuture.allOf(results.toArray(new CompletableFuture[results.size()]))
+        .thenApply(reply -> effects().reply(Empty.getDefaultInstance()));
 
     return effects().asyncEffect(result);
   }
