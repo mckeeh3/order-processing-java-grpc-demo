@@ -8,9 +8,6 @@ import com.akkaserverless.javasdk.view.ViewContext;
 import com.google.protobuf.Any;
 import com.google.protobuf.Timestamp;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import io.shopping.cart.entity.PurchasedProductEntity;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
@@ -19,7 +16,6 @@ import io.shopping.cart.entity.PurchasedProductEntity;
 // or delete it so it is regenerated as needed.
 
 public class PurchasedProductsView extends AbstractPurchasedProductsView {
-  private static final Logger log = LoggerFactory.getLogger(PurchasedProductsView.class);
   private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 
   public PurchasedProductsView(ViewContext context) {
@@ -32,12 +28,6 @@ public class PurchasedProductsView extends AbstractPurchasedProductsView {
 
   @Override
   public UpdateEffect<PurchasedProductsOuter.PurchasedProduct> processItemCheckedOut(PurchasedProductsOuter.PurchasedProduct state, PurchasedProductEntity.PurchasedProductState command) {
-    if (state.getProductId().isEmpty()) {
-      log.info("+Insert {}, {}, {}, {}", command.getCustomerId(), command.getCartId(), command.getProductId(), toUtc(command.getPurchasedUtc()));
-    } else {
-      log.info("-Update {}, {}, {}", state.getCustomerId(), state.getCartId(), state.getProductId());
-      log.info(">Update {}, {}, {}", command.getCustomerId(), command.getCartId(), command.getProductId());
-    }
     return effects().updateState(
         state.toBuilder()
             .setCustomerId(command.getCustomerId())

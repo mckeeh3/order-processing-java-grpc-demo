@@ -3,9 +3,6 @@ package io.shopping.cart.entity;
 import com.akkaserverless.javasdk.valueentity.ValueEntityContext;
 import com.google.protobuf.Empty;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import io.shopping.cart.api.PurchasedProductApi;
 import io.shopping.cart.entity.PurchasedProductEntity.PurchasedProductState;
 
@@ -15,7 +12,6 @@ import io.shopping.cart.entity.PurchasedProductEntity.PurchasedProductState;
 // or delete it so it is regenerated as needed.
 
 public class PurchasedProduct extends AbstractPurchasedProduct {
-  private static final Logger log = LoggerFactory.getLogger(PurchasedProduct.class);
 
   public PurchasedProduct(ValueEntityContext context) {
   }
@@ -27,8 +23,6 @@ public class PurchasedProduct extends AbstractPurchasedProduct {
 
   @Override
   public Effect<Empty> addPurchasedProduct(PurchasedProductEntity.PurchasedProductState state, PurchasedProductApi.PurchasedProduct command) {
-    log.info("{}", state);
-    log.info("{}", command);
     return effects()
         .updateState(updateState(state, command))
         .thenReply(Empty.getDefaultInstance());

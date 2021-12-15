@@ -7,9 +7,6 @@ import com.akkaserverless.javasdk.action.ActionCreationContext;
 import com.google.protobuf.Any;
 import com.google.protobuf.Empty;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import io.shopping.cart.api.PurchasedProductApi;
 import io.shopping.cart.entity.CartEntity;
 
@@ -19,15 +16,12 @@ import io.shopping.cart.entity.CartEntity;
 // or delete it so it is regenerated as needed.
 
 public class CartToPurchasedProductAction extends AbstractCartToPurchasedProductAction {
-  private static final Logger log = LoggerFactory.getLogger(CartToPurchasedProductAction.class);
 
   public CartToPurchasedProductAction(ActionCreationContext creationContext) {
   }
 
   @Override
   public Effect<Empty> onCartCheckedOut(CartEntity.CartCheckedOut cartCheckedOut) {
-    log.info("{}", cartCheckedOut);
-
     var results = cartCheckedOut.getCartState().getLineItemsList().stream()
         .map(lineItem -> PurchasedProductApi.PurchasedProduct.newBuilder()
             .setCustomerId(cartCheckedOut.getCartState().getCustomerId())
