@@ -3,6 +3,8 @@ package io.shopping.cart.entity;
 import com.akkaserverless.javasdk.valueentity.ValueEntityContext;
 import com.google.protobuf.Empty;
 import io.shopping.cart.api.PurchasedProductApi;
+import io.shopping.cart.api.PurchasedProductApi.GetPurchasedProductRequest;
+import io.shopping.cart.entity.PurchasedProductEntity.PurchasedProductState;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
 //
@@ -11,20 +13,48 @@ import io.shopping.cart.api.PurchasedProductApi;
 
 /** A value entity. */
 public class PurchasedProduct extends AbstractPurchasedProduct {
-  @SuppressWarnings("unused")
-  private final String entityId;
 
   public PurchasedProduct(ValueEntityContext context) {
-    this.entityId = context.entityId();
   }
 
   @Override
   public PurchasedProductEntity.PurchasedProductState emptyState() {
-    throw new UnsupportedOperationException("Not implemented yet, replace with your empty entity state");
+    return PurchasedProductEntity.PurchasedProductState.getDefaultInstance();
   }
 
   @Override
-  public Effect<Empty> addPurchasedProduct(PurchasedProductEntity.PurchasedProductState currentState, PurchasedProductApi.PurchasedProduct purchasedProduct) {
-    return effects().error("The command handler for `AddPurchasedProduct` is not implemented, yet");
+  public Effect<Empty> addPurchasedProduct(PurchasedProductEntity.PurchasedProductState state, PurchasedProductApi.PurchasedProduct command) {
+    return effects()
+        .updateState(updateState(state, command))
+        .thenReply(Empty.getDefaultInstance());
+  }
+
+  @Override
+  public Effect<PurchasedProductApi.PurchasedProduct> getPurchasedProduct(PurchasedProductState state, GetPurchasedProductRequest command) {
+    return effects().reply(toApi(state));
+  }
+
+  private PurchasedProductApi.PurchasedProduct toApi(PurchasedProductState state) {
+    return PurchasedProductApi.PurchasedProduct
+        .newBuilder()
+        .setCustomerId(state.getCustomerId())
+        .setCartId(state.getCartId())
+        .setProductId(state.getProductId())
+        .setProductName(state.getProductName())
+        .setQuantity(state.getQuantity())
+        .setPurchasedUtc(state.getPurchasedUtc())
+        .build();
+  }
+
+  private PurchasedProductState updateState(PurchasedProductEntity.PurchasedProductState state, PurchasedProductApi.PurchasedProduct command) {
+    return state
+        .toBuilder()
+        .setCustomerId(command.getCustomerId())
+        .setCartId(command.getCartId())
+        .setProductId(command.getProductId())
+        .setProductName(command.getProductName())
+        .setQuantity(command.getQuantity())
+        .setPurchasedUtc(command.getPurchasedUtc())
+        .build();
   }
 }

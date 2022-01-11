@@ -21,6 +21,18 @@ service PurchasedProductService {
       body: "*"
     };
   }
+
+  rpc GetPurchasedProduct(GetPurchasedProductRequest) returns (PurchasedProduct) {
+    option (google.api.http) = {
+      get: "/product/{customer_id}/{cart_id}/{product_id}"
+    };
+  }
+}
+
+message GetPurchasedProductRequest {
+  string customer_id = 1 [(akkaserverless.field).entity_key = true];
+  string cart_id = 2 [(akkaserverless.field).entity_key = true];
+  string product_id = 3 [(akkaserverless.field).entity_key = true];
 }
 
 message PurchasedProduct {

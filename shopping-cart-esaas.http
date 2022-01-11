@@ -90,3 +90,8 @@ curl -XGET -H "Content-Type: application/json"
 
 curl -XGET -H "Content-Type: application/json"
   '{{urlPrefix}}/purchased-products-by-date?product_id={{productId}}&from_date={{fromDate}}&to_date={{toDate}}'
+
+### io.shopping.cart.api.PurchasedProductService.GetPurchasedProduct
+
+curl -XGET -H "Content-Type: application/json"
+  '{{urlPrefix}}/product/{{customerId}}/{{cartId}}/{{productId}}'
