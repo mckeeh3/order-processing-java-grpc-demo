@@ -1,9 +1,9 @@
 package io.shopping.cart.view;
 
 import com.akkaserverless.javasdk.view.ViewContext;
-import com.akkaserverless.javasdk.view.View;
-import io.shopping.cart.entity.PurchasedProductEntity;
 import com.google.protobuf.Any;
+
+import io.shopping.cart.entity.PurchasedProductEntity;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
 //
@@ -12,22 +12,29 @@ import com.google.protobuf.Any;
 
 public class PurchasedProductsView extends AbstractPurchasedProductsView {
 
-  public PurchasedProductsView(ViewContext context) {}
+  public PurchasedProductsView(ViewContext context) {
+  }
 
   @Override
   public PurchasedProductsOuter.PurchasedProduct emptyState() {
-    throw new UnsupportedOperationException("Not implemented yet, replace with your empty view state");
+    return PurchasedProductsOuter.PurchasedProduct.getDefaultInstance();
   }
 
   @Override
-  public View.UpdateEffect<PurchasedProductsOuter.PurchasedProduct> processItemCheckedOut(
-    PurchasedProductsOuter.PurchasedProduct state, PurchasedProductEntity.PurchasedProductState purchasedProductState) {
-    throw new UnsupportedOperationException("Update handler for 'ProcessItemCheckedOut' not implemented yet");
+  public UpdateEffect<PurchasedProductsOuter.PurchasedProduct> processItemCheckedOut(PurchasedProductsOuter.PurchasedProduct state, PurchasedProductEntity.PurchasedProductState command) {
+    return effects().updateState(
+        state.toBuilder()
+            .setCustomerId(command.getCustomerId())
+            .setCartId(command.getCartId())
+            .setProductId(command.getProductId())
+            .setProductName(command.getProductName())
+            .setQuantity(command.getQuantity())
+            .setPurchasedUtc(command.getPurchasedUtc())
+            .build());
   }
+
   @Override
-  public View.UpdateEffect<PurchasedProductsOuter.PurchasedProduct> ignoreOtherEvents(
-    PurchasedProductsOuter.PurchasedProduct state, Any any) {
-    throw new UnsupportedOperationException("Update handler for 'IgnoreOtherEvents' not implemented yet");
+  public UpdateEffect<PurchasedProductsOuter.PurchasedProduct> ignoreOtherEvents(PurchasedProductsOuter.PurchasedProduct state, Any any) {
+    return effects().ignore();
   }
 }
-

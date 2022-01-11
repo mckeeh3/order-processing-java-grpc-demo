@@ -1,8 +1,13 @@
 package io.shopping.cart.action;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
+
 import com.akkaserverless.javasdk.action.ActionCreationContext;
 import com.google.protobuf.Any;
 import com.google.protobuf.Empty;
+
+import io.shopping.cart.api.PurchasedProductApi;
 import io.shopping.cart.entity.CartEntity;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
@@ -10,19 +15,33 @@ import io.shopping.cart.entity.CartEntity;
 // As long as this file exists it will not be overwritten: you can maintain it yourself,
 // or delete it so it is regenerated as needed.
 
-/** An action. */
 public class CartToPurchasedProductAction extends AbstractCartToPurchasedProductAction {
 
-  public CartToPurchasedProductAction(ActionCreationContext creationContext) {}
+  public CartToPurchasedProductAction(ActionCreationContext creationContext) {
+  }
 
-  /** Handler for "OnCartCheckedOut". */
   @Override
   public Effect<Empty> onCartCheckedOut(CartEntity.CartCheckedOut cartCheckedOut) {
-    throw new RuntimeException("The command handler for `OnCartCheckedOut` is not implemented, yet");
+    var results = cartCheckedOut.getCartState().getLineItemsList().stream()
+        .map(lineItem -> PurchasedProductApi.PurchasedProduct.newBuilder()
+            .setCustomerId(cartCheckedOut.getCartState().getCustomerId())
+            .setCartId(cartCheckedOut.getCartState().getCartId())
+            .setProductId(lineItem.getProductId())
+            .setProductName(lineItem.getProductName())
+            .setQuantity(lineItem.getQuantity())
+            .setPurchasedUtc(cartCheckedOut.getCartState().getCheckedOutUtc())
+            .build())
+        .map(purchasedProduct -> components().purchasedProduct().addPurchasedProduct(purchasedProduct).execute())
+        .collect(Collectors.toList());
+
+    var result = CompletableFuture.allOf(results.toArray(new CompletableFuture[results.size()]))
+        .thenApply(reply -> effects().reply(Empty.getDefaultInstance()));
+
+    return effects().asyncEffect(result);
   }
-  /** Handler for "IgnoreOtherEvents". */
+
   @Override
   public Effect<Empty> ignoreOtherEvents(Any any) {
-    throw new RuntimeException("The command handler for `IgnoreOtherEvents` is not implemented, yet");
+    return effects().reply(Empty.getDefaultInstance());
   }
 }
