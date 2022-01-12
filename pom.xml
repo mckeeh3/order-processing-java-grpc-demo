@@ -4,7 +4,7 @@
 
   <groupId>io.shopping.cart</groupId>
   <artifactId>shopping-cart-esaas-with-views-java</artifactId>
-  <version>v2</version>
+  <version>v1</version>
   <packaging>jar</packaging>
 
   <name>shopping-cart-esaas-with-views-java</name>
@@ -18,7 +18,7 @@
     <jdk.target>11</jdk.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-    <akkaserverless-sdk.version>0.10.1</akkaserverless-sdk.version>
+    <akkaserverless-sdk.version>0.10.4</akkaserverless-sdk.version>
     <akka-grpc.version>2.1.0</akka-grpc.version>
   </properties>
 
@@ -308,7 +308,7 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.13.1</version>
+      <version>4.13.2</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

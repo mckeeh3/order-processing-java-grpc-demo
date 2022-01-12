@@ -6,16 +6,16 @@
 @productId = product-1
 @productName = product name 1
 @quantity = 1
-@checkedOutUtc = 2020-01-01T00:00:00.000-0500
-# @checkedOutUtc =
-@shippedUtc = 2020-01-01T00:00:00.000-0500
-# @shippedUtc =
-@deliveredUtc = 2020-01-01T00:00:00.000-0500
-# @deliveredUtc =
-# @deletedUtc = 2020-01-01T00:00:00.000-0500
+# @checkedOutUtc = 2022-01-01T00:00:00.000-0500
+@checkedOutUtc =
+# @shippedUtc = 2022-01-01T00:00:00.000-0500
+@shippedUtc =
+# @deliveredUtc = 2022-01-01T00:00:00.000-0500
+@deliveredUtc =
+# @deletedUtc = 2022-01-12T00:00:00.000-0500
 @deletedUtc =
-@fromDate = 2021-01-01T00:00:00.000-0500
-@toDate = 2022-01-01T00:00:00.000-0500
+@fromDate = 2022-01-01T00:00:00.000-0500
+@toDate = 2023-01-01T00:00:00.000-0500
 
 ### io.shopping.cart.ShoppingCartService.AddItem
 

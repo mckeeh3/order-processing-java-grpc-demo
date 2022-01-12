@@ -277,6 +277,10 @@ public class ShoppingCart extends AbstractShoppingCart {
     }
   }
 
+  private Optional<Effect<CartApi.ShoppingCart>> reject(Timestamp utc, String name) {
+    return Optional.empty();
+  }
+
   private Optional<Effect<CartApi.ShoppingCart>> reject(CartEntity.CartState state, CartApi.GetShoppingCart command) {
     if (state.getCartId().isEmpty()) {
       return Optional.of(effects().error("Shopping cart is empty"));
@@ -408,7 +412,7 @@ public class ShoppingCart extends AbstractShoppingCart {
         .setCheckedOutUtc(toTimeStamp(command.getCheckedOutUtc()))
         .setShippedUtc(toTimeStamp(command.getShippedUtc()))
         .setDeliveredUtc(toTimeStamp(command.getDeliveredUtc()))
-        .setDeletedUtc(toTimeStamp(command.getDeletedUtc()))
+        .setDeletedUtc(command.getDeletedUtc())
         .build();
   }
 

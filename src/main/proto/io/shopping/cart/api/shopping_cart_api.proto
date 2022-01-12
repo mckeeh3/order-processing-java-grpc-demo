@@ -3,6 +3,7 @@ syntax = "proto3";
 import "akkaserverless/annotations.proto";
 import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
 
 package io.shopping.cart.api;
 
@@ -112,7 +113,7 @@ message SetShoppingCartDates {
   string checked_out_utc = 2;
   string shipped_utc = 3;
   string delivered_utc = 4;
-  string deleted_utc = 5;
+  google.protobuf.Timestamp deleted_utc = 5;
 }
 
 message GetShoppingCart {
