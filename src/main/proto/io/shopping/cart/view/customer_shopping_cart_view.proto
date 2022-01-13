@@ -16,7 +16,9 @@ service CustomerShoppingCarts {
 
   rpc GetShoppingCarts(GetShoppingCartsRequest) returns (GetShoppingCartsResponse) {
     option (akkaserverless.method).view.query = {
-      query: "SELECT * AS shopping_carts FROM shopping_carts WHERE customer_id = :customer_id"
+      query: "SELECT * AS shopping_carts"
+             "  FROM shopping_carts"
+             " WHERE customer_id = :customer_id"
     };
     option (google.api.http) = {
       get: "/shoppng-carts"

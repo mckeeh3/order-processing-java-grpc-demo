@@ -1,10 +1,8 @@
 package io.shopping.cart.entity;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -265,18 +263,6 @@ public class ShoppingCart extends AbstractShoppingCart {
         .or(() -> Optional.empty());
   }
 
-  private Optional<Effect<CartApi.ShoppingCart>> reject(String utc, String name) {
-    if (utc.trim().isEmpty()) {
-      return Optional.empty();
-    }
-    try {
-      dateFormat.parse(utc);
-      return Optional.empty();
-    } catch (ParseException e) {
-      return Optional.of(effects().error(String.format("Invalid %s date: %s", name, e.getMessage())));
-    }
-  }
-
   private Optional<Effect<CartApi.ShoppingCart>> reject(Timestamp utc, String name) {
     return Optional.empty();
   }
@@ -409,9 +395,9 @@ public class ShoppingCart extends AbstractShoppingCart {
     return CartEntity.DatesChanged
         .newBuilder()
         .setCartId(state.getCartId())
-        .setCheckedOutUtc(toTimeStamp(command.getCheckedOutUtc()))
-        .setShippedUtc(toTimeStamp(command.getShippedUtc()))
-        .setDeliveredUtc(toTimeStamp(command.getDeliveredUtc()))
+        .setCheckedOutUtc(command.getCheckedOutUtc())
+        .setShippedUtc(command.getShippedUtc())
+        .setDeliveredUtc(command.getDeliveredUtc())
         .setDeletedUtc(command.getDeletedUtc())
         .build();
   }
@@ -421,10 +407,10 @@ public class ShoppingCart extends AbstractShoppingCart {
         .newBuilder()
         .setCartId(state.getCartId())
         .setCustomerId(state.getCustomerId())
-        .setCheckedOutUtc(toUtc(state.getCheckedOutUtc()))
-        .setShippedUtc(toUtc(state.getShippedUtc()))
-        .setDeliveredUtc(toUtc(state.getDeliveredUtc()))
-        .setDeletedUtc(toUtc(state.getDeletedUtc()))
+        .setCheckedOutUtc(state.getCheckedOutUtc())
+        .setShippedUtc(state.getShippedUtc())
+        .setDeliveredUtc(state.getDeliveredUtc())
+        .setDeletedUtc(state.getDeletedUtc())
         .addAllLineItems(toApi(state.getLineItemsList()))
         .build();
   }
@@ -438,28 +424,6 @@ public class ShoppingCart extends AbstractShoppingCart {
             .setQuantity(lineItem.getQuantity())
             .build())
         .collect(Collectors.toList());
-  }
-
-  private static String toUtc(Timestamp timestamp) {
-    if (timestamp.getSeconds() == 0) {
-      return "";
-    }
-    return dateFormat.format(new Date(timestamp.getSeconds() * 1000 + timestamp.getNanos() / 1000000));
-  }
-
-  private static Timestamp toTimeStamp(String utc) {
-    if (utc.isEmpty()) {
-      return Timestamp.newBuilder().build();
-    }
-    try {
-      var time = dateFormat.parse(utc);
-      return Timestamp.newBuilder()
-          .setSeconds(time.getTime() / 1000)
-          .setNanos((int) (time.getTime() % 1000) * 1000000)
-          .build();
-    } catch (ParseException e) {
-      throw new RuntimeException("Invalid UTC date: " + utc, e);
-    }
   }
 
   static class Cart {

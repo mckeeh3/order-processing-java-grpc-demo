@@ -15,9 +15,13 @@ service PurchasedProducts {
     type: SERVICE_TYPE_VIEW
   };
 
-  rpc GetPurchasedProductsByDate(GetPurchasedProductsRequest) returns (GetPurchasedProductsResponse) {
+  rpc GetPurchasedProductsByDate(PurchasedProductsRequest) returns (PurchasedProductsResponse) {
     option (akkaserverless.method).view.query = {
-      query: "SELECT * AS purchased_products FROM purchased_products WHERE product_id = :product_id AND purchased_utc.seconds >= :`from_date.seconds` AND purchased_utc.seconds <= :`to_date.seconds`"
+      query: "SELECT * AS purchased_products"
+             "  FROM purchased_products"
+             " WHERE product_id = :product_id"
+             "   AND purchased_utc.seconds >= :`from_date.seconds`"
+             "   AND purchased_utc.seconds <= :`to_date.seconds`"
     };
     option (google.api.http) = {
       get: "/purchased-products-by-date"
@@ -45,13 +49,13 @@ service PurchasedProducts {
   }
 }
 
-message GetPurchasedProductsRequest {
+message PurchasedProductsRequest {
   string product_id = 1;
   google.protobuf.Timestamp from_date = 2;
   google.protobuf.Timestamp to_date = 3;
 }
 
-message GetPurchasedProductsResponse {
+message PurchasedProductsResponse {
   repeated PurchasedProduct purchased_products = 1;
 }
 

@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package io.shopping.cart.view;
+
+import "google/protobuf/timestamp.proto";
+
+option java_outer_classname = "OrderOuter";
+
+message Order {
+  string cart_id = 1;
+  string customer_id = 2;
+  google.protobuf.Timestamp checked_out_utc = 3;
+  google.protobuf.Timestamp shipped_utc = 4;
+  google.protobuf.Timestamp delivered_utc = 5;
+  google.protobuf.Timestamp deleted_utc = 6;
+  repeated LineItem line_items = 7;
+}
+
+message LineItem {
+  string product_id = 1;
+  string product_name = 2;
+  int32 quantity = 3;
+}

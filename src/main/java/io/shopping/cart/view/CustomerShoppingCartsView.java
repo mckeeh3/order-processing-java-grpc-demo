@@ -1,14 +1,10 @@
 package io.shopping.cart.view;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.akkaserverless.javasdk.view.View;
 import com.akkaserverless.javasdk.view.ViewContext;
-import com.google.protobuf.Timestamp;
 
 import io.shopping.cart.api.CartApi;
 import io.shopping.cart.entity.CartEntity;
@@ -19,7 +15,6 @@ import io.shopping.cart.entity.CartEntity;
 // or delete it so it is regenerated as needed.
 
 public class CustomerShoppingCartsView extends AbstractCustomerShoppingCartsView {
-  private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 
   public CustomerShoppingCartsView(ViewContext context) {
   }
@@ -184,47 +179,40 @@ public class CustomerShoppingCartsView extends AbstractCustomerShoppingCartsView
 
     ShoppingCart handle(CartEntity.CartCheckedOut event) {
       state = state.toBuilder()
-          .setCheckedOutUtc(toUtc(event.getCartState().getCheckedOutUtc()))
+          .setCheckedOutUtc(event.getCartState().getCheckedOutUtc())
           .build();
       return this;
     }
 
     ShoppingCart handle(CartEntity.CartShipped event) {
       state = state.toBuilder()
-          .setShippedUtc(toUtc(event.getShippedUtc()))
+          .setShippedUtc(event.getShippedUtc())
           .build();
       return this;
     }
 
     ShoppingCart handle(CartEntity.CartDelivered event) {
       state = state.toBuilder()
-          .setDeliveredUtc(toUtc(event.getDeliveredUtc()))
+          .setDeliveredUtc(event.getDeliveredUtc())
           .build();
       return this;
     }
 
     ShoppingCart handle(CartEntity.CartDeleted event) {
       state = state.toBuilder()
-          .setDeletedUtc(toUtc(event.getDeletedUtc()))
+          .setDeletedUtc(event.getDeletedUtc())
           .build();
       return this;
     }
 
     ShoppingCart handle(CartEntity.DatesChanged event) {
       state = state.toBuilder()
-          .setCheckedOutUtc(toUtc(event.getCheckedOutUtc()))
-          .setShippedUtc(toUtc(event.getShippedUtc()))
-          .setDeliveredUtc(toUtc(event.getDeliveredUtc()))
-          .setDeletedUtc(toUtc(event.getDeletedUtc()))
+          .setCheckedOutUtc(event.getCheckedOutUtc())
+          .setShippedUtc(event.getShippedUtc())
+          .setDeliveredUtc(event.getDeliveredUtc())
+          .setDeletedUtc(event.getDeletedUtc())
           .build();
       return this;
-    }
-
-    private static String toUtc(Timestamp timestamp) {
-      if (timestamp.getSeconds() == 0) {
-        return "";
-      }
-      return dateFormat.format(new Date(timestamp.getSeconds() * 1000 + timestamp.getNanos() / 1000000));
     }
   }
 }
