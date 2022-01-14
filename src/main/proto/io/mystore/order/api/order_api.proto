@@ -21,11 +21,41 @@ service OrderService {
     };
   }
 
+  rpc ShippedCart(ShippedOrder) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/order/{order_id}/shipped"
+    };
+  }
+
+  rpc DeliveredCart(DeliveredOrder) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/order/{order_id}/delivered"
+    };
+  }
+
+  rpc DeleteCart(DeleteOrder) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/order/{order_id}/delete"
+    };
+  }
+
   rpc GetOrder(GetOrderRequest) returns (Order) {
     option (google.api.http) = {
       get: "/order/{order_id}"
     };
   }
+}
+
+message ShippedOrder {
+  string order_id = 1 [(akkaserverless.field).entity_key = true];
+}
+
+message DeliveredOrder {
+  string order_id = 1 [(akkaserverless.field).entity_key = true];
+}
+
+message DeleteOrder {
+  string order_id = 1 [(akkaserverless.field).entity_key = true];
 }
 
 message GetOrderRequest {

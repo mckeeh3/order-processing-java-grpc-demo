@@ -1,13 +1,19 @@
 package io.mystore.order.entity;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import com.akkaserverless.javasdk.valueentity.ValueEntityContext;
 import com.google.protobuf.Empty;
+import com.google.protobuf.Timestamp;
 
 import io.mystore.order.api.OrderApi;
+import io.mystore.order.api.OrderApi.DeleteOrder;
+import io.mystore.order.api.OrderApi.DeliveredOrder;
 import io.mystore.order.api.OrderApi.LineItem;
+import io.mystore.order.api.OrderApi.ShippedOrder;
+import io.mystore.order.entity.OrderEntity.OrderState;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
 //
@@ -31,6 +37,27 @@ public class Order extends AbstractOrder {
         .thenReply(Empty.getDefaultInstance());
   }
 
+  @Override
+  public Effect<Empty> shippedCart(OrderState state, ShippedOrder command) {
+    return effects()
+        .updateState(updateState(state, command))
+        .thenReply(Empty.getDefaultInstance());
+  }
+
+  @Override
+  public Effect<Empty> deliveredCart(OrderState state, DeliveredOrder command) {
+    return effects()
+        .updateState(updateState(state, command))
+        .thenReply(Empty.getDefaultInstance());
+  }
+
+  @Override
+  public Effect<Empty> deleteCart(OrderState state, DeleteOrder command) {
+    return effects()
+        .updateState(updateState(state, command))
+        .thenReply(Empty.getDefaultInstance());
+  }
+
   private OrderEntity.OrderState updateState(OrderEntity.OrderState state, OrderApi.Order command) {
     return OrderEntity.OrderState
         .newBuilder()
@@ -42,6 +69,27 @@ public class Order extends AbstractOrder {
         .setDeletedUtc(command.getDeletedUtc())
         .clearLineItems()
         .addAllLineItems(toState(command.getLineItemsList()))
+        .build();
+  }
+
+  private OrderEntity.OrderState updateState(OrderState state, ShippedOrder command) {
+    return state
+        .toBuilder()
+        .setShippedUtc(timestampNow())
+        .build();
+  }
+
+  private OrderEntity.OrderState updateState(OrderState state, DeliveredOrder command) {
+    return state
+        .toBuilder()
+        .setDeliveredUtc(timestampNow())
+        .build();
+  }
+
+  private OrderEntity.OrderState updateState(OrderState state, DeleteOrder command) {
+    return state
+        .toBuilder()
+        .setDeletedUtc(timestampNow())
         .build();
   }
 
@@ -83,5 +131,14 @@ public class Order extends AbstractOrder {
             .setQuantity(lineItem.getQuantity())
             .build())
         .collect(Collectors.toList());
+  }
+
+  static Timestamp timestampNow() {
+    var now = Instant.now();
+    return Timestamp
+        .newBuilder()
+        .setSeconds(now.getEpochSecond())
+        .setNanos(now.getNano())
+        .build();
   }
 }
