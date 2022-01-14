@@ -1,4 +1,4 @@
-package io.shopping.cart;
+package io.mystore;
 
 import com.akkaserverless.javasdk.AkkaServerless;
 import io.mystore.cart.entity.ShoppingCart;

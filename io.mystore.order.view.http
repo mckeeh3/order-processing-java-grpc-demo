@@ -1,0 +1,22 @@
+
+@urlPrefix = https://blue-shape-3166.us-east1.akkaserverless.app
+@customerId = customer-1
+@cartId = cart-1
+@productId = product-1
+@fromDate = 2022-01-01T00:00:00.000-05:00
+@toDate = 2023-01-01T00:00:00.000-05:00
+
+### io.mystore.order.view.OrdersByCustomerByDate.GetOrdersByCustomerByDate
+
+curl -XPOST -H "Content-Type: application/json" -d '{
+  "customer_id":"{{customerId}}",
+  "from_date":"{{fromDate}}",
+  "to_date":"{{toDate}}"}'
+  {{urlPrefix}}/orders-by-customer-by-date
+
+### io.mystore.order.view.OrdersByDate.GetOrdersByDate
+
+curl -XPOST -H "Content-Type: application/json" -d '{
+  "from_date":"{{fromDate}}",
+  "to_date":"{{toDate}}"}'
+  {{urlPrefix}}/orders-by-date

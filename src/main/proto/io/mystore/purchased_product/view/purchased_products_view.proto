@@ -24,7 +24,9 @@ service PurchasedProducts {
              "   AND purchased_utc.seconds <= :`to_date.seconds`"
     };
     option (google.api.http) = {
-      get: "/purchased-products-by-date"
+      // get: "/purchased-products-by-date"
+      post: "/purchased-products-by-date",
+      body: "*"
     };
   }
 

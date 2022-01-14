@@ -1,0 +1,15 @@
+
+@urlPrefix = https://blue-shape-3166.us-east1.akkaserverless.app
+@customerId = customer-1
+@cartId = cart-1
+@productId = product-1
+@fromDate = 2022-01-01T00:00:00.000-05:00
+@toDate = 2023-01-01T00:00:00.000-05:00
+
+### io.mystore.purchased_product.view.PurchasedProducts.GetPurchasedProductsByDate
+
+curl -XPOST -H "Content-Type: application/json" -d '{
+  "product_id":"{{productId}}",
+  "from_date":"{{fromDate}}",
+  "to_date":"{{toDate}}"}'
+  {{urlPrefix}}/purchased-products-by-date

@@ -25,7 +25,9 @@ service OrdersByCustomerByDate {
              "   AND ordered_utc.seconds < :`to_date.seconds`"
     };
     option (google.api.http) = {
-      get: "/orders-by-customer-by-date"
+      // get: "/orders-by-customer-by-date"
+      post: "/orders-by-customer-by-date",
+      body: "*"
     };
   }
 

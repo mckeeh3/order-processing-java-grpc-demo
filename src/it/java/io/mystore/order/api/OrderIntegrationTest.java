@@ -2,8 +2,8 @@ package io.mystore.order.api;
 
 import com.akkaserverless.javasdk.testkit.junit.AkkaServerlessTestKitResource;
 import com.google.protobuf.Empty;
+import io.mystore.Main;
 import io.mystore.order.entity.OrderEntity;
-import io.shopping.cart.Main;
 import org.junit.ClassRule;
 import org.junit.Test;
 

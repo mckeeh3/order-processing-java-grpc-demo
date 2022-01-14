@@ -1,0 +1,70 @@
+
+# @urlPrefix = http://localhost:9000
+@urlPrefix = https://blue-shape-3166.us-east1.akkaserverless.app
+@customerId = customer-1
+@cartId = cart-1
+@productId = product-1
+@productName = product name 1
+@quantity = 1
+# @checkedOutUtc = 2022-01-01T00:00:00.000-0500
+@checkedOutUtc =
+# @shippedUtc = 2022-01-01T00:00:00.000-0500
+@shippedUtc =
+# @deliveredUtc = 2022-01-01T00:00:00.000-0500
+@deliveredUtc =
+# @deletedUtc = 2022-01-12T00:00:00.000-0500
+@deletedUtc =
+
+### io.mystore.cart.api.ShoppingCartService.AddItem
+
+curl -XPOST -H "Content-Type: application/json" -d '{
+  "customer_id":"{{customerId}}",
+  "product_id":"{{productId}}",
+  "product_name":"{{productName}}",
+  "quantity":{{quantity}}
+  }' {{urlPrefix}}/cart/{{cartId}}/items/add
+
+### io.mystore.cart.api.ShoppingCartService.ChangeItem
+
+curl -XPUT -H "Content-Type: application/json" -d '{
+  "quantity":{{quantity}}
+  }' {{urlPrefix}}/cart/{{cartId}}/items/{{productId}}/change
+
+### io.mystore.cart.api.ShoppingCartService.RemoveItem
+
+curl -XDELETE -H "Content-Type: application/json"
+  {{urlPrefix}}/cart/{{cartId}}/items/{{productId}}/remove
+
+### io.mystore.cart.api.ShoppingCartService.CheckoutCart
+
+curl -XPUT -H "Content-Type: application/json"
+  {{urlPrefix}}/cart/{{cartId}}/checkout
+
+### io.mystore.cart.api.ShoppingCartService.ShippedCart
+
+curl -XPUT -H "Content-Type: application/json"
+  {{urlPrefix}}/cart/{{cartId}}/shipped
+
+### io.mystore.cart.api.ShoppingCartService.DeliveredCart
+
+curl -XPUT -H "Content-Type: application/json"
+  {{urlPrefix}}/cart/{{cartId}}/delivered
+
+### io.mystore.cart.api.ShoppingCartService.DeleteCart
+
+curl -XDELETE -H "Content-Type: application/json"
+  {{urlPrefix}}/cart/{{cartId}}/delete
+
+### io.mystore.cart.api.ShoppingCartService.SetDates
+
+curl -XPUT -H "Content-Type: application/json" -d '{
+  "checked_out_utc":"{{checkedOutUtc}}",
+  "shipped_utc":"{{shippedUtc}}",
+  "delivered_utc":"{{deliveredUtc}}",
+  "deleted_utc":"{{deletedUtc}}"
+  }' {{urlPrefix}}/cart/{{cartId}}/dates
+
+### io.mystore.cart.api.ShoppingCartService.GetCart
+
+curl -XGET -H "Content-Type: application/json"
+  {{urlPrefix}}/cart/{{cartId}}
