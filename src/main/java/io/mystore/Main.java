@@ -11,7 +11,7 @@ import io.mystore.order.view.OrdersByCustomerByDateView;
 import io.mystore.order.view.OrdersByDateView;
 import io.mystore.purchased_product.action.CartToPurchasedProductAction;
 import io.mystore.purchased_product.entity.PurchasedProduct;
-import io.mystore.purchased_product.view.PurchasedProductsView;
+import io.mystore.purchased_product.view.PurchasedProductsByDateView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +40,7 @@ public final class Main {
       CartsByDateView::new,
       OrdersByCustomerByDateView::new,
       OrdersByDateView::new,
-      PurchasedProductsView::new);
+      PurchasedProductsByDateView::new);
   }
 
   public static void main(String[] args) throws Exception {

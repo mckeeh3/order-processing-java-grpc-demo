@@ -9,9 +9,9 @@ import "google/protobuf/timestamp.proto";
 import "io/mystore/purchased_product/entity/purchased_product_entity.proto";
 import "io/mystore/purchased_product/view/purchased_product.proto";
 
-option java_outer_classname = "PurchasedProductsOuter";
+option java_outer_classname = "PurchasedProductsByDateModel";
 
-service PurchasedProducts {
+service PurchasedProductsByDate {
   option (akkaserverless.service) = {
     type: SERVICE_TYPE_VIEW
   };

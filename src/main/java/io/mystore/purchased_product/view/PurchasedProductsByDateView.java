@@ -10,9 +10,9 @@ import io.mystore.purchased_product.entity.PurchasedProductEntity;
 // As long as this file exists it will not be overwritten: you can maintain it yourself,
 // or delete it so it is regenerated as needed.
 
-public class PurchasedProductsView extends AbstractPurchasedProductsView {
+public class PurchasedProductsByDateView extends AbstractPurchasedProductsByDateView {
 
-  public PurchasedProductsView(ViewContext context) {
+  public PurchasedProductsByDateView(ViewContext context) {
   }
 
   @Override
