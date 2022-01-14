@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package io.mystore.purchased_product.view;
+
+option java_outer_classname = "PurchasedProductModel";
+
+message PurchasedProduct {
+  string customer_id = 1;
+  string order_id = 2;
+  string product_id = 3;
+  string product_name = 4;
+  int32 quantity = 5;
+  google.protobuf.Timestamp purchased_utc = 6;
+}

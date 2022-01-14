@@ -7,6 +7,7 @@ import "google/protobuf/any.proto";
 import "akkaserverless/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "io/mystore/purchased_product/entity/purchased_product_entity.proto";
+import "io/mystore/purchased_product/view/purchased_product.proto";
 
 option java_outer_classname = "PurchasedProductsOuter";
 
@@ -59,13 +60,4 @@ message PurchasedProductsRequest {
 
 message PurchasedProductsResponse {
   repeated PurchasedProduct purchased_products = 1;
-}
-
-message PurchasedProduct {
-  string customer_id = 1;
-  string cart_id = 2;
-  string product_id = 3;
-  string product_name = 4;
-  int32 quantity = 5;
-  google.protobuf.Timestamp purchased_utc = 6;
 }
