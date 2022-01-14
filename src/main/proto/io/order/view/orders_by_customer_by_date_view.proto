@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+package io.order.view;
+
+import "google/api/annotations.proto";
+import "google/protobuf/any.proto";
+import "akkaserverless/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "io/order/entity/order_entity.proto";
+import "io/order/view/order.proto";
+
+option java_outer_classname = "OrdersByCustomerByDateViewService";
+
+service OrdersByCustomerByDate {
+  option (akkaserverless.service) = {
+    type: SERVICE_TYPE_VIEW
+  };
+
+  rpc GetOrdersByCustomerByDate(OrdersByCustomerByDateRequest) returns (OrdersByCustomerByDateResponse) {
+    option (akkaserverless.method).view.query = {
+      query: "SELECT * AS orders"
+             "  FROM orders_by_customer_by_date"
+             " WHERE customer_id = :customer_id"
+             "   AND ordered_utc.seconds >= :`from_date.seconds`"
+             "   AND ordered_utc.seconds < :`to_date.seconds`"
+    };
+    option (google.api.http) = {
+      get: "/orders-by-customer-by-date"
+    };
+  }
+
+  rpc ProcessOrdered(entity.OrderState) returns (Order) {
+    option (akkaserverless.method).eventing.in = {
+      value_entity: "order"
+    };
+    option (akkaserverless.method).view.update = {
+      table: "orders_by_customer_by_date"
+      transform_updates: true
+    };
+  }
+
+  rpc IgnoreOtherEvents(google.protobuf.Any) returns (Order) {
+    option (akkaserverless.method).eventing.in = {
+      value_entity: "order"
+    };
+    option (akkaserverless.method).view.update = {
+      table: "orders_by_customer_by_date"
+      transform_updates: true
+    };
+  }
+}
+
+message OrdersByCustomerByDateRequest {
+  string customer_id = 1;
+  google.protobuf.Timestamp from_date = 2;
+  google.protobuf.Timestamp to_date = 3;
+}
+
+message OrdersByCustomerByDateResponse {
+  repeated Order orders = 1;
+}

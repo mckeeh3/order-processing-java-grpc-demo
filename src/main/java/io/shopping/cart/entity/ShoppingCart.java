@@ -1,7 +1,5 @@
 package io.shopping.cart.entity;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -21,7 +19,6 @@ import io.shopping.cart.api.CartApi;
 // or delete it so it is regenerated as needed.
 
 public class ShoppingCart extends AbstractShoppingCart {
-  private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 
   public ShoppingCart(EventSourcedEntityContext context) {
   }

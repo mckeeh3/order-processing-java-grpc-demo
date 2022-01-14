@@ -6,110 +6,111 @@ import "akkaserverless/annotations.proto";
 import "google/api/annotations.proto";
 import "io/shopping/cart/entity/shopping_cart_entity.proto";
 import "io/shopping/cart/api/shopping_cart_api.proto";
+import "io/shopping/cart/view/cart.proto";
 
-option java_outer_classname = "CustomerShoppingCartsOuter";
+option java_outer_classname = "CartsByCustomerModel";
 
-service CustomerShoppingCarts {
+service CartsByCustomer {
   option (akkaserverless.service) = {
     type: SERVICE_TYPE_VIEW
   };
 
-  rpc GetShoppingCarts(GetShoppingCartsRequest) returns (GetShoppingCartsResponse) {
+  rpc GetCartsByCustomer(GetCartsRequest) returns (GetCartsResponse) {
     option (akkaserverless.method).view.query = {
-      query: "SELECT * AS shopping_carts"
-             "  FROM shopping_carts"
+      query: "SELECT * AS carts"
+             "  FROM carts_by_customer"
              " WHERE customer_id = :customer_id"
     };
     option (google.api.http) = {
-      get: "/shoppng-carts"
+      get: "/carts-by-customer"
     };
   }
 
-  rpc ProcessItemAdded(entity.ItemAdded) returns (api.ShoppingCart) {
+  rpc ProcessItemAdded(entity.ItemAdded) returns (Cart) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "shopping_cart"
     };
     option (akkaserverless.method).view.update = {
-      table: "shopping_carts"
+      table: "carts_by_customer"
       transform_updates: true
     };
   }
 
-  rpc ProcessItemChanged(entity.ItemChanged) returns (api.ShoppingCart) {
+  rpc ProcessItemChanged(entity.ItemChanged) returns (Cart) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "shopping_cart"
     };
     option (akkaserverless.method).view.update = {
-      table: "shopping_carts"
+      table: "carts_by_customer"
       transform_updates: true
     };
   }
 
-  rpc ProcessItemRemoved(entity.ItemRemoved) returns (api.ShoppingCart) {
+  rpc ProcessItemRemoved(entity.ItemRemoved) returns (Cart) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "shopping_cart"
     };
     option (akkaserverless.method).view.update = {
-      table: "shopping_carts"
+      table: "carts_by_customer"
       transform_updates: true
     };
   }
 
-  rpc ProcessCartCheckedOut(entity.CartCheckedOut) returns (api.ShoppingCart) {
+  rpc ProcessCartCheckedOut(entity.CartCheckedOut) returns (Cart) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "shopping_cart"
     };
     option (akkaserverless.method).view.update = {
-      table: "shopping_carts"
+      table: "carts_by_customer"
       transform_updates: true
     };
   }
 
-  rpc ProcessCartShipped(entity.CartShipped) returns (api.ShoppingCart) {
+  rpc ProcessCartShipped(entity.CartShipped) returns (Cart) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "shopping_cart"
     };
     option (akkaserverless.method).view.update = {
-      table: "shopping_carts"
+      table: "carts_by_customer"
       transform_updates: true
     };
   }
 
-  rpc ProcessCartDelivered(entity.CartDelivered) returns (api.ShoppingCart) {
+  rpc ProcessCartDelivered(entity.CartDelivered) returns (Cart) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "shopping_cart"
     };
     option (akkaserverless.method).view.update = {
-      table: "shopping_carts"
+      table: "carts_by_customer"
       transform_updates: true
     };
   }
 
-  rpc ProcessCartDeleted(entity.CartDeleted) returns (api.ShoppingCart) {
+  rpc ProcessCartDeleted(entity.CartDeleted) returns (Cart) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "shopping_cart"
     };
     option (akkaserverless.method).view.update = {
-      table: "shopping_carts"
+      table: "carts_by_customer"
       transform_updates: true
     };
   }
 
-  rpc ProcessDatesChanged(entity.DatesChanged) returns (api.ShoppingCart) {
+  rpc ProcessDatesChanged(entity.DatesChanged) returns (Cart) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "shopping_cart"
     };
     option (akkaserverless.method).view.update = {
-      table: "shopping_carts"
+      table: "carts_by_customer"
       transform_updates: true
     };
   }
 }
 
-message GetShoppingCartsRequest {
+message GetCartsRequest {
   string customer_id = 1;
 }
 
-message GetShoppingCartsResponse {
-  repeated api.ShoppingCart shopping_carts = 1;
+message GetCartsResponse {
+  repeated Cart carts = 1;
 }

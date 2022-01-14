@@ -1,12 +1,16 @@
 package io.shopping.cart;
 
 import com.akkaserverless.javasdk.AkkaServerless;
+import io.order.action.CartToOrderAction;
+import io.order.entity.Order;
+import io.order.view.OrdersByCustomerByDateView;
+import io.order.view.OrdersByDateView;
 import io.shopping.cart.action.CartToPurchasedProductAction;
 import io.shopping.cart.entity.PurchasedProduct;
 import io.shopping.cart.entity.ShoppingCart;
-import io.shopping.cart.view.CustomerOrdersByDateView;
-import io.shopping.cart.view.CustomerShoppingCartsView;
-import io.shopping.cart.view.OrdersByDateView;
+import io.shopping.cart.view.CartsByCustomerByDateView;
+import io.shopping.cart.view.CartsByCustomerView;
+import io.shopping.cart.view.CartsByDateView;
 import io.shopping.cart.view.PurchasedProductsView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,11 +30,15 @@ public final class Main {
     // If you prefer, you may remove this and manually register these components in a
     // `new AkkaServerless()` instance.
     return AkkaServerlessFactory.withComponents(
+      Order::new,
       PurchasedProduct::new,
       ShoppingCart::new,
+      CartToOrderAction::new,
       CartToPurchasedProductAction::new,
-      CustomerOrdersByDateView::new,
-      CustomerShoppingCartsView::new,
+      CartsByCustomerView::new,
+      CartsByCustomerByDateView::new,
+      CartsByDateView::new,
+      OrdersByCustomerByDateView::new,
       OrdersByDateView::new,
       PurchasedProductsView::new);
   }

@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+import "akkaserverless/annotations.proto";
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+package io.order.api;
+
+option java_outer_classname = "OrderApi";
+
+service OrderService {
+  option (akkaserverless.codegen) = {
+    value_entity: { name: "io.order.entity.Order" entity_type: "order" state: "io.order.entity.OrderState" }
+  };
+
+  rpc AddOrder(Order) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/order/{order_id}/add"
+      body: "*"
+    };
+  }
+
+  rpc GetOrder(GetOrderRequest) returns (Order) {
+    option (google.api.http) = {
+      get: "/order/{order_id}"
+    };
+  }
+}
+
+message GetOrderRequest {
+  string order_id = 1 [(akkaserverless.field).entity_key = true];
+}
+
+message Order {
+  string order_id = 1 [(akkaserverless.field).entity_key = true];
+  string customer_id = 2;
+  google.protobuf.Timestamp ordered_utc = 3;
+  google.protobuf.Timestamp shipped_utc = 4;
+  google.protobuf.Timestamp delivered_utc = 5;
+  google.protobuf.Timestamp deleted_utc = 6;
+  repeated LineItem line_items = 7;
+}
+
+message LineItem {
+  string product_id = 1;
+  string product_name = 2;
+  int32 quantity = 3;
+}

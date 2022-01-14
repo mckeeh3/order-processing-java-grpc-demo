@@ -34,18 +34,6 @@ public class PurchasedProduct extends AbstractPurchasedProduct {
     return effects().reply(toApi(state));
   }
 
-  private PurchasedProductApi.PurchasedProduct toApi(PurchasedProductState state) {
-    return PurchasedProductApi.PurchasedProduct
-        .newBuilder()
-        .setCustomerId(state.getCustomerId())
-        .setCartId(state.getCartId())
-        .setProductId(state.getProductId())
-        .setProductName(state.getProductName())
-        .setQuantity(state.getQuantity())
-        .setPurchasedUtc(state.getPurchasedUtc())
-        .build();
-  }
-
   private PurchasedProductState updateState(PurchasedProductEntity.PurchasedProductState state, PurchasedProductApi.PurchasedProduct command) {
     return state
         .toBuilder()
@@ -55,6 +43,18 @@ public class PurchasedProduct extends AbstractPurchasedProduct {
         .setProductName(command.getProductName())
         .setQuantity(command.getQuantity())
         .setPurchasedUtc(command.getPurchasedUtc())
+        .build();
+  }
+
+  private PurchasedProductApi.PurchasedProduct toApi(PurchasedProductState state) {
+    return PurchasedProductApi.PurchasedProduct
+        .newBuilder()
+        .setCustomerId(state.getCustomerId())
+        .setCartId(state.getCartId())
+        .setProductId(state.getProductId())
+        .setProductName(state.getProductName())
+        .setQuantity(state.getQuantity())
+        .setPurchasedUtc(state.getPurchasedUtc())
         .build();
   }
 }

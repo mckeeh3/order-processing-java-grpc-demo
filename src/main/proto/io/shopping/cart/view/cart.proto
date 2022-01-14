@@ -4,9 +4,9 @@ package io.shopping.cart.view;
 
 import "google/protobuf/timestamp.proto";
 
-option java_outer_classname = "OrderOuter";
+option java_outer_classname = "CartModel";
 
-message Order {
+message Cart {
   string cart_id = 1;
   string customer_id = 2;
   google.protobuf.Timestamp checked_out_utc = 3;

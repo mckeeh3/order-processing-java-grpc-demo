@@ -8,95 +8,115 @@ import "google/protobuf/empty.proto";
 import "google/protobuf/any.proto";
 import "google/protobuf/timestamp.proto";
 import "io/shopping/cart/entity/shopping_cart_entity.proto";
-import "io/shopping/cart/view/order.proto";
+import "io/shopping/cart/view/cart.proto";
 
-option java_outer_classname = "CustomerOrdersByDateOuter";
+option java_outer_classname = "CartsByCustomerByDateModel";
 
-service CustomerOrdersByDate {
+service CartsByCustomerByDate {
   option (akkaserverless.service) = {
     type: SERVICE_TYPE_VIEW
   };
 
-  rpc GetCustomerOrdersByDate(CustomerOrdersByDateRequest) returns (stream CustomerOrdersByDateResponse) {
+  rpc GetCartsByCustomerByDate(CartsByCustomerByDateRequest) returns (stream CartsByCustomerByDateResponse) {
     option (akkaserverless.method).view.query = {
-      query: "SELECT * AS orders"
-             "  FROM customer_orders_by_date"
+      query: "SELECT * AS carts"
+             "  FROM carts_by_customer_by_date"
              " WHERE customer_id = :customer_id"
              "   AND checked_out_utc.seconds >= :`from_date.seconds`"
-             "   AND checked_out_utc.seconds <= :`to_date.seconds`"
+             "   AND checked_out_utc.seconds < :`to_date.seconds`"
     };
     option (google.api.http) = {
-      get: "/customer-orders-by-date"
+      get: "/carts-by-customer-by-date"
     };
   }
 
-  rpc ProcessCartCheckedOut(entity.CartCheckedOut) returns (Order) {
+  rpc ProcessItemAdded(entity.ItemAdded) returns (Cart) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "shopping_cart"
     };
     option (akkaserverless.method).view.update = {
-      table: "customer_orders_by_date"
+      table: "carts_by_customer"
       transform_updates: true
     };
   }
 
-  rpc ProcessCartShipped(entity.CartShipped) returns (Order) {
+  rpc ProcessItemChanged(entity.ItemChanged) returns (Cart) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "shopping_cart"
     };
     option (akkaserverless.method).view.update = {
-      table: "customer_orders_by_date"
+      table: "carts_by_customer"
       transform_updates: true
     };
   }
 
-  rpc ProcessCartDelivered(entity.CartDelivered) returns (Order) {
+  rpc ProcessItemRemoved(entity.ItemRemoved) returns (Cart) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "shopping_cart"
     };
     option (akkaserverless.method).view.update = {
-      table: "customer_orders_by_date"
+      table: "carts_by_customer"
       transform_updates: true
     };
   }
 
-  rpc ProcessCartDeleted(entity.CartDeleted) returns (Order) {
+  rpc ProcessCartCheckedOut(entity.CartCheckedOut) returns (Cart) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "shopping_cart"
     };
     option (akkaserverless.method).view.update = {
-      table: "customer_orders_by_date"
+      table: "carts_by_customer_by_date"
       transform_updates: true
     };
   }
 
-  rpc ProcessDatesChanged(entity.DatesChanged) returns (Order) {
+  rpc ProcessCartShipped(entity.CartShipped) returns (Cart) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "shopping_cart"
     };
     option (akkaserverless.method).view.update = {
-      table: "customer_orders_by_date"
+      table: "carts_by_customer_by_date"
       transform_updates: true
     };
   }
 
-  rpc IgnoreOtherEvents(google.protobuf.Any) returns (Order) {
+  rpc ProcessCartDelivered(entity.CartDelivered) returns (Cart) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "shopping_cart"
     };
     option (akkaserverless.method).view.update = {
-      table: "customer_orders_by_date"
+      table: "carts_by_customer_by_date"
+      transform_updates: true
+    };
+  }
+
+  rpc ProcessCartDeleted(entity.CartDeleted) returns (Cart) {
+    option (akkaserverless.method).eventing.in = {
+      event_sourced_entity: "shopping_cart"
+    };
+    option (akkaserverless.method).view.update = {
+      table: "carts_by_customer_by_date"
+      transform_updates: true
+    };
+  }
+
+  rpc ProcessDatesChanged(entity.DatesChanged) returns (Cart) {
+    option (akkaserverless.method).eventing.in = {
+      event_sourced_entity: "shopping_cart"
+    };
+    option (akkaserverless.method).view.update = {
+      table: "carts_by_customer_by_date"
       transform_updates: true
     };
   }
 }
 
-message CustomerOrdersByDateRequest {
+message CartsByCustomerByDateRequest {
   string customer_id = 1;
   google.protobuf.Timestamp from_date = 2;
   google.protobuf.Timestamp to_date = 3;
 }
 
-message CustomerOrdersByDateResponse {
-  repeated Order orders = 1;
+message CartsByCustomerByDateResponse {
+  repeated Cart carts = 1;
 }
