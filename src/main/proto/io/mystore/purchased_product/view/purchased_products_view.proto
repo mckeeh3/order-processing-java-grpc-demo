@@ -1,0 +1,69 @@
+syntax = "proto3";
+
+package io.mystore.purchased_product.view;
+
+import "google/api/annotations.proto";
+import "google/protobuf/any.proto";
+import "akkaserverless/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "io/mystore/purchased_product/entity/purchased_product_entity.proto";
+
+option java_outer_classname = "PurchasedProductsOuter";
+
+service PurchasedProducts {
+  option (akkaserverless.service) = {
+    type: SERVICE_TYPE_VIEW
+  };
+
+  rpc GetPurchasedProductsByDate(PurchasedProductsRequest) returns (PurchasedProductsResponse) {
+    option (akkaserverless.method).view.query = {
+      query: "SELECT * AS purchased_products"
+             "  FROM purchased_products"
+             " WHERE product_id = :product_id"
+             "   AND purchased_utc.seconds >= :`from_date.seconds`"
+             "   AND purchased_utc.seconds <= :`to_date.seconds`"
+    };
+    option (google.api.http) = {
+      get: "/purchased-products-by-date"
+    };
+  }
+
+  rpc ProcessItemCheckedOut(entity.PurchasedProductState) returns (PurchasedProduct) {
+    option (akkaserverless.method).eventing.in = {
+      value_entity: "purchased_product"
+    };
+    option (akkaserverless.method).view.update = {
+      table: "purchased_products"
+      transform_updates: true
+    };
+  }
+
+  rpc IgnoreOtherEvents(google.protobuf.Any) returns (PurchasedProduct) {
+    option (akkaserverless.method).eventing.in = {
+      value_entity: "purchased_product"
+    };
+    option (akkaserverless.method).view.update = {
+      table: "purchased_products"
+      transform_updates: true
+    };
+  }
+}
+
+message PurchasedProductsRequest {
+  string product_id = 1;
+  google.protobuf.Timestamp from_date = 2;
+  google.protobuf.Timestamp to_date = 3;
+}
+
+message PurchasedProductsResponse {
+  repeated PurchasedProduct purchased_products = 1;
+}
+
+message PurchasedProduct {
+  string customer_id = 1;
+  string cart_id = 2;
+  string product_id = 3;
+  string product_name = 4;
+  int32 quantity = 5;
+  google.protobuf.Timestamp purchased_utc = 6;
+}

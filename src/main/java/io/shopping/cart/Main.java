@@ -1,17 +1,17 @@
 package io.shopping.cart;
 
 import com.akkaserverless.javasdk.AkkaServerless;
-import io.order.action.CartToOrderAction;
-import io.order.entity.Order;
-import io.order.view.OrdersByCustomerByDateView;
-import io.order.view.OrdersByDateView;
-import io.shopping.cart.action.CartToPurchasedProductAction;
-import io.shopping.cart.entity.PurchasedProduct;
-import io.shopping.cart.entity.ShoppingCart;
-import io.shopping.cart.view.CartsByCustomerByDateView;
-import io.shopping.cart.view.CartsByCustomerView;
-import io.shopping.cart.view.CartsByDateView;
-import io.shopping.cart.view.PurchasedProductsView;
+import io.mystore.cart.entity.ShoppingCart;
+import io.mystore.cart.view.CartsByCustomerByDateView;
+import io.mystore.cart.view.CartsByCustomerView;
+import io.mystore.cart.view.CartsByDateView;
+import io.mystore.order.action.CartToOrderAction;
+import io.mystore.order.entity.Order;
+import io.mystore.order.view.OrdersByCustomerByDateView;
+import io.mystore.order.view.OrdersByDateView;
+import io.mystore.purchased_product.action.CartToPurchasedProductAction;
+import io.mystore.purchased_product.entity.PurchasedProduct;
+import io.mystore.purchased_product.view.PurchasedProductsView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,0 +1,84 @@
+syntax = "proto3";
+
+import "akkaserverless/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+package io.mystore.cart.entity;
+
+option java_outer_classname = "CartEntity";
+
+option (akkaserverless.file).event_sourced_entity = {
+  name: "ShoppingCart"
+  entity_type: "shopping_cart"
+  state: "CartState"
+  events: [
+    "ItemAdded",
+    "ItemChanged",
+    "ItemRemoved",
+    "CartCheckedOut",
+    "CartShipped",
+    "CartDelivered",
+    "CartDeleted",
+    "DatesChanged"  // force line breaks
+  ]
+};
+
+message ItemAdded {
+  string cart_id = 1;
+  string customer_id = 2;
+  LineItem line_item = 3;
+}
+
+message ItemChanged {
+  string cart_id = 1;
+  string product_id = 2;
+  int32 quantity = 3;
+}
+
+message ItemRemoved {
+  string cart_id = 1;
+  string product_id = 2;
+}
+
+message CartCheckedOut {
+  CartState cart_state = 1;
+}
+
+message CartShipped {
+  string cart_id = 1;
+  google.protobuf.Timestamp shipped_utc = 2;
+}
+
+message CartDelivered {
+  string cart_id = 1;
+  google.protobuf.Timestamp delivered_utc = 2;
+}
+
+message CartDeleted {
+  string cart_id = 1;
+  google.protobuf.Timestamp deleted_utc = 2;
+}
+
+message DatesChanged {
+  string cart_id = 1;
+  google.protobuf.Timestamp checked_out_utc = 2;
+  google.protobuf.Timestamp shipped_utc = 3;
+  google.protobuf.Timestamp delivered_utc = 4;
+  google.protobuf.Timestamp deleted_utc = 5;
+}
+
+message CartState {
+  string cart_id = 1;
+  string customer_id = 2;
+  google.protobuf.Timestamp checked_out_utc = 3;
+  google.protobuf.Timestamp shipped_utc = 4;
+  google.protobuf.Timestamp delivered_utc = 5;
+  google.protobuf.Timestamp deleted_utc = 6;
+  repeated LineItem line_items = 7;
+}
+
+message LineItem {
+  string product_id = 1;
+  string product_name = 2;
+  int32 quantity = 3;
+}
