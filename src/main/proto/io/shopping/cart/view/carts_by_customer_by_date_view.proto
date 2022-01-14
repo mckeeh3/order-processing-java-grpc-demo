@@ -35,7 +35,7 @@ service CartsByCustomerByDate {
       event_sourced_entity: "shopping_cart"
     };
     option (akkaserverless.method).view.update = {
-      table: "carts_by_customer"
+      table: "carts_by_customer_by_date"
       transform_updates: true
     };
   }
@@ -45,7 +45,7 @@ service CartsByCustomerByDate {
       event_sourced_entity: "shopping_cart"
     };
     option (akkaserverless.method).view.update = {
-      table: "carts_by_customer"
+      table: "carts_by_customer_by_date"
       transform_updates: true
     };
   }
@@ -55,7 +55,7 @@ service CartsByCustomerByDate {
       event_sourced_entity: "shopping_cart"
     };
     option (akkaserverless.method).view.update = {
-      table: "carts_by_customer"
+      table: "carts_by_customer_by_date"
       transform_updates: true
     };
   }

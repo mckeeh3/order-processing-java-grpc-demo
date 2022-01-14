@@ -43,6 +43,7 @@ public class OrdersByDateView extends AbstractOrdersByDateView {
     return lineItems.stream()
         .map(lineItem -> LineItem.newBuilder()
             .setProductId(lineItem.getProductId())
+            .setProductName(lineItem.getProductName())
             .setQuantity(lineItem.getQuantity())
             .build())
         .collect(Collectors.toList());

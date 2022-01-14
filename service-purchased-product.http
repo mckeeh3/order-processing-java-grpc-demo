@@ -1,0 +1,18 @@
+
+# @urlPrefix = http://localhost:9000
+@urlPrefix = https://bold-resonance-3890.us-east1.akkaserverless.app
+@customerId = customer-1
+@cartId = cart-1
+@productId = product-2
+@productName = product name 2
+@quantity = 1
+# @checkedOutUtc = 2022-01-01T00:00:00.000-0500
+@checkedOutUtc =
+# @shippedUtc = 2022-01-01T00:00:00.000-0500
+@shippedUtc =
+# @deliveredUtc = 2022-01-01T00:00:00.000-0500
+@deliveredUtc =
+# @deletedUtc = 2022-01-12T00:00:00.000-0500
+@deletedUtc =
+@fromDate = 2022-01-01T00:00:00.000-0500
+@toDate = 2023-01-01T00:00:00.000-0500

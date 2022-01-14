@@ -24,7 +24,9 @@ service OrdersByDate {
              "   AND ordered_utc.seconds < :`to_date.seconds`"
     };
     option (google.api.http) = {
-      get: "/orders-by-date"
+      // get: "/orders-by-date"
+      post: "/orders-by-date",
+      body: "*"
     };
   }
 
@@ -50,7 +52,6 @@ service OrdersByDate {
 }
 
 message OrdersByDateRequest {
-  string product_id = 1;
   google.protobuf.Timestamp from_date = 2;
   google.protobuf.Timestamp to_date = 3;
 }
