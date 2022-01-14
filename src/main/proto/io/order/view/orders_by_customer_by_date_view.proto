@@ -9,7 +9,7 @@ import "google/protobuf/timestamp.proto";
 import "io/order/entity/order_entity.proto";
 import "io/order/view/order.proto";
 
-option java_outer_classname = "OrdersByCustomerByDateViewService";
+option java_outer_classname = "OrdersByCustomerByDateModel";
 
 service OrdersByCustomerByDate {
   option (akkaserverless.service) = {
