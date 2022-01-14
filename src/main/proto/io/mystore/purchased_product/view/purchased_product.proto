@@ -2,7 +2,9 @@ syntax = "proto3";
 
 package io.mystore.purchased_product.view;
 
-option java_outer_classname = "PurchasedProductModel";
+import "google/protobuf/timestamp.proto";
+
+option java_outer_classname = "PurchasedProductsModel";
 
 message PurchasedProduct {
   string customer_id = 1;

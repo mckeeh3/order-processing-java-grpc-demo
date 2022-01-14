@@ -16,16 +16,16 @@ public class PurchasedProductsView extends AbstractPurchasedProductsView {
   }
 
   @Override
-  public PurchasedProductsOuter.PurchasedProduct emptyState() {
-    return PurchasedProductsOuter.PurchasedProduct.getDefaultInstance();
+  public PurchasedProductsModel.PurchasedProduct emptyState() {
+    return PurchasedProductsModel.PurchasedProduct.getDefaultInstance();
   }
 
   @Override
-  public UpdateEffect<PurchasedProductsOuter.PurchasedProduct> processItemCheckedOut(PurchasedProductsOuter.PurchasedProduct state, PurchasedProductEntity.PurchasedProductState command) {
+  public UpdateEffect<PurchasedProductsModel.PurchasedProduct> processItemCheckedOut(PurchasedProductsModel.PurchasedProduct state, PurchasedProductEntity.PurchasedProductState command) {
     return effects().updateState(
         state.toBuilder()
             .setCustomerId(command.getCustomerId())
-            .setCartId(command.getCartId())
+            .setOrderId(command.getCartId())
             .setProductId(command.getProductId())
             .setProductName(command.getProductName())
             .setQuantity(command.getQuantity())
@@ -34,7 +34,7 @@ public class PurchasedProductsView extends AbstractPurchasedProductsView {
   }
 
   @Override
-  public UpdateEffect<PurchasedProductsOuter.PurchasedProduct> ignoreOtherEvents(PurchasedProductsOuter.PurchasedProduct state, Any any) {
+  public UpdateEffect<PurchasedProductsModel.PurchasedProduct> ignoreOtherEvents(PurchasedProductsModel.PurchasedProduct state, Any any) {
     return effects().ignore();
   }
 }
