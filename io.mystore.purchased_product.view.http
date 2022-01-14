@@ -6,10 +6,25 @@
 @fromDate = 2022-01-01T00:00:00.000-05:00
 @toDate = 2023-01-01T00:00:00.000-05:00
 
-### io.mystore.purchased_product.view.PurchasedProducts.GetPurchasedProductsByDate
+### io.mystore.purchased_product.view.PurchasedProductsByCustomerByDate.GetPurchasedProductsByCustomerByDate
+
+curl -XPOST -H "Content-Type: application/json" -d '{
+  "customer_id":"{{customerId}}",
+  "from_date":"{{fromDate}}",
+  "to_date":"{{toDate}}"}'
+  {{urlPrefix}}/purchased-products-by-customer-by-date
+
+### io.mystore.purchased_product.view.PurchasedProductsByDate.GetPurchasedProductsByDate
+
+curl -XPOST -H "Content-Type: application/json" -d '{
+  "from_date":"{{fromDate}}",
+  "to_date":"{{toDate}}"}'
+  {{urlPrefix}}/purchased-products-by-date
+
+### io.mystore.purchased_product.view.PurchasedProductsByProductByDate.GetPurchasedProductsByProductByDate
 
 curl -XPOST -H "Content-Type: application/json" -d '{
   "product_id":"{{productId}}",
   "from_date":"{{fromDate}}",
   "to_date":"{{toDate}}"}'
-  {{urlPrefix}}/purchased-products-by-date
+  {{urlPrefix}}/purchased-products-by-product-by-date

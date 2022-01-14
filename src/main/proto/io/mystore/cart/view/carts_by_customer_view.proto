@@ -22,7 +22,6 @@ service CartsByCustomer {
              " WHERE customer_id = :customer_id"
     };
     option (google.api.http) = {
-      // get: "/carts-by-customer"
       post: "/carts-by-customer",
       body: "*"
     };

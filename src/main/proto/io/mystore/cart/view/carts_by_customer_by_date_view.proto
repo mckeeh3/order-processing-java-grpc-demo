@@ -26,7 +26,6 @@ service CartsByCustomerByDate {
              "   AND checked_out_utc.seconds < :`to_date.seconds`"
     };
     option (google.api.http) = {
-      // get: "/carts-by-customer-by-date"
       post: "/carts-by-customer-by-date",
       body: "*"
     };
