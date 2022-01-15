@@ -8,7 +8,7 @@ import com.akkaserverless.javasdk.view.ViewContext;
 import com.google.protobuf.Any;
 
 import io.mystore.order.entity.OrderEntity;
-import io.mystore.order.view.OrderOuter.LineItem;
+import io.mystore.order.view.OrderModel.LineItem;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
 //
@@ -21,12 +21,12 @@ public class OrdersByCustomerByDateView extends AbstractOrdersByCustomerByDateVi
   }
 
   @Override
-  public OrderOuter.Order emptyState() {
-    return OrderOuter.Order.getDefaultInstance();
+  public OrderModel.Order emptyState() {
+    return OrderModel.Order.getDefaultInstance();
   }
 
   @Override
-  public View.UpdateEffect<OrderOuter.Order> processOrdered(OrderOuter.Order state, OrderEntity.OrderState orderState) {
+  public View.UpdateEffect<OrderModel.Order> processOrdered(OrderModel.Order state, OrderEntity.OrderState orderState) {
     return effects().updateState(
         state.toBuilder()
             .setOrderId(orderState.getOrderId())
@@ -52,7 +52,7 @@ public class OrdersByCustomerByDateView extends AbstractOrdersByCustomerByDateVi
   }
 
   @Override
-  public View.UpdateEffect<OrderOuter.Order> ignoreOtherEvents(OrderOuter.Order state, Any any) {
+  public View.UpdateEffect<OrderModel.Order> ignoreOtherEvents(OrderModel.Order state, Any any) {
     return effects().ignore();
   }
 }
