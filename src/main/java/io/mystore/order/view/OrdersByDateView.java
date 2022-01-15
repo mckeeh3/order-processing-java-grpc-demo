@@ -34,7 +34,8 @@ public class OrdersByDateView extends AbstractOrdersByDateView {
             .setOrderedUtc(orderState.getOrderedUtc())
             .setShippedUtc(orderState.getShippedUtc())
             .setDeliveredUtc(orderState.getDeliveredUtc())
-            .setDeletedUtc(orderState.getDeletedUtc())
+            .setReturnedUtc(orderState.getReturnedUtc())
+            .setCanceledUtc(orderState.getCanceledUtc())
             .clearLineItems()
             .addAllLineItems(toLineItems(orderState.getLineItemsList()))
             .build());

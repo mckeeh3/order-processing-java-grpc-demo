@@ -9,11 +9,6 @@ import com.google.protobuf.Empty;
 import com.google.protobuf.Timestamp;
 
 import io.mystore.order.api.OrderApi;
-import io.mystore.order.api.OrderApi.DeleteOrder;
-import io.mystore.order.api.OrderApi.DeliveredOrder;
-import io.mystore.order.api.OrderApi.LineItem;
-import io.mystore.order.api.OrderApi.ShippedOrder;
-import io.mystore.order.entity.OrderEntity.OrderState;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
 //
@@ -38,21 +33,28 @@ public class Order extends AbstractOrder {
   }
 
   @Override
-  public Effect<Empty> shippedCart(OrderState state, ShippedOrder command) {
+  public Effect<Empty> shippedCart(OrderEntity.OrderState state, OrderApi.ShippedOrder command) {
     return effects()
         .updateState(updateState(state, command))
         .thenReply(Empty.getDefaultInstance());
   }
 
   @Override
-  public Effect<Empty> deliveredCart(OrderState state, DeliveredOrder command) {
+  public Effect<Empty> deliveredCart(OrderEntity.OrderState state, OrderApi.DeliveredOrder command) {
     return effects()
         .updateState(updateState(state, command))
         .thenReply(Empty.getDefaultInstance());
   }
 
   @Override
-  public Effect<Empty> deleteCart(OrderState state, DeleteOrder command) {
+  public Effect<Empty> returnedCart(OrderEntity.OrderState state, OrderApi.ReturnedOrder command) {
+    return effects()
+        .updateState(updateState(state, command))
+        .thenReply(Empty.getDefaultInstance());
+  }
+
+  @Override
+  public Effect<Empty> canceledCart(OrderEntity.OrderState state, OrderApi.CanceledOrder command) {
     return effects()
         .updateState(updateState(state, command))
         .thenReply(Empty.getDefaultInstance());
@@ -64,36 +66,40 @@ public class Order extends AbstractOrder {
         .setOrderId(command.getOrderId())
         .setCustomerId(command.getCustomerId())
         .setOrderedUtc(command.getOrderedUtc())
-        .setShippedUtc(command.getShippedUtc())
-        .setDeliveredUtc(command.getDeliveredUtc())
-        .setDeletedUtc(command.getDeletedUtc())
         .clearLineItems()
         .addAllLineItems(toState(command.getLineItemsList()))
         .build();
   }
 
-  private OrderEntity.OrderState updateState(OrderState state, ShippedOrder command) {
+  private OrderEntity.OrderState updateState(OrderEntity.OrderState state, OrderApi.ShippedOrder command) {
     return state
         .toBuilder()
         .setShippedUtc(timestampNow())
         .build();
   }
 
-  private OrderEntity.OrderState updateState(OrderState state, DeliveredOrder command) {
+  private OrderEntity.OrderState updateState(OrderEntity.OrderState state, OrderApi.DeliveredOrder command) {
     return state
         .toBuilder()
         .setDeliveredUtc(timestampNow())
         .build();
   }
 
-  private OrderEntity.OrderState updateState(OrderState state, DeleteOrder command) {
+  private OrderEntity.OrderState updateState(OrderEntity.OrderState state, OrderApi.ReturnedOrder command) {
     return state
         .toBuilder()
-        .setDeletedUtc(timestampNow())
+        .setReturnedUtc(timestampNow())
         .build();
   }
 
-  private List<OrderEntity.LineItem> toState(List<LineItem> lineItems) {
+  private OrderEntity.OrderState updateState(OrderEntity.OrderState state, OrderApi.CanceledOrder command) {
+    return state
+        .toBuilder()
+        .setCanceledUtc(timestampNow())
+        .build();
+  }
+
+  private List<OrderEntity.LineItem> toState(List<OrderApi.LineItem> lineItems) {
     return lineItems.stream().map(
         lineItem -> OrderEntity.LineItem
             .newBuilder()
@@ -117,12 +123,13 @@ public class Order extends AbstractOrder {
         .setOrderedUtc(state.getOrderedUtc())
         .setShippedUtc(state.getShippedUtc())
         .setDeliveredUtc(state.getDeliveredUtc())
-        .setDeletedUtc(state.getDeletedUtc())
+        .setReturnedUtc(state.getReturnedUtc())
+        .setCanceledUtc(state.getCanceledUtc())
         .addAllLineItems(toApi(state.getLineItemsList()))
         .build();
   }
 
-  private List<LineItem> toApi(List<OrderEntity.LineItem> lineItems) {
+  private List<OrderApi.LineItem> toApi(List<OrderEntity.LineItem> lineItems) {
     return lineItems.stream().map(
         lineItem -> OrderApi.LineItem
             .newBuilder()

@@ -33,9 +33,15 @@ service OrderService {
     };
   }
 
-  rpc DeleteCart(DeleteOrder) returns (google.protobuf.Empty) {
+  rpc ReturnedCart(ReturnedOrder) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/order/{order_id}/delete"
+      delete: "/order/{order_id}/returned"
+    };
+  }
+
+  rpc CanceledCart(CanceledOrder) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/order/{order_id}/canceled"
     };
   }
 
@@ -54,7 +60,11 @@ message DeliveredOrder {
   string order_id = 1 [(akkaserverless.field).entity_key = true];
 }
 
-message DeleteOrder {
+message ReturnedOrder {
+  string order_id = 1 [(akkaserverless.field).entity_key = true];
+}
+
+message CanceledOrder {
   string order_id = 1 [(akkaserverless.field).entity_key = true];
 }
 
@@ -68,8 +78,9 @@ message Order {
   google.protobuf.Timestamp ordered_utc = 3;
   google.protobuf.Timestamp shipped_utc = 4;
   google.protobuf.Timestamp delivered_utc = 5;
-  google.protobuf.Timestamp deleted_utc = 6;
-  repeated LineItem line_items = 7;
+  google.protobuf.Timestamp returned_utc = 6;
+  google.protobuf.Timestamp canceled_utc = 7;
+  repeated LineItem line_items = 8;
 }
 
 message LineItem {

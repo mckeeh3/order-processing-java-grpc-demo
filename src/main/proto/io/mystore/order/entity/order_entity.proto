@@ -12,8 +12,9 @@ message OrderState {
   google.protobuf.Timestamp ordered_utc = 3;
   google.protobuf.Timestamp shipped_utc = 4;
   google.protobuf.Timestamp delivered_utc = 5;
-  google.protobuf.Timestamp deleted_utc = 6;
-  repeated LineItem line_items = 7;
+  google.protobuf.Timestamp returned_utc = 6;
+  google.protobuf.Timestamp canceled_utc = 7;
+  repeated LineItem line_items = 8;
 }
 
 message LineItem {
