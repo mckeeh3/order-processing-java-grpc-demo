@@ -12,23 +12,35 @@
 @shippedUtc =
 # @deliveredUtc = 2022-01-01T00:00:00.000-0500
 @deliveredUtc =
-# @deletedUtc = 2022-01-12T00:00:00.000-0500
-@deletedUtc =
+# @canceledUtc = 2022-01-12T00:00:00.000-0500
+@canceledUtc =
+# @returnedUtc = 2022-01-12T00:00:00.000-0500
+@returnedUtc =
 
-### io.mystore.order.api.OrderService.ShippedCart
+### io.mystore.order.api.OrderService.ShippedOrder
 
 curl -XPUT -H "Content-Type: application/json"
   {{urlPrefix}}/order/{{orderId}}/shipped
 
-### io.mystore.order.api.OrderService.DeliveredCart
+### io.mystore.order.api.OrderService.DeliveredOrder
 
 curl -XPUT -H "Content-Type: application/json"
   {{urlPrefix}}/order/{{orderId}}/delivered
 
-### io.mystore.order.api.OrderService.DeleteCart
+### io.mystore.order.api.OrderService.ReturnedOrder
 
-curl -XDELETE -H "Content-Type: application/json"
-  {{urlPrefix}}/order/{{orderId}}/delete
+curl -XPUT -H "Content-Type: application/json"
+  {{urlPrefix}}/order/{{orderId}}/returned
+
+### io.mystore.order.api.OrderService.CanceledOrder
+
+curl -XPUT -H "Content-Type: application/json"
+  {{urlPrefix}}/order/{{orderId}}/canceled
+
+### io.mystore.order.api.OrderService.ReturnededOrder
+
+curl -XPUT -H "Content-Type: application/json"
+  {{urlPrefix}}/order/{{orderId}}/returned
 
 ### io.mystore.order.api.OrderService.GetOrder
 

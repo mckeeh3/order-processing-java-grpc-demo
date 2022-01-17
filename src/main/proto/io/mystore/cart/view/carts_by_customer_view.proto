@@ -5,7 +5,6 @@ package io.mystore.cart.view;
 import "akkaserverless/annotations.proto";
 import "google/api/annotations.proto";
 import "io/mystore/cart/entity/shopping_cart_entity.proto";
-import "io/mystore/cart/api/shopping_cart_api.proto";
 import "io/mystore/cart/view/cart.proto";
 
 option java_outer_classname = "CartsByCustomerModel";

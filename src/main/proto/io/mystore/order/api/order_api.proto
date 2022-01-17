@@ -21,27 +21,27 @@ service OrderService {
     };
   }
 
-  rpc ShippedCart(ShippedOrder) returns (google.protobuf.Empty) {
+  rpc ShippedOrder(ShippedOrderRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       put: "/order/{order_id}/shipped"
     };
   }
 
-  rpc DeliveredCart(DeliveredOrder) returns (google.protobuf.Empty) {
+  rpc DeliveredOrder(DeliveredOrderRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       put: "/order/{order_id}/delivered"
     };
   }
 
-  rpc ReturnedCart(ReturnedOrder) returns (google.protobuf.Empty) {
+  rpc ReturnedOrder(ReturnedOrderRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/order/{order_id}/returned"
+      put: "/order/{order_id}/returned"
     };
   }
 
-  rpc CanceledCart(CanceledOrder) returns (google.protobuf.Empty) {
+  rpc CanceledOrder(CanceledOrderRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/order/{order_id}/canceled"
+      put: "/order/{order_id}/canceled"
     };
   }
 
@@ -52,19 +52,19 @@ service OrderService {
   }
 }
 
-message ShippedOrder {
+message ShippedOrderRequest {
   string order_id = 1 [(akkaserverless.field).entity_key = true];
 }
 
-message DeliveredOrder {
+message DeliveredOrderRequest {
   string order_id = 1 [(akkaserverless.field).entity_key = true];
 }
 
-message ReturnedOrder {
+message ReturnedOrderRequest {
   string order_id = 1 [(akkaserverless.field).entity_key = true];
 }
 
-message CanceledOrder {
+message CanceledOrderRequest {
   string order_id = 1 [(akkaserverless.field).entity_key = true];
 }
 

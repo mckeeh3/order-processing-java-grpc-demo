@@ -33,28 +33,28 @@ public class Order extends AbstractOrder {
   }
 
   @Override
-  public Effect<Empty> shippedCart(OrderEntity.OrderState state, OrderApi.ShippedOrder command) {
+  public Effect<Empty> shippedOrder(OrderEntity.OrderState state, OrderApi.ShippedOrderRequest command) {
     return effects()
         .updateState(updateState(state, command))
         .thenReply(Empty.getDefaultInstance());
   }
 
   @Override
-  public Effect<Empty> deliveredCart(OrderEntity.OrderState state, OrderApi.DeliveredOrder command) {
+  public Effect<Empty> deliveredOrder(OrderEntity.OrderState state, OrderApi.DeliveredOrderRequest command) {
     return effects()
         .updateState(updateState(state, command))
         .thenReply(Empty.getDefaultInstance());
   }
 
   @Override
-  public Effect<Empty> returnedCart(OrderEntity.OrderState state, OrderApi.ReturnedOrder command) {
+  public Effect<Empty> returnedOrder(OrderEntity.OrderState state, OrderApi.ReturnedOrderRequest command) {
     return effects()
         .updateState(updateState(state, command))
         .thenReply(Empty.getDefaultInstance());
   }
 
   @Override
-  public Effect<Empty> canceledCart(OrderEntity.OrderState state, OrderApi.CanceledOrder command) {
+  public Effect<Empty> canceledOrder(OrderEntity.OrderState state, OrderApi.CanceledOrderRequest command) {
     return effects()
         .updateState(updateState(state, command))
         .thenReply(Empty.getDefaultInstance());
@@ -71,28 +71,28 @@ public class Order extends AbstractOrder {
         .build();
   }
 
-  private OrderEntity.OrderState updateState(OrderEntity.OrderState state, OrderApi.ShippedOrder command) {
+  private OrderEntity.OrderState updateState(OrderEntity.OrderState state, OrderApi.ShippedOrderRequest command) {
     return state
         .toBuilder()
         .setShippedUtc(timestampNow())
         .build();
   }
 
-  private OrderEntity.OrderState updateState(OrderEntity.OrderState state, OrderApi.DeliveredOrder command) {
+  private OrderEntity.OrderState updateState(OrderEntity.OrderState state, OrderApi.DeliveredOrderRequest command) {
     return state
         .toBuilder()
         .setDeliveredUtc(timestampNow())
         .build();
   }
 
-  private OrderEntity.OrderState updateState(OrderEntity.OrderState state, OrderApi.ReturnedOrder command) {
+  private OrderEntity.OrderState updateState(OrderEntity.OrderState state, OrderApi.ReturnedOrderRequest command) {
     return state
         .toBuilder()
         .setReturnedUtc(timestampNow())
         .build();
   }
 
-  private OrderEntity.OrderState updateState(OrderEntity.OrderState state, OrderApi.CanceledOrder command) {
+  private OrderEntity.OrderState updateState(OrderEntity.OrderState state, OrderApi.CanceledOrderRequest command) {
     return state
         .toBuilder()
         .setCanceledUtc(timestampNow())
