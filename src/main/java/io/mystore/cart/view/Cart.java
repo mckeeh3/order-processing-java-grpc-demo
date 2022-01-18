@@ -23,8 +23,8 @@ public class Cart {
   }
 
   Cart handle(CartEntity.ItemAdded event) {
-    items.computeIfPresent(event.getLineItem().getSkuId(), (productId, lineItem) -> incrementQuantity(event, lineItem));
-    items.computeIfAbsent(event.getLineItem().getSkuId(), productId -> toLineItem(event.getLineItem()));
+    items.computeIfPresent(event.getLineItem().getSkuId(), (skuId, lineItem) -> incrementQuantity(event, lineItem));
+    items.computeIfAbsent(event.getLineItem().getSkuId(), skuId -> toLineItem(event.getLineItem()));
 
     state = state.toBuilder()
         .setCartId(event.getCartId())
@@ -52,7 +52,7 @@ public class Cart {
   }
 
   Cart handle(CartEntity.ItemChanged event) {
-    items.computeIfPresent(event.getSkuId(), (productId, lineItem) -> changeQuantity(event, lineItem));
+    items.computeIfPresent(event.getSkuId(), (skuId, lineItem) -> changeQuantity(event, lineItem));
 
     state = state.toBuilder()
         .clearLineItems()

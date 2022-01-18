@@ -437,8 +437,8 @@ public class ShoppingCart extends AbstractShoppingCart {
     }
 
     Cart handle(CartEntity.ItemAdded event) {
-      lineItems.computeIfPresent(event.getLineItem().getSkuId(), (productId, lineItem) -> incrementQuantity(event, lineItem));
-      lineItems.computeIfAbsent(event.getLineItem().getSkuId(), productId -> toLineItem(event));
+      lineItems.computeIfPresent(event.getLineItem().getSkuId(), (skuId, lineItem) -> incrementQuantity(event, lineItem));
+      lineItems.computeIfAbsent(event.getLineItem().getSkuId(), skuId -> toLineItem(event));
 
       state = state.toBuilder()
           .setCartId(event.getCartId())
@@ -466,7 +466,7 @@ public class ShoppingCart extends AbstractShoppingCart {
     }
 
     Cart handle(CartEntity.ItemChanged event) {
-      lineItems.computeIfPresent(event.getSkuId(), (productId, lineItem) -> changeQuantity(event, lineItem));
+      lineItems.computeIfPresent(event.getSkuId(), (skuId, lineItem) -> changeQuantity(event, lineItem));
 
       state = state.toBuilder()
           .clearLineItems()
