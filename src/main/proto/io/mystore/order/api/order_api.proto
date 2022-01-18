@@ -11,7 +11,11 @@ option java_outer_classname = "OrderApi";
 
 service OrderService {
   option (akkaserverless.codegen) = {
-    value_entity: { name: "io.mystore.order.entity.Order" entity_type: "order" state: "io.mystore.order.entity.OrderState" }
+    value_entity: {
+      name: "io.mystore.order.entity.Order"  //
+      entity_type: "order"
+      state: "io.mystore.order.entity.OrderState"
+    }
   };
 
   rpc AddOrder(Order) returns (google.protobuf.Empty) {

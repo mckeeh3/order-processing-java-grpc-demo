@@ -7,10 +7,10 @@ import com.akkaserverless.javasdk.action.ActionCreationContext;
 import com.google.protobuf.Any;
 import com.google.protobuf.Empty;
 
-import io.mystore.order.api.OrderApi;
-import io.mystore.order.api.OrderApi.LineItem;
 import io.mystore.cart.entity.CartEntity;
 import io.mystore.cart.entity.CartEntity.CartState;
+import io.mystore.order.api.OrderApi;
+import io.mystore.order.api.OrderApi.LineItem;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
 //

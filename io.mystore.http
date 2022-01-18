@@ -1,0 +1,28 @@
+
+@urlPrefix = https://blue-shape-3166.us-east1.akkaserverless.app
+@orderId = cart-1
+
+### io.mystore.shipping.api.ShipOrderService.ShippedOrder
+
+curl -XPUT -H "Content-Type: application/json"
+  {{urlPrefix}}/ship-order/{{orderId}}/shipped
+
+### io.mystore.shipping.api.ShipOrderService.DeliveredOrder
+
+curl -XPUT -H "Content-Type: application/json"
+  {{urlPrefix}}/ship-order/{{orderId}}/delivered
+
+### io.mystore.shipping.api.ShipOrderService.ReturnedOrder
+
+curl -XPUT -H "Content-Type: application/json"
+  {{urlPrefix}}/ship-order/{{orderId}}/returned
+
+### io.mystore.shipping.api.ShipOrderService.CanceledOrder
+
+curl -XPUT -H "Content-Type: application/json"
+  {{urlPrefix}}/ship-order/{{orderId}}/canceled
+
+### io.mystore.shipping.api.ShipOrderService.GetShipOrder
+
+curl -XGET -H "Content-Type: application/json"
+  '{{urlPrefix}}/ship-order/{{orderId}}'

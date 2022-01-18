@@ -13,45 +13,45 @@ service ShipOrderService {
   option (akkaserverless.codegen) = {
     value_entity: {
       name: "io.mystore.shipping.entity.ShipOrder"  //
-      entity_type: "order"
+      entity_type: "ship-order"
       state: "io.mystore.shipping.entity.ShipOrderState"
     }
   };
 
   rpc AddShipOrder(ShipOrder) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      post: "/order/{order_id}/add"
+      post: "/ship-order/{order_id}/add"
       body: "*"
     };
   }
 
   rpc ShippedOrder(ShippedOrderRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      put: "/order/{order_id}/shipped"
+      put: "/ship-order/{order_id}/shipped"
     };
   }
 
   rpc DeliveredOrder(DeliveredOrderRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      put: "/order/{order_id}/delivered"
+      put: "/ship-order/{order_id}/delivered"
     };
   }
 
   rpc ReturnedOrder(ReturnedOrderRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      put: "/order/{order_id}/returned"
+      put: "/ship-order/{order_id}/returned"
     };
   }
 
   rpc CanceledOrder(CanceledOrderRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      put: "/order/{order_id}/canceled"
+      put: "/ship-order/{order_id}/canceled"
     };
   }
 
   rpc GetShipOrder(GetShipOrderRequest) returns (ShipOrder) {
     option (google.api.http) = {
-      get: "/order/{order_id}"
+      get: "/ship-order/{order_id}"
     };
   }
 }

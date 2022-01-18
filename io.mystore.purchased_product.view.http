@@ -2,7 +2,7 @@
 @urlPrefix = https://blue-shape-3166.us-east1.akkaserverless.app
 @customerId = customer-1
 @cartId = cart-1
-@productId = product-1
+@skuId = sku-1
 @fromDate = 2022-01-01T00:00:00.000-05:00
 @toDate = 2023-01-01T00:00:00.000-05:00
 
@@ -24,7 +24,7 @@ curl -XPOST -H "Content-Type: application/json" -d '{
 ### io.mystore.purchased_product.view.PurchasedProductsByProductByDate.GetPurchasedProductsByProductByDate
 
 curl -XPOST -H "Content-Type: application/json" -d '{
-  "product_id":"{{productId}}",
+  "sku_id":"{{skuId}}",
   "from_date":"{{fromDate}}",
   "to_date":"{{toDate}}"}'
-  {{urlPrefix}}/purchased-products-by-product-by-date
+  {{urlPrefix}}/purchased-products-by-sku-by-date

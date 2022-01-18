@@ -13,28 +13,28 @@ service ShipOrderItemService {
   option (akkaserverless.codegen) = {
     value_entity: {
       name: "io.mystore.shipping.entity.ShipOrderItem"  //
-      entity_type: "order"
+      entity_type: "ship-order-item"
       state: "io.mystore.shipping.entity.ShipOrderItemState"
     }
   };
 
   rpc AddShipOrderItem(ShipOrderItem) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      post: "/ship-order-item/{customer_id}/{cart_id}/{sku_id}/add"
+      post: "/ship-order-item/{customer_id}/{order_id}/{sku_id}/add"
       body: "*"
     };
   }
 
   rpc GetShipOrderItem(GetShipOrderItemRequest) returns (ShipOrderItem) {
     option (google.api.http) = {
-      get: "/ship-order-item/{customer_id}/{cart_id}/{sku_id}"
+      get: "/ship-order-item/{customer_id}/{order_id}/{sku_id}"
     };
   }
 }
 
 message GetShipOrderItemRequest {
   string customer_id = 1;
-  string cart_id = 2 [(akkaserverless.field).entity_key = true];
+  string order_id = 2 [(akkaserverless.field).entity_key = true];
   string sku_id = 3 [(akkaserverless.field).entity_key = true];
 }
 

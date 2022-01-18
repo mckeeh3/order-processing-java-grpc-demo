@@ -3,8 +3,8 @@
 @urlPrefix = https://blue-shape-3166.us-east1.akkaserverless.app
 @customerId = customer-1
 @cartId = cart-1
-@productId = product-1
-@productName = product name 1
+@skuId = sku-1
+@skuName = sku name 1
 @quantity = 1
 # @checkedOutUtc = 2022-01-01T00:00:00.000-0500
 @checkedOutUtc =
@@ -19,8 +19,8 @@
 
 curl -XPOST -H "Content-Type: application/json" -d '{
   "customer_id":"{{customerId}}",
-  "product_id":"{{productId}}",
-  "product_name":"{{productName}}",
+  "sku_id":"{{skuId}}",
+  "sku_name":"{{skuName}}",
   "quantity":{{quantity}}
   }' {{urlPrefix}}/cart/{{cartId}}/items/add
 
@@ -28,12 +28,12 @@ curl -XPOST -H "Content-Type: application/json" -d '{
 
 curl -XPUT -H "Content-Type: application/json" -d '{
   "quantity":{{quantity}}
-  }' {{urlPrefix}}/cart/{{cartId}}/items/{{productId}}/change
+  }' {{urlPrefix}}/cart/{{cartId}}/items/{{skuId}}/change
 
 ### io.mystore.cart.api.ShoppingCartService.RemoveItem
 
 curl -XDELETE -H "Content-Type: application/json"
-  {{urlPrefix}}/cart/{{cartId}}/items/{{productId}}/remove
+  {{urlPrefix}}/cart/{{cartId}}/items/{{skuId}}/remove
 
 ### io.mystore.cart.api.ShoppingCartService.CheckoutCart
 
