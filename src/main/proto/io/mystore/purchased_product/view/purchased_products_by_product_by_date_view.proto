@@ -20,12 +20,12 @@ service PurchasedProductsByProductByDate {
     option (akkaserverless.method).view.query = {
       query: "SELECT * AS purchased_products"
              "  FROM purchased_products"
-             " WHERE product_id = :product_id"
+             " WHERE sku_id = :sku_id"
              "   AND purchased_utc.seconds >= :`from_date.seconds`"
              "   AND purchased_utc.seconds <= :`to_date.seconds`"
     };
     option (google.api.http) = {
-      post: "/purchased-products-by-product-by-date",
+      post: "/purchased-products-by-sku-by-date",
       body: "*"
     };
   }
@@ -52,7 +52,7 @@ service PurchasedProductsByProductByDate {
 }
 
 message PurchasedProductsRequestByProduct {
-  string product_id = 1;
+  string sku_id = 1;
   google.protobuf.Timestamp from_date = 2;
   google.protobuf.Timestamp to_date = 3;
 }

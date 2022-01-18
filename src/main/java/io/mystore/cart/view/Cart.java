@@ -11,7 +11,7 @@ public class Cart {
 
   private Cart(CartModel.Cart state) {
     this.state = state;
-    state.getLineItemsList().forEach(lineItem -> items.put(lineItem.getProductId(), lineItem));
+    state.getLineItemsList().forEach(lineItem -> items.put(lineItem.getSkuId(), lineItem));
   }
 
   static Cart fromState(CartModel.Cart state) {
@@ -23,8 +23,8 @@ public class Cart {
   }
 
   Cart handle(CartEntity.ItemAdded event) {
-    items.computeIfPresent(event.getLineItem().getProductId(), (productId, lineItem) -> incrementQuantity(event, lineItem));
-    items.computeIfAbsent(event.getLineItem().getProductId(), productId -> toLineItem(event.getLineItem()));
+    items.computeIfPresent(event.getLineItem().getSkuId(), (productId, lineItem) -> incrementQuantity(event, lineItem));
+    items.computeIfAbsent(event.getLineItem().getSkuId(), productId -> toLineItem(event.getLineItem()));
 
     state = state.toBuilder()
         .setCartId(event.getCartId())
@@ -45,14 +45,14 @@ public class Cart {
   private static CartModel.LineItem toLineItem(CartEntity.LineItem lineItem) {
     return CartModel.LineItem
         .newBuilder()
-        .setProductId(lineItem.getProductId())
-        .setProductName(lineItem.getProductName())
+        .setSkuId(lineItem.getSkuId())
+        .setSkuName(lineItem.getSkuName())
         .setQuantity(lineItem.getQuantity())
         .build();
   }
 
   Cart handle(CartEntity.ItemChanged event) {
-    items.computeIfPresent(event.getProductId(), (productId, lineItem) -> changeQuantity(event, lineItem));
+    items.computeIfPresent(event.getSkuId(), (productId, lineItem) -> changeQuantity(event, lineItem));
 
     state = state.toBuilder()
         .clearLineItems()
@@ -69,7 +69,7 @@ public class Cart {
   }
 
   Cart handle(CartEntity.ItemRemoved event) {
-    items.remove(event.getProductId());
+    items.remove(event.getSkuId());
 
     state = state.toBuilder()
         .clearLineItems()

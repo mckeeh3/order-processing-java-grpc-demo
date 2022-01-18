@@ -44,8 +44,8 @@ public class OrdersByDateView extends AbstractOrdersByDateView {
   private List<LineItem> toLineItems(List<OrderEntity.LineItem> lineItems) {
     return lineItems.stream()
         .map(lineItem -> LineItem.newBuilder()
-            .setProductId(lineItem.getProductId())
-            .setProductName(lineItem.getProductName())
+            .setSkuId(lineItem.getSkuId())
+            .setSkuName(lineItem.getSkuName())
             .setQuantity(lineItem.getQuantity())
             .build())
         .collect(Collectors.toList());

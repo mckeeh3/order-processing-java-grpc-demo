@@ -26,8 +26,8 @@ public class PurchasedProductsByProductByDateView extends AbstractPurchasedProdu
         state.toBuilder()
             .setCustomerId(command.getCustomerId())
             .setOrderId(command.getCartId())
-            .setProductId(command.getProductId())
-            .setProductName(command.getProductName())
+            .setSkuId(command.getSkuId())
+            .setSkuName(command.getSkuName())
             .setQuantity(command.getQuantity())
             .setPurchasedUtc(command.getPurchasedUtc())
             .build());

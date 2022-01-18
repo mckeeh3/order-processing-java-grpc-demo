@@ -43,8 +43,8 @@ public class CartToShipOrderAction extends AbstractCartToShipOrderAction {
     return lineItems.stream().map(
         lineItem -> ShipOrderApi.LineItem
             .newBuilder()
-            .setProductId(lineItem.getProductId())
-            .setProductName(lineItem.getProductName())
+            .setSkuId(lineItem.getSkuId())
+            .setSkuName(lineItem.getSkuName())
             .setQuantity(lineItem.getQuantity())
             .build())
         .collect(Collectors.toList());

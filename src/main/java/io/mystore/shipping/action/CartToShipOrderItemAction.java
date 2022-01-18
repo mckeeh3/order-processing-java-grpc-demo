@@ -25,12 +25,12 @@ public class CartToShipOrderItemAction extends AbstractCartToShipOrderItemAction
         .map(lineItem -> ShipOrderItemApi.ShipOrderItem.newBuilder()
             .setCustomerId(cartCheckedOut.getCartState().getCustomerId())
             .setOrderId(cartCheckedOut.getCartState().getCartId())
-            .setProductId(lineItem.getProductId())
-            .setProductName(lineItem.getProductName())
+            .setSkuId(lineItem.getSkuId())
+            .setSkuName(lineItem.getSkuName())
             .setQuantity(lineItem.getQuantity())
             .setOrderedUtc(cartCheckedOut.getCartState().getCheckedOutUtc())
             .build())
-        .map(purchasedProduct -> components().shipOrderItem().addShipOrderItem(purchasedProduct).execute())
+        .map(purchasedSku -> components().shipOrderItem().addShipOrderItem(purchasedSku).execute())
         .collect(Collectors.toList());
 
     var result = CompletableFuture.allOf(results.toArray(new CompletableFuture[results.size()]))

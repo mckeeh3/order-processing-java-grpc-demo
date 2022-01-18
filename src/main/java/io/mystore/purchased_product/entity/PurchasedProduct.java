@@ -40,8 +40,8 @@ public class PurchasedProduct extends AbstractPurchasedProduct {
         .toBuilder()
         .setCustomerId(command.getCustomerId())
         .setCartId(command.getCartId())
-        .setProductId(command.getProductId())
-        .setProductName(command.getProductName())
+        .setSkuId(command.getSkuId())
+        .setSkuName(command.getSkuName())
         .setQuantity(command.getQuantity())
         .setPurchasedUtc(command.getPurchasedUtc())
         .build();
@@ -52,8 +52,8 @@ public class PurchasedProduct extends AbstractPurchasedProduct {
         .newBuilder()
         .setCustomerId(state.getCustomerId())
         .setCartId(state.getCartId())
-        .setProductId(state.getProductId())
-        .setProductName(state.getProductName())
+        .setSkuId(state.getSkuId())
+        .setSkuName(state.getSkuName())
         .setQuantity(state.getQuantity())
         .setPurchasedUtc(state.getPurchasedUtc())
         .build();

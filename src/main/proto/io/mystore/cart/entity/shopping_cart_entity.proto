@@ -31,13 +31,13 @@ message ItemAdded {
 
 message ItemChanged {
   string cart_id = 1;
-  string product_id = 2;
+  string sku_id = 2;
   int32 quantity = 3;
 }
 
 message ItemRemoved {
   string cart_id = 1;
-  string product_id = 2;
+  string sku_id = 2;
 }
 
 message CartCheckedOut {
@@ -78,7 +78,7 @@ message CartState {
 }
 
 message LineItem {
-  string product_id = 1;
-  string product_name = 2;
+  string sku_id = 1;
+  string sku_name = 2;
   int32 quantity = 3;
 }

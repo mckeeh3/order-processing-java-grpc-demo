@@ -103,8 +103,8 @@ public class Order extends AbstractOrder {
     return lineItems.stream().map(
         lineItem -> OrderEntity.LineItem
             .newBuilder()
-            .setProductId(lineItem.getProductId())
-            .setProductName(lineItem.getProductName())
+            .setSkuId(lineItem.getSkuId())
+            .setSkuName(lineItem.getSkuName())
             .setQuantity(lineItem.getQuantity())
             .build())
         .collect(Collectors.toList());
@@ -133,8 +133,8 @@ public class Order extends AbstractOrder {
     return lineItems.stream().map(
         lineItem -> OrderApi.LineItem
             .newBuilder()
-            .setProductId(lineItem.getProductId())
-            .setProductName(lineItem.getProductName())
+            .setSkuId(lineItem.getSkuId())
+            .setSkuName(lineItem.getSkuName())
             .setQuantity(lineItem.getQuantity())
             .build())
         .collect(Collectors.toList());

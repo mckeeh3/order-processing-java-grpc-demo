@@ -37,8 +37,8 @@ public class ShipOrderItem extends AbstractShipOrderItem {
         .toBuilder()
         .setCustomerId(command.getCustomerId())
         .setOrderId(command.getOrderId())
-        .setProductId(command.getProductId())
-        .setProductName(command.getProductName())
+        .setSkuId(command.getSkuId())
+        .setSkuName(command.getSkuName())
         .setQuantity(command.getQuantity())
         .build();
   }
@@ -48,8 +48,8 @@ public class ShipOrderItem extends AbstractShipOrderItem {
         .newBuilder()
         .setCustomerId(state.getCustomerId())
         .setOrderId(state.getOrderId())
-        .setProductId(state.getProductId())
-        .setProductName(state.getProductName())
+        .setSkuId(state.getSkuId())
+        .setSkuName(state.getSkuName())
         .setQuantity(state.getQuantity())
         .build();
   }

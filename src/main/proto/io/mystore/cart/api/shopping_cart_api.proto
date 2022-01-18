@@ -24,14 +24,14 @@ service ShoppingCartService {
 
   rpc ChangeItem(ChangeLineItem) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      put: "/cart/{cart_id}/items/{product_id}/change"
+      put: "/cart/{cart_id}/items/{sku_id}/change"
       body: "*"
     };
   }
 
   rpc RemoveItem(RemoveLineItem) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/cart/{cart_id}/items/{product_id}/remove"
+      delete: "/cart/{cart_id}/items/{sku_id}/remove"
     };
   }
 
@@ -76,20 +76,20 @@ service ShoppingCartService {
 message AddLineItem {
   string cart_id = 1 [(akkaserverless.field).entity_key = true];
   string customer_id = 2;
-  string product_id = 3;
-  string product_name = 4;
+  string sku_id = 3;
+  string sku_name = 4;
   int32 quantity = 5;
 }
 
 message ChangeLineItem {
   string cart_id = 1 [(akkaserverless.field).entity_key = true];
-  string product_id = 2;
+  string sku_id = 2;
   int32 quantity = 3;
 }
 
 message RemoveLineItem {
   string cart_id = 1 [(akkaserverless.field).entity_key = true];
-  string product_id = 2;
+  string sku_id = 2;
 }
 
 message CheckoutShoppingCart {
@@ -131,7 +131,7 @@ message ShoppingCart {
 }
 
 message LineItem {
-  string product_id = 1;
-  string product_name = 2;
+  string sku_id = 1;
+  string sku_name = 2;
   int32 quantity = 3;
 }

@@ -20,14 +20,14 @@ service ShipOrderItemService {
 
   rpc AddShipOrderItem(ShipOrderItem) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      post: "/ship-order-item/{customer_id}/{cart_id}/{product_id}/add"
+      post: "/ship-order-item/{customer_id}/{cart_id}/{sku_id}/add"
       body: "*"
     };
   }
 
   rpc GetShipOrderItem(GetShipOrderItemRequest) returns (ShipOrderItem) {
     option (google.api.http) = {
-      get: "/ship-order-item/{customer_id}/{cart_id}/{product_id}"
+      get: "/ship-order-item/{customer_id}/{cart_id}/{sku_id}"
     };
   }
 }
@@ -35,14 +35,14 @@ service ShipOrderItemService {
 message GetShipOrderItemRequest {
   string customer_id = 1;
   string cart_id = 2 [(akkaserverless.field).entity_key = true];
-  string product_id = 3 [(akkaserverless.field).entity_key = true];
+  string sku_id = 3 [(akkaserverless.field).entity_key = true];
 }
 
 message ShipOrderItem {
   string customer_id = 1;
   string order_id = 2 [(akkaserverless.field).entity_key = true];
-  string product_id = 3 [(akkaserverless.field).entity_key = true];
-  string product_name = 4;
+  string sku_id = 3 [(akkaserverless.field).entity_key = true];
+  string sku_name = 4;
   int32 quantity = 5;
   google.protobuf.Timestamp ordered_utc = 6;
 }

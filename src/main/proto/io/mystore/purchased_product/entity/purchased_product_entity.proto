@@ -16,8 +16,8 @@ option (akkaserverless.file).value_entity = {
 message PurchasedProductState {
   string customer_id = 1;
   string cart_id = 2;
-  string product_id = 3;
-  string product_name = 4;
+  string sku_id = 3;
+  string sku_name = 4;
   int32 quantity = 5;
   google.protobuf.Timestamp purchased_utc = 6;
 }

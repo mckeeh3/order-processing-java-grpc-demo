@@ -147,11 +147,11 @@ public class ShoppingCart extends AbstractShoppingCart {
     if (command.getCustomerId().isEmpty()) {
       return Optional.of(effects().error("Customer ID is required"));
     }
-    if (command.getProductId().isEmpty()) {
-      return Optional.of(effects().error("Product ID is required"));
+    if (command.getSkuId().isEmpty()) {
+      return Optional.of(effects().error("Sku ID is required"));
     }
-    if (command.getProductName().isEmpty()) {
-      return Optional.of(effects().error("Product name is required"));
+    if (command.getSkuName().isEmpty()) {
+      return Optional.of(effects().error("Sku name is required"));
     }
     if (command.getQuantity() <= 0) {
       return Optional.of(effects().error("Quantity must be greater than 0"));
@@ -169,8 +169,8 @@ public class ShoppingCart extends AbstractShoppingCart {
     if (state.getDeletedUtc().getSeconds() > 0) {
       return Optional.of(effects().error("Shopping cart is deleted"));
     }
-    if (command.getProductId().isEmpty()) {
-      return Optional.of(effects().error("Product id is required"));
+    if (command.getSkuId().isEmpty()) {
+      return Optional.of(effects().error("Sku id is required"));
     }
     if (command.getQuantity() <= 0) {
       return Optional.of(effects().error("Quantity must be greater than 0"));
@@ -188,8 +188,8 @@ public class ShoppingCart extends AbstractShoppingCart {
     if (state.getDeletedUtc().getSeconds() > 0) {
       return Optional.of(effects().error("Shopping cart is deleted"));
     }
-    if (command.getProductId().isEmpty()) {
-      return Optional.of(effects().error("Product id is required"));
+    if (command.getSkuId().isEmpty()) {
+      return Optional.of(effects().error("Sku id is required"));
     }
     return Optional.empty();
   }
@@ -326,8 +326,8 @@ public class ShoppingCart extends AbstractShoppingCart {
   private static CartEntity.ItemAdded event(CartEntity.CartState state, CartApi.AddLineItem command) {
     var lineItem = CartEntity.LineItem
         .newBuilder()
-        .setProductId(command.getProductId())
-        .setProductName(command.getProductName())
+        .setSkuId(command.getSkuId())
+        .setSkuName(command.getSkuName())
         .setQuantity(command.getQuantity())
         .build();
     return CartEntity.ItemAdded.newBuilder()
@@ -341,7 +341,7 @@ public class ShoppingCart extends AbstractShoppingCart {
     return CartEntity.ItemChanged
         .newBuilder()
         .setCartId(state.getCartId())
-        .setProductId(command.getProductId())
+        .setSkuId(command.getSkuId())
         .setQuantity(command.getQuantity())
         .build();
   }
@@ -350,7 +350,7 @@ public class ShoppingCart extends AbstractShoppingCart {
     return CartEntity.ItemRemoved
         .newBuilder()
         .setCartId(state.getCartId())
-        .setProductId(command.getProductId())
+        .setSkuId(command.getSkuId())
         .build();
   }
 
@@ -416,8 +416,8 @@ public class ShoppingCart extends AbstractShoppingCart {
     return lineItems.stream().map(
         lineItem -> CartApi.LineItem
             .newBuilder()
-            .setProductId(lineItem.getProductId())
-            .setProductName(lineItem.getProductName())
+            .setSkuId(lineItem.getSkuId())
+            .setSkuName(lineItem.getSkuName())
             .setQuantity(lineItem.getQuantity())
             .build())
         .collect(Collectors.toList());
@@ -429,7 +429,7 @@ public class ShoppingCart extends AbstractShoppingCart {
 
     Cart(CartEntity.CartState state) {
       this.state = state;
-      state.getLineItemsList().forEach(lineItem -> lineItems.put(lineItem.getProductId(), lineItem));
+      state.getLineItemsList().forEach(lineItem -> lineItems.put(lineItem.getSkuId(), lineItem));
     }
 
     static Cart fromState(CartEntity.CartState state) {
@@ -437,8 +437,8 @@ public class ShoppingCart extends AbstractShoppingCart {
     }
 
     Cart handle(CartEntity.ItemAdded event) {
-      lineItems.computeIfPresent(event.getLineItem().getProductId(), (productId, lineItem) -> incrementQuantity(event, lineItem));
-      lineItems.computeIfAbsent(event.getLineItem().getProductId(), productId -> toLineItem(event));
+      lineItems.computeIfPresent(event.getLineItem().getSkuId(), (productId, lineItem) -> incrementQuantity(event, lineItem));
+      lineItems.computeIfAbsent(event.getLineItem().getSkuId(), productId -> toLineItem(event));
 
       state = state.toBuilder()
           .setCartId(event.getCartId())
@@ -459,14 +459,14 @@ public class ShoppingCart extends AbstractShoppingCart {
     static CartEntity.LineItem toLineItem(CartEntity.ItemAdded event) {
       return CartEntity.LineItem
           .newBuilder()
-          .setProductId(event.getLineItem().getProductId())
-          .setProductName(event.getLineItem().getProductName())
+          .setSkuId(event.getLineItem().getSkuId())
+          .setSkuName(event.getLineItem().getSkuName())
           .setQuantity(event.getLineItem().getQuantity())
           .build();
     }
 
     Cart handle(CartEntity.ItemChanged event) {
-      lineItems.computeIfPresent(event.getProductId(), (productId, lineItem) -> changeQuantity(event, lineItem));
+      lineItems.computeIfPresent(event.getSkuId(), (productId, lineItem) -> changeQuantity(event, lineItem));
 
       state = state.toBuilder()
           .clearLineItems()
@@ -483,7 +483,7 @@ public class ShoppingCart extends AbstractShoppingCart {
     }
 
     Cart handle(CartEntity.ItemRemoved event) {
-      lineItems.remove(event.getProductId());
+      lineItems.remove(event.getSkuId());
 
       state = state
           .toBuilder()

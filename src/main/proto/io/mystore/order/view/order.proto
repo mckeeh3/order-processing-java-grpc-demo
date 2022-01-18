@@ -18,7 +18,7 @@ message Order {
 }
 
 message LineItem {
-  string product_id = 1;
-  string product_name = 2;
+  string sku_id = 1;
+  string sku_name = 2;
   int32 quantity = 3;
 }
