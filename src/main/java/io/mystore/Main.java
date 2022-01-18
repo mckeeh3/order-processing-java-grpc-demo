@@ -14,6 +14,10 @@ import io.mystore.purchased_product.entity.PurchasedProduct;
 import io.mystore.purchased_product.view.PurchasedProductsByCustomerByDateView;
 import io.mystore.purchased_product.view.PurchasedProductsByDateView;
 import io.mystore.purchased_product.view.PurchasedProductsByProductByDateView;
+import io.mystore.shipping.action.CartToShipOrderAction;
+import io.mystore.shipping.action.CartToShipOrderItemAction;
+import io.mystore.shipping.entity.ShipOrder;
+import io.mystore.shipping.entity.ShipOrderItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,9 +38,13 @@ public final class Main {
     return AkkaServerlessFactory.withComponents(
       Order::new,
       PurchasedProduct::new,
+      ShipOrder::new,
+      ShipOrderItem::new,
       ShoppingCart::new,
       CartToOrderAction::new,
       CartToPurchasedProductAction::new,
+      CartToShipOrderAction::new,
+      CartToShipOrderItemAction::new,
       CartsByCustomerView::new,
       CartsByCustomerByDateView::new,
       CartsByDateView::new,
