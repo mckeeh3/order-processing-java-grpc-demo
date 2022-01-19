@@ -69,18 +69,51 @@ public class ShipOrder extends AbstractShipOrder {
   }
 
   private Optional<Effect<Empty>> reject(ShipOrderEntity.ShipOrderState state, ShipOrderApi.ShippedOrderRequest command) {
+    if (state.getCanceledUtc().getSeconds() > 0) {
+      return Optional.of(effects().error("Order has been canceled"));
+    }
+    if (state.getShippedUtc().getSeconds() > 0) {
+      return Optional.of(effects().error("Order already shipped"));
+    }
     return Optional.empty();
   }
 
   private Optional<Effect<Empty>> reject(ShipOrderEntity.ShipOrderState state, ShipOrderApi.DeliveredOrderRequest command) {
+    if (state.getCanceledUtc().getSeconds() > 0) {
+      return Optional.of(effects().error("Order has been canceled"));
+    }
+    if (state.getShippedUtc().getSeconds() == 0) {
+      return Optional.of(effects().error("Order has not been shipped"));
+    }
+    if (state.getDeliveredUtc().getSeconds() > 0) {
+      return Optional.of(effects().error("Order already delivered"));
+    }
     return Optional.empty();
   }
 
   private Optional<Effect<Empty>> reject(ShipOrderEntity.ShipOrderState state, ShipOrderApi.ReturnedOrderRequest command) {
+    if (state.getCanceledUtc().getSeconds() > 0) {
+      return Optional.of(effects().error("Order has been canceled"));
+    }
+    if (state.getDeliveredUtc().getSeconds() == 0) {
+      return Optional.of(effects().error("Order has not been delivered"));
+    }
+    if (state.getReturnedUtc().getSeconds() > 0) {
+      return Optional.of(effects().error("Order already returned"));
+    }
     return Optional.empty();
   }
 
   private Optional<Effect<Empty>> reject(ShipOrderEntity.ShipOrderState state, ShipOrderApi.CanceledOrderRequest command) {
+    if (state.getCanceledUtc().getSeconds() > 0) {
+      return Optional.of(effects().error("Order has been canceled"));
+    }
+    if (state.getDeliveredUtc().getSeconds() > 0) {
+      return Optional.of(effects().error("Order has been delivered"));
+    }
+    if (state.getReturnedUtc().getSeconds() > 0) {
+      return Optional.of(effects().error("Order has been returned"));
+    }
     return Optional.empty();
   }
 
