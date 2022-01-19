@@ -1,7 +1,6 @@
 package io.mystore;
 
 import com.akkaserverless.javasdk.AkkaServerless;
-import io.mystore.cart.entity.ShoppingCart;
 import io.mystore.cart.view.CartsByCustomerByDateView;
 import io.mystore.cart.view.CartsByCustomerView;
 import io.mystore.cart.view.CartsByDateView;
@@ -40,7 +39,8 @@ public final class Main {
       PurchasedProduct::new,
       ShipOrder::new,
       ShipOrderItem::new,
-      ShoppingCart::new,
+      io.mystore.shipping.entity.ShoppingCart::new,
+      io.mystore.cart.entity.ShoppingCart::new,
       CartToOrderAction::new,
       CartToPurchasedProductAction::new,
       CartToShipOrderAction::new,

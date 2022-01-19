@@ -11,6 +11,32 @@ message ShipOrderItemState {
   string order_id = 2;
   string sku_id = 3;
   string sku_name = 4;
-  int32 quantity = 5;
-  google.protobuf.Timestamp ordered_utc = 6;
+  string sku_item_id = 5;
+  int32 quantity = 6;
+  google.protobuf.Timestamp ordered_utc = 7;
+  google.protobuf.Timestamp shipped_utc = 8;
+  google.protobuf.Timestamp back_ordered_utc = 9;
+}
+
+message OrderItemAdded {
+  string order_id = 1;
+  string sku_id = 2;
+}
+
+message SkuItemAddedToOrder {
+  string order_id = 1;
+  string sku_id = 2;
+  string sku_item_id = 3;
+  google.protobuf.Timestamp shipped_utc = 4;
+}
+
+message SkuItemReleasedFromOrder {
+  string order_id = 1;
+  string sku_id = 2;
+}
+
+message OrderItemBackOrdered {
+  string order_id = 1;
+  string sku_id = 2;
+  google.protobuf.Timestamp back_ordered_utc = 3;
 }

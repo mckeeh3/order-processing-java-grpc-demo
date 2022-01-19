@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package io.mystore.shipping.entity;
+
+import "google/protobuf/timestamp.proto";
+
+option java_outer_classname = "ShipSkuItemEntity";
+
+message ShipSkuItemState {
+  string sku_item_id = 1;
+  string sku_id = 2;
+  string order_id = 3;
+  google.protobuf.Timestamp shipped_utc = 4;
+  google.protobuf.Timestamp back_ordered_utc = 5;
+}
+
+message SkuItemAdded {
+  string sku_item_id = 1;
+  string sku_id = 2;
+}
+
+message ShipOrderItemAdded {
+  string sku_item_id = 1;
+  string order_id = 2;
+}

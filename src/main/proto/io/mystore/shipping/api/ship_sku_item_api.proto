@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+import "akkaserverless/annotations.proto";
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+package io.mystore.shipping.api;
+
+option java_outer_classname = "ShipSkuItemApi";
+
+service ShipSkuItemService {
+  option (akkaserverless.codegen) = {
+    event_sourced_entity: {
+      name: "io.mystore.shipping.entity.ShoppingCart"
+      entity_type: "ship_sku_item"
+      state: "io.mystore.shipping.entity.ShipSkuItemState"
+      events: [
+        "io.mystore.shipping.entity.SkuItemAdded",
+        "io.mystore.shipping.entity.ShipOrderItemAdded"  // force line breaks
+      ]
+    }
+  };
+
+  rpc AddItem(AddSkuItem) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/sku-items/{sku_item_id}/{sku-id}/add-sku-item"
+      body: "*"
+    };
+  }
+
+  rpc AddShipOrderItem(AddShipOrderItemToSku) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/sku-items/{sku_item_id}/{order_id}/add-ship-order-item"
+      body: "*"
+    };
+  }
+}
+
+message AddSkuItem {
+  string sku_item_id = 1 [(akkaserverless.field).entity_key = true];
+  string sku_id = 2;
+}
+
+message AddShipOrderItemToSku {
+  string sku_item_id = 1 [(akkaserverless.field).entity_key = true];
+  string order_id = 2;
+}
+
+message ShipSkuItem {
+  string sku_item_id = 1;
+  string sku_id = 2;
+  string ship_order_id = 3;
+  google.protobuf.Timestamp shipped_utc = 4;
+}

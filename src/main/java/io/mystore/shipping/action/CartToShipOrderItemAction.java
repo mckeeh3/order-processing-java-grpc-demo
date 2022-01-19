@@ -28,7 +28,6 @@ public class CartToShipOrderItemAction extends AbstractCartToShipOrderItemAction
             .setOrderId(cartCheckedOut.getCartState().getCartId())
             .setSkuId(lineItem.getSkuId())
             .setSkuName(lineItem.getSkuName())
-            .setQuantity(lineItem.getQuantity())
             .setOrderedUtc(cartCheckedOut.getCartState().getCheckedOutUtc())
             .build())
         .map(purchasedSku -> components().shipOrderItem().addShipOrderItem(purchasedSku).execute())
