@@ -1,27 +1,10 @@
 syntax = "proto3";
 
-import "akkaserverless/annotations.proto";
 import "google/protobuf/timestamp.proto";
 
 package io.mystore.cart.entity;
 
 option java_outer_classname = "CartEntity";
-
-option (akkaserverless.file).event_sourced_entity = {
-  name: "ShoppingCart"
-  entity_type: "shopping_cart"
-  state: "CartState"
-  events: [
-    "ItemAdded",
-    "ItemChanged",
-    "ItemRemoved",
-    "CartCheckedOut",
-    "CartShipped",
-    "CartDelivered",
-    "CartDeleted",
-    "DatesChanged"  // force line breaks
-  ]
-};
 
 message ItemAdded {
   string cart_id = 1;

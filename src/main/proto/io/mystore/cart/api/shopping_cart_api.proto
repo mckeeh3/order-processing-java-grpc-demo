@@ -10,9 +10,22 @@ package io.mystore.cart.api;
 option java_outer_classname = "CartApi";
 
 service ShoppingCartService {
-  option (akkaserverless.service) = {
-    type: SERVICE_TYPE_ENTITY
-    component: "io.mystore.cart.entity.ShoppingCart"
+  option (akkaserverless.codegen) = {
+    event_sourced_entity: {
+      name: "io.mystore.cart.entity.ShoppingCart"
+      entity_type: "shopping_cart"
+      state: "io.mystore.cart.entity.CartState"
+      events: [
+        "io.mystore.cart.entity.ItemAdded",
+        "io.mystore.cart.entity.ItemChanged",
+        "io.mystore.cart.entity.ItemRemoved",
+        "io.mystore.cart.entity.CartCheckedOut",
+        "io.mystore.cart.entity.CartShipped",
+        "io.mystore.cart.entity.CartDelivered",
+        "io.mystore.cart.entity.CartDeleted",
+        "io.mystore.cart.entity.DatesChanged"  // force line breaks
+      ]
+    }
   };
 
   rpc AddItem(AddLineItem) returns (google.protobuf.Empty) {
