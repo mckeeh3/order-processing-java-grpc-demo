@@ -2,6 +2,8 @@ package io.mystore.shipping.action;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import com.akkaserverless.javasdk.action.ActionCreationContext;
 import com.google.protobuf.Any;
@@ -23,14 +25,8 @@ public class CartToShipOrderItemAction extends AbstractCartToShipOrderItemAction
   @Override
   public Effect<Empty> onCartCheckedOut(CartEntity.CartCheckedOut cartCheckedOut) {
     var results = cartCheckedOut.getCartState().getLineItemsList().stream()
-        .map(lineItem -> ShipOrderItemApi.ShipOrderItem.newBuilder()
-            .setCustomerId(cartCheckedOut.getCartState().getCustomerId())
-            .setOrderId(cartCheckedOut.getCartState().getCartId())
-            .setSkuId(lineItem.getSkuId())
-            .setSkuName(lineItem.getSkuName())
-            .setOrderedUtc(cartCheckedOut.getCartState().getCheckedOutUtc())
-            .build())
-        .map(purchasedSku -> components().shipOrderItem().addShipOrderItem(purchasedSku).execute())
+        .flatMap(lineItem -> shipOrderItems(cartCheckedOut, lineItem))
+        .map(shipOrderItem -> components().shipOrderItem().createShipOrderItem(shipOrderItem).execute())
         .collect(Collectors.toList());
 
     var result = CompletableFuture.allOf(results.toArray(new CompletableFuture[results.size()]))
@@ -42,5 +38,17 @@ public class CartToShipOrderItemAction extends AbstractCartToShipOrderItemAction
   @Override
   public Effect<Empty> ignoreOtherEvents(Any any) {
     return effects().reply(Empty.getDefaultInstance());
+  }
+
+  Stream<ShipOrderItemApi.ShipOrderItem> shipOrderItems(CartEntity.CartCheckedOut cartCheckedOut, CartEntity.LineItem lineItem) {
+    return IntStream.range(0, lineItem.getQuantity())
+        .mapToObj(ignore -> ShipOrderItemApi.ShipOrderItem
+            .newBuilder()
+            .setCustomerId(cartCheckedOut.getCartState().getCustomerId())
+            .setOrderId(cartCheckedOut.getCartState().getCartId())
+            .setSkuId(lineItem.getSkuId())
+            .setSkuName(lineItem.getSkuName())
+            .setOrderedUtc(cartCheckedOut.getCartState().getCheckedOutUtc())
+            .build());
   }
 }

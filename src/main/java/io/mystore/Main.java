@@ -1,6 +1,7 @@
 package io.mystore;
 
 import com.akkaserverless.javasdk.AkkaServerless;
+import io.mystore.cart.entity.ShoppingCart;
 import io.mystore.cart.view.CartsByCustomerByDateView;
 import io.mystore.cart.view.CartsByCustomerView;
 import io.mystore.cart.view.CartsByDateView;
@@ -15,8 +16,12 @@ import io.mystore.purchased_product.view.PurchasedProductsByDateView;
 import io.mystore.purchased_product.view.PurchasedProductsByProductByDateView;
 import io.mystore.shipping.action.CartToShipOrderAction;
 import io.mystore.shipping.action.CartToShipOrderItemAction;
+import io.mystore.shipping.action.ShipOrderItemToShipSkuItemAction;
+import io.mystore.shipping.action.ShipSkuItemToShipOrderItemAction;
 import io.mystore.shipping.entity.ShipOrder;
 import io.mystore.shipping.entity.ShipOrderItem;
+import io.mystore.shipping.entity.ShipSkuItem;
+import io.mystore.shipping.view.AvailableShipSkuItemsView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,8 +44,9 @@ public final class Main {
       PurchasedProduct::new,
       ShipOrder::new,
       ShipOrderItem::new,
-      io.mystore.shipping.entity.ShoppingCart::new,
-      io.mystore.cart.entity.ShoppingCart::new,
+      ShipSkuItem::new,
+      ShoppingCart::new,
+      AvailableShipSkuItemsView::new,
       CartToOrderAction::new,
       CartToPurchasedProductAction::new,
       CartToShipOrderAction::new,
@@ -52,7 +58,9 @@ public final class Main {
       OrdersByDateView::new,
       PurchasedProductsByCustomerByDateView::new,
       PurchasedProductsByDateView::new,
-      PurchasedProductsByProductByDateView::new);
+      PurchasedProductsByProductByDateView::new,
+      ShipOrderItemToShipSkuItemAction::new,
+      ShipSkuItemToShipOrderItemAction::new);
   }
 
   public static void main(String[] args) throws Exception {

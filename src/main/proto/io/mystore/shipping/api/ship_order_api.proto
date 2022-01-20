@@ -13,7 +13,7 @@ service ShipOrderService {
   option (akkaserverless.codegen) = {
     value_entity: {
       name: "io.mystore.shipping.entity.ShipOrder"  //
-      entity_type: "ship-order"
+      entity_type: "ship_order"
       state: "io.mystore.shipping.entity.ShipOrderState"
     }
   };

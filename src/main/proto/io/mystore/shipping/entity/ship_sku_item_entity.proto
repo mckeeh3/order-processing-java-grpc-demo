@@ -11,15 +11,20 @@ message ShipSkuItemState {
   string sku_id = 2;
   string order_id = 3;
   google.protobuf.Timestamp shipped_utc = 4;
-  google.protobuf.Timestamp back_ordered_utc = 5;
 }
 
-message SkuItemAdded {
+message SkuItemCreated {
   string sku_item_id = 1;
   string sku_id = 2;
+  string sku_name = 3;
 }
 
 message ShipOrderItemAdded {
+  string sku_item_id = 1;
+  string order_id = 2;
+}
+
+message ReleasedSkuItemFromOrder {
   string sku_item_id = 1;
   string order_id = 2;
 }
