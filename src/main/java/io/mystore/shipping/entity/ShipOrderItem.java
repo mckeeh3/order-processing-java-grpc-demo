@@ -147,6 +147,7 @@ public class ShipOrderItem extends AbstractShipOrderItem {
 
     var shipSkuItemRequired = ShipOrderItemEntity.ShipSkuItemRequired
         .newBuilder()
+        .setOrderId(command.getOrderId())
         .setOrderItemId(command.getOrderItemId())
         .setSkuId(command.getSkuId())
         .build();

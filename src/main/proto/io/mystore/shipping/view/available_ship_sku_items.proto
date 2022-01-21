@@ -9,11 +9,14 @@ import "io/mystore/shipping/entity/ship_sku_item_entity.proto";
 option java_outer_classname = "AvailableShipSkuItemsModel";
 
 service AvailableShipSkuItems {
-  option (akkaserverless.codegen) = {
-    view: {}
+  // option (akkaserverless.codegen) = {
+  //   view: {}
+  // };
+  option (akkaserverless.service) = {
+    type: SERVICE_TYPE_VIEW
   };
 
-  rpc GetAvailableShipSkuItems(GetAvailableShipSkuItemsRequest) returns (stream GetAvailableShipSkuItemsResponse) {
+  rpc GetAvailableShipSkuItems(GetAvailableShipSkuItemsRequest) returns (GetAvailableShipSkuItemsResponse) {
     option (akkaserverless.method).view.query = {
       query: "SELECT * AS ship_sku_items"
              "  FROM available_ship_sku_items"

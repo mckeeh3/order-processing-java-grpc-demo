@@ -15,7 +15,7 @@ service CartsByDate {
     type: SERVICE_TYPE_VIEW
   };
 
-  rpc GetCartsByDate(GetCartsByDateRequest) returns (stream GetCartsByDateResponse) {
+  rpc GetCartsByDate(GetCartsByDateRequest) returns (GetCartsByDateResponse) {
     option (akkaserverless.method).view.query = {
       query: "SELECT * AS carts"
              "  FROM carts_by_date"
