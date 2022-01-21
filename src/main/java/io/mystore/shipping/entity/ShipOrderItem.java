@@ -1,13 +1,13 @@
 package io.mystore.shipping.entity;
 
 import java.time.Instant;
+import java.util.List;
 
 import com.akkaserverless.javasdk.eventsourcedentity.EventSourcedEntityContext;
 import com.google.protobuf.Empty;
 import com.google.protobuf.Timestamp;
 
 import io.mystore.shipping.api.ShipOrderItemApi;
-import io.mystore.shipping.entity.ShipOrderItemEntity.ShipOrderItemState;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
 //
@@ -30,7 +30,7 @@ public class ShipOrderItem extends AbstractShipOrderItem {
   }
 
   @Override
-  public Effect<Empty> addSkuItemToOrder(ShipOrderItemEntity.ShipOrderItemState state, ShipOrderItemApi.SkuItem command) {
+  public Effect<Empty> addSkuItemToOrder(ShipOrderItemEntity.ShipOrderItemState state, ShipOrderItemApi.SkuOrderItem command) {
     return handle(state, command);
   }
 
@@ -63,6 +63,11 @@ public class ShipOrderItem extends AbstractShipOrderItem {
   }
 
   @Override
+  public ShipOrderItemEntity.ShipOrderItemState shipSkuItemRequired(ShipOrderItemEntity.ShipOrderItemState state, ShipOrderItemEntity.ShipSkuItemRequired event) {
+    return state;
+  }
+
+  @Override
   public ShipOrderItemEntity.ShipOrderItemState skuItemAddedToOrder(ShipOrderItemEntity.ShipOrderItemState state, ShipOrderItemEntity.SkuItemAddedToOrder event) {
     return state
         .toBuilder()
@@ -85,13 +90,13 @@ public class ShipOrderItem extends AbstractShipOrderItem {
         .build();
   }
 
-  private Effect<Empty> handle(ShipOrderItemState state, ShipOrderItemApi.ShipOrderItem command) {
+  private Effect<Empty> handle(ShipOrderItemEntity.ShipOrderItemState state, ShipOrderItemApi.ShipOrderItem command) {
     return effects()
-        .emitEvent(eventFor(state, command))
+        .emitEvents(eventsFor(state, command))
         .thenReply(newState -> Empty.getDefaultInstance());
   }
 
-  private Effect<Empty> handle(ShipOrderItemEntity.ShipOrderItemState state, ShipOrderItemApi.SkuItem command) {
+  private Effect<Empty> handle(ShipOrderItemEntity.ShipOrderItemState state, ShipOrderItemApi.SkuOrderItem command) {
     if (state.getSkuItemId().isEmpty()) {
       return effects()
           .emitEvent(eventFor(state, command))
@@ -129,41 +134,53 @@ public class ShipOrderItem extends AbstractShipOrderItem {
             .build());
   }
 
-  private ShipOrderItemEntity.OrderItemCreated eventFor(ShipOrderItemEntity.ShipOrderItemState state, ShipOrderItemApi.ShipOrderItem command) {
-    return ShipOrderItemEntity.OrderItemCreated
+  private List<?> eventsFor(ShipOrderItemEntity.ShipOrderItemState state, ShipOrderItemApi.ShipOrderItem command) {
+    var orderItemCreated = ShipOrderItemEntity.OrderItemCreated
         .newBuilder()
+        .setCustomerId(command.getCustomerId())
         .setOrderId(command.getOrderId())
+        .setOrderItemId(command.getOrderItemId())
+        .setSkuId(command.getSkuId())
+        .setSkuName(command.getSkuName())
+        .setOrderedUtc(command.getOrderedUtc())
+        .build();
+
+    var shipSkuItemRequired = ShipOrderItemEntity.ShipSkuItemRequired
+        .newBuilder()
+        .setOrderItemId(command.getOrderItemId())
         .setSkuId(command.getSkuId())
         .build();
+
+    return List.of(orderItemCreated, shipSkuItemRequired);
   }
 
-  private ShipOrderItemEntity.SkuItemAddedToOrder eventFor(ShipOrderItemState state, ShipOrderItemApi.SkuItem command) {
+  private ShipOrderItemEntity.SkuItemAddedToOrder eventFor(ShipOrderItemEntity.ShipOrderItemState state, ShipOrderItemApi.SkuOrderItem command) {
     return ShipOrderItemEntity.SkuItemAddedToOrder
         .newBuilder()
-        .setOrderId(command.getOrderId())
-        .setSkuId(command.getSkuId())
+        .setOrderId(state.getOrderId())
+        .setOrderItemId(state.getSkuItemId())
+        .setSkuId(state.getSkuItemId())
+        .setSkuItemId(command.getSkuItemId())
         .setShippedUtc(command.getShippedUtc())
         .build();
   }
 
-  private ShipOrderItemEntity.OrderItemBackOrdered eventFor(ShipOrderItemState state, ShipOrderItemApi.BackOrderShipOrderItem command) {
+  private ShipOrderItemEntity.OrderItemBackOrdered eventFor(ShipOrderItemEntity.ShipOrderItemState state, ShipOrderItemApi.BackOrderShipOrderItem command) {
     return ShipOrderItemEntity.OrderItemBackOrdered
         .newBuilder()
-        .setOrderId(command.getOrderId())
-        .setSkuId(command.getSkuId())
         .setBackOrderedUtc(timestampNow())
         .build();
   }
 
-  private ShipOrderItemEntity.OrderItemCreated eventFor(ShipOrderItemState state, ShipOrderItemApi.StockAlertShipOrderItem command) {
-    return ShipOrderItemEntity.OrderItemCreated // this event tells skip-sku-item to find some items to ship
+  private ShipOrderItemEntity.ShipSkuItemRequired eventFor(ShipOrderItemEntity.ShipOrderItemState state, ShipOrderItemApi.StockAlertShipOrderItem command) {
+    return ShipOrderItemEntity.ShipSkuItemRequired
         .newBuilder()
-        .setOrderId(command.getOrderId())
-        .setSkuId(command.getSkuId())
+        .setOrderItemId(command.getOrderItemId())
+        .setSkuId(state.getSkuId())
         .build();
   }
 
-  private ShipOrderItemEntity.SkuItemReleasedFromOrder eventForReleaseSkuItem(ShipOrderItemState state) {
+  private ShipOrderItemEntity.SkuItemReleasedFromOrder eventForReleaseSkuItem(ShipOrderItemEntity.ShipOrderItemState state) {
     return ShipOrderItemEntity.SkuItemReleasedFromOrder
         .newBuilder()
         .setOrderId(state.getOrderId())

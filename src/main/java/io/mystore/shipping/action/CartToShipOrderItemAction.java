@@ -1,5 +1,6 @@
 package io.mystore.shipping.action;
 
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -46,6 +47,7 @@ public class CartToShipOrderItemAction extends AbstractCartToShipOrderItemAction
             .newBuilder()
             .setCustomerId(cartCheckedOut.getCartState().getCustomerId())
             .setOrderId(cartCheckedOut.getCartState().getCartId())
+            .setOrderItemId(UUID.randomUUID().toString())
             .setSkuId(lineItem.getSkuId())
             .setSkuName(lineItem.getSkuName())
             .setOrderedUtc(cartCheckedOut.getCartState().getCheckedOutUtc())

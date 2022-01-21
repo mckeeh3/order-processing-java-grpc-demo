@@ -15,10 +15,10 @@ public class ShipOrderItemToShipSkuItemAction extends AbstractShipOrderItemToShi
 
   public ShipOrderItemToShipSkuItemAction(ActionCreationContext creationContext) {}
 
-  /** Handler for "OnOrderItemCreated". */
+  /** Handler for "OnShipSkuItemRequired". */
   @Override
-  public Effect<Empty> onOrderItemCreated(ShipOrderItemEntity.OrderItemCreated orderItemCreated) {
-    throw new RuntimeException("The command handler for `OnOrderItemCreated` is not implemented, yet");
+  public Effect<Empty> onShipSkuItemRequired(ShipOrderItemEntity.ShipSkuItemRequired shipSkuItemRequired) {
+    throw new RuntimeException("The command handler for `OnShipSkuItemRequired` is not implemented, yet");
   }
   /** Handler for "OnSkuItemReleasedFromOrder". */
   @Override

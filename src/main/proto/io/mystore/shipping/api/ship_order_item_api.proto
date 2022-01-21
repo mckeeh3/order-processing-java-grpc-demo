@@ -17,6 +17,7 @@ service ShipOrderItemService {
       state: "io.mystore.shipping.entity.ShipOrderItemState"
       events: [
         "io.mystore.shipping.entity.OrderItemCreated",
+        "io.mystore.shipping.entity.ShipSkuItemRequired",
         "io.mystore.shipping.entity.SkuItemAddedToOrder",
         "io.mystore.shipping.entity.SkuItemReleasedFromOrder",
         "io.mystore.shipping.entity.OrderItemBackOrdered"  // force line breaks
@@ -26,35 +27,35 @@ service ShipOrderItemService {
 
   rpc CreateShipOrderItem(ShipOrderItem) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      post: "/ship-order-items/{customer_id}/{order_id}/{sku_id}/add-order-item"
+      post: "/ship-order-items/{order_item_id}/add-order-item"
       body: "*"
     };
   }
 
-  rpc AddSkuItemToOrder(SkuItem) returns (google.protobuf.Empty) {
+  rpc AddSkuItemToOrder(SkuOrderItem) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      put: "/ship-order-items/{order_id}/{sku_id}/{sku_item_id}/add-sku-item-to-order"
+      put: "/ship-order-items/{order_item_id}/add-sku-item-to-order"
       body: "*"
     };
   }
 
   rpc PlaceOnBackOrder(BackOrderShipOrderItem) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      put: "/ship-order-items/{order_id}/{sku_id}/back_order"
+      put: "/ship-order-items/{order_item_id}/back_order"
       body: "*"
     };
   }
 
   rpc StockAlert(StockAlertShipOrderItem) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      put: "/ship-order-items/{order_id}/{sku_id}/stock-alert"
+      put: "/ship-order-items/{order_item_id}/stock-alert"
       body: "*"
     };
   }
 
   rpc GetShipOrderItem(GetShipOrderItemRequest) returns (ShipOrderItem) {
     option (google.api.http) = {
-      get: "/ship-order-items/{customer_id}/{order_id}/{sku_id}"
+      get: "/ship-order-items/{order_item_id}"
     };
   }
 }
@@ -70,29 +71,20 @@ message ShipOrderItem {
   google.protobuf.Timestamp back_ordered_utc = 8;
 }
 
-message SkuItem {
-  string order_id = 1;
-  string order_item_id = 2 [(akkaserverless.field).entity_key = true];
-  string sku_id = 3;
-  string sku_item_id = 4;
-  google.protobuf.Timestamp shipped_utc = 5;
+message SkuOrderItem {
+  string order_item_id = 1 [(akkaserverless.field).entity_key = true];
+  string sku_item_id = 2;
+  google.protobuf.Timestamp shipped_utc = 3;
 }
 
 message BackOrderShipOrderItem {
-  string order_id = 1;
-  string order_item_id = 2 [(akkaserverless.field).entity_key = true];
-  string sku_id = 3;
+  string order_item_id = 1 [(akkaserverless.field).entity_key = true];
 }
 
 message StockAlertShipOrderItem {
-  string order_id = 1;
-  string order_item_id = 2 [(akkaserverless.field).entity_key = true];
-  string sku_id = 3;
+  string order_item_id = 1 [(akkaserverless.field).entity_key = true];
 }
 
 message GetShipOrderItemRequest {
-  string customer_id = 1;
-  string order_id = 2;
-  string order_item_id = 3 [(akkaserverless.field).entity_key = true];
-  string sku_id = 4;
+  string order_item_id = 1 [(akkaserverless.field).entity_key = true];
 }

@@ -47,3 +47,8 @@ message OrderItemBackOrdered {
   string sku_id = 3;
   google.protobuf.Timestamp back_ordered_utc = 4;
 }
+
+message ShipSkuItemRequired {
+  string order_item_id = 1;
+  string sku_id = 2;
+}

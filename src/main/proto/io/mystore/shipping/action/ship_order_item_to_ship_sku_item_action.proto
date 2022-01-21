@@ -14,7 +14,7 @@ service ShipOrderItemToShipSkuItem {
     action: {}
   };
 
-  rpc OnOrderItemCreated(shipping.entity.OrderItemCreated) returns (google.protobuf.Empty) {
+  rpc OnShipSkuItemRequired(shipping.entity.ShipSkuItemRequired) returns (google.protobuf.Empty) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "ship_order_item"
     };
