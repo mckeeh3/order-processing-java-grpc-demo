@@ -26,7 +26,9 @@ import io.mystore.shipping.entity.ShipOrderItem;
 import io.mystore.shipping.entity.ShipSkuItem;
 import io.mystore.shipping.entity.StockItem;
 import io.mystore.shipping.view.AvailableShipSkuItemsView;
+import io.mystore.shipping.view.AvailableStockItemsView;
 import io.mystore.shipping.view.BackOrderedShipOrderItemsView;
+import io.mystore.shipping.view.ShippedStockItemsView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,6 +55,7 @@ public final class Main {
       ShoppingCart::new,
       StockItem::new,
       AvailableShipSkuItemsView::new,
+      AvailableStockItemsView::new,
       BackOrderedShipOrderItemsView::new,
       CartToOrderAction::new,
       CartToPurchasedProductAction::new,
@@ -69,6 +72,7 @@ public final class Main {
       ShipOrderItemToShipSkuItemAction::new,
       ShipSkuItemToShipOrderItemAction::new,
       ShipSkuItemToStockItemAction::new,
+      ShippedStockItemsView::new,
       StockItemFrontendAction::new,
       StockItemToShipSkuItemAction::new);
   }

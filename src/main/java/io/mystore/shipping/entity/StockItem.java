@@ -154,10 +154,12 @@ public class StockItem extends AbstractStockItem {
         .build();
   }
 
-  private StockItemEntity.StockItemCreated eventFor(StockItemEntity.StockItemState state, StockItemApi.ReleaseStockItem command) {
-    return StockItemEntity.StockItemCreated
+  private StockItemEntity.StockItemReleased eventFor(StockItemEntity.StockItemState state, StockItemApi.ReleaseStockItem command) {
+    return StockItemEntity.StockItemReleased
         .newBuilder()
         .setSkuItemId(command.getSkuItemId())
+        .setOrderId(command.getOrderId())
+        .setOrderItemId(command.getOrderItemId())
         .build();
   }
 

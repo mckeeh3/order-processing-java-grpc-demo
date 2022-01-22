@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+package io.mystore.shipping.view;
+
+import "akkaserverless/annotations.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+import "io/mystore/shipping/entity/stock_item_entity.proto";
+
+option java_outer_classname = "AvailableStockItemsModel";
+
+service AvailableStockItems {
+  option (akkaserverless.codegen) = {
+    view: {}
+  };
+
+  rpc GetAvailableStockItems(GetAvailableStockItemsRequest) returns (GetAvailableStockItemsResponse) {
+    option (akkaserverless.method).view.query = {
+      query: "SELECT * AS stock_items"
+             "  FROM available_stock_items"
+             " WHERE shipped_utc.seconds = 0"
+    };
+    option (google.api.http) = {
+      get: "/available-stock-items"
+    };
+  }
+
+  rpc OnCreated(entity.StockItemCreated) returns (AvailableStockItem) {
+    option (akkaserverless.method).eventing.in = {
+      event_sourced_entity: "stock_item"
+    };
+    option (akkaserverless.method).view.update = {
+      table: "available_stock_items"
+      transform_updates: true
+    };
+  }
+
+  rpc OnShipped(entity.StockItemShipped) returns (AvailableStockItem) {
+    option (akkaserverless.method).eventing.in = {
+      event_sourced_entity: "stock_item"
+    };
+    option (akkaserverless.method).view.update = {
+      table: "available_stock_items"
+      transform_updates: true
+    };
+  }
+
+  rpc OnReleased(entity.StockItemReleased) returns (AvailableStockItem) {
+    option (akkaserverless.method).eventing.in = {
+      event_sourced_entity: "stock_item"
+    };
+    option (akkaserverless.method).view.update = {
+      table: "available_stock_items"
+      transform_updates: true
+    };
+  }
+
+  rpc IgnoreOtherEvents(google.protobuf.Any) returns (AvailableStockItem) {
+    option (akkaserverless.method).eventing.in = {
+      event_sourced_entity: "stock_item"
+    };
+    option (akkaserverless.method).view.update = {
+      table: "available_stock_items"
+      transform_updates: true
+    };
+  }
+}
+
+message GetAvailableStockItemsRequest {}
+
+message GetAvailableStockItemsResponse {
+  repeated AvailableStockItem stock_items = 1;
+}
+
+message AvailableStockItem {
+  string sku_id = 1;
+  string sku_name = 2;
+  string sku_item_id = 3;
+  google.protobuf.Timestamp shipped_utc = 4;
+}

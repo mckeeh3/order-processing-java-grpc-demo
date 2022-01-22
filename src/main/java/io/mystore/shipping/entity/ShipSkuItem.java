@@ -56,7 +56,7 @@ public class ShipSkuItem extends AbstractShipSkuItem {
         .toBuilder()
         .setOrderId(event.getOrderId())
         .setOrderItemId(event.getOrderItemId())
-        .setShippedUtc(timestampNow())
+        .setShippedUtc(event.getShippedUtc())
         .build();
   }
 
@@ -103,14 +103,17 @@ public class ShipSkuItem extends AbstractShipSkuItem {
   private ShipSkuItemEntity.ShipOrderItemAdded eventFor(ShipSkuItemState state, ShipSkuItemApi.AddShipOrderItemToSkuItem command) {
     return ShipSkuItemEntity.ShipOrderItemAdded
         .newBuilder()
+        .setSkuItemId(command.getSkuItemId())
         .setOrderId(command.getOrderId())
         .setOrderItemId(command.getOrderItemId())
+        .setShippedUtc(timestampNow())
         .build();
   }
 
   private ShipSkuItemEntity.ReleasedSkuItemFromOrder eventFor(ShipSkuItemState state, ShipSkuItemApi.ReleaseShipOrderItemFromSkuItem command) {
     return ShipSkuItemEntity.ReleasedSkuItemFromOrder
         .newBuilder()
+        .setSkuItemId(command.getSkuItemId())
         .setOrderId(command.getOrderId())
         .setOrderItemId(command.getOrderItemId())
         .build();

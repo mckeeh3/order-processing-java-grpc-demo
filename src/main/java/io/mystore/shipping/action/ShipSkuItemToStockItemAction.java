@@ -36,6 +36,9 @@ public class ShipSkuItemToStockItemAction extends AbstractShipSkuItemToStockItem
     return StockItemApi.ShipStockItem
         .newBuilder()
         .setSkuItemId(shipOrderItemAdded.getSkuItemId())
+        .setOrderId(shipOrderItemAdded.getOrderId())
+        .setOrderItemId(shipOrderItemAdded.getOrderItemId())
+        .setShippedUtc(shipOrderItemAdded.getShippedUtc())
         .build();
   }
 
@@ -43,6 +46,8 @@ public class ShipSkuItemToStockItemAction extends AbstractShipSkuItemToStockItem
     return StockItemApi.ReleaseStockItem
         .newBuilder()
         .setSkuItemId(releasedSkuItemFromOrder.getSkuItemId())
+        .setOrderId(releasedSkuItemFromOrder.getOrderId())
+        .setOrderItemId(releasedSkuItemFromOrder.getOrderItemId())
         .build();
   }
 }
