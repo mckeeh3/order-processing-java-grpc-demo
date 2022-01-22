@@ -67,7 +67,7 @@ message ShipSkuItem {
   string sku_item_id = 1;
   string sku_id = 2;
   string sku_name = 3;
-  string ship_order_id = 4;
+  string order_id = 4;
   string order_item_id = 5;
   google.protobuf.Timestamp shipped_utc = 6;
 }

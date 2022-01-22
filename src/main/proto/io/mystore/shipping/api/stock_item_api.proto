@@ -1,0 +1,83 @@
+syntax = "proto3";
+
+import "akkaserverless/annotations.proto";
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+package io.mystore.shipping.api;
+
+option java_outer_classname = "StockItemApi";
+
+service StockItemService {
+  option (akkaserverless.codegen) = {
+    event_sourced_entity: {
+      name: "io.mystore.shipping.entity.StockItem"
+      entity_type: "stock_item"
+      state: "io.mystore.shipping.entity.StockItemState"
+      events: [
+        "io.mystore.shipping.entity.StockItemCreated",
+        "io.mystore.shipping.entity.StockItemShipped",
+        "io.mystore.shipping.entity.StockItemReleased"  // force line breaks
+      ]
+    }
+  };
+
+  rpc Create(CreateStockItem) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/stock-items/{stock_item_id}/add-stock-item"
+      body: "*"
+    };
+  }
+
+  rpc Ship(ShipStockItem) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/stock-items/{stock_item_id}/ship-stock-item"
+      body: "*"
+    };
+  }
+
+  rpc Release(ReleaseStockItem) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/stock-items/{stock_item_id}/release-stock-item"
+      body: "*"
+    };
+  }
+
+  rpc Get(GetStockItem) returns (StockItem) {
+    option (google.api.http) = {
+      put: "/stock-items/{stock_item_id}"
+      body: "*"
+    };
+  }
+}
+
+message CreateStockItem {
+  string sku_item_id = 1 [(akkaserverless.field).entity_key = true];
+  string sku_id = 2;
+  string sku_name = 3;
+}
+
+message ShipStockItem {
+  string sku_item_id = 1 [(akkaserverless.field).entity_key = true];
+  string order_id = 2;
+  string order_item_id = 3;
+  google.protobuf.Timestamp shipped_utc = 4;
+}
+
+message ReleaseStockItem {
+  string sku_item_id = 1 [(akkaserverless.field).entity_key = true];
+}
+
+message GetStockItem {
+  string sku_item_id = 1 [(akkaserverless.field).entity_key = true];
+}
+
+message StockItem {
+  string sku_item_id = 1;
+  string sku_id = 2;
+  string sku_name = 3;
+  string order_id = 4;
+  string order_item_id = 5;
+  google.protobuf.Timestamp shipped_utc = 6;
+}

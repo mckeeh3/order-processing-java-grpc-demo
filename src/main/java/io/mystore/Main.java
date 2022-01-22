@@ -18,9 +18,13 @@ import io.mystore.shipping.action.CartToShipOrderAction;
 import io.mystore.shipping.action.CartToShipOrderItemAction;
 import io.mystore.shipping.action.ShipOrderItemToShipSkuItemAction;
 import io.mystore.shipping.action.ShipSkuItemToShipOrderItemAction;
+import io.mystore.shipping.action.ShipSkuItemToStockItemAction;
+import io.mystore.shipping.action.StockItemFrontendAction;
+import io.mystore.shipping.action.StockItemToShipSkuItemAction;
 import io.mystore.shipping.entity.ShipOrder;
 import io.mystore.shipping.entity.ShipOrderItem;
 import io.mystore.shipping.entity.ShipSkuItem;
+import io.mystore.shipping.entity.StockItem;
 import io.mystore.shipping.view.AvailableShipSkuItemsView;
 import io.mystore.shipping.view.BackOrderedShipOrderItemsView;
 import org.slf4j.Logger;
@@ -47,6 +51,7 @@ public final class Main {
       ShipOrderItem::new,
       ShipSkuItem::new,
       ShoppingCart::new,
+      StockItem::new,
       AvailableShipSkuItemsView::new,
       BackOrderedShipOrderItemsView::new,
       CartToOrderAction::new,
@@ -62,7 +67,10 @@ public final class Main {
       PurchasedProductsByDateView::new,
       PurchasedProductsByProductByDateView::new,
       ShipOrderItemToShipSkuItemAction::new,
-      ShipSkuItemToShipOrderItemAction::new);
+      ShipSkuItemToShipOrderItemAction::new,
+      ShipSkuItemToStockItemAction::new,
+      StockItemFrontendAction::new,
+      StockItemToShipSkuItemAction::new);
   }
 
   public static void main(String[] args) throws Exception {

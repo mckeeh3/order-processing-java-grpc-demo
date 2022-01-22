@@ -15,18 +15,14 @@ import io.mystore.shipping.api.ShipOrderApi;
 // As long as this file exists it will not be overwritten: you can maintain it yourself,
 // or delete it so it is regenerated as needed.
 
-/** An action. */
 public class CartToShipOrderAction extends AbstractCartToShipOrderAction {
 
   public CartToShipOrderAction(ActionCreationContext creationContext) {
   }
 
-  /** Handler for "OnCartCheckedOut". */
   @Override
   public Effect<Empty> onCartCheckedOut(CartEntity.CartCheckedOut cartCheckedOut) {
-    var result = components().shipOrder().addShipOrder(toShipOrder(cartCheckedOut));
-
-    return effects().forward(result);
+    return effects().forward(components().shipOrder().addShipOrder(toShipOrder(cartCheckedOut)));
   }
 
   private ShipOrderApi.ShipOrder toShipOrder(CartEntity.CartCheckedOut cartCheckedOut) {
@@ -39,6 +35,11 @@ public class CartToShipOrderAction extends AbstractCartToShipOrderAction {
         .build();
   }
 
+  @Override
+  public Effect<Empty> ignoreOtherEvents(Any any) {
+    return effects().reply(Empty.getDefaultInstance());
+  }
+
   private List<ShipOrderApi.LineItem> toLineItems(List<CartEntity.LineItem> lineItems) {
     return lineItems.stream().map(
         lineItem -> ShipOrderApi.LineItem
@@ -48,11 +49,5 @@ public class CartToShipOrderAction extends AbstractCartToShipOrderAction {
             .setQuantity(lineItem.getQuantity())
             .build())
         .collect(Collectors.toList());
-  }
-
-  /** Handler for "IgnoreOtherEvents". */
-  @Override
-  public Effect<Empty> ignoreOtherEvents(Any any) {
-    return effects().reply(Empty.getDefaultInstance());
   }
 }

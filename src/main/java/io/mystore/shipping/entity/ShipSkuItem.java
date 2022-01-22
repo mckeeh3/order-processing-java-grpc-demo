@@ -46,6 +46,7 @@ public class ShipSkuItem extends AbstractShipSkuItem {
         .setSkuId(event.getSkuId())
         .setSkuItemId(event.getSkuItemId())
         .setOrderId("")
+        .setOrderItemId("")
         .build();
   }
 
@@ -54,16 +55,18 @@ public class ShipSkuItem extends AbstractShipSkuItem {
     return state
         .toBuilder()
         .setOrderId(event.getOrderId())
+        .setOrderItemId(event.getOrderItemId())
         .setShippedUtc(timestampNow())
         .build();
   }
 
   @Override
   public ShipSkuItemEntity.ShipSkuItemState releasedSkuItemFromOrder(ShipSkuItemEntity.ShipSkuItemState state, ShipSkuItemEntity.ReleasedSkuItemFromOrder event) {
-    if (state.getOrderId().equals(event.getOrderId())) {
+    if (state.getOrderItemId().equals(event.getOrderItemId())) {
       return state
           .toBuilder()
           .setOrderId("")
+          .setOrderItemId("")
           .setShippedUtc(timestampZero())
           .build();
     } else {
@@ -101,6 +104,7 @@ public class ShipSkuItem extends AbstractShipSkuItem {
     return ShipSkuItemEntity.ShipOrderItemAdded
         .newBuilder()
         .setOrderId(command.getOrderId())
+        .setOrderItemId(command.getOrderItemId())
         .build();
   }
 
@@ -108,6 +112,7 @@ public class ShipSkuItem extends AbstractShipSkuItem {
     return ShipSkuItemEntity.ReleasedSkuItemFromOrder
         .newBuilder()
         .setOrderId(command.getOrderId())
+        .setOrderItemId(command.getOrderItemId())
         .build();
   }
 
