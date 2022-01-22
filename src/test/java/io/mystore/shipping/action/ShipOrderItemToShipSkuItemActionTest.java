@@ -28,9 +28,15 @@ public class ShipOrderItemToShipSkuItemActionTest {
   }
 
   @Test
-  public void onOrderItemCreatedTest() {
+  public void onShipSkuItemRequiredTest() {
     ShipOrderItemToShipSkuItemActionTestKit testKit = ShipOrderItemToShipSkuItemActionTestKit.of(ShipOrderItemToShipSkuItemAction::new);
-    // ActionResult<Empty> result = testKit.onOrderItemCreated(ShipOrderItemEntity.OrderItemCreated.newBuilder()...build());
+    // ActionResult<Empty> result = testKit.onShipSkuItemRequired(ShipOrderItemEntity.ShipSkuItemRequired.newBuilder()...build());
+  }
+
+  @Test
+  public void onSkuItemReleasedFromOrderTest() {
+    ShipOrderItemToShipSkuItemActionTestKit testKit = ShipOrderItemToShipSkuItemActionTestKit.of(ShipOrderItemToShipSkuItemAction::new);
+    // ActionResult<Empty> result = testKit.onSkuItemReleasedFromOrder(ShipOrderItemEntity.SkuItemReleasedFromOrder.newBuilder()...build());
   }
 
   @Test

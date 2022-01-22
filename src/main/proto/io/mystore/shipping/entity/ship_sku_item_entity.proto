@@ -22,6 +22,7 @@ message SkuItemCreated {
 message ShipOrderItemAdded {
   string sku_item_id = 1;
   string order_id = 2;
+  google.protobuf.Timestamp shipped_utc = 3;
 }
 
 message ReleasedSkuItemFromOrder {

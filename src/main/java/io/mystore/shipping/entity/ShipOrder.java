@@ -65,6 +65,7 @@ public class ShipOrder extends AbstractShipOrder {
         .setCustomerId(command.getCustomerId())
         .setOrderId(command.getOrderId())
         .setOrderedUtc(command.getOrderedUtc())
+        .addAllLineItems(toEntity(command.getLineItemsList()))
         .build();
   }
 
@@ -118,6 +119,9 @@ public class ShipOrder extends AbstractShipOrder {
   }
 
   private Optional<Effect<ShipOrderApi.ShipOrder>> reject(ShipOrderEntity.ShipOrderState state, ShipOrderApi.GetShipOrderRequest command) {
+    if (state.getOrderId().isEmpty()) {
+      return Optional.of(effects().error("Order not found"));
+    }
     return Optional.empty();
   }
 
@@ -203,6 +207,17 @@ public class ShipOrder extends AbstractShipOrder {
   private List<ShipOrderApi.LineItem> toApi(List<ShipOrderEntity.LineItem> lineItems) {
     return lineItems.stream()
         .map(lineItem -> ShipOrderApi.LineItem
+            .newBuilder()
+            .setSkuId(lineItem.getSkuId())
+            .setSkuName(lineItem.getSkuName())
+            .setQuantity(lineItem.getQuantity())
+            .build())
+        .collect(Collectors.toList());
+  }
+
+  private List<ShipOrderEntity.LineItem> toEntity(List<ShipOrderApi.LineItem> lineItems) {
+    return lineItems.stream()
+        .map(lineItem -> ShipOrderEntity.LineItem
             .newBuilder()
             .setSkuId(lineItem.getSkuId())
             .setSkuName(lineItem.getSkuName())

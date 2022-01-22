@@ -4,16 +4,15 @@ package io.mystore.shipping.view;
 
 import "akkaserverless/annotations.proto";
 import "google/api/annotations.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
 import "io/mystore/shipping/entity/ship_sku_item_entity.proto";
 
 option java_outer_classname = "AvailableShipSkuItemsModel";
 
 service AvailableShipSkuItems {
-  // option (akkaserverless.codegen) = {
-  //   view: {}
-  // };
-  option (akkaserverless.service) = {
-    type: SERVICE_TYPE_VIEW
+  option (akkaserverless.codegen) = {
+    view: {}
   };
 
   rpc GetAvailableShipSkuItems(GetAvailableShipSkuItemsRequest) returns (GetAvailableShipSkuItemsResponse) {
@@ -21,11 +20,10 @@ service AvailableShipSkuItems {
       query: "SELECT * AS ship_sku_items"
              "  FROM available_ship_sku_items"
              " WHERE sku_id = :sku_id"
-             "   AND available_to_ship = true"
+             "   AND shipped_utc.seconds > 0"
     };
     option (google.api.http) = {
-      post: "/available-ship-sku-items",
-      body: "*"
+      get: "/available-ship-sku-items"
     };
   }
 
@@ -58,6 +56,16 @@ service AvailableShipSkuItems {
       transform_updates: true
     };
   }
+
+  rpc IgnoreOtherEvents(google.protobuf.Any) returns (ShipSkuItem) {
+    option (akkaserverless.method).eventing.in = {
+      event_sourced_entity: "ship_sku_item"
+    };
+    option (akkaserverless.method).view.update = {
+      table: "available_ship_sku_items"
+      transform_updates: true
+    };
+  }
 }
 
 message GetAvailableShipSkuItemsRequest {
@@ -72,5 +80,5 @@ message ShipSkuItem {
   string sku_id = 1;
   string sku_name = 2;
   string sku_item_id = 3;
-  bool available_to_ship = 4;
+  google.protobuf.Timestamp shipped_utc = 4;
 }

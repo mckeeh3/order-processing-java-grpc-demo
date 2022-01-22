@@ -2,12 +2,15 @@ package io.mystore.shipping.entity;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 import com.akkaserverless.javasdk.eventsourcedentity.EventSourcedEntityContext;
 import com.google.protobuf.Empty;
 import com.google.protobuf.Timestamp;
 
 import io.mystore.shipping.api.ShipOrderItemApi;
+import io.mystore.shipping.api.ShipOrderItemApi.GetShipOrderItemRequest;
+import io.mystore.shipping.entity.ShipOrderItemEntity.ShipOrderItemState;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
 //
@@ -46,7 +49,7 @@ public class ShipOrderItem extends AbstractShipOrderItem {
 
   @Override
   public Effect<ShipOrderItemApi.ShipOrderItem> getShipOrderItem(ShipOrderItemEntity.ShipOrderItemState state, ShipOrderItemApi.GetShipOrderItemRequest command) {
-    return handle(state, command);
+    return reject(state, command).orElseGet(() -> handle(state, command));
   }
 
   @Override
@@ -55,6 +58,7 @@ public class ShipOrderItem extends AbstractShipOrderItem {
         .toBuilder()
         .setCustomerId(event.getCustomerId())
         .setOrderId(event.getOrderId())
+        .setOrderItemId(event.getOrderItemId())
         .setSkuId(event.getSkuId())
         .setSkuName(event.getSkuName())
         .setSkuItemId("")
@@ -88,6 +92,13 @@ public class ShipOrderItem extends AbstractShipOrderItem {
         .toBuilder()
         .setBackOrderedUtc(event.getBackOrderedUtc())
         .build();
+  }
+
+  private Optional<Effect<ShipOrderItemApi.ShipOrderItem>> reject(ShipOrderItemState state, GetShipOrderItemRequest command) {
+    if (state.getOrderId().isEmpty()) {
+      return Optional.of(effects().error("Order item for order-item-id '" + command.getOrderItemId() + "' does not exist"));
+    }
+    return Optional.empty();
   }
 
   private Effect<Empty> handle(ShipOrderItemEntity.ShipOrderItemState state, ShipOrderItemApi.ShipOrderItem command) {
@@ -126,6 +137,7 @@ public class ShipOrderItem extends AbstractShipOrderItem {
             .newBuilder()
             .setCustomerId(state.getCustomerId())
             .setOrderId(state.getOrderId())
+            .setOrderItemId(state.getOrderItemId())
             .setSkuId(state.getSkuId())
             .setSkuName(state.getSkuName())
             .setOrderedUtc(state.getOrderedUtc())

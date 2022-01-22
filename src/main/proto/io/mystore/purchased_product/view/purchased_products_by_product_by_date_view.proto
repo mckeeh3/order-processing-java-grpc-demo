@@ -2,9 +2,9 @@ syntax = "proto3";
 
 package io.mystore.purchased_product.view;
 
+import "akkaserverless/annotations.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/any.proto";
-import "akkaserverless/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "io/mystore/purchased_product/entity/purchased_product_entity.proto";
 import "io/mystore/purchased_product/view/purchased_product.proto";

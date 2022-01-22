@@ -25,21 +25,21 @@ service ShipSkuItemService {
 
   rpc CreateSkuItem(CreateShipSkuItem) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      post: "/sku-items/{sku_item_id}/{sku-id}/add-sku-item"
+      post: "/sku-items/{sku_item_id}/add-sku-item"
       body: "*"
     };
   }
 
   rpc AddShipOrderItem(AddShipOrderItemToSkuItem) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      put: "/sku-items/{sku_item_id}/{order_item_id}/add-ship-order-item"
+      put: "/sku-items/{sku_item_id}/add-ship-order-item"
       body: "*"
     };
   }
 
   rpc ReleaseShipOrderItem(ReleaseShipOrderItemFromSkuItem) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      put: "/sku-items/{sku_item_id}/{order_item_id}/release-ship-order-item-from-sku-item"
+      put: "/sku-items/{sku_item_id}/release-ship-order-item-from-sku-item"
       body: "*"
     };
   }
