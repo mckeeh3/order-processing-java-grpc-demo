@@ -1,12 +1,14 @@
 package io.mystore.shipping.entity;
 
 import java.time.Instant;
+import java.util.Optional;
 
 import com.akkaserverless.javasdk.eventsourcedentity.EventSourcedEntityContext;
 import com.google.protobuf.Empty;
 import com.google.protobuf.Timestamp;
 
 import io.mystore.shipping.api.ShipSkuItemApi;
+import io.mystore.shipping.api.ShipSkuItemApi.CreateShipSkuItem;
 import io.mystore.shipping.entity.ShipSkuItemEntity.ShipSkuItemState;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
@@ -26,7 +28,7 @@ public class ShipSkuItem extends AbstractShipSkuItem {
 
   @Override
   public Effect<Empty> createSkuItem(ShipSkuItemEntity.ShipSkuItemState state, ShipSkuItemApi.CreateShipSkuItem command) {
-    return handle(state, command);
+    return reject(state, command).orElseGet(() -> handle(state, command));
   }
 
   @Override
@@ -72,6 +74,13 @@ public class ShipSkuItem extends AbstractShipSkuItem {
     } else {
       return state;
     }
+  }
+
+  private Optional<Effect<Empty>> reject(ShipSkuItemState state, CreateShipSkuItem command) {
+    if (!state.getOrderItemId().isEmpty()) {
+      return Optional.of(effects().error("skuItem is not available"));
+    }
+    return Optional.empty();
   }
 
   private Effect<Empty> handle(ShipSkuItemState state, ShipSkuItemApi.CreateShipSkuItem command) {
