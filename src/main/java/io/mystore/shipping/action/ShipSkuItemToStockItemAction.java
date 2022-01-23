@@ -18,7 +18,7 @@ public class ShipSkuItemToStockItemAction extends AbstractShipSkuItemToStockItem
   }
 
   @Override
-  public Effect<Empty> onShipOrderItemAdded(ShipSkuItemEntity.ShipOrderItemAdded shipOrderItemAdded) {
+  public Effect<Empty> onShipOrderItemAdded(ShipSkuItemEntity.OrderItemAdded shipOrderItemAdded) {
     return effects().forward(components().stockItem().ship(toStockItem(shipOrderItemAdded)));
   }
 
@@ -32,7 +32,7 @@ public class ShipSkuItemToStockItemAction extends AbstractShipSkuItemToStockItem
     return effects().reply(Empty.getDefaultInstance());
   }
 
-  private StockItemApi.ShipStockItem toStockItem(ShipSkuItemEntity.ShipOrderItemAdded shipOrderItemAdded) {
+  private StockItemApi.ShipStockItem toStockItem(ShipSkuItemEntity.OrderItemAdded shipOrderItemAdded) {
     return StockItemApi.ShipStockItem
         .newBuilder()
         .setSkuItemId(shipOrderItemAdded.getSkuItemId())

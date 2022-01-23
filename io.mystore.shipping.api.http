@@ -1,0 +1,17 @@
+@urlPrefix = https://blue-shape-3166.us-east1.akkaserverless.app
+@skuId = sku-1
+@skuName = sku-1 name
+@quantity = 1
+@orderItemId = 32baaaff-0282-4c06-817f-2df6c0cb8167
+
+### io.mystore.shipping.action.StockItemFrontend.createStockItems
+
+curl -XPOST -H "Content-Type: application/json" -d '{
+  "sku_name":"{{skuName}}",
+  "quantity":{{quantity}}}'
+  {{urlPrefix}}/stock-item-frontend/{{skuId}}/create
+
+### io.mystore.shipping.api.ShipOrderItemService.GetShipOrderItem
+
+curl -XGET -H "Content-Type: application/json"
+  '{{urlPrefix}}/ship-order-items/{{orderItemId}}'

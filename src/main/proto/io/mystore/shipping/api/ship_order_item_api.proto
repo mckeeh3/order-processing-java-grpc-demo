@@ -14,10 +14,10 @@ service ShipOrderItemService {
     event_sourced_entity: {
       name: "io.mystore.shipping.entity.ShipOrderItem"  //
       entity_type: "ship_order_item"
-      state: "io.mystore.shipping.entity.ShipOrderItemState"
+      state: "io.mystore.shipping.entity.OrderItemState"
       events: [
         "io.mystore.shipping.entity.OrderItemCreated",
-        "io.mystore.shipping.entity.ShipSkuItemRequired",
+        "io.mystore.shipping.entity.SkuItemRequired",
         "io.mystore.shipping.entity.SkuItemAddedToOrder",
         "io.mystore.shipping.entity.SkuItemReleasedFromOrder",
         "io.mystore.shipping.entity.OrderItemBackOrdered"  // force line breaks
@@ -25,7 +25,7 @@ service ShipOrderItemService {
     }
   };
 
-  rpc CreateShipOrderItem(ShipOrderItem) returns (google.protobuf.Empty) {
+  rpc CreateShipOrderItem(OrderItem) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       post: "/ship-order-items/{order_item_id}/add-order-item"
       body: "*"
@@ -39,28 +39,28 @@ service ShipOrderItemService {
     };
   }
 
-  rpc PlaceOnBackOrder(BackOrderShipOrderItem) returns (google.protobuf.Empty) {
+  rpc PlaceOnBackOrder(BackOrderOrderItem) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       put: "/ship-order-items/{order_item_id}/back_order"
       body: "*"
     };
   }
 
-  rpc StockAlert(StockAlertShipOrderItem) returns (google.protobuf.Empty) {
+  rpc StockAlert(StockAlertOrderItem) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       put: "/ship-order-items/{order_item_id}/stock-alert"
       body: "*"
     };
   }
 
-  rpc GetShipOrderItem(GetShipOrderItemRequest) returns (ShipOrderItem) {
+  rpc GetShipOrderItem(GetOrderItemRequest) returns (OrderItem) {
     option (google.api.http) = {
       get: "/ship-order-items/{order_item_id}"
     };
   }
 }
 
-message ShipOrderItem {
+message OrderItem {
   string customer_id = 1;
   string order_id = 2;
   string order_item_id = 3 [(akkaserverless.field).entity_key = true];
@@ -77,14 +77,14 @@ message SkuOrderItem {
   google.protobuf.Timestamp shipped_utc = 3;
 }
 
-message BackOrderShipOrderItem {
+message BackOrderOrderItem {
   string order_item_id = 1 [(akkaserverless.field).entity_key = true];
 }
 
-message StockAlertShipOrderItem {
+message StockAlertOrderItem {
   string order_item_id = 1 [(akkaserverless.field).entity_key = true];
 }
 
-message GetShipOrderItemRequest {
+message GetOrderItemRequest {
   string order_item_id = 1 [(akkaserverless.field).entity_key = true];
 }

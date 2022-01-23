@@ -1,5 +1,6 @@
 
 @urlPrefix = https://blue-shape-3166.us-east1.akkaserverless.app
+@skuId = sku-1
 @orderId = cart-1
 @orderItemId = d606c78f-e337-4977-8b1b-35adaf4b86fe
 
@@ -17,3 +18,18 @@ curl -XGET -H "Content-Type: application/json"
 
 curl -XGET -H "Content-Type: application/json"
   '{{urlPrefix}}/back-ordered-ship-order-items'
+
+### io.mystore.shipping.view.AvailableStockItems.GetAvailableStockItems
+
+curl -XGET -H "Content-Type: application/json"
+  '{{urlPrefix}}/available-stock-items'
+
+### io.mystore.shipping.view.AvailableShipSkuItems.GetAvailableShipSkuItems
+
+curl -XGET -H "Content-Type: application/json"
+  '{{urlPrefix}}/available-ship-sku-items?sku_id={{skuId}}'
+
+### io.mystore.shipping.view.ShippedStockItems.GetShippedStockItems
+
+curl -XGET -H "Content-Type: application/json"
+  '{{urlPrefix}}/shipped-stock-items'

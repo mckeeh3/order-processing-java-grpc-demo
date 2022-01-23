@@ -26,7 +26,7 @@ public class CartToShipOrderItemAction extends AbstractCartToShipOrderItemAction
   @Override
   public Effect<Empty> onCartCheckedOut(CartEntity.CartCheckedOut cartCheckedOut) {
     var results = cartCheckedOut.getCartState().getLineItemsList().stream()
-        .flatMap(lineItem -> shipOrderItems(cartCheckedOut, lineItem))
+        .flatMap(lineItem -> toOrderItems(cartCheckedOut, lineItem))
         .map(shipOrderItem -> components().shipOrderItem().createShipOrderItem(shipOrderItem).execute())
         .collect(Collectors.toList());
 
@@ -41,9 +41,9 @@ public class CartToShipOrderItemAction extends AbstractCartToShipOrderItemAction
     return effects().reply(Empty.getDefaultInstance());
   }
 
-  Stream<ShipOrderItemApi.ShipOrderItem> shipOrderItems(CartEntity.CartCheckedOut cartCheckedOut, CartEntity.LineItem lineItem) {
+  Stream<ShipOrderItemApi.OrderItem> toOrderItems(CartEntity.CartCheckedOut cartCheckedOut, CartEntity.LineItem lineItem) {
     return IntStream.range(0, lineItem.getQuantity())
-        .mapToObj(ignore -> ShipOrderItemApi.ShipOrderItem
+        .mapToObj(ignore -> ShipOrderItemApi.OrderItem
             .newBuilder()
             .setCustomerId(cartCheckedOut.getCartState().getCustomerId())
             .setOrderId(cartCheckedOut.getCartState().getCartId())

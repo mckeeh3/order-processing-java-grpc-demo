@@ -15,7 +15,7 @@ service BackOrderedShipOrderItems {
     view: {}
   };
 
-  rpc GetBackOrderedShipOrderItems(GetBackOrderedShipOrderItemsRequest) returns (GetBackOrderedShipOrderItemsResponse) {
+  rpc GetBackOrderedShipOrderItems(GetBackOrderedOrderItemsRequest) returns (GetBackOrderedOrderItemsResponse) {
     option (akkaserverless.method).view.query = {
       query: "SELECT * AS ship_order_items"
              "  FROM back_ordered_ship_order_items"
@@ -67,11 +67,9 @@ service BackOrderedShipOrderItems {
   }
 }
 
-message GetBackOrderedShipOrderItemsRequest {
-  string order_id = 1;
-}
+message GetBackOrderedOrderItemsRequest {}
 
-message GetBackOrderedShipOrderItemsResponse {
+message GetBackOrderedOrderItemsResponse {
   repeated ShipOrderItem ship_order_items = 1;
 }
 

@@ -1,7 +1,10 @@
 package io.mystore.shipping.action;
 
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import com.akkaserverless.javasdk.action.ActionCreationContext;
 import com.google.protobuf.Empty;
@@ -20,16 +23,23 @@ public class StockItemFrontendAction extends AbstractStockItemFrontendAction {
 
   @Override
   public Effect<Empty> createStockItems(StockFrontendService.CreateStockRequest createStockRequest) {
-    IntStream.range(0, createStockRequest.getQuantity()).forEach(i -> {
-      var request = StockItemApi.CreateStockItem
-          .newBuilder()
-          .setSkuId(createStockRequest.getSkuId())
-          .setSkuItemId(UUID.randomUUID().toString())
-          .setSkuName(createStockRequest.getSkuName())
-          .build();
-      effects().forward(components().stockItem().create(request));
-    });
+    var results = requests(createStockRequest)
+        .map(request -> components().stockItem().create(request).execute())
+        .collect(Collectors.toList());
 
-    return effects().reply(Empty.getDefaultInstance());
+    var result = CompletableFuture.allOf(results.toArray(new CompletableFuture[results.size()]))
+        .thenApply(reply -> effects().reply(Empty.getDefaultInstance()));
+
+    return effects().asyncEffect(result);
+  }
+
+  private Stream<StockItemApi.CreateStockItem> requests(StockFrontendService.CreateStockRequest createStockRequest) {
+    return IntStream.range(0, createStockRequest.getQuantity())
+        .mapToObj(i -> StockItemApi.CreateStockItem
+            .newBuilder()
+            .setSkuId(createStockRequest.getSkuId())
+            .setSkuItemId(UUID.randomUUID().toString())
+            .setSkuName(createStockRequest.getSkuName())
+            .build());
   }
 }

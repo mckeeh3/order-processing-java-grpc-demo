@@ -11,6 +11,9 @@ import com.akkaserverless.javasdk.eventsourcedentity.EventSourcedEntityContext;
 import com.google.protobuf.Empty;
 import com.google.protobuf.Timestamp;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.mystore.cart.api.CartApi;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
@@ -19,6 +22,7 @@ import io.mystore.cart.api.CartApi;
 // or delete it so it is regenerated as needed.
 
 public class ShoppingCart extends AbstractShoppingCart {
+  static final Logger log = LoggerFactory.getLogger(ShoppingCart.class);
 
   public ShoppingCart(EventSourcedEntityContext context) {
   }
@@ -290,6 +294,8 @@ public class ShoppingCart extends AbstractShoppingCart {
   }
 
   private Effect<Empty> handle(CartEntity.CartState state, CartApi.CheckoutShoppingCart command) {
+    log.info("Cart state: {}, checkoutShoppingCart: {}", state, command);
+
     return effects()
         .emitEvent(event(state, command))
         .thenReply(newState -> Empty.getDefaultInstance());

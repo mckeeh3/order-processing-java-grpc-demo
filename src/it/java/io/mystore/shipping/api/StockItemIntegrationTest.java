@@ -28,10 +28,10 @@ public class StockItemIntegrationTest {
   /**
    * Use the generated gRPC client to call the service through the Akka Serverless proxy.
    */
-  private final StockService client;
+  private final StockItemService client;
 
   public StockItemIntegrationTest() {
-    client = testKit.getGrpcClient(StockService.class);
+    client = testKit.getGrpcClient(StockItemService.class);
   }
 
   @Test

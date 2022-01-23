@@ -6,12 +6,13 @@ import "google/protobuf/timestamp.proto";
 
 option java_outer_classname = "ShipSkuItemEntity";
 
-message ShipSkuItemState {
+message SkuItemState {
   string sku_item_id = 1;
   string sku_id = 2;
-  string order_id = 3;
-  string order_item_id = 4;
-  google.protobuf.Timestamp shipped_utc = 5;
+  string sku_name = 3;
+  string order_id = 4;
+  string order_item_id = 5;
+  google.protobuf.Timestamp shipped_utc = 6;
 }
 
 message SkuItemCreated {
@@ -20,7 +21,7 @@ message SkuItemCreated {
   string sku_name = 3;
 }
 
-message ShipOrderItemAdded {
+message OrderItemAdded {
   string sku_item_id = 1;
   string order_id = 2;
   string order_item_id = 3;

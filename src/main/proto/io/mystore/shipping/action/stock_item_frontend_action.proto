@@ -15,7 +15,7 @@ service StockItemFrontend {
 
   rpc createStockItems(CreateStockRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      post: "/action/ping"
+      post: "/stock-item-frontend/{sku_id}/create"
       body: "*"
     };
   }

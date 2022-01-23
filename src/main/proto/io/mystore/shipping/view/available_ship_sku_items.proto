@@ -20,7 +20,7 @@ service AvailableShipSkuItems {
       query: "SELECT * AS ship_sku_items"
              "  FROM available_ship_sku_items"
              " WHERE sku_id = :sku_id"
-             "   AND shipped_utc.seconds > 0"
+             "   AND shipped_utc.seconds = 0"
     };
     option (google.api.http) = {
       get: "/available-ship-sku-items"
@@ -37,7 +37,7 @@ service AvailableShipSkuItems {
     };
   }
 
-  rpc ProcessShipOrderItemAdded(entity.ShipOrderItemAdded) returns (ShipSkuItem) {
+  rpc ProcessShipOrderItemAdded(entity.OrderItemAdded) returns (ShipSkuItem) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "ship_sku_item"
     };

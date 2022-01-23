@@ -20,7 +20,7 @@ service ShipSkuItemToShipOrderItem {
     };
   }
 
-  rpc OnShipOrderItemAdded(shipping.entity.ShipOrderItemAdded) returns (google.protobuf.Empty) {
+  rpc OnShipOrderItemAdded(shipping.entity.OrderItemAdded) returns (google.protobuf.Empty) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "ship_sku_item"
     };

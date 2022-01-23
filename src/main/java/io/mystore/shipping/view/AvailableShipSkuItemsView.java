@@ -38,7 +38,7 @@ public class AvailableShipSkuItemsView extends AbstractAvailableShipSkuItemsView
 
   @Override
   public View.UpdateEffect<AvailableShipSkuItemsModel.ShipSkuItem> processShipOrderItemAdded(
-      AvailableShipSkuItemsModel.ShipSkuItem state, ShipSkuItemEntity.ShipOrderItemAdded shipOrderItemAdded) {
+      AvailableShipSkuItemsModel.ShipSkuItem state, ShipSkuItemEntity.OrderItemAdded shipOrderItemAdded) {
     return effects()
         .updateState(
             state

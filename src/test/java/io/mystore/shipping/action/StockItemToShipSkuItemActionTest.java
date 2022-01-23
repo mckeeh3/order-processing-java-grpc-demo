@@ -6,7 +6,7 @@ import com.google.protobuf.Any;
 import com.google.protobuf.Empty;
 import io.mystore.shipping.action.StockItemToShipSkuItemAction;
 import io.mystore.shipping.action.StockItemToShipSkuItemActionTestKit;
-import io.mystore.shipping.entity.StockEntity;
+import io.mystore.shipping.entity.StockItemEntity;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -30,7 +30,7 @@ public class StockItemToShipSkuItemActionTest {
   @Test
   public void onCreateStockItemTest() {
     StockItemToShipSkuItemActionTestKit testKit = StockItemToShipSkuItemActionTestKit.of(StockItemToShipSkuItemAction::new);
-    // ActionResult<Empty> result = testKit.onCreateStockItem(StockEntity.StockItemCreated.newBuilder()...build());
+    // ActionResult<Empty> result = testKit.onCreateStockItem(StockItemEntity.StockItemCreated.newBuilder()...build());
   }
 
   @Test

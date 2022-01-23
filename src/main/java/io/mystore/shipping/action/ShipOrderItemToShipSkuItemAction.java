@@ -22,22 +22,22 @@ public class ShipOrderItemToShipSkuItemAction extends AbstractShipOrderItemToShi
   }
 
   @Override
-  public Effect<Empty> onShipSkuItemRequired(ShipOrderItemEntity.ShipSkuItemRequired shipSkuItemRequired) {
+  public Effect<Empty> onShipSkuItemRequired(ShipOrderItemEntity.SkuItemRequired skuItemRequired) {
     return effects().asyncReply(
         components().availableShipSkuItemsView().getAvailableShipSkuItems(
             AvailableShipSkuItemsModel.GetAvailableShipSkuItemsRequest
                 .newBuilder()
-                .setSkuId(shipSkuItemRequired.getSkuId())
+                .setSkuId(skuItemRequired.getSkuId())
                 .build())
             .execute()
-            .thenCompose(response -> onAvailableShipSkuItems(shipSkuItemRequired, response)));
+            .thenCompose(response -> onAvailableShipSkuItems(skuItemRequired, response)));
   }
 
   @Override
   public Effect<Empty> onSkuItemReleasedFromOrder(ShipOrderItemEntity.SkuItemReleasedFromOrder skuItemReleasedFromOrder) {
     return effects().asyncReply(
-        components().shipSkuItem().releaseShipOrderItem(
-            ShipSkuItemApi.ReleaseShipOrderItemFromSkuItem
+        components().shipSkuItem().releaseOrderItem(
+            ShipSkuItemApi.ReleaseOrderItemFromSkuItem
                 .newBuilder()
                 .setSkuItemId(skuItemReleasedFromOrder.getSkuItemId())
                 .build())
@@ -50,31 +50,31 @@ public class ShipOrderItemToShipSkuItemAction extends AbstractShipOrderItemToShi
   }
 
   private CompletionStage<Empty> onAvailableShipSkuItems(
-      ShipOrderItemEntity.ShipSkuItemRequired shipSkuItemRequired, AvailableShipSkuItemsModel.GetAvailableShipSkuItemsResponse response) {
+      ShipOrderItemEntity.SkuItemRequired skuItemRequired, AvailableShipSkuItemsModel.GetAvailableShipSkuItemsResponse response) {
     if (response.getShipSkuItemsCount() > 0) {
-      return requestShipSkuItem(shipSkuItemRequired, response.getShipSkuItemsList().get(0));
+      return requestShipSkuItem(skuItemRequired, response.getShipSkuItemsList().get(0));
     } else {
-      return backOrderShipOrderItem(shipSkuItemRequired);
+      return backOrderShipOrderItem(skuItemRequired);
     }
   }
 
   private CompletionStage<Empty> requestShipSkuItem(
-      ShipOrderItemEntity.ShipSkuItemRequired shipSkuItemRequired, AvailableShipSkuItemsModel.ShipSkuItem shipSkuItem) {
-    return components().shipSkuItem().addShipOrderItem(
-        ShipSkuItemApi.AddShipOrderItemToSkuItem
+      ShipOrderItemEntity.SkuItemRequired skuItemRequired, AvailableShipSkuItemsModel.ShipSkuItem shipSkuItem) {
+    return components().shipSkuItem().addOrderItem(
+        ShipSkuItemApi.AddOrderItemToSkuItem
             .newBuilder()
-            .setOrderId(shipSkuItemRequired.getOrderId())
-            .setOrderItemId(shipSkuItemRequired.getOrderItemId())
+            .setOrderId(skuItemRequired.getOrderId())
+            .setOrderItemId(skuItemRequired.getOrderItemId())
             .setSkuItemId(shipSkuItem.getSkuItemId())
             .build())
         .execute();
   }
 
-  private CompletionStage<Empty> backOrderShipOrderItem(ShipOrderItemEntity.ShipSkuItemRequired shipSkuItemRequired) {
+  private CompletionStage<Empty> backOrderShipOrderItem(ShipOrderItemEntity.SkuItemRequired skuItemRequired) {
     return components().shipOrderItem().placeOnBackOrder(
-        ShipOrderItemApi.BackOrderShipOrderItem
+        ShipOrderItemApi.BackOrderOrderItem
             .newBuilder()
-            .setOrderItemId(shipSkuItemRequired.getOrderItemId())
+            .setOrderItemId(skuItemRequired.getOrderItemId())
             .build())
         .execute();
   }

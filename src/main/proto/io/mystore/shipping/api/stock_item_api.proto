@@ -25,28 +25,28 @@ service StockItemService {
 
   rpc Create(CreateStockItem) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      post: "/stock-items/{stock_item_id}/add-stock-item"
+      post: "/stock-items/{sku_item_id}/add-sku-item"
       body: "*"
     };
   }
 
   rpc Ship(ShipStockItem) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      put: "/stock-items/{stock_item_id}/ship-stock-item"
+      put: "/stock-items/{sku_item_id}/ship-sku-item"
       body: "*"
     };
   }
 
   rpc Release(ReleaseStockItem) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      put: "/stock-items/{stock_item_id}/release-stock-item"
+      put: "/stock-items/{sku_item_id}/release-sku-item"
       body: "*"
     };
   }
 
   rpc Get(GetStockItem) returns (StockItem) {
     option (google.api.http) = {
-      put: "/stock-items/{stock_item_id}"
+      put: "/stock-items/{sku_item_id}"
       body: "*"
     };
   }

@@ -6,6 +6,9 @@ import com.akkaserverless.javasdk.eventsourcedentity.EventSourcedEntityContext;
 import com.google.protobuf.Empty;
 import com.google.protobuf.Timestamp;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.mystore.shipping.api.StockItemApi;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
@@ -14,6 +17,7 @@ import io.mystore.shipping.api.StockItemApi;
 // or delete it so it is regenerated as needed.
 
 public class StockItem extends AbstractStockItem {
+  static final Logger log = LoggerFactory.getLogger(StockItem.class);
 
   public StockItem(EventSourcedEntityContext context) {
   }
@@ -106,18 +110,24 @@ public class StockItem extends AbstractStockItem {
   }
 
   private Effect<Empty> handle(StockItemEntity.StockItemState state, StockItemApi.CreateStockItem command) {
+    log.info("StockItem state: {}, CreateStockItem: {}", state, command);
+
     return effects()
         .emitEvent(eventFor(state, command))
         .thenReply(newState -> Empty.getDefaultInstance());
   }
 
   private Effect<Empty> handle(StockItemEntity.StockItemState state, StockItemApi.ShipStockItem command) {
+    log.info("StockItem state: {}, ShipStockItem: {}", state, command);
+
     return effects()
         .emitEvent(eventFor(state, command))
         .thenReply(newState -> Empty.getDefaultInstance());
   }
 
   private Effect<Empty> handle(StockItemEntity.StockItemState state, StockItemApi.ReleaseStockItem command) {
+    log.info("StockItem state: {}, ReleaseStockItem: {}", state, command);
+
     return effects()
         .emitEvent(eventFor(state, command))
         .thenReply(newState -> Empty.getDefaultInstance());
