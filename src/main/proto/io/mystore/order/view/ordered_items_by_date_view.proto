@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+package io.mystore.order.view;
+
+import "google/api/annotations.proto";
+import "google/protobuf/any.proto";
+import "akkaserverless/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "io/mystore/order/entity/order_item_entity.proto";
+import "io/mystore/order/view/ordered_item.proto";
+
+option java_outer_classname = "OrderedItemsByDateModel";
+
+service OrderedItemsByDate {
+  option (akkaserverless.codegen) = {
+    view: {}
+  };
+
+  rpc GetOrderedItemsByDate(OrderedItemsRequest) returns (OrderedItemsResponse) {
+    option (akkaserverless.method).view.query = {
+      query: "SELECT * AS ordered_items"
+             "  FROM ordered_items"
+             " WHERE ordered_utc.seconds >= :`from_date.seconds`"
+             "   AND ordered_utc.seconds < :`to_date.seconds`"
+    };
+    option (google.api.http) = {
+      post: "/ordered-items-by-date",
+      body: "*"
+    };
+  }
+
+  rpc OnOrdered(entity.OrderItemState) returns (OrderedItem) {
+    option (akkaserverless.method).eventing.in = {
+      event_sourced_entity: "ordered_item"
+    };
+    option (akkaserverless.method).view.update = {
+      table: "ordered_items"
+      transform_updates: true
+    };
+  }
+
+  rpc IgnoreOtherEvents(google.protobuf.Any) returns (OrderedItem) {
+    option (akkaserverless.method).eventing.in = {
+      event_sourced_entity: "ordered_item"
+    };
+    option (akkaserverless.method).view.update = {
+      table: "ordered_items"
+      transform_updates: true
+    };
+  }
+}
+
+message OrderedItemsRequest {
+  google.protobuf.Timestamp from_date = 1;
+  google.protobuf.Timestamp to_date = 2;
+}
+
+message OrderedItemsResponse {
+  repeated OrderedItem ordered_items = 1;
+}

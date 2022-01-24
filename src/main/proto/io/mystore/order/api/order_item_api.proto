@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+import "akkaserverless/annotations.proto";
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+package io.mystore.prchased_product.api;
+
+option java_outer_classname = "OrderItemApi";
+
+service OrderItemService {
+  option (akkaserverless.codegen) = {
+    value_entity: {
+      name: "io.mystore.order.entity.OrderItem"
+      entity_type: "order_item"
+      state: "io.mystore.order.entity.OrderItemState"  //
+    }
+  };
+
+  rpc CreateOrderItem(OrderItemCommand) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/order-items/{order_item_id}/{sku_id}/create"
+      body: "*"
+    };
+  }
+
+  rpc GetOrderItem(GetOrderItemRequest) returns (GetOrderItemResponse) {
+    option (google.api.http) = {
+      get: "/order-items/{order_item_id}/{sku_id}"
+    };
+  }
+}
+
+message OrderItemCommand {
+  string customer_id = 1;
+  string order_id = 2 [(akkaserverless.field).entity_key = true];
+  string sku_id = 3 [(akkaserverless.field).entity_key = true];
+  string sku_name = 4;
+  int32 quantity = 5;
+  google.protobuf.Timestamp ordered_utc = 6;
+}
+
+message GetOrderItemRequest {
+  string customer_id = 1;
+  string order_id = 2 [(akkaserverless.field).entity_key = true];
+  string sku_id = 3 [(akkaserverless.field).entity_key = true];
+}
+
+message GetOrderItemResponse {
+  string customer_id = 1;
+  string order_id = 2 [(akkaserverless.field).entity_key = true];
+  string sku_id = 3 [(akkaserverless.field).entity_key = true];
+  string sku_name = 4;
+  int32 quantity = 5;
+  google.protobuf.Timestamp ordered_utc = 6;
+}

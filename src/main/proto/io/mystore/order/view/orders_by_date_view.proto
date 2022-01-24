@@ -12,8 +12,8 @@ import "io/mystore/order/view/order.proto";
 option java_outer_classname = "OrdersByDateModel";
 
 service OrdersByDate {
-  option (akkaserverless.service) = {
-    type: SERVICE_TYPE_VIEW
+  option (akkaserverless.codegen) = {
+    view: {}
   };
 
   rpc GetOrdersByDate(OrdersByDateRequest) returns (OrdersByDateResponse) {
@@ -29,9 +29,9 @@ service OrdersByDate {
     };
   }
 
-  rpc ProcessOrdered(entity.OrderState) returns (Order) {
+  rpc OnOrdered(entity.OrderCreated) returns (Order) {
     option (akkaserverless.method).eventing.in = {
-      value_entity: "order"
+      event_sourced_entity: "order"
     };
     option (akkaserverless.method).view.update = {
       table: "orders_by_date"
@@ -41,7 +41,7 @@ service OrdersByDate {
 
   rpc IgnoreOtherEvents(google.protobuf.Any) returns (Order) {
     option (akkaserverless.method).eventing.in = {
-      value_entity: "order"
+      event_sourced_entity: "order"
     };
     option (akkaserverless.method).view.update = {
       table: "orders_by_date"

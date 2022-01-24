@@ -6,57 +6,57 @@ import "google/api/annotations.proto";
 import "google/protobuf/any.proto";
 import "akkaserverless/annotations.proto";
 import "google/protobuf/timestamp.proto";
-import "io/mystore/order/entity/order_entity.proto";
-import "io/mystore/order/view/order.proto";
+import "io/mystore/order/entity/order_item_entity.proto";
+import "io/mystore/order/view/ordered_item.proto";
 
-option java_outer_classname = "OrdersByCustomerByDateModel";
+option java_outer_classname = "OrderedItemsByCustomerByDateModel";
 
-service OrdersByCustomerByDate {
+service OrderedItemsByCustomerByDate {
   option (akkaserverless.codegen) = {
     view: {}
   };
 
-  rpc GetOrdersByCustomerByDate(OrdersByCustomerByDateRequest) returns (OrdersByCustomerByDateResponse) {
+  rpc GetOrderedItemsByCustomerByDate(OrderedItemsRequestByCustomer) returns (OrderedItemsResponseByCustomer) {
     option (akkaserverless.method).view.query = {
-      query: "SELECT * AS orders"
-             "  FROM orders_by_customer_by_date"
+      query: "SELECT * AS ordered_items"
+             "  FROM ordered_items"
              " WHERE customer_id = :customer_id"
              "   AND ordered_utc.seconds >= :`from_date.seconds`"
              "   AND ordered_utc.seconds < :`to_date.seconds`"
     };
     option (google.api.http) = {
-      post: "/orders-by-customer-by-date",
+      post: "/ordered-items-by-customer-by-date",
       body: "*"
     };
   }
 
-  rpc OnOrdered(entity.OrderCreated) returns (Order) {
+  rpc OnOrdered(entity.OrderItemState) returns (OrderedItem) {
     option (akkaserverless.method).eventing.in = {
-      event_sourced_entity: "order"
+      event_sourced_entity: "ordered_items"
     };
     option (akkaserverless.method).view.update = {
-      table: "orders_by_customer_by_date"
+      table: "ordered_items"
       transform_updates: true
     };
   }
 
-  rpc IgnoreOtherEvents(google.protobuf.Any) returns (Order) {
+  rpc IgnoreOtherEvents(google.protobuf.Any) returns (OrderedItem) {
     option (akkaserverless.method).eventing.in = {
-      event_sourced_entity: "order"
+      event_sourced_entity: "ordered_items"
     };
     option (akkaserverless.method).view.update = {
-      table: "orders_by_customer_by_date"
+      table: "ordered_items"
       transform_updates: true
     };
   }
 }
 
-message OrdersByCustomerByDateRequest {
+message OrderedItemsRequestByCustomer {
   string customer_id = 1;
   google.protobuf.Timestamp from_date = 2;
   google.protobuf.Timestamp to_date = 3;
 }
 
-message OrdersByCustomerByDateResponse {
-  repeated Order orders = 1;
+message OrderedItemsResponseByCustomer {
+  repeated OrderedItem ordered_items = 1;
 }

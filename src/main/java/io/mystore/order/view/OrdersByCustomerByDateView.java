@@ -25,23 +25,19 @@ public class OrdersByCustomerByDateView extends AbstractOrdersByCustomerByDateVi
   }
 
   @Override
-  public View.UpdateEffect<OrderModel.Order> processOrdered(OrderModel.Order state, OrderEntity.OrderState orderState) {
+  public View.UpdateEffect<OrderModel.Order> onOrdered(OrderModel.Order state, OrderEntity.OrderCreated orderCreated) {
     return effects().updateState(
         state.toBuilder()
-            .setOrderId(orderState.getOrderId())
-            .setCustomerId(orderState.getCustomerId())
-            .setOrderedUtc(orderState.getOrderedUtc())
-            .setShippedUtc(orderState.getShippedUtc())
-            .setDeliveredUtc(orderState.getDeliveredUtc())
-            .setReturnedUtc(orderState.getReturnedUtc())
-            .setCanceledUtc(orderState.getCanceledUtc())
+            .setOrderId(orderCreated.getOrderId())
+            .setCustomerId(orderCreated.getCustomerId())
+            .setOrderedUtc(orderCreated.getOrderedUtc())
             .clearOrderItems()
-            .addAllOrderItems(toOrderItems(orderState.getOrderItemsList()))
+            .addAllOrderItems(toOrderItems(orderCreated.getOrderItemsList()))
             .build());
   }
 
-  private List<OrderModel.OrderItem> toOrderItems(List<OrderEntity.OrderItem> lineItems) {
-    return lineItems.stream()
+  private List<OrderModel.OrderItem> toOrderItems(List<OrderEntity.OrderItem> orderItems) {
+    return orderItems.stream()
         .map(lineItem -> OrderModel.OrderItem.newBuilder()
             .setSkuId(lineItem.getSkuId())
             .setSkuName(lineItem.getSkuName())

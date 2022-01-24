@@ -28,7 +28,7 @@ service OrderService {
 
   rpc CreateOrder(CreateOrderRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      post: "/order/{order_id}/add"
+      post: "/order/{order_id}/create"
       body: "*"
     };
   }

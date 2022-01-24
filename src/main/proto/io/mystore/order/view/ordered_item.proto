@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package io.mystore.order.view;
+
+import "google/protobuf/timestamp.proto";
+
+option java_outer_classname = "OrderItemModel";
+
+message OrderedItem {
+  string customer_id = 1;
+  string order_id = 2;
+  string sku_id = 3;
+  string sku_name = 4;
+  int32 quantity = 5;
+  google.protobuf.Timestamp ordered_utc = 6;
+}
