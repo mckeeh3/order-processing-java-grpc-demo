@@ -11,14 +11,22 @@ option java_outer_classname = "OrderApi";
 
 service OrderService {
   option (akkaserverless.codegen) = {
-    value_entity: {
-      name: "io.mystore.order.entity.Order"  //
+    event_sourced_entity: {
+      name: "io.mystore.order.entity.Order"
       entity_type: "order"
       state: "io.mystore.order.entity.OrderState"
+      events: [
+        "io.mystore.order.entity.OrderCreated",
+        "io.mystore.order.entity.OrderShipped",
+        "io.mystore.order.entity.OrderDelivered",
+        "io.mystore.order.entity.OrderReturned",
+        "io.mystore.order.entity.OrderCancelled",
+        "io.mystore.order.entity.OrderItemShipped"  //
+      ]
     }
   };
 
-  rpc AddOrder(Order) returns (google.protobuf.Empty) {
+  rpc CreateOrder(CreateOrderRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       post: "/order/{order_id}/add"
       body: "*"
@@ -27,7 +35,7 @@ service OrderService {
 
   rpc ShippedOrder(ShippedOrderRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      put: "/order/{order_id}/shipped"
+      put: "/order/{order_id}/shipped-order"
     };
   }
 
@@ -49,6 +57,13 @@ service OrderService {
     };
   }
 
+  rpc ShippedOrderItem(ShippedOrderItemRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/order/{order_id}/shipped-order-item"
+      body: "*"
+    };
+  }
+
   rpc GetOrder(GetOrderRequest) returns (Order) {
     option (google.api.http) = {
       get: "/order/{order_id}"
@@ -56,8 +71,20 @@ service OrderService {
   }
 }
 
+message CreateOrderRequest {
+  string order_id = 1 [(akkaserverless.field).entity_key = true];
+  string customer_id = 2;
+  google.protobuf.Timestamp ordered_utc = 3;
+  repeated OrderItem order_items = 4;
+}
+
 message ShippedOrderRequest {
   string order_id = 1 [(akkaserverless.field).entity_key = true];
+}
+
+message ShippedOrderItemRequest {
+  string order_id = 1 [(akkaserverless.field).entity_key = true];
+  string sku_id = 2;
 }
 
 message DeliveredOrderRequest {
@@ -84,11 +111,12 @@ message Order {
   google.protobuf.Timestamp delivered_utc = 5;
   google.protobuf.Timestamp returned_utc = 6;
   google.protobuf.Timestamp canceled_utc = 7;
-  repeated LineItem line_items = 8;
+  repeated OrderItem order_items = 8;
 }
 
-message LineItem {
+message OrderItem {
   string sku_id = 1;
   string sku_name = 2;
   int32 quantity = 3;
+  google.protobuf.Timestamp shipped_utc = 4;
 }

@@ -43,6 +43,11 @@ public class ShipSkuItemToShipOrderItemAction extends AbstractShipSkuItemToShipO
     return effects().reply(Empty.getDefaultInstance());
   }
 
+  @Override
+  public Effect<Empty> onReleaseOrderItemFromSkuItem(ShipSkuItemEntity.ReleasedSkuItemFromOrder releasedSkuItemFromOrder) {
+    return effects().forward(components().shipOrderItem().stockAlert(stockAlertOrderItem(releasedSkuItemFromOrder)));
+  }
+
   private CompletionStage<Empty> sendStockAlertsToBackOrderedOrderItems(
       ShipSkuItemEntity.SkuItemCreated skuItemCreated, BackOrderedShipOrderItemsModel.GetBackOrderedOrderItemsResponse response) {
     var results = response.getShipOrderItemsList().stream()
@@ -66,6 +71,13 @@ public class ShipSkuItemToShipOrderItemAction extends AbstractShipSkuItemToShipO
         .setOrderItemId(shipOrderItemAdded.getOrderItemId())
         .setSkuItemId(shipOrderItemAdded.getSkuItemId())
         .setShippedUtc(shipOrderItemAdded.getShippedUtc())
+        .build();
+  }
+
+  private ShipOrderItemApi.StockAlertOrderItem stockAlertOrderItem(ShipSkuItemEntity.ReleasedSkuItemFromOrder releasedSkuItemFromOrder) {
+    return ShipOrderItemApi.StockAlertOrderItem
+        .newBuilder()
+        .setOrderItemId(releasedSkuItemFromOrder.getOrderItemId())
         .build();
   }
 }

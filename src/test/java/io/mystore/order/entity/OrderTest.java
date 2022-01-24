@@ -1,7 +1,8 @@
 package io.mystore.order.entity;
 
-import com.akkaserverless.javasdk.testkit.ValueEntityResult;
-import com.akkaserverless.javasdk.valueentity.ValueEntity;
+import com.akkaserverless.javasdk.eventsourcedentity.EventSourcedEntity;
+import com.akkaserverless.javasdk.eventsourcedentity.EventSourcedEntityContext;
+import com.akkaserverless.javasdk.testkit.EventSourcedResult;
 import com.google.protobuf.Empty;
 import io.mystore.order.api.OrderApi;
 import org.junit.Test;
@@ -20,25 +21,63 @@ public class OrderTest {
     OrderTestKit testKit = OrderTestKit.of(Order::new);
     // use the testkit to execute a command
     // of events emitted, or a final updated state:
-    // ValueEntityResult<SomeResponse> result = testKit.someOperation(SomeRequest);
+    // EventSourcedResult<SomeResponse> result = testKit.someOperation(SomeRequest);
+    // verify the emitted events
+    // ExpectedEvent actualEvent = result.getNextEventOfType(ExpectedEvent.class);
+    // assertEquals(expectedEvent, actualEvent)
+    // verify the final state after applying the events
+    // assertEquals(expectedState, testKit.getState());
     // verify the response
     // SomeResponse actualResponse = result.getReply();
     // assertEquals(expectedResponse, actualResponse);
-    // verify the final state after the command
-    // assertEquals(expectedState, testKit.getState());
   }
 
   @Test
-  public void addOrderTest() {
+  public void createOrderTest() {
     OrderTestKit testKit = OrderTestKit.of(Order::new);
-    // ValueEntityResult<Empty> result = testKit.addOrder(Order.newBuilder()...build());
+    // EventSourcedResult<Empty> result = testKit.createOrder(CreateOrderRequest.newBuilder()...build());
+  }
+
+
+  @Test
+  public void shippedOrderTest() {
+    OrderTestKit testKit = OrderTestKit.of(Order::new);
+    // EventSourcedResult<Empty> result = testKit.shippedOrder(ShippedOrderRequest.newBuilder()...build());
+  }
+
+
+  @Test
+  public void deliveredOrderTest() {
+    OrderTestKit testKit = OrderTestKit.of(Order::new);
+    // EventSourcedResult<Empty> result = testKit.deliveredOrder(DeliveredOrderRequest.newBuilder()...build());
+  }
+
+
+  @Test
+  public void returnedOrderTest() {
+    OrderTestKit testKit = OrderTestKit.of(Order::new);
+    // EventSourcedResult<Empty> result = testKit.returnedOrder(ReturnedOrderRequest.newBuilder()...build());
+  }
+
+
+  @Test
+  public void canceledOrderTest() {
+    OrderTestKit testKit = OrderTestKit.of(Order::new);
+    // EventSourcedResult<Empty> result = testKit.canceledOrder(CanceledOrderRequest.newBuilder()...build());
+  }
+
+
+  @Test
+  public void shippedOrderItemTest() {
+    OrderTestKit testKit = OrderTestKit.of(Order::new);
+    // EventSourcedResult<Empty> result = testKit.shippedOrderItem(ShippedOrderItemRequest.newBuilder()...build());
   }
 
 
   @Test
   public void getOrderTest() {
     OrderTestKit testKit = OrderTestKit.of(Order::new);
-    // ValueEntityResult<Order> result = testKit.getOrder(GetOrderRequest.newBuilder()...build());
+    // EventSourcedResult<Order> result = testKit.getOrder(GetOrderRequest.newBuilder()...build());
   }
 
 }

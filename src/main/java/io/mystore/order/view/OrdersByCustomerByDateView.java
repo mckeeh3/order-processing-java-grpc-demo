@@ -8,7 +8,6 @@ import com.akkaserverless.javasdk.view.ViewContext;
 import com.google.protobuf.Any;
 
 import io.mystore.order.entity.OrderEntity;
-import io.mystore.order.view.OrderModel.LineItem;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
 //
@@ -36,14 +35,14 @@ public class OrdersByCustomerByDateView extends AbstractOrdersByCustomerByDateVi
             .setDeliveredUtc(orderState.getDeliveredUtc())
             .setReturnedUtc(orderState.getReturnedUtc())
             .setCanceledUtc(orderState.getCanceledUtc())
-            .clearLineItems()
-            .addAllLineItems(toLineItems(orderState.getLineItemsList()))
+            .clearOrderItems()
+            .addAllOrderItems(toOrderItems(orderState.getOrderItemsList()))
             .build());
   }
 
-  private List<LineItem> toLineItems(List<OrderEntity.LineItem> lineItems) {
+  private List<OrderModel.OrderItem> toOrderItems(List<OrderEntity.OrderItem> lineItems) {
     return lineItems.stream()
-        .map(lineItem -> LineItem.newBuilder()
+        .map(lineItem -> OrderModel.OrderItem.newBuilder()
             .setSkuId(lineItem.getSkuId())
             .setSkuName(lineItem.getSkuName())
             .setQuantity(lineItem.getQuantity())
