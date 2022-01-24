@@ -11,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.mystore.shipping.api.ShipSkuItemApi;
+import io.mystore.shipping.api.ShipSkuItemApi.AddOrderItemToSkuItem;
+import io.mystore.shipping.entity.ShipSkuItemEntity.SkuItemState;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
 //
@@ -35,7 +37,7 @@ public class ShipSkuItem extends AbstractShipSkuItem {
 
   @Override
   public Effect<Empty> addOrderItem(ShipSkuItemEntity.SkuItemState state, ShipSkuItemApi.AddOrderItemToSkuItem command) {
-    return handle(state, command);
+    return reject(state, command).orElseGet(() -> handle(state, command));
   }
 
   @Override
@@ -86,6 +88,13 @@ public class ShipSkuItem extends AbstractShipSkuItem {
     return Optional.empty();
   }
 
+  private Optional<Effect<Empty>> reject(SkuItemState state, AddOrderItemToSkuItem command) {
+    if (!state.getOrderItemId().isEmpty() && !state.getOrderId().equals(command.getOrderId())) {
+      return Optional.of(effects().error("skuItem is not available"));
+    }
+    return Optional.empty();
+  }
+
   private Effect<Empty> handle(ShipSkuItemEntity.SkuItemState state, ShipSkuItemApi.CreateSkuItemFromStock command) {
     log.info("ShipSkuItem state: {}, CreateSkuItemFromStock: {}", state, command);
 
@@ -99,9 +108,6 @@ public class ShipSkuItem extends AbstractShipSkuItem {
 
     if (state.getOrderItemId().equals(command.getOrderItemId())) {
       return effects().reply(Empty.getDefaultInstance()); // already added, idempotent
-    }
-    if (!state.getOrderItemId().isEmpty()) {
-      return effects().error("skuItem is not available");
     }
 
     return effects()

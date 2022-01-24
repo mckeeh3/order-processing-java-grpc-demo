@@ -118,8 +118,10 @@ public class ShipOrderItem extends AbstractShipOrderItem {
       return effects()
           .emitEvent(eventFor(state, command))
           .thenReply(newState -> Empty.getDefaultInstance());
-    } else { // sku-item already added to order - tell ship-sku-item to release the sku-item
-      return effects()
+    } else if (state.getSkuItemId().equals(command.getSkuItemId())) {
+      return effects().reply(Empty.getDefaultInstance()); // idempotent
+    } else {
+      return effects() // sku-item already added to order - tell ship-sku-item to release the sku-item
           .emitEvent(eventForReleaseSkuItem(state))
           .thenReply(newState -> Empty.getDefaultInstance());
     }
