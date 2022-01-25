@@ -157,36 +157,48 @@ public class Order extends AbstractOrder {
   }
 
   private Effect<Empty> handle(OrderEntity.OrderState state, OrderApi.CreateOrderRequest command) {
+    log.info("order: state: {}, CreateOrderRequest: {}", state, command);
+
     return effects()
         .emitEvent(eventFor(state, command))
         .thenReply(newState -> Empty.getDefaultInstance());
   }
 
   private Effect<Empty> handle(OrderEntity.OrderState state, OrderApi.ShippedOrderRequest command) {
+    log.info("order: state: {}, ShippedOrderRequest: {}", state, command);
+
     return effects()
         .emitEvent(eventFor(state, command))
         .thenReply(newState -> Empty.getDefaultInstance());
   }
 
   private Effect<Empty> handle(OrderEntity.OrderState state, OrderApi.DeliveredOrderRequest command) {
+    log.info("order: state: {}, DeliveredOrderRequest: {}", state, command);
+
     return effects()
         .emitEvent(eventFor(state, command))
         .thenReply(newState -> Empty.getDefaultInstance());
   }
 
   private Effect<Empty> handle(OrderEntity.OrderState state, OrderApi.ReturnedOrderRequest command) {
+    log.info("order: state: {}, ReturnedOrderRequest: {}", state, command);
+
     return effects()
         .emitEvent(eventFor(state, command))
         .thenReply(newState -> Empty.getDefaultInstance());
   }
 
   private Effect<Empty> handle(OrderEntity.OrderState state, OrderApi.CanceledOrderRequest command) {
+    log.info("order: state: {}, CanceledOrderRequest: {}", state, command);
+
     return effects()
         .emitEvent(eventFor(state, command))
         .thenReply(newState -> Empty.getDefaultInstance());
   }
 
   private Effect<Empty> handle(OrderEntity.OrderState state, OrderApi.ShippedOrderItemRequest command) {
+    log.info("order: state: {}, ShippedOrderItemRequest: {}", state, command);
+
     return effects()
         .emitEvents(eventsFor(state, command))
         .thenReply(newState -> Empty.getDefaultInstance());

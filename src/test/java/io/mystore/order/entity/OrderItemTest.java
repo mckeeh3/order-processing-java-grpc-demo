@@ -3,7 +3,7 @@ package io.mystore.order.entity;
 import com.akkaserverless.javasdk.testkit.ValueEntityResult;
 import com.akkaserverless.javasdk.valueentity.ValueEntity;
 import com.google.protobuf.Empty;
-import io.mystore.prchased_product.api.OrderItemApi;
+import io.mystore.order.api.OrderItemApi;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

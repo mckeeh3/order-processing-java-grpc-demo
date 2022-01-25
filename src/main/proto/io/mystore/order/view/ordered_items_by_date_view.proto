@@ -31,7 +31,7 @@ service OrderedItemsByDate {
 
   rpc OnOrdered(entity.OrderItemState) returns (OrderedItem) {
     option (akkaserverless.method).eventing.in = {
-      event_sourced_entity: "ordered_item"
+      value_entity: "order_item"
     };
     option (akkaserverless.method).view.update = {
       table: "ordered_items"
@@ -41,7 +41,7 @@ service OrderedItemsByDate {
 
   rpc IgnoreOtherEvents(google.protobuf.Any) returns (OrderedItem) {
     option (akkaserverless.method).eventing.in = {
-      event_sourced_entity: "ordered_item"
+      value_entity: "order_item"
     };
     option (akkaserverless.method).view.update = {
       table: "ordered_items"

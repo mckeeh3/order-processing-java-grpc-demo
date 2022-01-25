@@ -7,7 +7,7 @@ import com.akkaserverless.javasdk.action.ActionCreationContext;
 import com.google.protobuf.Any;
 import com.google.protobuf.Empty;
 import io.mystore.order.entity.OrderEntity;
-import io.mystore.prchased_product.api.OrderItemApi;
+import io.mystore.order.api.OrderItemApi;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
 //

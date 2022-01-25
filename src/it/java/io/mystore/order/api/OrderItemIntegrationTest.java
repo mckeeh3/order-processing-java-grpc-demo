@@ -1,4 +1,4 @@
-package io.mystore.prchased_product.api;
+package io.mystore.order.api;
 
 import com.akkaserverless.javasdk.testkit.junit.AkkaServerlessTestKitResource;
 import com.google.protobuf.Empty;

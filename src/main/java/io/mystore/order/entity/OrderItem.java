@@ -6,7 +6,7 @@ import com.google.protobuf.Empty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.mystore.prchased_product.api.OrderItemApi;
+import io.mystore.order.api.OrderItemApi;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
 //
@@ -26,6 +26,8 @@ public class OrderItem extends AbstractOrderItem {
 
   @Override
   public Effect<Empty> createOrderItem(OrderItemEntity.OrderItemState state, OrderItemApi.OrderItemCommand command) {
+    log.info("orderItem: state: {}, createOrderItem: {}", state, command);
+
     return effects()
         .updateState(updateState(state, command))
         .thenReply(Empty.getDefaultInstance());

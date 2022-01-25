@@ -12,22 +12,29 @@ import io.mystore.order.entity.OrderItemEntity;
 
 public class OrderedItemsByCustomerByDateView extends AbstractOrderedItemsByCustomerByDateView {
 
-  public OrderedItemsByCustomerByDateView(ViewContext context) {}
+  public OrderedItemsByCustomerByDateView(ViewContext context) {
+  }
 
   @Override
   public OrderItemModel.OrderedItem emptyState() {
-    throw new UnsupportedOperationException("Not implemented yet, replace with your empty view state");
+    return OrderItemModel.OrderedItem.getDefaultInstance();
   }
 
   @Override
-  public View.UpdateEffect<OrderItemModel.OrderedItem> onOrdered(
-    OrderItemModel.OrderedItem state, OrderItemEntity.OrderItemState orderItemState) {
-    throw new UnsupportedOperationException("Update handler for 'OnOrdered' not implemented yet");
+  public View.UpdateEffect<OrderItemModel.OrderedItem> onOrdered(OrderItemModel.OrderedItem state, OrderItemEntity.OrderItemState orderItemState) {
+    return effects().updateState(
+        state.toBuilder()
+            .setCustomerId(orderItemState.getCustomerId())
+            .setOrderId(orderItemState.getOrderId())
+            .setSkuId(orderItemState.getSkuId())
+            .setSkuName(orderItemState.getSkuName())
+            .setQuantity(orderItemState.getQuantity())
+            .setOrderedUtc(orderItemState.getOrderedUtc())
+            .build());
   }
+
   @Override
-  public View.UpdateEffect<OrderItemModel.OrderedItem> ignoreOtherEvents(
-    OrderItemModel.OrderedItem state, Any any) {
-    throw new UnsupportedOperationException("Update handler for 'IgnoreOtherEvents' not implemented yet");
+  public View.UpdateEffect<OrderItemModel.OrderedItem> ignoreOtherEvents(OrderItemModel.OrderedItem state, Any any) {
+    return effects().ignore();
   }
 }
-

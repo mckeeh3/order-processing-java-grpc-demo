@@ -5,7 +5,7 @@ import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 
-package io.mystore.prchased_product.api;
+package io.mystore.order.api;
 
 option java_outer_classname = "OrderItemApi";
 
@@ -20,14 +20,14 @@ service OrderItemService {
 
   rpc CreateOrderItem(OrderItemCommand) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      post: "/order-items/{order_item_id}/{sku_id}/create"
+      post: "/order-items/{order_id}/{sku_id}/create"
       body: "*"
     };
   }
 
   rpc GetOrderItem(GetOrderItemRequest) returns (GetOrderItemResponse) {
     option (google.api.http) = {
-      get: "/order-items/{order_item_id}/{sku_id}"
+      get: "/order-items/{order_id}/{sku_id}"
     };
   }
 }
