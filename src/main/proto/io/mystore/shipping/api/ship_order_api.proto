@@ -11,41 +11,29 @@ option java_outer_classname = "ShipOrderApi";
 
 service ShipOrderService {
   option (akkaserverless.codegen) = {
-    value_entity: {
-      name: "io.mystore.shipping.entity.ShipOrder"  //
+    event_sourced_entity: {
+      name: "io.mystore.shipping.entity.ShipOrder"
       entity_type: "ship_order"
       state: "io.mystore.shipping.entity.ShipOrderState"
+      events: [
+        "io.mystore.shipping.entity.ShipOrderCreated",
+        "io.mystore.shipping.entity.OrderShipped",
+        "io.mystore.shipping.entity.OrderItemShipped"  //
+      ]
     }
   };
 
-  rpc AddShipOrder(ShipOrder) returns (google.protobuf.Empty) {
+  rpc AddShipOrder(AddShipOrderCommand) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       post: "/ship-order/{order_id}/add"
       body: "*"
     };
   }
 
-  rpc ShippedOrder(ShippedOrderRequest) returns (google.protobuf.Empty) {
+  rpc ShippedOrderItem(ShippedOrderItemCommand) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      put: "/ship-order/{order_id}/shipped"
-    };
-  }
-
-  rpc DeliveredOrder(DeliveredOrderRequest) returns (google.protobuf.Empty) {
-    option (google.api.http) = {
-      put: "/ship-order/{order_id}/delivered"
-    };
-  }
-
-  rpc ReturnedOrder(ReturnedOrderRequest) returns (google.protobuf.Empty) {
-    option (google.api.http) = {
-      put: "/ship-order/{order_id}/returned"
-    };
-  }
-
-  rpc CanceledOrder(CanceledOrderRequest) returns (google.protobuf.Empty) {
-    option (google.api.http) = {
-      put: "/ship-order/{order_id}/canceled"
+      put: "/ship-order/{order_id}/shipped-order-item"
+      body: "*"
     };
   }
 
@@ -56,20 +44,25 @@ service ShipOrderService {
   }
 }
 
-message ShippedOrderRequest {
+message AddShipOrderCommand {
   string order_id = 1 [(akkaserverless.field).entity_key = true];
+  string customer_id = 2;
+  google.protobuf.Timestamp ordered_utc = 3;
+  repeated OrderItemFromOrder order_items = 4;
 }
 
-message DeliveredOrderRequest {
-  string order_id = 1 [(akkaserverless.field).entity_key = true];
+message OrderItemFromOrder {
+  string sku_id = 1;
+  string sku_name = 2;
+  int32 quantity = 3;
+  google.protobuf.Timestamp shipped_utc = 4;
 }
 
-message ReturnedOrderRequest {
+message ShippedOrderItemCommand {
   string order_id = 1 [(akkaserverless.field).entity_key = true];
-}
-
-message CanceledOrderRequest {
-  string order_id = 1 [(akkaserverless.field).entity_key = true];
+  string order_item_id = 2;
+  string sku_item_id = 3;
+  google.protobuf.Timestamp shipped_utc = 4;
 }
 
 message GetShipOrderRequest {
@@ -81,14 +74,21 @@ message ShipOrder {
   string customer_id = 2;
   google.protobuf.Timestamp ordered_utc = 3;
   google.protobuf.Timestamp shipped_utc = 4;
-  google.protobuf.Timestamp delivered_utc = 5;
-  google.protobuf.Timestamp returned_utc = 6;
-  google.protobuf.Timestamp canceled_utc = 7;
-  repeated LineItem line_items = 8;
+  repeated OrderItemFromOrder order_items = 5;
+  repeated ShipOrderItems ship_order_items = 6;
 }
 
-message LineItem {
+message ShipOrderItems {
   string sku_id = 1;
   string sku_name = 2;
   int32 quantity = 3;
+  google.protobuf.Timestamp shipped_utc = 4;
+  repeated ShipOrderItem ship_order_items = 5;
+}
+
+message ShipOrderItem {
+  string order_item_id = 1;
+  string sku_id = 2;
+  string sku_item_id = 3;
+  google.protobuf.Timestamp shipped_utc = 4;
 }

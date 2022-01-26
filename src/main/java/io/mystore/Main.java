@@ -19,8 +19,8 @@ import io.mystore.purchased_product.entity.PurchasedProduct;
 import io.mystore.purchased_product.view.PurchasedProductsByCustomerByDateView;
 import io.mystore.purchased_product.view.PurchasedProductsByDateView;
 import io.mystore.purchased_product.view.PurchasedProductsByProductByDateView;
-import io.mystore.shipping.action.CartToShipOrderAction;
 import io.mystore.shipping.action.CartToShipOrderItemAction;
+import io.mystore.shipping.action.OrderToShipOrderAction;
 import io.mystore.shipping.action.ShipOrderItemToShipSkuItemAction;
 import io.mystore.shipping.action.ShipSkuItemToShipOrderItemAction;
 import io.mystore.shipping.action.ShipSkuItemToStockItemAction;
@@ -65,12 +65,12 @@ public final class Main {
       BackOrderedShipOrderItemsView::new,
       CartToOrderAction::new,
       CartToPurchasedProductAction::new,
-      CartToShipOrderAction::new,
       CartToShipOrderItemAction::new,
       CartsByCustomerView::new,
       CartsByCustomerByDateView::new,
       CartsByDateView::new,
       OrderToOrderedItemsAction::new,
+      OrderToShipOrderAction::new,
       OrderedItemsByCustomerByDateView::new,
       OrderedItemsByDateView::new,
       OrderedItemsBySkuByDateView::new,

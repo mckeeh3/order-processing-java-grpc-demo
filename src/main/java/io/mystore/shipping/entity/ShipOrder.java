@@ -1,13 +1,16 @@
 package io.mystore.shipping.entity;
 
-import java.time.Instant;
 import java.util.List;
-import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
-import com.akkaserverless.javasdk.valueentity.ValueEntityContext;
+import com.akkaserverless.javasdk.eventsourcedentity.EventSourcedEntityContext;
 import com.google.protobuf.Empty;
-import com.google.protobuf.Timestamp;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.mystore.shipping.api.ShipOrderApi;
 
@@ -16,10 +19,10 @@ import io.mystore.shipping.api.ShipOrderApi;
 // As long as this file exists it will not be overwritten: you can maintain it yourself,
 // or delete it so it is regenerated as needed.
 
-/** A value entity. */
 public class ShipOrder extends AbstractShipOrder {
+  static final Logger log = LoggerFactory.getLogger(ShipOrder.class);
 
-  public ShipOrder(ValueEntityContext context) {
+  public ShipOrder(EventSourcedEntityContext context) {
   }
 
   @Override
@@ -28,200 +31,181 @@ public class ShipOrder extends AbstractShipOrder {
   }
 
   @Override
-  public Effect<Empty> addShipOrder(ShipOrderEntity.ShipOrderState state, ShipOrderApi.ShipOrder command) {
-    return effects()
-        .updateState(updateState(state, command))
-        .thenReply(Empty.getDefaultInstance());
+  public Effect<Empty> addShipOrder(ShipOrderEntity.ShipOrderState state, ShipOrderApi.AddShipOrderCommand command) {
+    return handle(state, command);
   }
 
   @Override
-  public Effect<Empty> shippedOrder(ShipOrderEntity.ShipOrderState state, ShipOrderApi.ShippedOrderRequest command) {
-    return reject(state, command).orElseGet(() -> handle(state, command));
-  }
-
-  @Override
-  public Effect<Empty> deliveredOrder(ShipOrderEntity.ShipOrderState state, ShipOrderApi.DeliveredOrderRequest command) {
-    return reject(state, command).orElseGet(() -> handle(state, command));
-  }
-
-  @Override
-  public Effect<Empty> returnedOrder(ShipOrderEntity.ShipOrderState state, ShipOrderApi.ReturnedOrderRequest command) {
-    return reject(state, command).orElseGet(() -> handle(state, command));
-  }
-
-  @Override
-  public Effect<Empty> canceledOrder(ShipOrderEntity.ShipOrderState state, ShipOrderApi.CanceledOrderRequest command) {
-    return reject(state, command).orElseGet(() -> handle(state, command));
+  public Effect<Empty> shippedOrderItem(ShipOrderEntity.ShipOrderState state, ShipOrderApi.ShippedOrderItemCommand command) {
+    return handle(state, command);
   }
 
   @Override
   public Effect<ShipOrderApi.ShipOrder> getShipOrder(ShipOrderEntity.ShipOrderState state, ShipOrderApi.GetShipOrderRequest command) {
-    return reject(state, command).orElseGet(() -> handle(state, command));
+    return handle(state, command);
   }
 
-  private ShipOrderEntity.ShipOrderState updateState(ShipOrderEntity.ShipOrderState state, ShipOrderApi.ShipOrder command) {
-    return ShipOrderEntity.ShipOrderState
-        .newBuilder()
-        .setCustomerId(command.getCustomerId())
-        .setOrderId(command.getOrderId())
-        .setOrderedUtc(command.getOrderedUtc())
-        .addAllLineItems(toEntity(command.getLineItemsList()))
+  @Override
+  public ShipOrderEntity.ShipOrderState shipOrderCreated(ShipOrderEntity.ShipOrderState state, ShipOrderEntity.ShipOrderCreated event) {
+    return state
+        .toBuilder()
+        .setCustomerId(event.getCustomerId())
+        .setOrderId(event.getOrderId())
+        .setOrderedUtc(event.getOrderedUtc())
+        .addAllOrderItems(event.getOrderItemsList())
+        .addAllShipOrderItems(event.getShipOrderItemsList())
         .build();
   }
 
-  private Optional<Effect<Empty>> reject(ShipOrderEntity.ShipOrderState state, ShipOrderApi.ShippedOrderRequest command) {
-    if (state.getCanceledUtc().getSeconds() > 0) {
-      return Optional.of(effects().error("Order has been canceled"));
-    }
-    if (state.getShippedUtc().getSeconds() > 0) {
-      return Optional.of(effects().error("Order already shipped"));
-    }
-    return Optional.empty();
+  @Override
+  public ShipOrderEntity.ShipOrderState orderShipped(ShipOrderEntity.ShipOrderState state, ShipOrderEntity.OrderShipped event) {
+    return state
+        .toBuilder()
+        .setShippedUtc(event.getShippedUtc())
+        .build();
   }
 
-  private Optional<Effect<Empty>> reject(ShipOrderEntity.ShipOrderState state, ShipOrderApi.DeliveredOrderRequest command) {
-    if (state.getCanceledUtc().getSeconds() > 0) {
-      return Optional.of(effects().error("Order has been canceled"));
-    }
-    if (state.getShippedUtc().getSeconds() == 0) {
-      return Optional.of(effects().error("Order has not been shipped"));
-    }
-    if (state.getDeliveredUtc().getSeconds() > 0) {
-      return Optional.of(effects().error("Order already delivered"));
-    }
-    return Optional.empty();
+  @Override
+  public ShipOrderEntity.ShipOrderState orderItemShipped(ShipOrderEntity.ShipOrderState state, ShipOrderEntity.OrderItemShipped event) {
+    return state
+        .toBuilder()
+        .clearShipOrderItems()
+        .addAllShipOrderItems(
+            state.getShipOrderItemsList().stream()
+                .map(shipOrderItem -> shipOrderItem
+                    .toBuilder()
+                    .setShippedUtc(event.getShippedUtc())
+                    .build())
+                .collect(Collectors.toList()))
+        .build();
   }
 
-  private Optional<Effect<Empty>> reject(ShipOrderEntity.ShipOrderState state, ShipOrderApi.ReturnedOrderRequest command) {
-    if (state.getCanceledUtc().getSeconds() > 0) {
-      return Optional.of(effects().error("Order has been canceled"));
-    }
-    if (state.getDeliveredUtc().getSeconds() == 0) {
-      return Optional.of(effects().error("Order has not been delivered"));
-    }
-    if (state.getReturnedUtc().getSeconds() > 0) {
-      return Optional.of(effects().error("Order already returned"));
-    }
-    return Optional.empty();
-  }
+  private Effect<Empty> handle(ShipOrderEntity.ShipOrderState state, ShipOrderApi.AddShipOrderCommand command) {
+    log.info("ShipOrder state: {}, AddShipOrderCommand: {}", state, command);
 
-  private Optional<Effect<Empty>> reject(ShipOrderEntity.ShipOrderState state, ShipOrderApi.CanceledOrderRequest command) {
-    if (state.getCanceledUtc().getSeconds() > 0) {
-      return Optional.of(effects().error("Order has been canceled"));
-    }
-    if (state.getDeliveredUtc().getSeconds() > 0) {
-      return Optional.of(effects().error("Order has been delivered"));
-    }
-    if (state.getReturnedUtc().getSeconds() > 0) {
-      return Optional.of(effects().error("Order has been returned"));
-    }
-    return Optional.empty();
-  }
-
-  private Optional<Effect<ShipOrderApi.ShipOrder>> reject(ShipOrderEntity.ShipOrderState state, ShipOrderApi.GetShipOrderRequest command) {
-    if (state.getOrderId().isEmpty()) {
-      return Optional.of(effects().error("Order not found"));
-    }
-    return Optional.empty();
-  }
-
-  private Effect<Empty> handle(ShipOrderEntity.ShipOrderState state, ShipOrderApi.ShippedOrderRequest command) {
     return effects()
-        .updateState(updateState(state, command))
-        .thenReply(Empty.getDefaultInstance());
+        .emitEvent(eventFor(state, command))
+        .thenReply(newState -> Empty.getDefaultInstance());
   }
 
-  private Effect<Empty> handle(ShipOrderEntity.ShipOrderState state, ShipOrderApi.DeliveredOrderRequest command) {
-    return effects()
-        .updateState(updateState(state, command))
-        .thenReply(Empty.getDefaultInstance());
-  }
+  private Effect<Empty> handle(ShipOrderEntity.ShipOrderState state, ShipOrderApi.ShippedOrderItemCommand command) {
+    log.info("ShipOrder state: {}, ShippedOrderItemCommand: {}", state, command);
 
-  private Effect<Empty> handle(ShipOrderEntity.ShipOrderState state, ShipOrderApi.ReturnedOrderRequest command) {
     return effects()
-        .updateState(updateState(state, command))
-        .thenReply(Empty.getDefaultInstance());
-  }
-
-  private Effect<Empty> handle(ShipOrderEntity.ShipOrderState state, ShipOrderApi.CanceledOrderRequest command) {
-    return effects()
-        .updateState(updateState(state, command))
-        .thenReply(Empty.getDefaultInstance());
+        .emitEvent(eventFor(state, command))
+        .thenReply(newState -> Empty.getDefaultInstance());
   }
 
   private Effect<ShipOrderApi.ShipOrder> handle(ShipOrderEntity.ShipOrderState state, ShipOrderApi.GetShipOrderRequest command) {
     return effects().reply(toApi(state));
   }
 
-  private ShipOrderEntity.ShipOrderState updateState(ShipOrderEntity.ShipOrderState state, ShipOrderApi.ShippedOrderRequest command) {
-    return state
-        .toBuilder()
-        .setShippedUtc(timestampNow())
-        .build();
-  }
-
-  private ShipOrderEntity.ShipOrderState updateState(ShipOrderEntity.ShipOrderState state, ShipOrderApi.DeliveredOrderRequest command) {
-    return state
-        .toBuilder()
-        .setDeliveredUtc(timestampNow())
-        .build();
-  }
-
-  private ShipOrderEntity.ShipOrderState updateState(ShipOrderEntity.ShipOrderState state, ShipOrderApi.ReturnedOrderRequest command) {
-    return state
-        .toBuilder()
-        .setReturnedUtc(timestampNow())
-        .build();
-  }
-
-  private ShipOrderEntity.ShipOrderState updateState(ShipOrderEntity.ShipOrderState state, ShipOrderApi.CanceledOrderRequest command) {
-    return state
-        .toBuilder()
-        .setCanceledUtc(timestampNow())
-        .build();
-  }
-
-  private Timestamp timestampNow() {
-    var now = Instant.now();
-    return Timestamp
+  private ShipOrderEntity.ShipOrderCreated eventFor(ShipOrderEntity.ShipOrderState state, ShipOrderApi.AddShipOrderCommand command) {
+    return ShipOrderEntity.ShipOrderCreated
         .newBuilder()
-        .setSeconds(now.getEpochSecond())
-        .setNanos(now.getNano())
+        .setOrderId(command.getOrderId())
+        .setCustomerId(command.getCustomerId())
+        .setOrderedUtc(command.getOrderedUtc())
+        .addAllOrderItems(toAllOrderItems(command.getOrderItemsList()))
+        .addAllShipOrderItems(toAllShipOrderItems(command.getOrderItemsList()))
         .build();
+  }
+
+  private ShipOrderEntity.OrderItemShipped eventFor(ShipOrderEntity.ShipOrderState state, ShipOrderApi.ShippedOrderItemCommand command) {
+    return ShipOrderEntity.OrderItemShipped
+        .newBuilder()
+        .setOrderId(command.getOrderId())
+        .setOrderItemId(command.getOrderItemId())
+        .setSkuItemId(command.getSkuItemId())
+        .setShippedUtc(command.getShippedUtc())
+        .build();
+  }
+
+  private List<ShipOrderEntity.OrderItem> toAllOrderItems(List<ShipOrderApi.OrderItemFromOrder> orderItems) {
+    return orderItems.stream()
+        .map(item -> ShipOrderEntity.OrderItem
+            .newBuilder()
+            .setSkuId(item.getSkuId())
+            .setSkuName(item.getSkuName())
+            .setQuantity(item.getQuantity())
+            .setShippedUtc(item.getShippedUtc())
+            .build())
+        .collect(Collectors.toList());
+  }
+
+  private List<ShipOrderEntity.ShipOrderItems> toAllShipOrderItems(List<ShipOrderApi.OrderItemFromOrder> orderItems) {
+    return orderItems.stream()
+        .map(item -> ShipOrderEntity.ShipOrderItems
+            .newBuilder()
+            .setSkuId(item.getSkuId())
+            .setSkuName(item.getSkuName())
+            .setQuantity(item.getQuantity())
+            .setShippedUtc(item.getShippedUtc())
+            .addAllShipOrderItems(toAllEntityShipOrderItems(orderItems))
+            .build())
+        .collect(Collectors.toList());
+  }
+
+  private List<ShipOrderEntity.ShipOrderItem> toAllEntityShipOrderItems(List<ShipOrderApi.OrderItemFromOrder> orderItems) {
+    return orderItems.stream()
+        .flatMap(orderItem -> toShipOrderItems(orderItem))
+        .collect(Collectors.toList());
+  }
+
+  private Stream<ShipOrderEntity.ShipOrderItem> toShipOrderItems(ShipOrderApi.OrderItemFromOrder orderItem) {
+    return IntStream.range(0, orderItem.getQuantity())
+        .mapToObj(i -> ShipOrderEntity.ShipOrderItem
+            .newBuilder()
+            .setOrderItemId(UUID.randomUUID().toString())
+            .setSkuId(orderItem.getSkuId())
+            .setShippedUtc(orderItem.getShippedUtc())
+            .build());
   }
 
   private ShipOrderApi.ShipOrder toApi(ShipOrderEntity.ShipOrderState state) {
     return ShipOrderApi.ShipOrder
         .newBuilder()
-        .setCustomerId(state.getCustomerId())
         .setOrderId(state.getOrderId())
+        .setCustomerId(state.getCustomerId())
         .setOrderedUtc(state.getOrderedUtc())
-        .setShippedUtc(state.getShippedUtc())
-        .setDeliveredUtc(state.getDeliveredUtc())
-        .setReturnedUtc(state.getReturnedUtc())
-        .setCanceledUtc(state.getCanceledUtc())
-        .addAllLineItems(toApi(state.getLineItemsList()))
+        .addAllOrderItems(toOrderItems(state.getOrderItemsList()))
+        .addAllShipOrderItems(toShipOrderItems(state.getShipOrderItemsList()))
         .build();
   }
 
-  private List<ShipOrderApi.LineItem> toApi(List<ShipOrderEntity.LineItem> lineItems) {
-    return lineItems.stream()
-        .map(lineItem -> ShipOrderApi.LineItem
+  private List<ShipOrderApi.OrderItemFromOrder> toOrderItems(List<ShipOrderEntity.OrderItem> orderItems) {
+    return orderItems.stream()
+        .map(item -> ShipOrderApi.OrderItemFromOrder
             .newBuilder()
-            .setSkuId(lineItem.getSkuId())
-            .setSkuName(lineItem.getSkuName())
-            .setQuantity(lineItem.getQuantity())
+            .setSkuId(item.getSkuId())
+            .setSkuName(item.getSkuName())
+            .setQuantity(item.getQuantity())
+            .setShippedUtc(item.getShippedUtc())
             .build())
         .collect(Collectors.toList());
   }
 
-  private List<ShipOrderEntity.LineItem> toEntity(List<ShipOrderApi.LineItem> lineItems) {
-    return lineItems.stream()
-        .map(lineItem -> ShipOrderEntity.LineItem
+  private List<ShipOrderApi.ShipOrderItems> toShipOrderItems(List<ShipOrderEntity.ShipOrderItems> shipOrderItems) {
+    return shipOrderItems.stream()
+        .map(item -> ShipOrderApi.ShipOrderItems
             .newBuilder()
-            .setSkuId(lineItem.getSkuId())
-            .setSkuName(lineItem.getSkuName())
-            .setQuantity(lineItem.getQuantity())
+            .setSkuId(item.getSkuId())
+            .setSkuName(item.getSkuName())
+            .setQuantity(item.getQuantity())
+            .setShippedUtc(item.getShippedUtc())
+            .addAllShipOrderItems(toShipOrderItemsList(item.getShipOrderItemsList()))
+            .build())
+        .collect(Collectors.toList());
+  }
+
+  private List<ShipOrderApi.ShipOrderItem> toShipOrderItemsList(List<ShipOrderEntity.ShipOrderItem> shipOrderItems) {
+    return shipOrderItems.stream()
+        .map(item -> ShipOrderApi.ShipOrderItem
+            .newBuilder()
+            .setSkuId(item.getSkuId())
+            .setSkuItemId(item.getSkuItemId())
+            .setOrderItemId(item.getOrderItemId())
+            .setShippedUtc(item.getShippedUtc())
             .build())
         .collect(Collectors.toList());
   }
