@@ -41,6 +41,7 @@ public class OrderToShipOrderAction extends AbstractOrderToShipOrderAction {
             .newBuilder()
             .setSkuId(orderItem.getSkuId())
             .setSkuName(orderItem.getSkuName())
+            .setQuantity(orderItem.getQuantity())
             .build())
         .collect(Collectors.toList());
   }

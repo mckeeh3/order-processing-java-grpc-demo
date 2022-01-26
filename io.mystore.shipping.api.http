@@ -1,4 +1,5 @@
 @urlPrefix = https://blue-shape-3166.us-east1.akkaserverless.app
+@orderId = cart-1
 @skuId = sku-1
 @skuName = sku-1 name
 @quantity = 1
@@ -15,3 +16,8 @@ curl -XPOST -H "Content-Type: application/json" -d '{
 
 curl -XGET -H "Content-Type: application/json"
   '{{urlPrefix}}/ship-order-items/{{orderItemId}}'
+
+### io.mystore.shipping.api.ShipOrderService.GetShipOrder
+
+curl -XGET -H "Content-Type: application/json"
+  '{{urlPrefix}}/ship-order/{{orderId}}'
