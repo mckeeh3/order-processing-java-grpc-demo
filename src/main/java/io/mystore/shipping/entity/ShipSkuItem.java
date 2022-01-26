@@ -145,6 +145,7 @@ public class ShipSkuItem extends AbstractShipSkuItem {
   private ShipSkuItemEntity.ReleasedSkuItemFromOrder eventFor(ShipSkuItemEntity.SkuItemState state, ShipSkuItemApi.ReleaseOrderItemFromSkuItem command) {
     return ShipSkuItemEntity.ReleasedSkuItemFromOrder
         .newBuilder()
+        .setSkuId(command.getSkuId())
         .setSkuItemId(command.getSkuItemId())
         .setOrderId(command.getOrderId())
         .setOrderItemId(command.getOrderItemId())

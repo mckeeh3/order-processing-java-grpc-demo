@@ -38,7 +38,8 @@ message SkuItemAddedToOrder {
 message SkuItemReleasedFromOrder {
   string order_id = 1;
   string order_item_id = 2;
-  string sku_item_id = 3;
+  string sku_id = 3;
+  string sku_item_id = 4;
 }
 
 message OrderItemBackOrdered {

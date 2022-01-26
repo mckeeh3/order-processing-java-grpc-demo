@@ -59,8 +59,9 @@ message AddOrderItemToSkuItem {
 
 message ReleaseOrderItemFromSkuItem {
   string sku_item_id = 1 [(akkaserverless.field).entity_key = true];
-  string order_id = 2;
-  string order_item_id = 3;
+  string sku_id = 2;
+  string order_id = 3;
+  string order_item_id = 4;
 }
 
 message SkuItem {

@@ -30,7 +30,7 @@ public class ShipOrderItem extends AbstractShipOrderItem {
   }
 
   @Override
-  public Effect<Empty> createShipOrderItem(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.OrderItem command) {
+  public Effect<Empty> createShipOrderItem(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.CreateShipOrderItemCommand command) {
     return handle(state, command);
   }
 
@@ -103,8 +103,8 @@ public class ShipOrderItem extends AbstractShipOrderItem {
     return Optional.empty();
   }
 
-  private Effect<Empty> handle(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.OrderItem command) {
-    log.info("ShipOrderItem state: {}, ShipOrderItem: {}", state, command);
+  private Effect<Empty> handle(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.CreateShipOrderItemCommand command) {
+    log.info("ShipOrderItem state: {}, CreateShipOrderItemCommand: {}", state, command);
 
     return effects()
         .emitEvents(eventsFor(state, command))
@@ -158,7 +158,7 @@ public class ShipOrderItem extends AbstractShipOrderItem {
             .build());
   }
 
-  private List<?> eventsFor(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.OrderItem command) {
+  private List<?> eventsFor(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.CreateShipOrderItemCommand command) {
     var orderItemCreated = ShipOrderItemEntity.OrderItemCreated
         .newBuilder()
         .setCustomerId(command.getCustomerId())
@@ -202,7 +202,7 @@ public class ShipOrderItem extends AbstractShipOrderItem {
         .newBuilder()
         .setOrderId(state.getOrderId())
         .setOrderItemId(command.getOrderItemId())
-        .setSkuId(state.getSkuId())
+        .setSkuId(command.getSkuId())
         .build();
   }
 
@@ -210,6 +210,8 @@ public class ShipOrderItem extends AbstractShipOrderItem {
     return ShipOrderItemEntity.SkuItemReleasedFromOrder
         .newBuilder()
         .setOrderId(state.getOrderId())
+        .setOrderItemId(state.getOrderItemId())
+        .setSkuId(state.getSkuId())
         .setSkuItemId(state.getSkuItemId())
         .build();
   }

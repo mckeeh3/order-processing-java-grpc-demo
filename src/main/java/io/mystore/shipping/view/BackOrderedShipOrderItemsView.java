@@ -6,7 +6,6 @@ import com.google.protobuf.Any;
 import com.google.protobuf.Timestamp;
 
 import io.mystore.shipping.entity.ShipOrderItemEntity;
-import io.mystore.shipping.view.BackOrderedShipOrderItemsModel.ShipOrderItem;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
 //
@@ -19,13 +18,13 @@ public class BackOrderedShipOrderItemsView extends AbstractBackOrderedShipOrderI
   }
 
   @Override
-  public BackOrderedShipOrderItemsModel.ShipOrderItem emptyState() {
-    return BackOrderedShipOrderItemsModel.ShipOrderItem.getDefaultInstance();
+  public ShipOrderItemModel.ShipOrderItem emptyState() {
+    return ShipOrderItemModel.ShipOrderItem.getDefaultInstance();
   }
 
   @Override
-  public View.UpdateEffect<BackOrderedShipOrderItemsModel.ShipOrderItem> processOrderItemCreated(
-      BackOrderedShipOrderItemsModel.ShipOrderItem state, ShipOrderItemEntity.OrderItemCreated orderItemCreated) {
+  public View.UpdateEffect<ShipOrderItemModel.ShipOrderItem> processOrderItemCreated(
+      ShipOrderItemModel.ShipOrderItem state, ShipOrderItemEntity.OrderItemCreated orderItemCreated) {
     return effects()
         .updateState(
             state
@@ -38,8 +37,8 @@ public class BackOrderedShipOrderItemsView extends AbstractBackOrderedShipOrderI
   }
 
   @Override
-  public View.UpdateEffect<BackOrderedShipOrderItemsModel.ShipOrderItem> processSkuItemAddedToOrder(
-      BackOrderedShipOrderItemsModel.ShipOrderItem state, ShipOrderItemEntity.SkuItemAddedToOrder skuItemAddedToOrder) {
+  public View.UpdateEffect<ShipOrderItemModel.ShipOrderItem> processSkuItemAddedToOrder(
+      ShipOrderItemModel.ShipOrderItem state, ShipOrderItemEntity.SkuItemAddedToOrder skuItemAddedToOrder) {
     return effects()
         .updateState(
             state
@@ -49,8 +48,8 @@ public class BackOrderedShipOrderItemsView extends AbstractBackOrderedShipOrderI
   }
 
   @Override
-  public View.UpdateEffect<BackOrderedShipOrderItemsModel.ShipOrderItem> processOrderItemBackOrdered(
-      BackOrderedShipOrderItemsModel.ShipOrderItem state, ShipOrderItemEntity.OrderItemBackOrdered orderItemBackOrdered) {
+  public View.UpdateEffect<ShipOrderItemModel.ShipOrderItem> processOrderItemBackOrdered(
+      ShipOrderItemModel.ShipOrderItem state, ShipOrderItemEntity.OrderItemBackOrdered orderItemBackOrdered) {
     return effects()
         .updateState(
             state
@@ -60,7 +59,7 @@ public class BackOrderedShipOrderItemsView extends AbstractBackOrderedShipOrderI
   }
 
   @Override
-  public UpdateEffect<ShipOrderItem> ignoreOtherEvents(ShipOrderItem state, Any any) {
+  public UpdateEffect<ShipOrderItemModel.ShipOrderItem> ignoreOtherEvents(ShipOrderItemModel.ShipOrderItem state, Any any) {
     return effects().ignore();
   }
 

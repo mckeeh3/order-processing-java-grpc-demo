@@ -4,9 +4,9 @@ import akka.stream.javadsl.Source;
 import com.akkaserverless.javasdk.testkit.ActionResult;
 import com.google.protobuf.Any;
 import com.google.protobuf.Empty;
-import io.mystore.cart.entity.CartEntity;
-import io.mystore.shipping.action.CartToShipOrderItemAction;
-import io.mystore.shipping.action.CartToShipOrderItemActionTestKit;
+import io.mystore.shipping.action.ShipOrderToShipOrderItemAction;
+import io.mystore.shipping.action.ShipOrderToShipOrderItemActionTestKit;
+import io.mystore.shipping.entity.ShipOrderEntity;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -15,11 +15,11 @@ import static org.junit.Assert.*;
 // As long as this file exists it will not be overwritten: you can maintain it yourself,
 // or delete it so it is regenerated as needed.
 
-public class CartToShipOrderItemActionTest {
+public class ShipOrderToShipOrderItemActionTest {
 
   @Test
   public void exampleTest() {
-    CartToShipOrderItemActionTestKit testKit = CartToShipOrderItemActionTestKit.of(CartToShipOrderItemAction::new);
+    ShipOrderToShipOrderItemActionTestKit testKit = ShipOrderToShipOrderItemActionTestKit.of(ShipOrderToShipOrderItemAction::new);
     // use the testkit to execute a command
     // ActionResult<SomeResponse> result = testKit.someOperation(SomeRequest);
     // verify the response
@@ -28,14 +28,14 @@ public class CartToShipOrderItemActionTest {
   }
 
   @Test
-  public void onCartCheckedOutTest() {
-    CartToShipOrderItemActionTestKit testKit = CartToShipOrderItemActionTestKit.of(CartToShipOrderItemAction::new);
-    // ActionResult<Empty> result = testKit.onCartCheckedOut(CartEntity.CartCheckedOut.newBuilder()...build());
+  public void onShipOrderCreatedTest() {
+    ShipOrderToShipOrderItemActionTestKit testKit = ShipOrderToShipOrderItemActionTestKit.of(ShipOrderToShipOrderItemAction::new);
+    // ActionResult<Empty> result = testKit.onShipOrderCreated(ShipOrderEntity.ShipOrderCreated.newBuilder()...build());
   }
 
   @Test
   public void ignoreOtherEventsTest() {
-    CartToShipOrderItemActionTestKit testKit = CartToShipOrderItemActionTestKit.of(CartToShipOrderItemAction::new);
+    ShipOrderToShipOrderItemActionTestKit testKit = ShipOrderToShipOrderItemActionTestKit.of(ShipOrderToShipOrderItemAction::new);
     // ActionResult<Empty> result = testKit.ignoreOtherEvents(Any.newBuilder()...build());
   }
 

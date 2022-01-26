@@ -29,7 +29,8 @@ message OrderItemAdded {
 }
 
 message ReleasedSkuItemFromOrder {
-  string sku_item_id = 1;
-  string order_id = 2;
-  string order_item_id = 3;
+  string sku_id = 1;
+  string sku_item_id = 2;
+  string order_id = 3;
+  string order_item_id = 4;
 }

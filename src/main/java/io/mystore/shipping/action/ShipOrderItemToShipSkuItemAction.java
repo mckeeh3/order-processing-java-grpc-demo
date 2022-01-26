@@ -39,7 +39,10 @@ public class ShipOrderItemToShipSkuItemAction extends AbstractShipOrderItemToShi
         components().shipSkuItem().releaseOrderItem(
             ShipSkuItemApi.ReleaseOrderItemFromSkuItem
                 .newBuilder()
+                .setSkuId(skuItemReleasedFromOrder.getSkuId())
                 .setSkuItemId(skuItemReleasedFromOrder.getSkuItemId())
+                .setOrderId(skuItemReleasedFromOrder.getOrderId())
+                .setOrderItemId(skuItemReleasedFromOrder.getOrderItemId())
                 .build())
             .execute());
   }

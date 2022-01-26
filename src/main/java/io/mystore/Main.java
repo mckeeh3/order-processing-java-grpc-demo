@@ -19,9 +19,9 @@ import io.mystore.purchased_product.entity.PurchasedProduct;
 import io.mystore.purchased_product.view.PurchasedProductsByCustomerByDateView;
 import io.mystore.purchased_product.view.PurchasedProductsByDateView;
 import io.mystore.purchased_product.view.PurchasedProductsByProductByDateView;
-import io.mystore.shipping.action.CartToShipOrderItemAction;
 import io.mystore.shipping.action.OrderToShipOrderAction;
 import io.mystore.shipping.action.ShipOrderItemToShipSkuItemAction;
+import io.mystore.shipping.action.ShipOrderToShipOrderItemAction;
 import io.mystore.shipping.action.ShipSkuItemToShipOrderItemAction;
 import io.mystore.shipping.action.ShipSkuItemToStockItemAction;
 import io.mystore.shipping.action.StockItemFrontendAction;
@@ -32,6 +32,7 @@ import io.mystore.shipping.entity.ShipSkuItem;
 import io.mystore.shipping.entity.StockItem;
 import io.mystore.shipping.view.AvailableShipSkuItemsView;
 import io.mystore.shipping.view.AvailableStockItemsView;
+import io.mystore.shipping.view.BackOrderedShipOrderItemsBySkuView;
 import io.mystore.shipping.view.BackOrderedShipOrderItemsView;
 import io.mystore.shipping.view.ShippedStockItemsView;
 import org.slf4j.Logger;
@@ -63,9 +64,9 @@ public final class Main {
       AvailableShipSkuItemsView::new,
       AvailableStockItemsView::new,
       BackOrderedShipOrderItemsView::new,
+      BackOrderedShipOrderItemsBySkuView::new,
       CartToOrderAction::new,
       CartToPurchasedProductAction::new,
-      CartToShipOrderItemAction::new,
       CartsByCustomerView::new,
       CartsByCustomerByDateView::new,
       CartsByDateView::new,
@@ -80,6 +81,7 @@ public final class Main {
       PurchasedProductsByDateView::new,
       PurchasedProductsByProductByDateView::new,
       ShipOrderItemToShipSkuItemAction::new,
+      ShipOrderToShipOrderItemAction::new,
       ShipSkuItemToShipOrderItemAction::new,
       ShipSkuItemToStockItemAction::new,
       ShippedStockItemsView::new,

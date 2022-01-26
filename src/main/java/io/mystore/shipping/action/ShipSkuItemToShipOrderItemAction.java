@@ -10,7 +10,8 @@ import com.google.protobuf.Empty;
 
 import io.mystore.shipping.api.ShipOrderItemApi;
 import io.mystore.shipping.entity.ShipSkuItemEntity;
-import io.mystore.shipping.view.BackOrderedShipOrderItemsModel;
+import io.mystore.shipping.view.BackOrderedShipOrderItemsBySkuModel;
+import io.mystore.shipping.view.ShipOrderItemModel;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
 //
@@ -25,9 +26,10 @@ public class ShipSkuItemToShipOrderItemAction extends AbstractShipSkuItemToShipO
   @Override
   public Effect<Empty> onSkuItemCreated(ShipSkuItemEntity.SkuItemCreated skuItemCreated) {
     return effects().asyncReply(
-        components().backOrderedShipOrderItemsView().getBackOrderedShipOrderItems(
-            BackOrderedShipOrderItemsModel.GetBackOrderedOrderItemsRequest
+        components().backOrderedShipOrderItemsBySkuView().getBackOrderedShipOrderItemsBySku(
+            BackOrderedShipOrderItemsBySkuModel.GetBackOrderedOrderItemsBySkuRequest
                 .newBuilder()
+                .setSkuId(skuItemCreated.getSkuId())
                 .build())
             .execute()
             .thenCompose(response -> sendStockAlertsToBackOrderedOrderItems(skuItemCreated, response)));
@@ -49,7 +51,7 @@ public class ShipSkuItemToShipOrderItemAction extends AbstractShipSkuItemToShipO
   }
 
   private CompletionStage<Empty> sendStockAlertsToBackOrderedOrderItems(
-      ShipSkuItemEntity.SkuItemCreated skuItemCreated, BackOrderedShipOrderItemsModel.GetBackOrderedOrderItemsResponse response) {
+      ShipSkuItemEntity.SkuItemCreated skuItemCreated, BackOrderedShipOrderItemsBySkuModel.GetBackOrderedOrderItemsBySkuResponse response) {
     var results = response.getShipOrderItemsList().stream()
         .map(shipOrderItem -> components().shipOrderItem().stockAlert(stockAlertOrderItem(shipOrderItem)).execute())
         .collect(Collectors.toList());
@@ -58,10 +60,11 @@ public class ShipSkuItemToShipOrderItemAction extends AbstractShipSkuItemToShipO
         .thenApply(reply -> Empty.getDefaultInstance());
   }
 
-  private ShipOrderItemApi.StockAlertOrderItem stockAlertOrderItem(BackOrderedShipOrderItemsModel.ShipOrderItem shipOrderItem) {
+  private ShipOrderItemApi.StockAlertOrderItem stockAlertOrderItem(ShipOrderItemModel.ShipOrderItem shipOrderItem) {
     return ShipOrderItemApi.StockAlertOrderItem
         .newBuilder()
         .setOrderItemId(shipOrderItem.getOrderItemId())
+        .setSkuId(shipOrderItem.getSkuId())
         .build();
   }
 
@@ -78,6 +81,7 @@ public class ShipSkuItemToShipOrderItemAction extends AbstractShipSkuItemToShipO
     return ShipOrderItemApi.StockAlertOrderItem
         .newBuilder()
         .setOrderItemId(releasedSkuItemFromOrder.getOrderItemId())
+        .setSkuId(releasedSkuItemFromOrder.getSkuId())
         .build();
   }
 }

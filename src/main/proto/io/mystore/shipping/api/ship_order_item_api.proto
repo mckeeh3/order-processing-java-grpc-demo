@@ -25,7 +25,7 @@ service ShipOrderItemService {
     }
   };
 
-  rpc CreateShipOrderItem(OrderItem) returns (google.protobuf.Empty) {
+  rpc CreateShipOrderItem(CreateShipOrderItemCommand) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       post: "/ship-order-items/{order_item_id}/add-order-item"
       body: "*"
@@ -60,10 +60,19 @@ service ShipOrderItemService {
   }
 }
 
-message OrderItem {
+message CreateShipOrderItemCommand {
   string customer_id = 1;
   string order_id = 2;
   string order_item_id = 3 [(akkaserverless.field).entity_key = true];
+  string sku_id = 4;
+  string sku_name = 5;
+  google.protobuf.Timestamp ordered_utc = 6;
+}
+
+message OrderItem {
+  string customer_id = 1;
+  string order_id = 2;
+  string order_item_id = 3;
   string sku_id = 4;
   string sku_name = 5;
   google.protobuf.Timestamp ordered_utc = 6;
@@ -83,6 +92,7 @@ message BackOrderOrderItem {
 
 message StockAlertOrderItem {
   string order_item_id = 1 [(akkaserverless.field).entity_key = true];
+  string sku_id = 2;
 }
 
 message GetOrderItemRequest {
