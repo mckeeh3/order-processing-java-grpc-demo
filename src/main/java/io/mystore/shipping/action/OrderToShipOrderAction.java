@@ -22,11 +22,11 @@ public class OrderToShipOrderAction extends AbstractOrderToShipOrderAction {
 
   @Override
   public Effect<Empty> onOrderCreated(OrderEntity.OrderCreated orderCreated) {
-    return effects().forward(components().shipOrder().addShipOrder(toShipOrder(orderCreated)));
+    return effects().forward(components().shipOrder().createShipOrder(toShipOrder(orderCreated)));
   }
 
-  private ShipOrderApi.AddShipOrderCommand toShipOrder(OrderCreated orderCreated) {
-    return ShipOrderApi.AddShipOrderCommand
+  private ShipOrderApi.CreateShipOrderCommand toShipOrder(OrderCreated orderCreated) {
+    return ShipOrderApi.CreateShipOrderCommand
         .newBuilder()
         .setOrderId(orderCreated.getOrderId())
         .setCustomerId(orderCreated.getCustomerId())

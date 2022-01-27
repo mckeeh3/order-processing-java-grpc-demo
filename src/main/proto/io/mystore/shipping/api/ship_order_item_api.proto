@@ -18,7 +18,7 @@ service ShipOrderItemService {
       events: [
         "io.mystore.shipping.entity.OrderItemCreated",
         "io.mystore.shipping.entity.SkuItemRequired",
-        "io.mystore.shipping.entity.SkuItemAddedToOrder",
+        "io.mystore.shipping.entity.JoinedSkuItemToOrderItem",
         "io.mystore.shipping.entity.SkuItemReleasedFromOrder",
         "io.mystore.shipping.entity.OrderItemBackOrdered"  // force line breaks
       ]
@@ -32,7 +32,7 @@ service ShipOrderItemService {
     };
   }
 
-  rpc AddSkuItemToOrder(SkuOrderItem) returns (google.protobuf.Empty) {
+  rpc AddSkuItemToOrder(JoinSkuItemToOrderItem) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       put: "/ship-order-items/{order_item_id}/add-sku-item-to-order"
       body: "*"
@@ -80,7 +80,7 @@ message OrderItem {
   google.protobuf.Timestamp back_ordered_utc = 8;
 }
 
-message SkuOrderItem {
+message JoinSkuItemToOrderItem {
   string order_item_id = 1 [(akkaserverless.field).entity_key = true];
   string sku_item_id = 2;
   google.protobuf.Timestamp shipped_utc = 3;

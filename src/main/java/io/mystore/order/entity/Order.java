@@ -31,32 +31,32 @@ public class Order extends AbstractOrder {
   }
 
   @Override
-  public Effect<Empty> createOrder(OrderEntity.OrderState state, OrderApi.CreateOrderRequest command) {
+  public Effect<Empty> createOrder(OrderEntity.OrderState state, OrderApi.CreateOrderCommand command) {
     return handle(state, command);
   }
 
   @Override
-  public Effect<Empty> shippedOrder(OrderEntity.OrderState state, OrderApi.ShippedOrderRequest command) {
+  public Effect<Empty> shippedOrder(OrderEntity.OrderState state, OrderApi.ShippedOrderCommand command) {
     return handle(state, command);
   }
 
   @Override
-  public Effect<Empty> deliveredOrder(OrderEntity.OrderState state, OrderApi.DeliveredOrderRequest command) {
+  public Effect<Empty> deliveredOrder(OrderEntity.OrderState state, OrderApi.DeliveredOrderCommand command) {
     return reject(state, command).orElseGet(() -> handle(state, command));
   }
 
   @Override
-  public Effect<Empty> returnedOrder(OrderEntity.OrderState state, OrderApi.ReturnedOrderRequest command) {
+  public Effect<Empty> returnedOrder(OrderEntity.OrderState state, OrderApi.ReturnedOrderCommand command) {
     return reject(state, command).orElseGet(() -> handle(state, command));
   }
 
   @Override
-  public Effect<Empty> canceledOrder(OrderEntity.OrderState state, OrderApi.CanceledOrderRequest command) {
+  public Effect<Empty> canceledOrder(OrderEntity.OrderState state, OrderApi.CanceledOrderCommand command) {
     return reject(state, command).orElseGet(() -> handle(state, command));
   }
 
   @Override
-  public Effect<Empty> shippedOrderItem(OrderEntity.OrderState state, OrderApi.ShippedOrderItemRequest command) {
+  public Effect<Empty> shippedOrderItem(OrderEntity.OrderState state, OrderApi.ShippedOrderItemCommand command) {
     return handle(state, command);
   }
 
@@ -119,7 +119,7 @@ public class Order extends AbstractOrder {
         .build();
   }
 
-  private Optional<Effect<Empty>> reject(OrderEntity.OrderState state, OrderApi.DeliveredOrderRequest command) {
+  private Optional<Effect<Empty>> reject(OrderEntity.OrderState state, OrderApi.DeliveredOrderCommand command) {
     if (state.getCanceledUtc().getSeconds() == 0) {
       return Optional.of(effects().error("Shopping has been canceled"));
     }
@@ -132,7 +132,7 @@ public class Order extends AbstractOrder {
     return Optional.empty();
   }
 
-  private Optional<Effect<Empty>> reject(OrderEntity.OrderState state, OrderApi.ReturnedOrderRequest command) {
+  private Optional<Effect<Empty>> reject(OrderEntity.OrderState state, OrderApi.ReturnedOrderCommand command) {
     if (state.getCanceledUtc().getSeconds() == 0) {
       return Optional.of(effects().error("Shopping has been canceled"));
     }
@@ -142,7 +142,7 @@ public class Order extends AbstractOrder {
     return Optional.empty();
   }
 
-  private Optional<Effect<Empty>> reject(OrderEntity.OrderState state, OrderApi.CanceledOrderRequest command) {
+  private Optional<Effect<Empty>> reject(OrderEntity.OrderState state, OrderApi.CanceledOrderCommand command) {
     if (state.getDeliveredUtc().getSeconds() > 0) {
       return Optional.of(effects().error("Shopping cart already delivered"));
     }
@@ -156,55 +156,55 @@ public class Order extends AbstractOrder {
     return Optional.empty();
   }
 
-  private Effect<Empty> handle(OrderEntity.OrderState state, OrderApi.CreateOrderRequest command) {
-    log.info("order: state: {}, CreateOrderRequest: {}", state, command);
+  private Effect<Empty> handle(OrderEntity.OrderState state, OrderApi.CreateOrderCommand command) {
+    log.info("state: {}, CreateOrderCommand: {}", state, command);
 
     return effects()
         .emitEvent(eventFor(state, command))
         .thenReply(newState -> Empty.getDefaultInstance());
   }
 
-  private Effect<Empty> handle(OrderEntity.OrderState state, OrderApi.ShippedOrderRequest command) {
-    log.info("order: state: {}, ShippedOrderRequest: {}", state, command);
+  private Effect<Empty> handle(OrderEntity.OrderState state, OrderApi.ShippedOrderCommand command) {
+    log.info("state: {}, ShippedOrderCommand: {}", state, command);
 
     return effects()
         .emitEvent(eventFor(state, command))
         .thenReply(newState -> Empty.getDefaultInstance());
   }
 
-  private Effect<Empty> handle(OrderEntity.OrderState state, OrderApi.DeliveredOrderRequest command) {
-    log.info("order: state: {}, DeliveredOrderRequest: {}", state, command);
+  private Effect<Empty> handle(OrderEntity.OrderState state, OrderApi.DeliveredOrderCommand command) {
+    log.info("state: {}, DeliveredOrderCommand: {}", state, command);
 
     return effects()
         .emitEvent(eventFor(state, command))
         .thenReply(newState -> Empty.getDefaultInstance());
   }
 
-  private Effect<Empty> handle(OrderEntity.OrderState state, OrderApi.ReturnedOrderRequest command) {
-    log.info("order: state: {}, ReturnedOrderRequest: {}", state, command);
+  private Effect<Empty> handle(OrderEntity.OrderState state, OrderApi.ReturnedOrderCommand command) {
+    log.info("state: {}, ReturnedOrderCommand: {}", state, command);
 
     return effects()
         .emitEvent(eventFor(state, command))
         .thenReply(newState -> Empty.getDefaultInstance());
   }
 
-  private Effect<Empty> handle(OrderEntity.OrderState state, OrderApi.CanceledOrderRequest command) {
-    log.info("order: state: {}, CanceledOrderRequest: {}", state, command);
+  private Effect<Empty> handle(OrderEntity.OrderState state, OrderApi.CanceledOrderCommand command) {
+    log.info("state: {}, CanceledOrderCommand: {}", state, command);
 
     return effects()
         .emitEvent(eventFor(state, command))
         .thenReply(newState -> Empty.getDefaultInstance());
   }
 
-  private Effect<Empty> handle(OrderEntity.OrderState state, OrderApi.ShippedOrderItemRequest command) {
-    log.info("order: state: {}, ShippedOrderItemRequest: {}", state, command);
+  private Effect<Empty> handle(OrderEntity.OrderState state, OrderApi.ShippedOrderItemCommand command) {
+    log.info("state: {}, ShippedOrderItemCommand: {}", state, command);
 
     return effects()
         .emitEvents(eventsFor(state, command))
         .thenReply(newState -> Empty.getDefaultInstance());
   }
 
-  private OrderEntity.OrderCreated eventFor(OrderEntity.OrderState state, OrderApi.CreateOrderRequest command) {
+  private OrderEntity.OrderCreated eventFor(OrderEntity.OrderState state, OrderApi.CreateOrderCommand command) {
     return OrderEntity.OrderCreated
         .newBuilder()
         .setOrderId(command.getOrderId())
@@ -214,28 +214,28 @@ public class Order extends AbstractOrder {
         .build();
   }
 
-  private OrderEntity.OrderShipped eventFor(OrderEntity.OrderState state, OrderApi.ShippedOrderRequest command) {
+  private OrderEntity.OrderShipped eventFor(OrderEntity.OrderState state, OrderApi.ShippedOrderCommand command) {
     return OrderEntity.OrderShipped
         .newBuilder()
         .setShippedUtc(timestampNow())
         .build();
   }
 
-  private OrderEntity.OrderDelivered eventFor(OrderEntity.OrderState state, OrderApi.DeliveredOrderRequest command) {
+  private OrderEntity.OrderDelivered eventFor(OrderEntity.OrderState state, OrderApi.DeliveredOrderCommand command) {
     return OrderEntity.OrderDelivered
         .newBuilder()
         .setDeliveredUtc(timestampNow())
         .build();
   }
 
-  private OrderEntity.OrderReturned eventFor(OrderEntity.OrderState state, OrderApi.ReturnedOrderRequest command) {
+  private OrderEntity.OrderReturned eventFor(OrderEntity.OrderState state, OrderApi.ReturnedOrderCommand command) {
     return OrderEntity.OrderReturned
         .newBuilder()
         .setReturnedUtc(timestampNow())
         .build();
   }
 
-  private OrderEntity.OrderCancelled eventFor(OrderEntity.OrderState state, OrderApi.CanceledOrderRequest command) {
+  private OrderEntity.OrderCancelled eventFor(OrderEntity.OrderState state, OrderApi.CanceledOrderCommand command) {
     return OrderEntity.OrderCancelled
         .newBuilder()
         .setOrderId(state.getOrderId())
@@ -243,7 +243,7 @@ public class Order extends AbstractOrder {
         .build();
   }
 
-  private List<?> eventsFor(OrderEntity.OrderState state, OrderApi.ShippedOrderItemRequest command) {
+  private List<?> eventsFor(OrderEntity.OrderState state, OrderApi.ShippedOrderItemCommand command) {
     var orderItemShipped = OrderEntity.OrderItemShipped
         .newBuilder()
         .setOrderId(state.getOrderId())

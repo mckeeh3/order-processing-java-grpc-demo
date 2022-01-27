@@ -110,7 +110,7 @@ public class StockItem extends AbstractStockItem {
   }
 
   private Effect<Empty> handle(StockItemEntity.StockItemState state, StockItemApi.CreateStockItem command) {
-    log.info("StockItem state: {}, CreateStockItem: {}", state, command);
+    log.info("state: {}, CreateStockItem: {}", state, command);
 
     return effects()
         .emitEvent(eventFor(state, command))
@@ -118,7 +118,7 @@ public class StockItem extends AbstractStockItem {
   }
 
   private Effect<Empty> handle(StockItemEntity.StockItemState state, StockItemApi.ShipStockItem command) {
-    log.info("StockItem state: {}, ShipStockItem: {}", state, command);
+    log.info("state: {}, ShipStockItem: {}", state, command);
 
     return effects()
         .emitEvent(eventFor(state, command))
@@ -126,7 +126,7 @@ public class StockItem extends AbstractStockItem {
   }
 
   private Effect<Empty> handle(StockItemEntity.StockItemState state, StockItemApi.ReleaseStockItem command) {
-    log.info("StockItem state: {}, ReleaseStockItem: {}", state, command);
+    log.info("state: {}, ReleaseStockItem: {}", state, command);
 
     return effects()
         .emitEvent(eventFor(state, command))

@@ -23,13 +23,13 @@ public class CartToOrderAction extends AbstractCartToOrderAction {
 
   @Override
   public Effect<Empty> onCartCheckedOut(CartEntity.CartCheckedOut command) {
-    var getCartState = components().order().createOrder(toCreateOrderRequest(command.getCartState()));
+    var getCartState = components().order().createOrder(toCreateOrderCommand(command.getCartState()));
 
     return effects().forward(getCartState);
   }
 
-  private OrderApi.CreateOrderRequest toCreateOrderRequest(CartState state) {
-    return OrderApi.CreateOrderRequest
+  private OrderApi.CreateOrderCommand toCreateOrderCommand(CartState state) {
+    return OrderApi.CreateOrderCommand
         .newBuilder()
         .setOrderId(state.getCartId())
         .setCustomerId(state.getCustomerId())

@@ -26,7 +26,7 @@ public class OrderItem extends AbstractOrderItem {
 
   @Override
   public Effect<Empty> createOrderItem(OrderItemEntity.OrderItemState state, OrderItemApi.OrderItemCommand command) {
-    log.info("orderItem: state: {}, createOrderItem: {}", state, command);
+    log.info("state: {}, createOrderItem: {}", state, command);
 
     return effects()
         .updateState(updateState(state, command))

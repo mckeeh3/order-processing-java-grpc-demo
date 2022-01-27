@@ -37,7 +37,7 @@ public class ShipSkuItem extends AbstractShipSkuItem {
 
   @Override
   public Effect<Empty> addOrderItem(ShipSkuItemEntity.SkuItemState state, ShipSkuItemApi.AddOrderItemToSkuItem command) {
-    log.info("addOrderItem: state.orderItemId {}, AddOrderItemToSkuItem.orderItemId {}",
+    log.info("state.orderItemId {}, AddOrderItemToSkuItem.orderItemId {}",
         state.getOrderItemId().isEmpty() ? "(empty)" : state.getOrderItemId(), command.getOrderItemId());
     return reject(state, command).orElseGet(() -> handle(state, command));
   }
@@ -98,7 +98,7 @@ public class ShipSkuItem extends AbstractShipSkuItem {
   }
 
   private Effect<Empty> handle(ShipSkuItemEntity.SkuItemState state, ShipSkuItemApi.CreateSkuItemFromStock command) {
-    log.info("ShipSkuItem state: {}, CreateSkuItemFromStock: {}", state, command);
+    log.info("state: {}, CreateSkuItemFromStock: {}", state, command);
 
     return effects()
         .emitEvent(eventFor(state, command))
@@ -106,7 +106,7 @@ public class ShipSkuItem extends AbstractShipSkuItem {
   }
 
   private Effect<Empty> handle(ShipSkuItemEntity.SkuItemState state, ShipSkuItemApi.AddOrderItemToSkuItem command) {
-    log.info("ShipSkuItem state: {}, AddOrderItemToSkuItem: {}", state, command);
+    log.info("state: {}, AddOrderItemToSkuItem: {}", state, command);
 
     if (state.getOrderItemId().equals(command.getOrderItemId())) {
       return effects().reply(Empty.getDefaultInstance()); // already added, idempotent
@@ -118,7 +118,7 @@ public class ShipSkuItem extends AbstractShipSkuItem {
   }
 
   private Effect<Empty> handle(ShipSkuItemEntity.SkuItemState state, ShipSkuItemApi.ReleaseOrderItemFromSkuItem command) {
-    log.info("ShipSkuItem state: {}, ReleaseOrderItemFromSkuItem: {}", state, command);
+    log.info("state: {}, ReleaseOrderItemFromSkuItem: {}", state, command);
 
     return effects()
         .emitEvent(eventFor(state, command))

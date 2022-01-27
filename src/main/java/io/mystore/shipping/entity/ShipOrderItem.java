@@ -35,7 +35,7 @@ public class ShipOrderItem extends AbstractShipOrderItem {
   }
 
   @Override
-  public Effect<Empty> addSkuItemToOrder(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.SkuOrderItem command) {
+  public Effect<Empty> addSkuItemToOrder(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.JoinSkuItemToOrderItem command) {
     return handle(state, command);
   }
 
@@ -74,7 +74,7 @@ public class ShipOrderItem extends AbstractShipOrderItem {
   }
 
   @Override
-  public ShipOrderItemEntity.OrderItemState skuItemAddedToOrder(ShipOrderItemEntity.OrderItemState state, ShipOrderItemEntity.SkuItemAddedToOrder event) {
+  public ShipOrderItemEntity.OrderItemState joinedSkuItemToOrderItem(ShipOrderItemEntity.OrderItemState state, ShipOrderItemEntity.JoinedSkuItemToOrderItem event) {
     return state
         .toBuilder()
         .setSkuItemId(event.getSkuItemId())
@@ -104,15 +104,15 @@ public class ShipOrderItem extends AbstractShipOrderItem {
   }
 
   private Effect<Empty> handle(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.CreateShipOrderItemCommand command) {
-    log.info("ShipOrderItem state: {}, CreateShipOrderItemCommand: {}", state, command);
+    log.info("state: {}, CreateShipOrderItemCommand: {}", state, command);
 
     return effects()
         .emitEvents(eventsFor(state, command))
         .thenReply(newState -> Empty.getDefaultInstance());
   }
 
-  private Effect<Empty> handle(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.SkuOrderItem command) {
-    log.info("ShipOrderItem state: {}, SkuOrderItem: {}", state, command);
+  private Effect<Empty> handle(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.JoinSkuItemToOrderItem command) {
+    log.info("state: {}, JoinSkuItemToOrderItem: {}", state, command);
 
     if (state.getSkuItemId().isEmpty()) {
       return effects()
@@ -128,7 +128,7 @@ public class ShipOrderItem extends AbstractShipOrderItem {
   }
 
   private Effect<Empty> handle(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.BackOrderOrderItem command) {
-    log.info("ShipOrderItem state: {}, BackOrderShipOrderItem: {}", state, command);
+    log.info("state: {}, BackOrderShipOrderItem: {}", state, command);
 
     if (state.getSkuItemId().isEmpty()) { // don't back order if already shipped
       return effects()
@@ -140,7 +140,7 @@ public class ShipOrderItem extends AbstractShipOrderItem {
   }
 
   private Effect<Empty> handle(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.StockAlertOrderItem command) {
-    log.info("ShipOrderItem state: {}, StockAlertShipOrderItem {}", state, command);
+    log.info("state: {}, StockAlertShipOrderItem {}", state, command);
 
     return effects()
         .emitEvent(eventFor(state, command))
@@ -183,11 +183,11 @@ public class ShipOrderItem extends AbstractShipOrderItem {
     return List.of(orderItemCreated, shipSkuItemRequired);
   }
 
-  private ShipOrderItemEntity.SkuItemAddedToOrder eventFor(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.SkuOrderItem command) {
-    return ShipOrderItemEntity.SkuItemAddedToOrder
+  private ShipOrderItemEntity.JoinedSkuItemToOrderItem eventFor(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.JoinSkuItemToOrderItem command) {
+    return ShipOrderItemEntity.JoinedSkuItemToOrderItem
         .newBuilder()
         .setOrderId(state.getOrderId())
-        .setOrderItemId(state.getSkuItemId())
+        .setOrderItemId(state.getOrderItemId())
         .setSkuId(state.getSkuItemId())
         .setSkuItemId(command.getSkuItemId())
         .setShippedUtc(command.getShippedUtc())
@@ -210,7 +210,7 @@ public class ShipOrderItem extends AbstractShipOrderItem {
         .build();
   }
 
-  private ShipOrderItemEntity.SkuItemReleasedFromOrder eventForReleaseSkuItem(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.SkuOrderItem command) {
+  private ShipOrderItemEntity.SkuItemReleasedFromOrder eventForReleaseSkuItem(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.JoinSkuItemToOrderItem command) {
     return ShipOrderItemEntity.SkuItemReleasedFromOrder
         .newBuilder()
         .setOrderId(state.getOrderId())

@@ -26,38 +26,38 @@ service OrderService {
     }
   };
 
-  rpc CreateOrder(CreateOrderRequest) returns (google.protobuf.Empty) {
+  rpc CreateOrder(CreateOrderCommand) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       post: "/order/{order_id}/create"
       body: "*"
     };
   }
 
-  rpc ShippedOrder(ShippedOrderRequest) returns (google.protobuf.Empty) {
+  rpc ShippedOrder(ShippedOrderCommand) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       put: "/order/{order_id}/shipped-order"
     };
   }
 
-  rpc DeliveredOrder(DeliveredOrderRequest) returns (google.protobuf.Empty) {
+  rpc DeliveredOrder(DeliveredOrderCommand) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       put: "/order/{order_id}/delivered"
     };
   }
 
-  rpc ReturnedOrder(ReturnedOrderRequest) returns (google.protobuf.Empty) {
+  rpc ReturnedOrder(ReturnedOrderCommand) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       put: "/order/{order_id}/returned"
     };
   }
 
-  rpc CanceledOrder(CanceledOrderRequest) returns (google.protobuf.Empty) {
+  rpc CanceledOrder(CanceledOrderCommand) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       put: "/order/{order_id}/canceled"
     };
   }
 
-  rpc ShippedOrderItem(ShippedOrderItemRequest) returns (google.protobuf.Empty) {
+  rpc ShippedOrderItem(ShippedOrderItemCommand) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       put: "/order/{order_id}/shipped-order-item"
       body: "*"
@@ -71,31 +71,31 @@ service OrderService {
   }
 }
 
-message CreateOrderRequest {
+message CreateOrderCommand {
   string order_id = 1 [(akkaserverless.field).entity_key = true];
   string customer_id = 2;
   google.protobuf.Timestamp ordered_utc = 3;
   repeated OrderItem order_items = 4;
 }
 
-message ShippedOrderRequest {
+message ShippedOrderCommand {
   string order_id = 1 [(akkaserverless.field).entity_key = true];
 }
 
-message ShippedOrderItemRequest {
+message ShippedOrderItemCommand {
   string order_id = 1 [(akkaserverless.field).entity_key = true];
   string sku_id = 2;
 }
 
-message DeliveredOrderRequest {
+message DeliveredOrderCommand {
   string order_id = 1 [(akkaserverless.field).entity_key = true];
 }
 
-message ReturnedOrderRequest {
+message ReturnedOrderCommand {
   string order_id = 1 [(akkaserverless.field).entity_key = true];
 }
 
-message CanceledOrderRequest {
+message CanceledOrderCommand {
   string order_id = 1 [(akkaserverless.field).entity_key = true];
 }
 

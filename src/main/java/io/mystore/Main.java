@@ -20,6 +20,7 @@ import io.mystore.purchased_product.view.PurchasedProductsByCustomerByDateView;
 import io.mystore.purchased_product.view.PurchasedProductsByDateView;
 import io.mystore.purchased_product.view.PurchasedProductsByProductByDateView;
 import io.mystore.shipping.action.OrderToShipOrderAction;
+import io.mystore.shipping.action.ShipOrderItemToShipOrderAction;
 import io.mystore.shipping.action.ShipOrderItemToShipSkuItemAction;
 import io.mystore.shipping.action.ShipOrderToShipOrderItemAction;
 import io.mystore.shipping.action.ShipSkuItemToShipOrderItemAction;
@@ -80,6 +81,7 @@ public final class Main {
       PurchasedProductsByCustomerByDateView::new,
       PurchasedProductsByDateView::new,
       PurchasedProductsByProductByDateView::new,
+      ShipOrderItemToShipOrderAction::new,
       ShipOrderItemToShipSkuItemAction::new,
       ShipOrderToShipOrderItemAction::new,
       ShipSkuItemToShipOrderItemAction::new,

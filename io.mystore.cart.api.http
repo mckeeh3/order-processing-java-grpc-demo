@@ -3,9 +3,9 @@
 @urlPrefix = https://blue-shape-3166.us-east1.akkaserverless.app
 @customerId = customer-1
 @cartId = cart-1
-@skuId = sku-3
-@skuName = sku name 3
-@quantity = 3
+@skuId = sku-1
+@skuName = sku name 1
+@quantity = 1
 # @checkedOutUtc = 2022-01-01T00:00:00.000-0500
 @checkedOutUtc =
 # @shippedUtc = 2022-01-01T00:00:00.000-0500
