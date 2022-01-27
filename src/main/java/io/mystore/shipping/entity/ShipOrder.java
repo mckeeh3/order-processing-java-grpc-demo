@@ -144,7 +144,6 @@ public class ShipOrder extends AbstractShipOrder {
   }
 
   private List<ShipOrderEntity.ShipOrderItems> toAllShipOrderItems(List<ShipOrderApi.OrderItemFromOrder> orderItems) {
-    log.info("toAllShipOrderItems: orderItems: {}", orderItems);
     return orderItems.stream()
         .map(item -> ShipOrderEntity.ShipOrderItems
             .newBuilder()
@@ -158,13 +157,11 @@ public class ShipOrder extends AbstractShipOrder {
   }
 
   private List<ShipOrderEntity.ShipOrderItem> toAllEntityShipOrderItems(OrderItemFromOrder orderItem) {
-    log.info("toAllEntityShipOrderItems: orderItem: {}", orderItem);
     return toShipOrderItems(orderItem)
         .collect(Collectors.toList());
   }
 
   private Stream<ShipOrderEntity.ShipOrderItem> toShipOrderItems(ShipOrderApi.OrderItemFromOrder orderItem) {
-    log.info("toShipOrderItems: orderItem: {}", orderItem);
     return IntStream.range(0, orderItem.getQuantity())
         .mapToObj(i -> ShipOrderEntity.ShipOrderItem
             .newBuilder()

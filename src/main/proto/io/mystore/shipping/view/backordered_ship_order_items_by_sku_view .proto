@@ -19,12 +19,12 @@ service BackOrderedShipOrderItemsBySku {
   rpc GetBackOrderedShipOrderItemsBySku(GetBackOrderedOrderItemsBySkuRequest) returns (GetBackOrderedOrderItemsBySkuResponse) {
     option (akkaserverless.method).view.query = {
       query: "SELECT * AS ship_order_items"
-             "  FROM back_ordered_ship_order_items"
+             "  FROM back_ordered_ship_order_items_by_sku"
              " WHERE back_ordered_utc.seconds > 0"
              "   AND sku_id = :skuId"
     };
     option (google.api.http) = {
-      get: "/back-ordered-ship-order-items"
+      get: "/back-ordered-ship-order-items-by-sku"
     };
   }
 
@@ -33,7 +33,7 @@ service BackOrderedShipOrderItemsBySku {
       event_sourced_entity: "ship_order_item"
     };
     option (akkaserverless.method).view.update = {
-      table: "back_ordered_ship_order_items"
+      table: "back_ordered_ship_order_items_by_sku"
       transform_updates: true
     };
   }
@@ -43,7 +43,7 @@ service BackOrderedShipOrderItemsBySku {
       event_sourced_entity: "ship_order_item"
     };
     option (akkaserverless.method).view.update = {
-      table: "back_ordered_ship_order_items"
+      table: "back_ordered_ship_order_items_by_sku"
       transform_updates: true
     };
   }
@@ -53,7 +53,7 @@ service BackOrderedShipOrderItemsBySku {
       event_sourced_entity: "ship_order_item"
     };
     option (akkaserverless.method).view.update = {
-      table: "back_ordered_ship_order_items"
+      table: "back_ordered_ship_order_items_by_sku"
       transform_updates: true
     };
   }
@@ -63,7 +63,7 @@ service BackOrderedShipOrderItemsBySku {
       event_sourced_entity: "ship_order_item"
     };
     option (akkaserverless.method).view.update = {
-      table: "back_ordered_ship_order_items"
+      table: "back_ordered_ship_order_items_by_sku"
       transform_updates: true
     };
   }

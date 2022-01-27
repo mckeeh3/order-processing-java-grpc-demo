@@ -8,6 +8,9 @@ import com.akkaserverless.javasdk.action.ActionCreationContext;
 import com.google.protobuf.Any;
 import com.google.protobuf.Empty;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.mystore.shipping.api.ShipOrderItemApi;
 import io.mystore.shipping.entity.ShipSkuItemEntity;
 import io.mystore.shipping.view.BackOrderedShipOrderItemsBySkuModel;
@@ -19,20 +22,14 @@ import io.mystore.shipping.view.ShipOrderItemModel;
 // or delete it so it is regenerated as needed.
 
 public class ShipSkuItemToShipOrderItemAction extends AbstractShipSkuItemToShipOrderItemAction {
+  static final Logger log = LoggerFactory.getLogger(ShipSkuItemToShipOrderItemAction.class);
 
   public ShipSkuItemToShipOrderItemAction(ActionCreationContext creationContext) {
   }
 
   @Override
   public Effect<Empty> onSkuItemCreated(ShipSkuItemEntity.SkuItemCreated skuItemCreated) {
-    return effects().asyncReply(
-        components().backOrderedShipOrderItemsBySkuView().getBackOrderedShipOrderItemsBySku(
-            BackOrderedShipOrderItemsBySkuModel.GetBackOrderedOrderItemsBySkuRequest
-                .newBuilder()
-                .setSkuId(skuItemCreated.getSkuId())
-                .build())
-            .execute()
-            .thenCompose(response -> sendStockAlertsToBackOrderedOrderItems(skuItemCreated, response)));
+    return notifyBackOrderedOfAvailableSkuItem(skuItemCreated.getSkuId());
   }
 
   @Override
@@ -41,17 +38,27 @@ public class ShipSkuItemToShipOrderItemAction extends AbstractShipSkuItemToShipO
   }
 
   @Override
+  public Effect<Empty> onReleaseOrderItemFromSkuItem(ShipSkuItemEntity.ReleasedSkuItemFromOrder releasedSkuItemFromOrder) {
+    return notifyBackOrderedOfAvailableSkuItem(releasedSkuItemFromOrder.getSkuId());
+  }
+
+  @Override
   public Effect<Empty> ignoreOtherEvents(Any any) {
     return effects().reply(Empty.getDefaultInstance());
   }
 
-  @Override
-  public Effect<Empty> onReleaseOrderItemFromSkuItem(ShipSkuItemEntity.ReleasedSkuItemFromOrder releasedSkuItemFromOrder) {
-    return effects().forward(components().shipOrderItem().stockAlert(stockAlertOrderItem(releasedSkuItemFromOrder)));
+  private Effect<Empty> notifyBackOrderedOfAvailableSkuItem(String skuId) {
+    return effects().asyncReply(
+        components().backOrderedShipOrderItemsBySkuView().getBackOrderedShipOrderItemsBySku(
+            BackOrderedShipOrderItemsBySkuModel.GetBackOrderedOrderItemsBySkuRequest
+                .newBuilder()
+                .setSkuId(skuId)
+                .build())
+            .execute()
+            .thenCompose(response -> sendStockAlertsToBackOrderedOrderItems(response)));
   }
 
-  private CompletionStage<Empty> sendStockAlertsToBackOrderedOrderItems(
-      ShipSkuItemEntity.SkuItemCreated skuItemCreated, BackOrderedShipOrderItemsBySkuModel.GetBackOrderedOrderItemsBySkuResponse response) {
+  private CompletionStage<Empty> sendStockAlertsToBackOrderedOrderItems(BackOrderedShipOrderItemsBySkuModel.GetBackOrderedOrderItemsBySkuResponse response) {
     var results = response.getShipOrderItemsList().stream()
         .map(shipOrderItem -> components().shipOrderItem().stockAlert(stockAlertOrderItem(shipOrderItem)).execute())
         .collect(Collectors.toList());
@@ -74,14 +81,6 @@ public class ShipSkuItemToShipOrderItemAction extends AbstractShipSkuItemToShipO
         .setOrderItemId(shipOrderItemAdded.getOrderItemId())
         .setSkuItemId(shipOrderItemAdded.getSkuItemId())
         .setShippedUtc(shipOrderItemAdded.getShippedUtc())
-        .build();
-  }
-
-  private ShipOrderItemApi.StockAlertOrderItem stockAlertOrderItem(ShipSkuItemEntity.ReleasedSkuItemFromOrder releasedSkuItemFromOrder) {
-    return ShipOrderItemApi.StockAlertOrderItem
-        .newBuilder()
-        .setOrderItemId(releasedSkuItemFromOrder.getOrderItemId())
-        .setSkuId(releasedSkuItemFromOrder.getSkuId())
         .build();
   }
 }

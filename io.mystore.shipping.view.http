@@ -19,6 +19,11 @@ curl -XGET -H "Content-Type: application/json"
 curl -XGET -H "Content-Type: application/json"
   '{{urlPrefix}}/back-ordered-ship-order-items'
 
+### io.mystore.shipping.view.BackOrderedShipOrderItemsBySku.GetBackOrderedShipOrderItemsBySku
+
+curl -XGET -H "Content-Type: application/json"
+  '{{urlPrefix}}/back-ordered-ship-order-items?skuId={{skuId}}'
+
 ### io.mystore.shipping.view.AvailableStockItems.GetAvailableStockItems
 
 curl -XGET -H "Content-Type: application/json"

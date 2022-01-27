@@ -37,6 +37,8 @@ public class ShipSkuItem extends AbstractShipSkuItem {
 
   @Override
   public Effect<Empty> addOrderItem(ShipSkuItemEntity.SkuItemState state, ShipSkuItemApi.AddOrderItemToSkuItem command) {
+    log.info("addOrderItem: state.orderItemId {}, AddOrderItemToSkuItem.orderItemId {}",
+        state.getOrderItemId().isEmpty() ? "(empty)" : state.getOrderItemId(), command.getOrderItemId());
     return reject(state, command).orElseGet(() -> handle(state, command));
   }
 
@@ -89,7 +91,7 @@ public class ShipSkuItem extends AbstractShipSkuItem {
   }
 
   private Optional<Effect<Empty>> reject(SkuItemState state, AddOrderItemToSkuItem command) {
-    if (!state.getOrderItemId().isEmpty() && !state.getOrderId().equals(command.getOrderId())) {
+    if (!state.getOrderItemId().isEmpty() && !state.getOrderItemId().equals(command.getOrderItemId())) {
       return Optional.of(effects().error("skuItem is not available"));
     }
     return Optional.empty();

@@ -122,7 +122,7 @@ public class ShipOrderItem extends AbstractShipOrderItem {
       return effects().reply(Empty.getDefaultInstance()); // idempotent
     } else {
       return effects() // sku-item already added to order - tell ship-sku-item to release the sku-item
-          .emitEvent(eventForReleaseSkuItem(state))
+          .emitEvent(eventForReleaseSkuItem(state, command))
           .thenReply(newState -> Empty.getDefaultInstance());
     }
   }
@@ -130,9 +130,13 @@ public class ShipOrderItem extends AbstractShipOrderItem {
   private Effect<Empty> handle(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.BackOrderOrderItem command) {
     log.info("ShipOrderItem state: {}, BackOrderShipOrderItem: {}", state, command);
 
-    return effects()
-        .emitEvent(eventFor(state, command))
-        .thenReply(newState -> Empty.getDefaultInstance());
+    if (state.getSkuItemId().isEmpty()) { // don't back order if already shipped
+      return effects()
+          .emitEvent(eventFor(state, command))
+          .thenReply(newState -> Empty.getDefaultInstance());
+    } else {
+      return effects().reply(Empty.getDefaultInstance());
+    }
   }
 
   private Effect<Empty> handle(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.StockAlertOrderItem command) {
@@ -206,13 +210,13 @@ public class ShipOrderItem extends AbstractShipOrderItem {
         .build();
   }
 
-  private ShipOrderItemEntity.SkuItemReleasedFromOrder eventForReleaseSkuItem(ShipOrderItemEntity.OrderItemState state) {
+  private ShipOrderItemEntity.SkuItemReleasedFromOrder eventForReleaseSkuItem(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.SkuOrderItem command) {
     return ShipOrderItemEntity.SkuItemReleasedFromOrder
         .newBuilder()
         .setOrderId(state.getOrderId())
         .setOrderItemId(state.getOrderItemId())
         .setSkuId(state.getSkuId())
-        .setSkuItemId(state.getSkuItemId())
+        .setSkuItemId(command.getSkuItemId())
         .build();
   }
 
