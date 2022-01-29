@@ -14,11 +14,6 @@ import io.mystore.order.view.OrderedItemsByDateView;
 import io.mystore.order.view.OrderedItemsBySkuByDateView;
 import io.mystore.order.view.OrdersByCustomerByDateView;
 import io.mystore.order.view.OrdersByDateView;
-import io.mystore.purchased_product.action.CartToPurchasedProductAction;
-import io.mystore.purchased_product.entity.PurchasedProduct;
-import io.mystore.purchased_product.view.PurchasedProductsByCustomerByDateView;
-import io.mystore.purchased_product.view.PurchasedProductsByDateView;
-import io.mystore.purchased_product.view.PurchasedProductsByProductByDateView;
 import io.mystore.shipping.action.OrderToShipOrderAction;
 import io.mystore.shipping.action.ShipOrderItemToShipOrderAction;
 import io.mystore.shipping.action.ShipOrderItemToShipSkuItemAction;
@@ -56,7 +51,6 @@ public final class Main {
     return AkkaServerlessFactory.withComponents(
       Order::new,
       OrderItem::new,
-      PurchasedProduct::new,
       ShipOrder::new,
       ShipOrderItem::new,
       ShipSkuItem::new,
@@ -67,7 +61,6 @@ public final class Main {
       BackOrderedShipOrderItemsView::new,
       BackOrderedShipOrderItemsBySkuView::new,
       CartToOrderAction::new,
-      CartToPurchasedProductAction::new,
       CartsByCustomerView::new,
       CartsByCustomerByDateView::new,
       CartsByDateView::new,
@@ -78,9 +71,6 @@ public final class Main {
       OrderedItemsBySkuByDateView::new,
       OrdersByCustomerByDateView::new,
       OrdersByDateView::new,
-      PurchasedProductsByCustomerByDateView::new,
-      PurchasedProductsByDateView::new,
-      PurchasedProductsByProductByDateView::new,
       ShipOrderItemToShipOrderAction::new,
       ShipOrderItemToShipSkuItemAction::new,
       ShipOrderToShipOrderItemAction::new,
