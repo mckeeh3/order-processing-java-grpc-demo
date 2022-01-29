@@ -188,7 +188,7 @@ public class ShipOrderItem extends AbstractShipOrderItem {
         .newBuilder()
         .setOrderId(state.getOrderId())
         .setOrderItemId(state.getOrderItemId())
-        .setSkuId(state.getSkuItemId())
+        .setSkuId(state.getSkuId())
         .setSkuItemId(command.getSkuItemId())
         .setShippedUtc(command.getShippedUtc())
         .build();

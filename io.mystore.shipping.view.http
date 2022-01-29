@@ -1,6 +1,6 @@
 
 @urlPrefix = https://blue-shape-3166.us-east1.akkaserverless.app
-@skuId = sku-3
+@skuId = sku-2
 @orderId = cart-1
 @orderItemId = d606c78f-e337-4977-8b1b-35adaf4b86fe
 

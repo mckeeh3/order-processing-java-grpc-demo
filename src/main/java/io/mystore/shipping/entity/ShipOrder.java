@@ -68,11 +68,16 @@ public class ShipOrder extends AbstractShipOrder {
   }
 
   @Override
+  public ShipOrderEntity.ShipOrderState orderSkuShipped(ShipOrderEntity.ShipOrderState state, ShipOrderEntity.OrderSkuShipped event) {
+    return updateStateFor(state, event);
+  }
+
+  @Override
   public ShipOrderEntity.ShipOrderState orderItemShipped(ShipOrderEntity.ShipOrderState state, ShipOrderEntity.OrderItemShipped event) {
     return updateStateFor(state, event);
   }
 
-  private Effect<Empty> handle(ShipOrderEntity.ShipOrderState state, ShipOrderApi.CreateShipOrderCommand command) {
+  Effect<Empty> handle(ShipOrderEntity.ShipOrderState state, ShipOrderApi.CreateShipOrderCommand command) {
     log.info("state: {}, CreateShipOrderCommand: {}", state, command);
 
     return effects()
@@ -80,7 +85,7 @@ public class ShipOrder extends AbstractShipOrder {
         .thenReply(newState -> Empty.getDefaultInstance());
   }
 
-  private Effect<Empty> handle(ShipOrderEntity.ShipOrderState state, ShipOrderApi.ShippedOrderItemCommand command) {
+  Effect<Empty> handle(ShipOrderEntity.ShipOrderState state, ShipOrderApi.ShippedOrderItemCommand command) {
     log.info("state: {}, ShippedOrderItemCommand: {}", state, command);
 
     return effects()
@@ -88,11 +93,11 @@ public class ShipOrder extends AbstractShipOrder {
         .thenReply(newState -> Empty.getDefaultInstance());
   }
 
-  private Effect<ShipOrderApi.ShipOrder> handle(ShipOrderEntity.ShipOrderState state, ShipOrderApi.GetShipOrderRequest command) {
+  Effect<ShipOrderApi.ShipOrder> handle(ShipOrderEntity.ShipOrderState state, ShipOrderApi.GetShipOrderRequest command) {
     return effects().reply(toApi(state));
   }
 
-  private ShipOrderEntity.ShipOrderCreated eventFor(ShipOrderEntity.ShipOrderState state, ShipOrderApi.CreateShipOrderCommand command) {
+  static ShipOrderEntity.ShipOrderCreated eventFor(ShipOrderEntity.ShipOrderState state, ShipOrderApi.CreateShipOrderCommand command) {
     return ShipOrderEntity.ShipOrderCreated
         .newBuilder()
         .setOrderId(command.getOrderId())
@@ -103,7 +108,7 @@ public class ShipOrder extends AbstractShipOrder {
         .build();
   }
 
-  private List<?> eventsFor(ShipOrderEntity.ShipOrderState state, ShipOrderApi.ShippedOrderItemCommand command) {
+  static List<?> eventsFor(ShipOrderEntity.ShipOrderState state, ShipOrderApi.ShippedOrderItemCommand command) {
     var orderItemShipped = ShipOrderEntity.OrderItemShipped
         .newBuilder()
         .setOrderId(command.getOrderId())
@@ -115,20 +120,47 @@ public class ShipOrder extends AbstractShipOrder {
 
     var updatedState = updateStateFor(state, orderItemShipped);
 
-    if (updatedState.getShippedUtc() != null && updatedState.getShippedUtc().getSeconds() > 0) {
+    var isSkuItemShipped = areAllSkuOrderItemsShipped(updatedState, command.getSkuId());
+    var isOrderShipped = areAllOrderItemsShipped(updatedState);
+
+    if (isSkuItemShipped && isOrderShipped) {
+      var orderSkuShipped = ShipOrderEntity.OrderSkuShipped
+          .newBuilder()
+          .setOrderId(command.getOrderId())
+          .setSkuId(command.getSkuId())
+          .setShippedUtc(command.getShippedUtc())
+          .build();
+
       var orderShipped = ShipOrderEntity.OrderShipped
           .newBuilder()
           .setOrderId(command.getOrderId())
-          .setShippedUtc(updatedState.getShippedUtc())
+          .setShippedUtc(command.getShippedUtc())
           .build();
 
-      return List.of(orderShipped, orderItemShipped);
+      return List.of(orderItemShipped, orderSkuShipped, orderShipped); // order of events is important
+    } else if (isSkuItemShipped) {
+      var orderSkuShipped = ShipOrderEntity.OrderSkuShipped
+          .newBuilder()
+          .setOrderId(command.getOrderId())
+          .setSkuId(command.getSkuId())
+          .setShippedUtc(command.getShippedUtc())
+          .build();
+
+      return List.of(orderItemShipped, orderSkuShipped); // order of events is important
+    } else if (isOrderShipped) {
+      var orderShipped = ShipOrderEntity.OrderShipped
+          .newBuilder()
+          .setOrderId(command.getOrderId())
+          .setShippedUtc(command.getShippedUtc())
+          .build();
+
+      return List.of(orderItemShipped, orderShipped); // order of events is important
     } else {
       return List.of(orderItemShipped);
     }
   }
 
-  private List<ShipOrderEntity.OrderItem> toAllOrderItems(List<ShipOrderApi.OrderItemFromOrder> orderItems) {
+  static List<ShipOrderEntity.OrderItem> toAllOrderItems(List<ShipOrderApi.OrderItemFromOrder> orderItems) {
     return orderItems.stream()
         .map(item -> ShipOrderEntity.OrderItem
             .newBuilder()
@@ -140,7 +172,7 @@ public class ShipOrder extends AbstractShipOrder {
         .collect(Collectors.toList());
   }
 
-  private List<ShipOrderEntity.ShipOrderItems> toAllShipOrderItems(List<ShipOrderApi.OrderItemFromOrder> orderItems) {
+  static List<ShipOrderEntity.ShipOrderItems> toAllShipOrderItems(List<ShipOrderApi.OrderItemFromOrder> orderItems) {
     return orderItems.stream()
         .map(item -> ShipOrderEntity.ShipOrderItems
             .newBuilder()
@@ -153,12 +185,12 @@ public class ShipOrder extends AbstractShipOrder {
         .collect(Collectors.toList());
   }
 
-  private List<ShipOrderEntity.ShipOrderItem> toAllEntityShipOrderItems(ShipOrderApi.OrderItemFromOrder orderItem) {
+  static List<ShipOrderEntity.ShipOrderItem> toAllEntityShipOrderItems(ShipOrderApi.OrderItemFromOrder orderItem) {
     return toShipOrderItems(orderItem)
         .collect(Collectors.toList());
   }
 
-  private Stream<ShipOrderEntity.ShipOrderItem> toShipOrderItems(ShipOrderApi.OrderItemFromOrder orderItem) {
+  static Stream<ShipOrderEntity.ShipOrderItem> toShipOrderItems(ShipOrderApi.OrderItemFromOrder orderItem) {
     return IntStream.range(0, orderItem.getQuantity())
         .mapToObj(i -> ShipOrderEntity.ShipOrderItem
             .newBuilder()
@@ -168,18 +200,19 @@ public class ShipOrder extends AbstractShipOrder {
             .build());
   }
 
-  private ShipOrderApi.ShipOrder toApi(ShipOrderEntity.ShipOrderState state) {
+  static ShipOrderApi.ShipOrder toApi(ShipOrderEntity.ShipOrderState state) {
     return ShipOrderApi.ShipOrder
         .newBuilder()
         .setOrderId(state.getOrderId())
         .setCustomerId(state.getCustomerId())
         .setOrderedUtc(state.getOrderedUtc())
+        .setShippedUtc(state.getShippedUtc())
         .addAllOrderItems(toOrderItems(state.getOrderItemsList()))
         .addAllShipOrderItems(toShipOrderItems(state.getShipOrderItemsList()))
         .build();
   }
 
-  private List<ShipOrderApi.OrderItemFromOrder> toOrderItems(List<ShipOrderEntity.OrderItem> orderItems) {
+  static List<ShipOrderApi.OrderItemFromOrder> toOrderItems(List<ShipOrderEntity.OrderItem> orderItems) {
     return orderItems.stream()
         .map(item -> ShipOrderApi.OrderItemFromOrder
             .newBuilder()
@@ -191,7 +224,7 @@ public class ShipOrder extends AbstractShipOrder {
         .collect(Collectors.toList());
   }
 
-  private List<ShipOrderApi.ShipOrderItems> toShipOrderItems(List<ShipOrderEntity.ShipOrderItems> shipOrderItems) {
+  static List<ShipOrderApi.ShipOrderItems> toShipOrderItems(List<ShipOrderEntity.ShipOrderItems> shipOrderItems) {
     return shipOrderItems.stream()
         .map(item -> ShipOrderApi.ShipOrderItems
             .newBuilder()
@@ -204,7 +237,7 @@ public class ShipOrder extends AbstractShipOrder {
         .collect(Collectors.toList());
   }
 
-  private List<ShipOrderApi.ShipOrderItem> toShipOrderItemsList(List<ShipOrderEntity.ShipOrderItem> shipOrderItems) {
+  static List<ShipOrderApi.ShipOrderItem> toShipOrderItemsList(List<ShipOrderEntity.ShipOrderItem> shipOrderItems) {
     return shipOrderItems.stream()
         .map(item -> ShipOrderApi.ShipOrderItem
             .newBuilder()
@@ -216,23 +249,48 @@ public class ShipOrder extends AbstractShipOrder {
         .collect(Collectors.toList());
   }
 
-  private ShipOrderEntity.ShipOrderState updateStateFor(ShipOrderEntity.ShipOrderState state, ShipOrderEntity.OrderItemShipped event) {
-    var updatedOrderItemsList = updateOrderItemsList(state.getShipOrderItemsList(), event);
-
-    var orderShipped = updatedOrderItemsList.stream()
-        .filter(item -> item.getShippedUtc() == null && item.getShippedUtc().getSeconds() == 0)
-        .findFirst()
-        .isEmpty();
-
-    return ShipOrderEntity.ShipOrderState
-        .newBuilder()
-        .setShippedUtc(orderShipped ? timestampNow() : state.getShippedUtc())
+  static ShipOrderEntity.ShipOrderState updateStateFor(ShipOrderEntity.ShipOrderState state, ShipOrderEntity.OrderSkuShipped event) {
+    var orderItemsList = state.getOrderItemsList().stream()
+        .map(item -> {
+          if (item.getSkuId().equals(event.getSkuId())) {
+            return item.toBuilder()
+                .setShippedUtc(event.getShippedUtc())
+                .build();
+          } else {
+            return item;
+          }
+        })
+        .collect(Collectors.toList());
+    var shipOrderItemsList = state.getShipOrderItemsList().stream()
+        .map(item -> {
+          if (item.getSkuId().equals(event.getSkuId())) {
+            return item.toBuilder()
+                .setShippedUtc(event.getShippedUtc())
+                .build();
+          } else {
+            return item;
+          }
+        })
+        .collect(Collectors.toList());
+    return state.toBuilder()
+        .clearOrderItems()
+        .addAllOrderItems(orderItemsList)
         .clearShipOrderItems()
-        .addAllShipOrderItems(updatedOrderItemsList)
+        .addAllShipOrderItems(shipOrderItemsList)
         .build();
   }
 
-  private List<ShipOrderEntity.ShipOrderItems> updateOrderItemsList(List<ShipOrderEntity.ShipOrderItems> shipOrderItemsList, ShipOrderEntity.OrderItemShipped event) {
+  static ShipOrderEntity.ShipOrderState updateStateFor(ShipOrderEntity.ShipOrderState state, ShipOrderEntity.OrderItemShipped event) {
+    var updatedShipOrderItemsList = updateShipOrderItemsList(state.getShipOrderItemsList(), event);
+
+    return state
+        .toBuilder()
+        .clearShipOrderItems()
+        .addAllShipOrderItems(updatedShipOrderItemsList)
+        .build();
+  }
+
+  static List<ShipOrderEntity.ShipOrderItems> updateShipOrderItemsList(List<ShipOrderEntity.ShipOrderItems> shipOrderItemsList, ShipOrderEntity.OrderItemShipped event) {
     return shipOrderItemsList.stream()
         .map(shipOrderItems -> {
           if (shipOrderItems.getSkuId().equals(event.getSkuId())) {
@@ -244,7 +302,7 @@ public class ShipOrder extends AbstractShipOrder {
         .collect(Collectors.toList());
   }
 
-  private ShipOrderEntity.ShipOrderItems updateShipOrderItemList(ShipOrderEntity.ShipOrderItems shipOrderItems, ShipOrderEntity.OrderItemShipped event) {
+  static ShipOrderEntity.ShipOrderItems updateShipOrderItemList(ShipOrderEntity.ShipOrderItems shipOrderItems, ShipOrderEntity.OrderItemShipped event) {
     var updatedList = shipOrderItems.getShipOrderItemsList().stream()
         .map(shipOrderItem -> {
           if (shipOrderItem.getOrderItemId().equals(event.getOrderItemId())) {
@@ -265,9 +323,9 @@ public class ShipOrder extends AbstractShipOrder {
         .build();
   }
 
-  private Timestamp updateShippedUtc(List<ShipOrderEntity.ShipOrderItem> updatedList, Timestamp notShippedUtc, Timestamp shippedUtc) {
+  static Timestamp updateShippedUtc(List<ShipOrderEntity.ShipOrderItem> updatedList, Timestamp notShippedUtc, Timestamp shippedUtc) {
     var notAllShipped = updatedList.stream()
-        .filter(shipOrderItem -> shipOrderItem.getShippedUtc() == null || shipOrderItem.getShippedUtc().getSeconds() == 0)
+        .filter(shipOrderItem -> isNotShipped(shipOrderItem.getShippedUtc()))
         .findFirst()
         .isPresent();
     if (notAllShipped) {
@@ -277,6 +335,22 @@ public class ShipOrder extends AbstractShipOrder {
     }
   }
 
+  static boolean areAllOrderItemsShipped(ShipOrderEntity.ShipOrderState state) {
+    return state.getShipOrderItemsList().stream()
+        .flatMap(mapper -> mapper.getShipOrderItemsList().stream())
+        .filter(item -> isNotShipped(item.getShippedUtc()))
+        .findFirst()
+        .isEmpty();
+  }
+
+  static boolean areAllSkuOrderItemsShipped(ShipOrderEntity.ShipOrderState state, String skuId) {
+    return state.getShipOrderItemsList().stream()
+        .flatMap(mapper -> mapper.getShipOrderItemsList().stream())
+        .filter(item -> item.getSkuId().equals(skuId) && isNotShipped(item.getShippedUtc()))
+        .findFirst()
+        .isEmpty();
+  }
+
   static Timestamp timestampNow() {
     var now = Instant.now();
     return Timestamp
@@ -284,5 +358,21 @@ public class ShipOrder extends AbstractShipOrder {
         .setSeconds(now.getEpochSecond())
         .setNanos(now.getNano())
         .build();
+  }
+
+  static Timestamp timestampZero() {
+    return Timestamp
+        .newBuilder()
+        .setSeconds(0)
+        .setNanos(0)
+        .build();
+  }
+
+  static boolean isShipped(Timestamp shippedUtc) {
+    return shippedUtc != null && shippedUtc.getSeconds() != 0;
+  }
+
+  static boolean isNotShipped(Timestamp shippedUtc) {
+    return shippedUtc == null || shippedUtc.getSeconds() == 0;
   }
 }

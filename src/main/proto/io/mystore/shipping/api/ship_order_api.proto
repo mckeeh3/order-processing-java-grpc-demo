@@ -18,6 +18,7 @@ service ShipOrderService {
       events: [
         "io.mystore.shipping.entity.ShipOrderCreated",
         "io.mystore.shipping.entity.OrderShipped",
+        "io.mystore.shipping.entity.OrderSkuShipped",
         "io.mystore.shipping.entity.OrderItemShipped"  //
       ]
     }
