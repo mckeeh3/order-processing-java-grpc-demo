@@ -27,7 +27,7 @@ public class ShipOrderToShipOrderItemAction extends AbstractShipOrderToShipOrder
   public Effect<Empty> onShipOrderCreated(ShipOrderEntity.ShipOrderCreated shipOrderCreated) {
     var results = shipOrderCreated.getShipOrderItemsList().stream()
         .flatMap(shipOrderItems -> toShipOrderItems(shipOrderCreated, shipOrderItems))
-        .map(shipOrderItem -> components().shipOrderItem().createShipOrderItem(shipOrderItem).execute())
+        .map(shipOrderItem -> components().shipOrderItem().createOrderItem(shipOrderItem).execute())
         .collect(Collectors.toList());
 
     var result = CompletableFuture.allOf(results.toArray(new CompletableFuture[results.size()]))
@@ -36,9 +36,9 @@ public class ShipOrderToShipOrderItemAction extends AbstractShipOrderToShipOrder
     return effects().asyncEffect(result);
   }
 
-  private Stream<ShipOrderItemApi.CreateShipOrderItemCommand> toShipOrderItems(ShipOrderCreated shipOrderCreated, ShipOrderItems shipOrderItems) {
+  private Stream<ShipOrderItemApi.CreateOrderItemCommand> toShipOrderItems(ShipOrderCreated shipOrderCreated, ShipOrderItems shipOrderItems) {
     return shipOrderItems.getShipOrderItemsList().stream()
-        .map(shipOrderItem -> ShipOrderItemApi.CreateShipOrderItemCommand
+        .map(shipOrderItem -> ShipOrderItemApi.CreateOrderItemCommand
             .newBuilder()
             .setCustomerId(shipOrderCreated.getCustomerId())
             .setOrderId(shipOrderCreated.getOrderId())

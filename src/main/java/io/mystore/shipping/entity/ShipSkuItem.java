@@ -11,8 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.mystore.shipping.api.ShipSkuItemApi;
-import io.mystore.shipping.api.ShipSkuItemApi.AddOrderItemToSkuItem;
-import io.mystore.shipping.entity.ShipSkuItemEntity.SkuItemState;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
 //
@@ -31,12 +29,12 @@ public class ShipSkuItem extends AbstractShipSkuItem {
   }
 
   @Override
-  public Effect<Empty> createSkuItem(ShipSkuItemEntity.SkuItemState state, ShipSkuItemApi.CreateSkuItemFromStock command) {
+  public Effect<Empty> createSkuItem(ShipSkuItemEntity.SkuItemState state, ShipSkuItemApi.CreateSkuItemCommand command) {
     return reject(state, command).orElseGet(() -> handle(state, command));
   }
 
   @Override
-  public Effect<Empty> addOrderItem(ShipSkuItemEntity.SkuItemState state, ShipSkuItemApi.AddOrderItemToSkuItem command) {
+  public Effect<Empty> joinToOrderItem(ShipSkuItemEntity.SkuItemState state, ShipSkuItemApi.JoinToOrderItemCommand command) {
     log.info("state.orderItemId {}, AddOrderItemToSkuItem.orderItemId {}",
         state.getOrderItemId().isEmpty() ? "(empty)" : state.getOrderItemId(), command.getOrderItemId());
     return reject(state, command).orElseGet(() -> handle(state, command));
@@ -83,30 +81,30 @@ public class ShipSkuItem extends AbstractShipSkuItem {
     }
   }
 
-  private Optional<Effect<Empty>> reject(ShipSkuItemEntity.SkuItemState state, ShipSkuItemApi.CreateSkuItemFromStock command) {
+  private Optional<Effect<Empty>> reject(ShipSkuItemEntity.SkuItemState state, ShipSkuItemApi.CreateSkuItemCommand command) {
     if (!state.getOrderItemId().isEmpty()) {
       return Optional.of(effects().error("skuItem is not available"));
     }
     return Optional.empty();
   }
 
-  private Optional<Effect<Empty>> reject(SkuItemState state, AddOrderItemToSkuItem command) {
+  private Optional<Effect<Empty>> reject(ShipSkuItemEntity.SkuItemState state, ShipSkuItemApi.JoinToOrderItemCommand command) {
     if (!state.getOrderItemId().isEmpty() && !state.getOrderItemId().equals(command.getOrderItemId())) {
       return Optional.of(effects().error("skuItem is not available"));
     }
     return Optional.empty();
   }
 
-  private Effect<Empty> handle(ShipSkuItemEntity.SkuItemState state, ShipSkuItemApi.CreateSkuItemFromStock command) {
-    log.info("state: {}, CreateSkuItemFromStock: {}", state, command);
+  private Effect<Empty> handle(ShipSkuItemEntity.SkuItemState state, ShipSkuItemApi.CreateSkuItemCommand command) {
+    log.info("state: {}, CreateSkuItemCommand: {}", state, command);
 
     return effects()
         .emitEvent(eventFor(state, command))
         .thenReply(newState -> Empty.getDefaultInstance());
   }
 
-  private Effect<Empty> handle(ShipSkuItemEntity.SkuItemState state, ShipSkuItemApi.AddOrderItemToSkuItem command) {
-    log.info("state: {}, AddOrderItemToSkuItem: {}", state, command);
+  private Effect<Empty> handle(ShipSkuItemEntity.SkuItemState state, ShipSkuItemApi.JoinToOrderItemCommand command) {
+    log.info("state: {}, JoinToOrderItemCommand: {}", state, command);
 
     if (state.getOrderItemId().equals(command.getOrderItemId())) {
       return effects().reply(Empty.getDefaultInstance()); // already added, idempotent
@@ -125,7 +123,7 @@ public class ShipSkuItem extends AbstractShipSkuItem {
         .thenReply(newState -> Empty.getDefaultInstance());
   }
 
-  private ShipSkuItemEntity.SkuItemCreated eventFor(ShipSkuItemEntity.SkuItemState state, ShipSkuItemApi.CreateSkuItemFromStock command) {
+  private ShipSkuItemEntity.SkuItemCreated eventFor(ShipSkuItemEntity.SkuItemState state, ShipSkuItemApi.CreateSkuItemCommand command) {
     return ShipSkuItemEntity.SkuItemCreated
         .newBuilder()
         .setSkuId(command.getSkuId())
@@ -134,7 +132,7 @@ public class ShipSkuItem extends AbstractShipSkuItem {
         .build();
   }
 
-  private ShipSkuItemEntity.OrderItemAdded eventFor(ShipSkuItemEntity.SkuItemState state, ShipSkuItemApi.AddOrderItemToSkuItem command) {
+  private ShipSkuItemEntity.OrderItemAdded eventFor(ShipSkuItemEntity.SkuItemState state, ShipSkuItemApi.JoinToOrderItemCommand command) {
     return ShipSkuItemEntity.OrderItemAdded
         .newBuilder()
         .setSkuItemId(command.getSkuItemId())

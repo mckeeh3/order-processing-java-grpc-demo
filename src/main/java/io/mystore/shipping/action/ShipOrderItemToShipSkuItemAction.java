@@ -63,8 +63,8 @@ public class ShipOrderItemToShipSkuItemAction extends AbstractShipOrderItemToShi
 
   private CompletionStage<Empty> requestShipSkuItem(
       ShipOrderItemEntity.SkuItemRequired skuItemRequired, AvailableShipSkuItemsModel.ShipSkuItem shipSkuItem) {
-    return components().shipSkuItem().addOrderItem(
-        ShipSkuItemApi.AddOrderItemToSkuItem
+    return components().shipSkuItem().joinToOrderItem(
+        ShipSkuItemApi.JoinToOrderItemCommand
             .newBuilder()
             .setOrderId(skuItemRequired.getOrderId())
             .setOrderItemId(skuItemRequired.getOrderItemId())

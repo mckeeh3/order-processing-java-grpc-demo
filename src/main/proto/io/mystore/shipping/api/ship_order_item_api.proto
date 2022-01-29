@@ -12,7 +12,7 @@ option java_outer_classname = "ShipOrderItemApi";
 service ShipOrderItemService {
   option (akkaserverless.codegen) = {
     event_sourced_entity: {
-      name: "io.mystore.shipping.entity.ShipOrderItem"  //
+      name: "io.mystore.shipping.entity.ShipOrderItem"
       entity_type: "ship_order_item"
       state: "io.mystore.shipping.entity.OrderItemState"
       events: [
@@ -25,14 +25,14 @@ service ShipOrderItemService {
     }
   };
 
-  rpc CreateShipOrderItem(CreateShipOrderItemCommand) returns (google.protobuf.Empty) {
+  rpc CreateOrderItem(CreateOrderItemCommand) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       post: "/ship-order-items/{order_item_id}/add-order-item"
       body: "*"
     };
   }
 
-  rpc AddSkuItemToOrder(JoinSkuItemToOrderItem) returns (google.protobuf.Empty) {
+  rpc JoinToSkuItem(JoinToSkuItemCommand) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       put: "/ship-order-items/{order_item_id}/add-sku-item-to-order"
       body: "*"
@@ -60,7 +60,7 @@ service ShipOrderItemService {
   }
 }
 
-message CreateShipOrderItemCommand {
+message CreateOrderItemCommand {
   string customer_id = 1;
   string order_id = 2;
   string order_item_id = 3 [(akkaserverless.field).entity_key = true];
@@ -80,7 +80,7 @@ message OrderItem {
   google.protobuf.Timestamp back_ordered_utc = 8;
 }
 
-message JoinSkuItemToOrderItem {
+message JoinToSkuItemCommand {
   string order_item_id = 1 [(akkaserverless.field).entity_key = true];
   string sku_item_id = 2;
   google.protobuf.Timestamp shipped_utc = 3;

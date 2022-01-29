@@ -30,12 +30,12 @@ public class ShipOrderItem extends AbstractShipOrderItem {
   }
 
   @Override
-  public Effect<Empty> createShipOrderItem(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.CreateShipOrderItemCommand command) {
+  public Effect<Empty> createOrderItem(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.CreateOrderItemCommand command) {
     return handle(state, command);
   }
 
   @Override
-  public Effect<Empty> addSkuItemToOrder(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.JoinSkuItemToOrderItem command) {
+  public Effect<Empty> joinToSkuItem(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.JoinToSkuItemCommand command) {
     return handle(state, command);
   }
 
@@ -103,16 +103,16 @@ public class ShipOrderItem extends AbstractShipOrderItem {
     return Optional.empty();
   }
 
-  private Effect<Empty> handle(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.CreateShipOrderItemCommand command) {
-    log.info("state: {}, CreateShipOrderItemCommand: {}", state, command);
+  private Effect<Empty> handle(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.CreateOrderItemCommand command) {
+    log.info("state: {}, CreateOrderItemCommand: {}", state, command);
 
     return effects()
         .emitEvents(eventsFor(state, command))
         .thenReply(newState -> Empty.getDefaultInstance());
   }
 
-  private Effect<Empty> handle(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.JoinSkuItemToOrderItem command) {
-    log.info("state: {}, JoinSkuItemToOrderItem: {}", state, command);
+  private Effect<Empty> handle(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.JoinToSkuItemCommand command) {
+    log.info("state: {}, JoinToSkuItemCommand: {}", state, command);
 
     if (state.getSkuItemId().isEmpty()) {
       return effects()
@@ -162,7 +162,7 @@ public class ShipOrderItem extends AbstractShipOrderItem {
             .build());
   }
 
-  private List<?> eventsFor(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.CreateShipOrderItemCommand command) {
+  private List<?> eventsFor(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.CreateOrderItemCommand command) {
     var orderItemCreated = ShipOrderItemEntity.OrderItemCreated
         .newBuilder()
         .setCustomerId(command.getCustomerId())
@@ -183,7 +183,7 @@ public class ShipOrderItem extends AbstractShipOrderItem {
     return List.of(orderItemCreated, shipSkuItemRequired);
   }
 
-  private ShipOrderItemEntity.JoinedSkuItemToOrderItem eventFor(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.JoinSkuItemToOrderItem command) {
+  private ShipOrderItemEntity.JoinedSkuItemToOrderItem eventFor(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.JoinToSkuItemCommand command) {
     return ShipOrderItemEntity.JoinedSkuItemToOrderItem
         .newBuilder()
         .setOrderId(state.getOrderId())
@@ -210,7 +210,7 @@ public class ShipOrderItem extends AbstractShipOrderItem {
         .build();
   }
 
-  private ShipOrderItemEntity.SkuItemReleasedFromOrder eventForReleaseSkuItem(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.JoinSkuItemToOrderItem command) {
+  private ShipOrderItemEntity.SkuItemReleasedFromOrder eventForReleaseSkuItem(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.JoinToSkuItemCommand command) {
     return ShipOrderItemEntity.SkuItemReleasedFromOrder
         .newBuilder()
         .setOrderId(state.getOrderId())

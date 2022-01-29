@@ -23,16 +23,16 @@ service ShipSkuItemService {
     }
   };
 
-  rpc CreateSkuItem(CreateSkuItemFromStock) returns (google.protobuf.Empty) {
+  rpc CreateSkuItem(CreateSkuItemCommand) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      post: "/sku-items/{sku_item_id}/add-sku-item"
+      post: "/sku-items/{sku_item_id}/create-sku-item"
       body: "*"
     };
   }
 
-  rpc AddOrderItem(AddOrderItemToSkuItem) returns (google.protobuf.Empty) {
+  rpc JoinToOrderItem(JoinToOrderItemCommand) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      put: "/sku-items/{sku_item_id}/add-ship-order-item"
+      put: "/sku-items/{sku_item_id}/join-to-order-item"
       body: "*"
     };
   }
@@ -45,13 +45,13 @@ service ShipSkuItemService {
   }
 }
 
-message CreateSkuItemFromStock {
+message CreateSkuItemCommand {
   string sku_item_id = 1 [(akkaserverless.field).entity_key = true];
   string sku_id = 2;
   string sku_name = 3;
 }
 
-message AddOrderItemToSkuItem {
+message JoinToOrderItemCommand {
   string sku_item_id = 1 [(akkaserverless.field).entity_key = true];
   string order_id = 2;
   string order_item_id = 3;

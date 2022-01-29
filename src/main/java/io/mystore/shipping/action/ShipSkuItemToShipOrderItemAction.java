@@ -34,7 +34,7 @@ public class ShipSkuItemToShipOrderItemAction extends AbstractShipSkuItemToShipO
 
   @Override
   public Effect<Empty> onShipOrderItemAdded(ShipSkuItemEntity.OrderItemAdded shipOrderItemAdded) {
-    return effects().forward(components().shipOrderItem().addSkuItemToOrder(toJoinSkuItemToOrderItem(shipOrderItemAdded)));
+    return effects().forward(components().shipOrderItem().joinToSkuItem(toJoinToSkuItemCommand(shipOrderItemAdded)));
   }
 
   @Override
@@ -75,8 +75,8 @@ public class ShipSkuItemToShipOrderItemAction extends AbstractShipSkuItemToShipO
         .build();
   }
 
-  private ShipOrderItemApi.JoinSkuItemToOrderItem toJoinSkuItemToOrderItem(ShipSkuItemEntity.OrderItemAdded shipOrderItemAdded) {
-    return ShipOrderItemApi.JoinSkuItemToOrderItem
+  private ShipOrderItemApi.JoinToSkuItemCommand toJoinToSkuItemCommand(ShipSkuItemEntity.OrderItemAdded shipOrderItemAdded) {
+    return ShipOrderItemApi.JoinToSkuItemCommand
         .newBuilder()
         .setOrderItemId(shipOrderItemAdded.getOrderItemId())
         .setSkuItemId(shipOrderItemAdded.getSkuItemId())
