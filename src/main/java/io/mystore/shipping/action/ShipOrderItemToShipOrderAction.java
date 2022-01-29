@@ -22,10 +22,10 @@ public class ShipOrderItemToShipOrderAction extends AbstractShipOrderItemToShipO
   }
 
   @Override
-  public Effect<Empty> onJoinedSkuItemToOrderItem(ShipOrderItemEntity.JoinedSkuItemToOrderItem joinedSkuItemToOrderItem) {
-    log.info("onJoinedSkuItemToOrderItem: JoinedSkuItemToOrderItem {}", joinedSkuItemToOrderItem);
+  public Effect<Empty> onJoinedToSkuItem(ShipOrderItemEntity.JoinedToSkuItem joinedToSkuItem) {
+    log.info("onJoinedToSkuItem: JoinedToSkuItem {}", joinedToSkuItem);
 
-    return effects().forward(components().shipOrder().shippedOrderItem(toShippedOrderItemCommand(joinedSkuItemToOrderItem)));
+    return effects().forward(components().shipOrder().shippedOrderItem(toJoinedToSkuItem(joinedToSkuItem)));
   }
 
   @Override
@@ -33,14 +33,14 @@ public class ShipOrderItemToShipOrderAction extends AbstractShipOrderItemToShipO
     return effects().reply(Empty.getDefaultInstance());
   }
 
-  private ShipOrderApi.ShippedOrderItemCommand toShippedOrderItemCommand(ShipOrderItemEntity.JoinedSkuItemToOrderItem joinedSkuItemToOrderItem) {
+  private ShipOrderApi.ShippedOrderItemCommand toJoinedToSkuItem(ShipOrderItemEntity.JoinedToSkuItem joinedToSkuItem) {
     return ShipOrderApi.ShippedOrderItemCommand
         .newBuilder()
-        .setOrderId(joinedSkuItemToOrderItem.getOrderId())
-        .setOrderItemId(joinedSkuItemToOrderItem.getOrderItemId())
-        .setSkuId(joinedSkuItemToOrderItem.getSkuId())
-        .setSkuItemId(joinedSkuItemToOrderItem.getSkuItemId())
-        .setShippedUtc(joinedSkuItemToOrderItem.getShippedUtc())
+        .setOrderId(joinedToSkuItem.getOrderId())
+        .setOrderItemId(joinedToSkuItem.getOrderItemId())
+        .setSkuId(joinedToSkuItem.getSkuId())
+        .setSkuItemId(joinedToSkuItem.getSkuItemId())
+        .setShippedUtc(joinedToSkuItem.getShippedUtc())
         .build();
   }
 }

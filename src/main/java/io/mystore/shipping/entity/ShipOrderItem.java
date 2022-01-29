@@ -74,7 +74,7 @@ public class ShipOrderItem extends AbstractShipOrderItem {
   }
 
   @Override
-  public ShipOrderItemEntity.OrderItemState joinedSkuItemToOrderItem(ShipOrderItemEntity.OrderItemState state, ShipOrderItemEntity.JoinedSkuItemToOrderItem event) {
+  public ShipOrderItemEntity.OrderItemState joinedToSkuItem(ShipOrderItemEntity.OrderItemState state, ShipOrderItemEntity.JoinedToSkuItem event) {
     return state
         .toBuilder()
         .setSkuItemId(event.getSkuItemId())
@@ -183,8 +183,8 @@ public class ShipOrderItem extends AbstractShipOrderItem {
     return List.of(orderItemCreated, shipSkuItemRequired);
   }
 
-  private ShipOrderItemEntity.JoinedSkuItemToOrderItem eventFor(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.JoinToSkuItemCommand command) {
-    return ShipOrderItemEntity.JoinedSkuItemToOrderItem
+  private ShipOrderItemEntity.JoinedToSkuItem eventFor(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.JoinToSkuItemCommand command) {
+    return ShipOrderItemEntity.JoinedToSkuItem
         .newBuilder()
         .setOrderId(state.getOrderId())
         .setOrderItemId(state.getOrderItemId())

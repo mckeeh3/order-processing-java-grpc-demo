@@ -14,7 +14,7 @@ service ShipOrderItemToShipOrder {
     action: {}
   };
 
-  rpc OnJoinedSkuItemToOrderItem(shipping.entity.JoinedSkuItemToOrderItem) returns (google.protobuf.Empty) {
+  rpc OnJoinedToSkuItem(shipping.entity.JoinedToSkuItem) returns (google.protobuf.Empty) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "ship_order_item"
     };

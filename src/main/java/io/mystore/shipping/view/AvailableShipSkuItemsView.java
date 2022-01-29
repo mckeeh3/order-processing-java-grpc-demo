@@ -24,7 +24,7 @@ public class AvailableShipSkuItemsView extends AbstractAvailableShipSkuItemsView
   }
 
   @Override
-  public View.UpdateEffect<AvailableShipSkuItemsModel.ShipSkuItem> processSkuItemCreated(
+  public View.UpdateEffect<AvailableShipSkuItemsModel.ShipSkuItem> onSkuItemCreated(
       AvailableShipSkuItemsModel.ShipSkuItem state, ShipSkuItemEntity.SkuItemCreated skuItemCreated) {
     return effects()
         .updateState(
@@ -37,19 +37,19 @@ public class AvailableShipSkuItemsView extends AbstractAvailableShipSkuItemsView
   }
 
   @Override
-  public View.UpdateEffect<AvailableShipSkuItemsModel.ShipSkuItem> processShipOrderItemAdded(
-      AvailableShipSkuItemsModel.ShipSkuItem state, ShipSkuItemEntity.OrderItemAdded shipOrderItemAdded) {
+  public View.UpdateEffect<AvailableShipSkuItemsModel.ShipSkuItem> onJoinedToOrderItem(
+      AvailableShipSkuItemsModel.ShipSkuItem state, ShipSkuItemEntity.JoinedToOrderItem joinedToOrderItem) {
     return effects()
         .updateState(
             state
                 .toBuilder()
-                .setShippedUtc(shipOrderItemAdded.getShippedUtc())
+                .setShippedUtc(joinedToOrderItem.getShippedUtc())
                 .build());
   }
 
   @Override
-  public View.UpdateEffect<AvailableShipSkuItemsModel.ShipSkuItem> processReleasedSkuItemFromOrder(
-      AvailableShipSkuItemsModel.ShipSkuItem state, ShipSkuItemEntity.ReleasedSkuItemFromOrder releasedSkuItemFromOrder) {
+  public View.UpdateEffect<AvailableShipSkuItemsModel.ShipSkuItem> onReleasedFromOrderItem(
+      AvailableShipSkuItemsModel.ShipSkuItem state, ShipSkuItemEntity.ReleasedFromOrderItem releasedFromOrderItem) {
     return effects()
         .updateState(
             state

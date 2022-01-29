@@ -33,13 +33,13 @@ public class ShipSkuItemToShipOrderItemAction extends AbstractShipSkuItemToShipO
   }
 
   @Override
-  public Effect<Empty> onShipOrderItemAdded(ShipSkuItemEntity.OrderItemAdded shipOrderItemAdded) {
-    return effects().forward(components().shipOrderItem().joinToSkuItem(toJoinToSkuItemCommand(shipOrderItemAdded)));
+  public Effect<Empty> onJoinedToOrderItem(ShipSkuItemEntity.JoinedToOrderItem joinedToOrderItem) {
+    return effects().forward(components().shipOrderItem().joinToSkuItem(toJoinToSkuItem(joinedToOrderItem)));
   }
 
   @Override
-  public Effect<Empty> onReleaseOrderItemFromSkuItem(ShipSkuItemEntity.ReleasedSkuItemFromOrder releasedSkuItemFromOrder) {
-    return notifyBackOrderedOfAvailableSkuItem(releasedSkuItemFromOrder.getSkuId());
+  public Effect<Empty> onReleasedFromOrderItem(ShipSkuItemEntity.ReleasedFromOrderItem releasedFromOrderItem) {
+    return notifyBackOrderedOfAvailableSkuItem(releasedFromOrderItem.getSkuId());
   }
 
   @Override
@@ -75,12 +75,12 @@ public class ShipSkuItemToShipOrderItemAction extends AbstractShipSkuItemToShipO
         .build();
   }
 
-  private ShipOrderItemApi.JoinToSkuItemCommand toJoinToSkuItemCommand(ShipSkuItemEntity.OrderItemAdded shipOrderItemAdded) {
+  private ShipOrderItemApi.JoinToSkuItemCommand toJoinToSkuItem(ShipSkuItemEntity.JoinedToOrderItem joinedToOrderItem) {
     return ShipOrderItemApi.JoinToSkuItemCommand
         .newBuilder()
-        .setOrderItemId(shipOrderItemAdded.getOrderItemId())
-        .setSkuItemId(shipOrderItemAdded.getSkuItemId())
-        .setShippedUtc(shipOrderItemAdded.getShippedUtc())
+        .setOrderItemId(joinedToOrderItem.getOrderItemId())
+        .setSkuItemId(joinedToOrderItem.getSkuItemId())
+        .setShippedUtc(joinedToOrderItem.getShippedUtc())
         .build();
   }
 }

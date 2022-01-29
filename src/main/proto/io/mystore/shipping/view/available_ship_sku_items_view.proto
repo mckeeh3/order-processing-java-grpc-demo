@@ -27,7 +27,7 @@ service AvailableShipSkuItems {
     };
   }
 
-  rpc ProcessSkuItemCreated(entity.SkuItemCreated) returns (ShipSkuItem) {
+  rpc OnSkuItemCreated(entity.SkuItemCreated) returns (ShipSkuItem) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "ship_sku_item"
     };
@@ -37,7 +37,7 @@ service AvailableShipSkuItems {
     };
   }
 
-  rpc ProcessShipOrderItemAdded(entity.OrderItemAdded) returns (ShipSkuItem) {
+  rpc OnJoinedToOrderItem(entity.JoinedToOrderItem) returns (ShipSkuItem) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "ship_sku_item"
     };
@@ -47,7 +47,7 @@ service AvailableShipSkuItems {
     };
   }
 
-  rpc ProcessReleasedSkuItemFromOrder(entity.ReleasedSkuItemFromOrder) returns (ShipSkuItem) {
+  rpc OnReleasedFromOrderItem(entity.ReleasedFromOrderItem) returns (ShipSkuItem) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "ship_sku_item"
     };

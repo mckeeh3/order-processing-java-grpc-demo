@@ -20,13 +20,13 @@ service ShipSkuItemToShipOrderItem {
     };
   }
 
-  rpc OnShipOrderItemAdded(shipping.entity.OrderItemAdded) returns (google.protobuf.Empty) {
+  rpc OnJoinedToOrderItem(shipping.entity.JoinedToOrderItem) returns (google.protobuf.Empty) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "ship_sku_item"
     };
   }
 
-  rpc OnReleaseOrderItemFromSkuItem(shipping.entity.ReleasedSkuItemFromOrder) returns (google.protobuf.Empty) {
+  rpc OnReleasedFromOrderItem(shipping.entity.ReleasedFromOrderItem) returns (google.protobuf.Empty) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "ship_sku_item"
     };

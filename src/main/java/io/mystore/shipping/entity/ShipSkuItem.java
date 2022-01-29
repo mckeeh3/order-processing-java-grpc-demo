@@ -35,8 +35,6 @@ public class ShipSkuItem extends AbstractShipSkuItem {
 
   @Override
   public Effect<Empty> joinToOrderItem(ShipSkuItemEntity.SkuItemState state, ShipSkuItemApi.JoinToOrderItemCommand command) {
-    log.info("state.orderItemId {}, AddOrderItemToSkuItem.orderItemId {}",
-        state.getOrderItemId().isEmpty() ? "(empty)" : state.getOrderItemId(), command.getOrderItemId());
     return reject(state, command).orElseGet(() -> handle(state, command));
   }
 
@@ -58,7 +56,7 @@ public class ShipSkuItem extends AbstractShipSkuItem {
   }
 
   @Override
-  public ShipSkuItemEntity.SkuItemState orderItemAdded(ShipSkuItemEntity.SkuItemState state, ShipSkuItemEntity.OrderItemAdded event) {
+  public ShipSkuItemEntity.SkuItemState joinedToOrderItem(ShipSkuItemEntity.SkuItemState state, ShipSkuItemEntity.JoinedToOrderItem event) {
     return state
         .toBuilder()
         .setOrderId(event.getOrderId())
@@ -68,7 +66,7 @@ public class ShipSkuItem extends AbstractShipSkuItem {
   }
 
   @Override
-  public ShipSkuItemEntity.SkuItemState releasedSkuItemFromOrder(ShipSkuItemEntity.SkuItemState state, ShipSkuItemEntity.ReleasedSkuItemFromOrder event) {
+  public ShipSkuItemEntity.SkuItemState releasedFromOrderItem(ShipSkuItemEntity.SkuItemState state, ShipSkuItemEntity.ReleasedFromOrderItem event) {
     if (state.getOrderItemId().equals(event.getOrderItemId())) {
       return state
           .toBuilder()
@@ -132,8 +130,8 @@ public class ShipSkuItem extends AbstractShipSkuItem {
         .build();
   }
 
-  private ShipSkuItemEntity.OrderItemAdded eventFor(ShipSkuItemEntity.SkuItemState state, ShipSkuItemApi.JoinToOrderItemCommand command) {
-    return ShipSkuItemEntity.OrderItemAdded
+  private ShipSkuItemEntity.JoinedToOrderItem eventFor(ShipSkuItemEntity.SkuItemState state, ShipSkuItemApi.JoinToOrderItemCommand command) {
+    return ShipSkuItemEntity.JoinedToOrderItem
         .newBuilder()
         .setSkuItemId(command.getSkuItemId())
         .setOrderId(command.getOrderId())
@@ -142,8 +140,8 @@ public class ShipSkuItem extends AbstractShipSkuItem {
         .build();
   }
 
-  private ShipSkuItemEntity.ReleasedSkuItemFromOrder eventFor(ShipSkuItemEntity.SkuItemState state, ShipSkuItemApi.ReleaseOrderItemFromSkuItem command) {
-    return ShipSkuItemEntity.ReleasedSkuItemFromOrder
+  private ShipSkuItemEntity.ReleasedFromOrderItem eventFor(ShipSkuItemEntity.SkuItemState state, ShipSkuItemApi.ReleaseOrderItemFromSkuItem command) {
+    return ShipSkuItemEntity.ReleasedFromOrderItem
         .newBuilder()
         .setSkuId(command.getSkuId())
         .setSkuItemId(command.getSkuItemId())

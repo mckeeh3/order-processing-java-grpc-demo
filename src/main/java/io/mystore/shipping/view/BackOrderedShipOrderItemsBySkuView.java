@@ -23,7 +23,7 @@ public class BackOrderedShipOrderItemsBySkuView extends AbstractBackOrderedShipO
   }
 
   @Override
-  public View.UpdateEffect<ShipOrderItemModel.ShipOrderItem> processOrderItemCreated(
+  public View.UpdateEffect<ShipOrderItemModel.ShipOrderItem> onOrderItemCreated(
       ShipOrderItemModel.ShipOrderItem state, ShipOrderItemEntity.OrderItemCreated orderItemCreated) {
     return effects()
         .updateState(
@@ -37,8 +37,8 @@ public class BackOrderedShipOrderItemsBySkuView extends AbstractBackOrderedShipO
   }
 
   @Override
-  public View.UpdateEffect<ShipOrderItemModel.ShipOrderItem> onJoinedSkuItemToOrderItem(
-      ShipOrderItemModel.ShipOrderItem state, ShipOrderItemEntity.JoinedSkuItemToOrderItem joinedSkuItemToOrderItem) {
+  public View.UpdateEffect<ShipOrderItemModel.ShipOrderItem> onJoinedToSkuItem(
+      ShipOrderItemModel.ShipOrderItem state, ShipOrderItemEntity.JoinedToSkuItem joinedToSkuItem) {
     return effects()
         .updateState(
             state
@@ -48,7 +48,7 @@ public class BackOrderedShipOrderItemsBySkuView extends AbstractBackOrderedShipO
   }
 
   @Override
-  public View.UpdateEffect<ShipOrderItemModel.ShipOrderItem> processOrderItemBackOrdered(
+  public View.UpdateEffect<ShipOrderItemModel.ShipOrderItem> onOrderItemBackOrdered(
       ShipOrderItemModel.ShipOrderItem state, ShipOrderItemEntity.OrderItemBackOrdered orderItemBackOrdered) {
     return effects()
         .updateState(

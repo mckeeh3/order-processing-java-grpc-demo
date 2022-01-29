@@ -17,8 +17,8 @@ service ShipSkuItemService {
       state: "io.mystore.shipping.entity.SkuItemState"
       events: [
         "io.mystore.shipping.entity.SkuItemCreated",
-        "io.mystore.shipping.entity.OrderItemAdded",
-        "io.mystore.shipping.entity.ReleasedSkuItemFromOrder"  // force line breaks
+        "io.mystore.shipping.entity.JoinedToOrderItem",
+        "io.mystore.shipping.entity.ReleasedFromOrderItem"  // force line breaks
       ]
     }
   };

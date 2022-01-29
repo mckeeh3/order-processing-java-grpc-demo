@@ -37,7 +37,7 @@ service BackOrderedShipOrderItems {
     };
   }
 
-  rpc OnJoinedSkuItemToOrderItem(entity.JoinedSkuItemToOrderItem) returns (ShipOrderItem) {
+  rpc OnJoinedToSkuItem(entity.JoinedToSkuItem) returns (ShipOrderItem) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "ship_order_item"
     };

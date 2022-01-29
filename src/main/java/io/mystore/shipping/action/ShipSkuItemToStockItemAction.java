@@ -18,13 +18,13 @@ public class ShipSkuItemToStockItemAction extends AbstractShipSkuItemToStockItem
   }
 
   @Override
-  public Effect<Empty> onShipOrderItemAdded(ShipSkuItemEntity.OrderItemAdded shipOrderItemAdded) {
+  public Effect<Empty> onJoinedToOrderItem(ShipSkuItemEntity.JoinedToOrderItem shipOrderItemAdded) {
     return effects().forward(components().stockItem().ship(toStockItem(shipOrderItemAdded)));
   }
 
   @Override
-  public Effect<Empty> onReleasedSkuItemFromOrder(ShipSkuItemEntity.ReleasedSkuItemFromOrder releasedSkuItemFromOrder) {
-    return effects().forward(components().stockItem().release(toStockItem(releasedSkuItemFromOrder)));
+  public Effect<Empty> onReleasedFromOrderItem(ShipSkuItemEntity.ReleasedFromOrderItem releasedFromOrderItem) {
+    return effects().forward(components().stockItem().release(toStockItem(releasedFromOrderItem)));
   }
 
   @Override
@@ -32,22 +32,22 @@ public class ShipSkuItemToStockItemAction extends AbstractShipSkuItemToStockItem
     return effects().reply(Empty.getDefaultInstance());
   }
 
-  private StockItemApi.ShipStockItem toStockItem(ShipSkuItemEntity.OrderItemAdded shipOrderItemAdded) {
+  private StockItemApi.ShipStockItem toStockItem(ShipSkuItemEntity.JoinedToOrderItem joinedToOrderItem) {
     return StockItemApi.ShipStockItem
         .newBuilder()
-        .setSkuItemId(shipOrderItemAdded.getSkuItemId())
-        .setOrderId(shipOrderItemAdded.getOrderId())
-        .setOrderItemId(shipOrderItemAdded.getOrderItemId())
-        .setShippedUtc(shipOrderItemAdded.getShippedUtc())
+        .setSkuItemId(joinedToOrderItem.getSkuItemId())
+        .setOrderId(joinedToOrderItem.getOrderId())
+        .setOrderItemId(joinedToOrderItem.getOrderItemId())
+        .setShippedUtc(joinedToOrderItem.getShippedUtc())
         .build();
   }
 
-  private StockItemApi.ReleaseStockItem toStockItem(ShipSkuItemEntity.ReleasedSkuItemFromOrder releasedSkuItemFromOrder) {
+  private StockItemApi.ReleaseStockItem toStockItem(ShipSkuItemEntity.ReleasedFromOrderItem releasedFromOrderItem) {
     return StockItemApi.ReleaseStockItem
         .newBuilder()
-        .setSkuItemId(releasedSkuItemFromOrder.getSkuItemId())
-        .setOrderId(releasedSkuItemFromOrder.getOrderId())
-        .setOrderItemId(releasedSkuItemFromOrder.getOrderItemId())
+        .setSkuItemId(releasedFromOrderItem.getSkuItemId())
+        .setOrderId(releasedFromOrderItem.getOrderId())
+        .setOrderItemId(releasedFromOrderItem.getOrderItemId())
         .build();
   }
 }

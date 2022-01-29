@@ -18,7 +18,7 @@ service ShipOrderItemService {
       events: [
         "io.mystore.shipping.entity.OrderItemCreated",
         "io.mystore.shipping.entity.SkuItemRequired",
-        "io.mystore.shipping.entity.JoinedSkuItemToOrderItem",
+        "io.mystore.shipping.entity.JoinedToSkuItem",
         "io.mystore.shipping.entity.SkuItemReleasedFromOrder",
         "io.mystore.shipping.entity.OrderItemBackOrdered"  // force line breaks
       ]
@@ -27,14 +27,14 @@ service ShipOrderItemService {
 
   rpc CreateOrderItem(CreateOrderItemCommand) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      post: "/ship-order-items/{order_item_id}/add-order-item"
+      post: "/ship-order-items/{order_item_id}/create-order-item"
       body: "*"
     };
   }
 
   rpc JoinToSkuItem(JoinToSkuItemCommand) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      put: "/ship-order-items/{order_item_id}/add-sku-item-to-order"
+      put: "/ship-order-items/{order_item_id}/join-to-sku-item"
       body: "*"
     };
   }

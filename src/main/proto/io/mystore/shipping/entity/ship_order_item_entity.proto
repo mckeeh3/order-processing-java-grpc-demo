@@ -27,7 +27,7 @@ message OrderItemCreated {
   google.protobuf.Timestamp ordered_utc = 6;
 }
 
-message JoinedSkuItemToOrderItem {
+message JoinedToSkuItem {
   string order_id = 1;
   string order_item_id = 2;
   string sku_id = 3;

@@ -21,14 +21,14 @@ message SkuItemCreated {
   string sku_name = 3;
 }
 
-message OrderItemAdded {
+message JoinedToOrderItem {
   string sku_item_id = 1;
   string order_id = 2;
   string order_item_id = 3;
   google.protobuf.Timestamp shipped_utc = 4;
 }
 
-message ReleasedSkuItemFromOrder {
+message ReleasedFromOrderItem {
   string sku_id = 1;
   string sku_item_id = 2;
   string order_id = 3;
