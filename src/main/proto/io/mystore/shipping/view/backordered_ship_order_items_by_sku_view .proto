@@ -5,7 +5,6 @@ package io.mystore.shipping.view;
 import "akkaserverless/annotations.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/any.proto";
-import "google/protobuf/timestamp.proto";
 import "io/mystore/shipping/view/ship_order_item.proto";
 import "io/mystore/shipping/entity/ship_order_item_entity.proto";
 

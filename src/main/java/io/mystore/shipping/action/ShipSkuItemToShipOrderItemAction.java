@@ -32,6 +32,7 @@ public class ShipSkuItemToShipOrderItemAction extends AbstractShipSkuItemToShipO
 
   @Override
   public Effect<Empty> onSkuItemCreated(ShipSkuItemEntity.SkuItemCreated skuItemCreated) {
+    log.info("onSkuItemCreated: {}", skuItemCreated);
     return notifySkuItemOfBackOrderedOrderItem(skuItemCreated.getSkuId(), skuItemCreated.getSkuItemId());
   }
 
@@ -42,6 +43,7 @@ public class ShipSkuItemToShipOrderItemAction extends AbstractShipSkuItemToShipO
 
   @Override
   public Effect<Empty> onReleasedFromOrderItem(ShipSkuItemEntity.ReleasedFromOrderItem releasedFromOrderItem) {
+    log.info("onReleasedFromOrderItem: {}", releasedFromOrderItem);
     return notifySkuItemOfBackOrderedOrderItem(releasedFromOrderItem.getSkuId(), releasedFromOrderItem.getSkuItemId());
   }
 
@@ -63,6 +65,8 @@ public class ShipSkuItemToShipOrderItemAction extends AbstractShipSkuItemToShipO
 
   private CompletionStage<Empty> joinBackOrderedToSkuItem(String skuItemId, GetBackOrderedOrderItemsBySkuResponse response) {
     var count = response.getShipOrderItemsCount();
+    log.info("joinBackOrderedToSkuItem: count: {}", count);
+
     if (count > 0) {
       return joinBackOrderedToSkuItem(skuItemId, response.getShipOrderItemsList().get(random.nextInt(count)));
     } else {

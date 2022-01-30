@@ -110,7 +110,7 @@ public class Order extends AbstractOrder {
 
   @Override
   public OrderEntity.OrderState orderItemShipped(OrderEntity.OrderState state, OrderEntity.OrderItemShipped event) {
-    var orderItems = updateShippedOrderItem(state.getOrderItemsList(), event.getSkuId());
+    var orderItems = updateShippedOrderItem(state.getOrderItemsList(), event);
 
     return state
         .toBuilder()
@@ -248,16 +248,18 @@ public class Order extends AbstractOrder {
         .newBuilder()
         .setOrderId(state.getOrderId())
         .setSkuId(command.getSkuId())
+        .setShippedUtc(command.getShippedUtc())
         .build();
 
     var notShipped = state.getOrderItemsList().stream()
-        .filter(orderItem -> orderItem.getShippedUtc().getSeconds() == 0);
+        .filter(orderItem -> orderItem.getShippedUtc().getSeconds() == 0)
+        .collect(Collectors.toList());
 
-    if (notShipped.count() == 0 || notShipped.count() == 1 && notShipped.findFirst().get().getSkuId().equals(command.getSkuId())) {
+    if (notShipped.size() == 0 || notShipped.size() == 1 && notShipped.get(0).getSkuId().equals(command.getSkuId())) {
       var orderShipped = OrderEntity.OrderShipped
           .newBuilder()
           .setOrderId(state.getOrderId())
-          .setShippedUtc(Timestamp.newBuilder().setSeconds(Instant.now().getEpochSecond()))
+          .setShippedUtc(timestampNow())
           .build();
 
       return List.of(orderItemShipped, orderShipped);
@@ -285,6 +287,10 @@ public class Order extends AbstractOrder {
     return orderItems.stream()
         .map(orderItem -> OrderApi.OrderItem
             .newBuilder()
+            .setSkuId(orderItem.getSkuId())
+            .setSkuName(orderItem.getSkuName())
+            .setQuantity(orderItem.getQuantity())
+            .setShippedUtc(orderItem.getShippedUtc())
             .build())
         .collect(Collectors.toList());
   }
@@ -300,13 +306,13 @@ public class Order extends AbstractOrder {
         .collect(Collectors.toList());
   }
 
-  private List<OrderEntity.OrderItem> updateShippedOrderItem(List<OrderEntity.OrderItem> orderItems, String skuId) {
+  private List<OrderEntity.OrderItem> updateShippedOrderItem(List<OrderEntity.OrderItem> orderItems, OrderEntity.OrderItemShipped event) {
     return orderItems.stream()
         .map(orderItem -> {
-          if (orderItem.getSkuId().equals(skuId)) {
+          if (orderItem.getSkuId().equals(event.getSkuId())) {
             return orderItem
                 .toBuilder()
-                .setShippedUtc(timestampNow())
+                .setShippedUtc(event.getShippedUtc())
                 .build();
           } else {
             return orderItem;

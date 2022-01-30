@@ -36,6 +36,14 @@ service OrderService {
   rpc ShippedOrder(ShippedOrderCommand) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       put: "/order/{order_id}/shipped-order"
+      body: "*"
+    };
+  }
+
+  rpc ShippedOrderItem(ShippedOrderItemCommand) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/order/{order_id}/shipped-order-item"
+      body: "*"
     };
   }
 
@@ -57,13 +65,6 @@ service OrderService {
     };
   }
 
-  rpc ShippedOrderItem(ShippedOrderItemCommand) returns (google.protobuf.Empty) {
-    option (google.api.http) = {
-      put: "/order/{order_id}/shipped-order-item"
-      body: "*"
-    };
-  }
-
   rpc GetOrder(GetOrderRequest) returns (Order) {
     option (google.api.http) = {
       get: "/order/{order_id}"
@@ -80,11 +81,13 @@ message CreateOrderCommand {
 
 message ShippedOrderCommand {
   string order_id = 1 [(akkaserverless.field).entity_key = true];
+  google.protobuf.Timestamp shipped_utc = 2;
 }
 
 message ShippedOrderItemCommand {
   string order_id = 1 [(akkaserverless.field).entity_key = true];
   string sku_id = 2;
+  google.protobuf.Timestamp shipped_utc = 3;
 }
 
 message DeliveredOrderCommand {

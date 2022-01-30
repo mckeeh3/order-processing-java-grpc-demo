@@ -1,13 +1,17 @@
 package io.mystore.order.entity;
 
-import com.akkaserverless.javasdk.eventsourcedentity.EventSourcedEntity;
-import com.akkaserverless.javasdk.eventsourcedentity.EventSourcedEntityContext;
-import com.akkaserverless.javasdk.testkit.EventSourcedResult;
-import com.google.protobuf.Empty;
-import io.mystore.order.api.OrderApi;
-import org.junit.Test;
+import static org.junit.Assert.assertTrue;
 
-import static org.junit.Assert.*;
+import java.time.Instant;
+import java.util.List;
+
+import com.google.protobuf.Timestamp;
+
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import io.mystore.order.api.OrderApi;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
 //
@@ -15,10 +19,11 @@ import static org.junit.Assert.*;
 // or delete it so it is regenerated as needed.
 
 public class OrderTest {
+  static final Logger log = LoggerFactory.getLogger(OrderTest.class);
 
   @Test
   public void exampleTest() {
-    OrderTestKit testKit = OrderTestKit.of(Order::new);
+    // OrderTestKit testKit = OrderTestKit.of(Order::new);
     // use the testkit to execute a command
     // of events emitted, or a final updated state:
     // EventSourcedResult<SomeResponse> result = testKit.someOperation(SomeRequest);
@@ -34,50 +39,81 @@ public class OrderTest {
 
   @Test
   public void createOrderTest() {
-    OrderTestKit testKit = OrderTestKit.of(Order::new);
+    // OrderTestKit testKit = OrderTestKit.of(Order::new);
     // EventSourcedResult<Empty> result = testKit.createOrder(CreateOrderRequest.newBuilder()...build());
   }
 
-
   @Test
   public void shippedOrderTest() {
-    OrderTestKit testKit = OrderTestKit.of(Order::new);
+    // OrderTestKit testKit = OrderTestKit.of(Order::new);
     // EventSourcedResult<Empty> result = testKit.shippedOrder(ShippedOrderRequest.newBuilder()...build());
   }
 
-
   @Test
   public void deliveredOrderTest() {
-    OrderTestKit testKit = OrderTestKit.of(Order::new);
+    // OrderTestKit testKit = OrderTestKit.of(Order::new);
     // EventSourcedResult<Empty> result = testKit.deliveredOrder(DeliveredOrderRequest.newBuilder()...build());
   }
 
-
   @Test
   public void returnedOrderTest() {
-    OrderTestKit testKit = OrderTestKit.of(Order::new);
+    // OrderTestKit testKit = OrderTestKit.of(Order::new);
     // EventSourcedResult<Empty> result = testKit.returnedOrder(ReturnedOrderRequest.newBuilder()...build());
   }
 
-
   @Test
   public void canceledOrderTest() {
-    OrderTestKit testKit = OrderTestKit.of(Order::new);
+    // OrderTestKit testKit = OrderTestKit.of(Order::new);
     // EventSourcedResult<Empty> result = testKit.canceledOrder(CanceledOrderRequest.newBuilder()...build());
   }
-
 
   @Test
   public void shippedOrderItemTest() {
     OrderTestKit testKit = OrderTestKit.of(Order::new);
-    // EventSourcedResult<Empty> result = testKit.shippedOrderItem(ShippedOrderItemRequest.newBuilder()...build());
-  }
 
+    testKit.createOrder(OrderApi.CreateOrderCommand
+        .newBuilder()
+        .setOrderId("order-1")
+        .setCustomerId("customer-1")
+        .setOrderedUtc(timestampNow())
+        .addAllOrderItems(
+            List.of(OrderApi.OrderItem
+                .newBuilder()
+                .setSkuId("sku-1")
+                .setSkuName("sku-name-1")
+                .setQuantity(1)
+                .build()))
+        .build());
+
+    testKit.shippedOrderItem(OrderApi.ShippedOrderItemCommand
+        .newBuilder()
+        .setOrderId("order-1")
+        .setSkuId("sku-1")
+        .setShippedUtc(timestampNow())
+        .build());
+
+    var order = testKit.getOrder(OrderApi.GetOrderRequest
+        .newBuilder()
+        .setOrderId("order-1")
+        .build());
+    log.info("order: {}", order.getReply());
+
+    assertTrue(order.getReply().getOrderItemsList().get(0).getShippedUtc() != null);
+    assertTrue(order.getReply().getOrderItemsList().get(0).getShippedUtc().getSeconds() > 0);
+  }
 
   @Test
   public void getOrderTest() {
-    OrderTestKit testKit = OrderTestKit.of(Order::new);
+    // OrderTestKit testKit = OrderTestKit.of(Order::new);
     // EventSourcedResult<Order> result = testKit.getOrder(GetOrderRequest.newBuilder()...build());
   }
 
+  static Timestamp timestampNow() {
+    var now = Instant.now();
+    return Timestamp
+        .newBuilder()
+        .setSeconds(now.getEpochSecond())
+        .setNanos(now.getNano())
+        .build();
+  }
 }
