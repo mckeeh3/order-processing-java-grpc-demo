@@ -1,5 +1,6 @@
 package io.mystore.shipping.action;
 
+import java.util.Random;
 import java.util.concurrent.CompletionStage;
 
 import com.akkaserverless.javasdk.action.ActionCreationContext;
@@ -17,6 +18,7 @@ import io.mystore.shipping.view.AvailableShipSkuItemsModel;
 // or delete it so it is regenerated as needed.
 
 public class ShipOrderItemToShipSkuItemAction extends AbstractShipOrderItemToShipSkuItemAction {
+  static final Random random = new Random();
 
   public ShipOrderItemToShipSkuItemAction(ActionCreationContext creationContext) {
   }
@@ -54,8 +56,9 @@ public class ShipOrderItemToShipSkuItemAction extends AbstractShipOrderItemToShi
 
   private CompletionStage<Empty> onAvailableShipSkuItems(
       ShipOrderItemEntity.SkuItemRequired skuItemRequired, AvailableShipSkuItemsModel.GetAvailableShipSkuItemsResponse response) {
-    if (response.getShipSkuItemsCount() > 0) {
-      return requestShipSkuItem(skuItemRequired, response.getShipSkuItemsList().get(0));
+    var count = response.getShipSkuItemsCount();
+    if (count > 0) {
+      return requestShipSkuItem(skuItemRequired, response.getShipSkuItemsList().get(random.nextInt(count)));
     } else {
       return backOrderShipOrderItem(skuItemRequired);
     }

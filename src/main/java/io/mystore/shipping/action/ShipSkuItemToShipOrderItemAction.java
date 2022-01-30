@@ -1,8 +1,8 @@
 package io.mystore.shipping.action;
 
+import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
-import java.util.stream.Collectors;
 
 import com.akkaserverless.javasdk.action.ActionCreationContext;
 import com.google.protobuf.Any;
@@ -12,9 +12,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.mystore.shipping.api.ShipOrderItemApi;
+import io.mystore.shipping.api.ShipSkuItemApi;
 import io.mystore.shipping.entity.ShipSkuItemEntity;
 import io.mystore.shipping.view.BackOrderedShipOrderItemsBySkuModel;
-import io.mystore.shipping.view.ShipOrderItemModel;
+import io.mystore.shipping.view.BackOrderedShipOrderItemsBySkuModel.GetBackOrderedOrderItemsBySkuResponse;
+import io.mystore.shipping.view.ShipOrderItemModel.ShipOrderItem;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
 //
@@ -22,6 +24,7 @@ import io.mystore.shipping.view.ShipOrderItemModel;
 // or delete it so it is regenerated as needed.
 
 public class ShipSkuItemToShipOrderItemAction extends AbstractShipSkuItemToShipOrderItemAction {
+  static final Random random = new Random();
   static final Logger log = LoggerFactory.getLogger(ShipSkuItemToShipOrderItemAction.class);
 
   public ShipSkuItemToShipOrderItemAction(ActionCreationContext creationContext) {
@@ -29,7 +32,7 @@ public class ShipSkuItemToShipOrderItemAction extends AbstractShipSkuItemToShipO
 
   @Override
   public Effect<Empty> onSkuItemCreated(ShipSkuItemEntity.SkuItemCreated skuItemCreated) {
-    return notifyBackOrderedOfAvailableSkuItem(skuItemCreated.getSkuId());
+    return notifySkuItemOfBackOrderedOrderItem(skuItemCreated.getSkuId(), skuItemCreated.getSkuItemId());
   }
 
   @Override
@@ -39,7 +42,7 @@ public class ShipSkuItemToShipOrderItemAction extends AbstractShipSkuItemToShipO
 
   @Override
   public Effect<Empty> onReleasedFromOrderItem(ShipSkuItemEntity.ReleasedFromOrderItem releasedFromOrderItem) {
-    return notifyBackOrderedOfAvailableSkuItem(releasedFromOrderItem.getSkuId());
+    return notifySkuItemOfBackOrderedOrderItem(releasedFromOrderItem.getSkuId(), releasedFromOrderItem.getSkuItemId());
   }
 
   @Override
@@ -47,7 +50,7 @@ public class ShipSkuItemToShipOrderItemAction extends AbstractShipSkuItemToShipO
     return effects().reply(Empty.getDefaultInstance());
   }
 
-  private Effect<Empty> notifyBackOrderedOfAvailableSkuItem(String skuId) {
+  private Effect<Empty> notifySkuItemOfBackOrderedOrderItem(String skuId, String skuItemId) {
     return effects().asyncReply(
         components().backOrderedShipOrderItemsBySkuView().getBackOrderedShipOrderItemsBySku(
             BackOrderedShipOrderItemsBySkuModel.GetBackOrderedOrderItemsBySkuRequest
@@ -55,24 +58,27 @@ public class ShipSkuItemToShipOrderItemAction extends AbstractShipSkuItemToShipO
                 .setSkuId(skuId)
                 .build())
             .execute()
-            .thenCompose(response -> sendStockAlertsToBackOrderedOrderItems(response)));
+            .thenCompose(response -> joinBackOrderedToSkuItem(skuItemId, response)));
   }
 
-  private CompletionStage<Empty> sendStockAlertsToBackOrderedOrderItems(BackOrderedShipOrderItemsBySkuModel.GetBackOrderedOrderItemsBySkuResponse response) {
-    var results = response.getShipOrderItemsList().stream()
-        .map(shipOrderItem -> components().shipOrderItem().stockAlert(stockAlertOrderItem(shipOrderItem)).execute())
-        .collect(Collectors.toList());
-
-    return CompletableFuture.allOf(results.toArray(new CompletableFuture[results.size()]))
-        .thenApply(reply -> Empty.getDefaultInstance());
+  private CompletionStage<Empty> joinBackOrderedToSkuItem(String skuItemId, GetBackOrderedOrderItemsBySkuResponse response) {
+    var count = response.getShipOrderItemsCount();
+    if (count > 0) {
+      return joinBackOrderedToSkuItem(skuItemId, response.getShipOrderItemsList().get(random.nextInt(count)));
+    } else {
+      return CompletableFuture.completedFuture(Empty.getDefaultInstance());
+    }
   }
 
-  private ShipOrderItemApi.StockAlertOrderItem stockAlertOrderItem(ShipOrderItemModel.ShipOrderItem shipOrderItem) {
-    return ShipOrderItemApi.StockAlertOrderItem
-        .newBuilder()
-        .setOrderItemId(shipOrderItem.getOrderItemId())
-        .setSkuId(shipOrderItem.getSkuId())
-        .build();
+  private CompletionStage<Empty> joinBackOrderedToSkuItem(String skuItemId, ShipOrderItem shipOrderItem) {
+    return components().shipSkuItem().joinToOrderItem(
+        ShipSkuItemApi.JoinToOrderItemCommand
+            .newBuilder()
+            .setOrderId(shipOrderItem.getOrderId())
+            .setOrderItemId(shipOrderItem.getOrderItemId())
+            .setSkuItemId(skuItemId)
+            .build())
+        .execute();
   }
 
   private ShipOrderItemApi.JoinToSkuItemCommand toJoinToSkuItem(ShipSkuItemEntity.JoinedToOrderItem joinedToOrderItem) {

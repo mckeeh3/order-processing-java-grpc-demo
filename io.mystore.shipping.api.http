@@ -1,8 +1,8 @@
 @urlPrefix = https://blue-shape-3166.us-east1.akkaserverless.app
-@orderId = cart-1
-@skuId = sku-3
-@skuName = sku name 3
-@quantity = 1
+@orderId = cart-2
+@skuId = sku-2
+@skuName = sku name 2
+@quantity = 2
 @orderItemId = a6f75256-83db-481f-ba3f-f32d40f251f0
 
 ### io.mystore.shipping.action.StockItemFrontend.createStockItems
@@ -12,12 +12,12 @@ curl -XPOST -H "Content-Type: application/json" -d '{
   "quantity":{{quantity}}}'
   {{urlPrefix}}/stock-item-frontend/{{skuId}}/create
 
-### io.mystore.shipping.api.ShipOrderItemService.GetShipOrderItem
-
-curl -XGET -H "Content-Type: application/json"
-  '{{urlPrefix}}/ship-order-items/{{orderItemId}}'
-
 ### io.mystore.shipping.api.ShipOrderService.GetShipOrder
 
 curl -XGET -H "Content-Type: application/json"
   '{{urlPrefix}}/ship-order/{{orderId}}'
+
+### io.mystore.shipping.api.ShipOrderItemService.GetShipOrderItem
+
+curl -XGET -H "Content-Type: application/json"
+  '{{urlPrefix}}/ship-order-items/{{orderItemId}}'
