@@ -77,8 +77,8 @@ public class ShipOrderItemToShipSkuItemAction extends AbstractShipOrderItemToShi
   }
 
   private CompletionStage<Empty> backOrderShipOrderItem(ShipOrderItemEntity.SkuItemRequired skuItemRequired) {
-    return components().shipOrderItem().placeOnBackOrder(
-        ShipOrderItemApi.BackOrderOrderItem
+    return components().shipOrderItem().backOrderOrderItem(
+        ShipOrderItemApi.BackOrderOrderItemCommand
             .newBuilder()
             .setOrderItemId(skuItemRequired.getOrderItemId())
             .build())

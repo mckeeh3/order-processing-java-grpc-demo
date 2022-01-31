@@ -25,8 +25,8 @@ public class OrderItem extends AbstractOrderItem {
   }
 
   @Override
-  public Effect<Empty> createOrderItem(OrderItemEntity.OrderItemState state, OrderItemApi.OrderItemCommand command) {
-    log.info("state: {}, createOrderItem: {}", state, command);
+  public Effect<Empty> createOrderItem(OrderItemEntity.OrderItemState state, OrderItemApi.CreateOrderItemCommand command) {
+    log.info("state: {}, createOrderItemCommand: {}", state, command);
 
     return effects()
         .updateState(updateState(state, command))
@@ -38,7 +38,7 @@ public class OrderItem extends AbstractOrderItem {
     return effects().reply(toApi(state));
   }
 
-  private OrderItemEntity.OrderItemState updateState(OrderItemEntity.OrderItemState state, OrderItemApi.OrderItemCommand command) {
+  private OrderItemEntity.OrderItemState updateState(OrderItemEntity.OrderItemState state, OrderItemApi.CreateOrderItemCommand command) {
     return OrderItemEntity.OrderItemState
         .newBuilder()
         .setOrderId(command.getOrderId())

@@ -22,7 +22,7 @@ public class OrderToOrderedItemsAction extends AbstractOrderToOrderedItemsAction
   @Override
   public Effect<Empty> onOrderCreated(OrderEntity.OrderCreated orderCreated) {
     var results = orderCreated.getOrderItemsList().stream()
-        .map(orderItem -> OrderItemApi.OrderItemCommand
+        .map(orderItem -> OrderItemApi.CreateOrderItemCommand
             .newBuilder()
             .setCustomerId(orderCreated.getCustomerId())
             .setOrderId(orderCreated.getOrderId())

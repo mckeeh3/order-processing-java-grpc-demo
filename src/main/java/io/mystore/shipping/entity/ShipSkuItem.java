@@ -133,6 +133,7 @@ public class ShipSkuItem extends AbstractShipSkuItem {
   private ShipSkuItemEntity.JoinedToOrderItem eventFor(ShipSkuItemEntity.SkuItemState state, ShipSkuItemApi.JoinToOrderItemCommand command) {
     return ShipSkuItemEntity.JoinedToOrderItem
         .newBuilder()
+        .setSkuId(state.getSkuId())
         .setSkuItemId(command.getSkuItemId())
         .setOrderId(command.getOrderId())
         .setOrderItemId(command.getOrderItemId())

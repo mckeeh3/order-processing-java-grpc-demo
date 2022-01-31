@@ -89,6 +89,7 @@ public class ShipSkuItemToShipOrderItemAction extends AbstractShipSkuItemToShipO
     return ShipOrderItemApi.JoinToSkuItemCommand
         .newBuilder()
         .setOrderItemId(joinedToOrderItem.getOrderItemId())
+        .setSkuId(joinedToOrderItem.getSkuId())
         .setSkuItemId(joinedToOrderItem.getSkuItemId())
         .setShippedUtc(joinedToOrderItem.getShippedUtc())
         .build();

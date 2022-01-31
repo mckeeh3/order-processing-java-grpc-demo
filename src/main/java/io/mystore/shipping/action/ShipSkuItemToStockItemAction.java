@@ -35,6 +35,7 @@ public class ShipSkuItemToStockItemAction extends AbstractShipSkuItemToStockItem
   private StockItemApi.ShipStockItem toStockItem(ShipSkuItemEntity.JoinedToOrderItem joinedToOrderItem) {
     return StockItemApi.ShipStockItem
         .newBuilder()
+        .setSkuId(joinedToOrderItem.getSkuId())
         .setSkuItemId(joinedToOrderItem.getSkuItemId())
         .setOrderId(joinedToOrderItem.getOrderId())
         .setOrderItemId(joinedToOrderItem.getOrderItemId())
@@ -45,6 +46,7 @@ public class ShipSkuItemToStockItemAction extends AbstractShipSkuItemToStockItem
   private StockItemApi.ReleaseStockItem toStockItem(ShipSkuItemEntity.ReleasedFromOrderItem releasedFromOrderItem) {
     return StockItemApi.ReleaseStockItem
         .newBuilder()
+        .setSkuId(releasedFromOrderItem.getSkuId())
         .setSkuItemId(releasedFromOrderItem.getSkuItemId())
         .setOrderId(releasedFromOrderItem.getOrderId())
         .setOrderItemId(releasedFromOrderItem.getOrderItemId())

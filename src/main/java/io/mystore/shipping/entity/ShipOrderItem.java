@@ -40,12 +40,7 @@ public class ShipOrderItem extends AbstractShipOrderItem {
   }
 
   @Override
-  public Effect<Empty> placeOnBackOrder(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.BackOrderOrderItem command) {
-    return handle(state, command);
-  }
-
-  @Override
-  public Effect<Empty> stockAlert(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.StockAlertOrderItem command) {
+  public Effect<Empty> backOrderOrderItem(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.BackOrderOrderItemCommand command) {
     return handle(state, command);
   }
 
@@ -127,7 +122,7 @@ public class ShipOrderItem extends AbstractShipOrderItem {
     }
   }
 
-  private Effect<Empty> handle(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.BackOrderOrderItem command) {
+  private Effect<Empty> handle(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.BackOrderOrderItemCommand command) {
     log.info("state: {}, BackOrderShipOrderItem: {}", state, command);
 
     if (state.getSkuItemId().isEmpty()) { // don't back order if already shipped
@@ -137,14 +132,6 @@ public class ShipOrderItem extends AbstractShipOrderItem {
     } else {
       return effects().reply(Empty.getDefaultInstance());
     }
-  }
-
-  private Effect<Empty> handle(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.StockAlertOrderItem command) {
-    log.info("state: {}, StockAlertShipOrderItem {}", state, command);
-
-    return effects()
-        .emitEvent(eventFor(state, command))
-        .thenReply(newState -> Empty.getDefaultInstance());
   }
 
   private Effect<ShipOrderItemApi.OrderItem> handle(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.GetOrderItemRequest command) {
@@ -194,19 +181,10 @@ public class ShipOrderItem extends AbstractShipOrderItem {
         .build();
   }
 
-  private ShipOrderItemEntity.OrderItemBackOrdered eventFor(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.BackOrderOrderItem command) {
+  private ShipOrderItemEntity.OrderItemBackOrdered eventFor(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.BackOrderOrderItemCommand command) {
     return ShipOrderItemEntity.OrderItemBackOrdered
         .newBuilder()
         .setBackOrderedUtc(timestampNow())
-        .build();
-  }
-
-  private ShipOrderItemEntity.SkuItemRequired eventFor(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.StockAlertOrderItem command) {
-    return ShipOrderItemEntity.SkuItemRequired
-        .newBuilder()
-        .setOrderId(state.getOrderId())
-        .setOrderItemId(command.getOrderItemId())
-        .setSkuId(command.getSkuId())
         .build();
   }
 

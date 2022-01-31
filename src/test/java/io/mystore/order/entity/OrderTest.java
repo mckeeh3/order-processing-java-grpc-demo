@@ -45,8 +45,97 @@ public class OrderTest {
 
   @Test
   public void shippedOrderTest() {
-    // OrderTestKit testKit = OrderTestKit.of(Order::new);
-    // EventSourcedResult<Empty> result = testKit.shippedOrder(ShippedOrderRequest.newBuilder()...build());
+    OrderTestKit testKit = OrderTestKit.of(Order::new);
+
+    testKit.createOrder(OrderApi.CreateOrderCommand
+        .newBuilder()
+        .setOrderId("order-1")
+        .setCustomerId("customer-1")
+        .setOrderedUtc(timestampNow())
+        .addAllOrderItems(
+            List.of(
+                OrderApi.OrderItem
+                    .newBuilder()
+                    .setSkuId("sku-1")
+                    .setSkuName("sku-name-1")
+                    .setQuantity(1)
+                    .build(),
+                OrderApi.OrderItem
+                    .newBuilder()
+                    .setSkuId("sku-2")
+                    .setSkuName("sku-name-2")
+                    .setQuantity(2)
+                    .build(),
+                OrderApi.OrderItem
+                    .newBuilder()
+                    .setSkuId("sku-3")
+                    .setSkuName("sku-name-3")
+                    .setQuantity(3)
+                    .build()))
+        .build());
+
+    testKit.shippedOrderItem(OrderApi.ShippedOrderItemCommand
+        .newBuilder()
+        .setOrderId("order-1")
+        .setSkuId("sku-1")
+        .setShippedUtc(timestampNow())
+        .build());
+
+    var order = testKit.getOrder(OrderApi.GetOrderRequest
+        .newBuilder()
+        .setOrderId("order-1")
+        .build());
+    log.info("order: {}", order.getReply());
+
+    assertTrue(order.getReply().getOrderItemsList().get(0).getShippedUtc() != null);
+    assertTrue(order.getReply().getOrderItemsList().get(0).getShippedUtc().getSeconds() > 0);
+
+    testKit.shippedOrderItem(OrderApi.ShippedOrderItemCommand
+        .newBuilder()
+        .setOrderId("order-1")
+        .setSkuId("sku-2")
+        .setShippedUtc(timestampNow())
+        .build());
+
+    order = testKit.getOrder(OrderApi.GetOrderRequest
+        .newBuilder()
+        .setOrderId("order-1")
+        .build());
+    log.info("order: {}", order.getReply());
+
+    assertTrue(order.getReply().getOrderItemsList().get(1).getShippedUtc() != null);
+    assertTrue(order.getReply().getOrderItemsList().get(1).getShippedUtc().getSeconds() > 0);
+
+    testKit.shippedOrderItem(OrderApi.ShippedOrderItemCommand
+        .newBuilder()
+        .setOrderId("order-1")
+        .setSkuId("sku-3")
+        .setShippedUtc(timestampNow())
+        .build());
+
+    order = testKit.getOrder(OrderApi.GetOrderRequest
+        .newBuilder()
+        .setOrderId("order-1")
+        .build());
+    log.info("order: {}", order.getReply());
+
+    assertTrue(order.getReply().getOrderItemsList().get(2).getShippedUtc() != null);
+    assertTrue(order.getReply().getOrderItemsList().get(2).getShippedUtc().getSeconds() > 0);
+
+    testKit.shippedOrder(OrderApi.ShippedOrderCommand
+        .newBuilder()
+        .setOrderId("order-1")
+        .setShippedUtc(timestampNow())
+        .build());
+
+    order = testKit.getOrder(OrderApi.GetOrderRequest
+        .newBuilder()
+        .setOrderId("order-1")
+        .build());
+    log.info("order: {}", order.getReply());
+
+    assertTrue(order.getReply().getShippedUtc() != null);
+    assertTrue(order.getReply().getShippedUtc().getSeconds() > 0);
   }
 
   @Test

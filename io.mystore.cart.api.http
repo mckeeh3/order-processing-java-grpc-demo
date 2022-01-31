@@ -2,7 +2,7 @@
 # @urlPrefix = http://localhost:9000
 @urlPrefix = https://blue-shape-3166.us-east1.akkaserverless.app
 @customerId = customer-1
-@cartId = cart-6
+@cartId = cart-1
 @skuId = sku-1
 @skuName = sku name 1
 @quantity = 1

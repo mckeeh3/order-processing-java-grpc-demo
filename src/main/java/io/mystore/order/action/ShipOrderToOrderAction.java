@@ -36,6 +36,7 @@ public class ShipOrderToOrderAction extends AbstractShipOrderToOrderAction {
     return OrderApi.ShippedOrderCommand
         .newBuilder()
         .setOrderId(orderShipped.getOrderId())
+        .setShippedUtc(orderShipped.getShippedUtc())
         .build();
   }
 
@@ -44,6 +45,7 @@ public class ShipOrderToOrderAction extends AbstractShipOrderToOrderAction {
         .newBuilder()
         .setOrderId(orderSkuShipped.getOrderId())
         .setSkuId(orderSkuShipped.getSkuId())
+        .setShippedUtc(orderSkuShipped.getShippedUtc())
         .build();
   }
 }

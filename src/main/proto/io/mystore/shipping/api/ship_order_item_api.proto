@@ -39,16 +39,9 @@ service ShipOrderItemService {
     };
   }
 
-  rpc PlaceOnBackOrder(BackOrderOrderItem) returns (google.protobuf.Empty) {
+  rpc BackOrderOrderItem(BackOrderOrderItemCommand) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      put: "/ship-order-items/{order_item_id}/back_order"
-      body: "*"
-    };
-  }
-
-  rpc StockAlert(StockAlertOrderItem) returns (google.protobuf.Empty) {
-    option (google.api.http) = {
-      put: "/ship-order-items/{order_item_id}/stock-alert"
+      put: "/ship-order-items/{order_item_id}/back_order_order_item"
       body: "*"
     };
   }
@@ -82,17 +75,13 @@ message OrderItem {
 
 message JoinToSkuItemCommand {
   string order_item_id = 1 [(akkaserverless.field).entity_key = true];
-  string sku_item_id = 2;
-  google.protobuf.Timestamp shipped_utc = 3;
-}
-
-message BackOrderOrderItem {
-  string order_item_id = 1 [(akkaserverless.field).entity_key = true];
-}
-
-message StockAlertOrderItem {
-  string order_item_id = 1 [(akkaserverless.field).entity_key = true];
   string sku_id = 2;
+  string sku_item_id = 3;
+  google.protobuf.Timestamp shipped_utc = 4;
+}
+
+message BackOrderOrderItemCommand {
+  string order_item_id = 1 [(akkaserverless.field).entity_key = true];
 }
 
 message GetOrderItemRequest {

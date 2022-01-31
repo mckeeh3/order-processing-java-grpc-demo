@@ -18,7 +18,7 @@ service OrderItemService {
     }
   };
 
-  rpc CreateOrderItem(OrderItemCommand) returns (google.protobuf.Empty) {
+  rpc CreateOrderItem(CreateOrderItemCommand) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       post: "/order-items/{order_id}/{sku_id}/create"
       body: "*"
@@ -32,7 +32,7 @@ service OrderItemService {
   }
 }
 
-message OrderItemCommand {
+message CreateOrderItemCommand {
   string customer_id = 1;
   string order_id = 2 [(akkaserverless.field).entity_key = true];
   string sku_id = 3 [(akkaserverless.field).entity_key = true];
@@ -42,15 +42,14 @@ message OrderItemCommand {
 }
 
 message GetOrderItemRequest {
-  string customer_id = 1;
-  string order_id = 2 [(akkaserverless.field).entity_key = true];
-  string sku_id = 3 [(akkaserverless.field).entity_key = true];
+  string order_id = 1 [(akkaserverless.field).entity_key = true];
+  string sku_id = 2 [(akkaserverless.field).entity_key = true];
 }
 
 message GetOrderItemResponse {
   string customer_id = 1;
-  string order_id = 2 [(akkaserverless.field).entity_key = true];
-  string sku_id = 3 [(akkaserverless.field).entity_key = true];
+  string order_id = 2;
+  string sku_id = 3;
   string sku_name = 4;
   int32 quantity = 5;
   google.protobuf.Timestamp ordered_utc = 6;

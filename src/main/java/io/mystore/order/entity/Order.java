@@ -217,7 +217,7 @@ public class Order extends AbstractOrder {
   private OrderEntity.OrderShipped eventFor(OrderEntity.OrderState state, OrderApi.ShippedOrderCommand command) {
     return OrderEntity.OrderShipped
         .newBuilder()
-        .setShippedUtc(timestampNow())
+        .setShippedUtc(command.getShippedUtc())
         .build();
   }
 
