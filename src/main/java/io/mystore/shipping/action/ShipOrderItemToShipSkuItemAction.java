@@ -80,6 +80,7 @@ public class ShipOrderItemToShipSkuItemAction extends AbstractShipOrderItemToShi
     return components().shipOrderItem().backOrderOrderItem(
         ShipOrderItemApi.BackOrderOrderItemCommand
             .newBuilder()
+            .setOrderId(skuItemRequired.getOrderId())
             .setOrderItemId(skuItemRequired.getOrderItemId())
             .build())
         .execute();

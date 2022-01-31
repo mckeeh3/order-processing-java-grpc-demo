@@ -75,13 +75,16 @@ message OrderItem {
 
 message JoinToSkuItemCommand {
   string order_item_id = 1 [(akkaserverless.field).entity_key = true];
-  string sku_id = 2;
-  string sku_item_id = 3;
-  google.protobuf.Timestamp shipped_utc = 4;
+  string order_id = 2;
+  string sku_id = 3;
+  string sku_item_id = 4;
+  google.protobuf.Timestamp shipped_utc = 5;
 }
 
 message BackOrderOrderItemCommand {
   string order_item_id = 1 [(akkaserverless.field).entity_key = true];
+  string order_id = 2;
+  string sku_id = 3;
 }
 
 message GetOrderItemRequest {
