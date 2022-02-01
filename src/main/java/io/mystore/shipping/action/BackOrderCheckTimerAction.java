@@ -105,7 +105,7 @@ public class BackOrderCheckTimerAction extends AbstractBackOrderCheckTimerAction
     var countBackOrderedOrderItems = backOrderedOrderItems.getShipOrderItemsCount();
     var skuItemOrderItems = new ArrayList<SkuItemOrderItem>();
 
-    log.info("available SKU items: {}, back ordered order items: {}", countAvailableSkuItems, countBackOrderedOrderItems);
+    log.info("skuId: {}, available SKU items: {}, back ordered order items: {}", skuId, countAvailableSkuItems, countBackOrderedOrderItems);
 
     for (int i = 0; i < Math.min(countAvailableSkuItems, countBackOrderedOrderItems); i++) {
       var availableSkuItem = availableSkuItems.getShipSkuItems(i);
@@ -127,7 +127,7 @@ public class BackOrderCheckTimerAction extends AbstractBackOrderCheckTimerAction
   }
 
   private CompletionStage<Empty> joinBackOrderedToSkuItemX(AvailableShipSkuItemsModel.ShipSkuItem shipSkuItem, ShipOrderItemModel.ShipOrderItem shipOrderItem) {
-    log.info("join SKU item: {}, back ordered order item: {}", shipSkuItem, shipOrderItem);
+    log.info("join SKU item: {}\nback ordered order item: {}", shipSkuItem, shipOrderItem);
 
     return components().shipSkuItem().joinToOrderItem(
         ShipSkuItemApi.JoinToOrderItemCommand

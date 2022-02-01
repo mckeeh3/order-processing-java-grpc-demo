@@ -99,7 +99,7 @@ public class ShipOrderItem extends AbstractShipOrderItem {
   }
 
   private Effect<Empty> handle(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.CreateOrderItemCommand command) {
-    log.info("state: {}, CreateOrderItemCommand: {}", state, command);
+    log.info("state: {}\nCreateOrderItemCommand: {}", state, command);
 
     return effects()
         .emitEvents(eventsFor(state, command))
@@ -107,7 +107,7 @@ public class ShipOrderItem extends AbstractShipOrderItem {
   }
 
   private Effect<Empty> handle(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.JoinToSkuItemCommand command) {
-    log.info("state: {}, JoinToSkuItemCommand: {}", state, command);
+    log.info("state: {}\nJoinToSkuItemCommand: {}", state, command);
 
     if (state.getSkuItemId().isEmpty()) {
       return effects()
@@ -123,7 +123,7 @@ public class ShipOrderItem extends AbstractShipOrderItem {
   }
 
   private Effect<Empty> handle(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.BackOrderOrderItemCommand command) {
-    log.info("state: {}, BackOrderShipOrderItem: {}", state, command);
+    log.info("state: {}\nBackOrderShipOrderItem: {}", state, command);
 
     if (state.getSkuItemId().isEmpty()) { // don't back order if already shipped
       return effects()

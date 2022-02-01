@@ -294,7 +294,7 @@ public class ShoppingCart extends AbstractShoppingCart {
   }
 
   private Effect<Empty> handle(CartEntity.CartState state, CartApi.CheckoutShoppingCart command) {
-    log.info("state: {}, checkoutShoppingCart: {}", state, command);
+    log.info("state: {}\ncheckoutShoppingCart: {}", state, command);
 
     return effects()
         .emitEvent(event(state, command))

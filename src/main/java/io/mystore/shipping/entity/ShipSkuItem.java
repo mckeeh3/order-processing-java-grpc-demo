@@ -88,13 +88,14 @@ public class ShipSkuItem extends AbstractShipSkuItem {
 
   private Optional<Effect<Empty>> reject(ShipSkuItemEntity.SkuItemState state, ShipSkuItemApi.JoinToOrderItemCommand command) {
     if (!state.getOrderItemId().isEmpty() && !state.getOrderItemId().equals(command.getOrderItemId())) {
+      log.info("skuItem is already assigned to another orderItem\nstate:\n{}\nJoinToOrderItemCommand: {}", state, command);
       return Optional.of(effects().error("skuItem is not available"));
     }
     return Optional.empty();
   }
 
   private Effect<Empty> handle(ShipSkuItemEntity.SkuItemState state, ShipSkuItemApi.CreateSkuItemCommand command) {
-    log.info("state: {}, CreateSkuItemCommand: {}", state, command);
+    log.info("state: {}\nCreateSkuItemCommand: {}", state, command);
 
     return effects()
         .emitEvent(eventFor(state, command))
@@ -102,7 +103,7 @@ public class ShipSkuItem extends AbstractShipSkuItem {
   }
 
   private Effect<Empty> handle(ShipSkuItemEntity.SkuItemState state, ShipSkuItemApi.JoinToOrderItemCommand command) {
-    log.info("state: {}, JoinToOrderItemCommand: {}", state, command);
+    log.info("state: {}\nJoinToOrderItemCommand: {}", state, command);
 
     if (state.getOrderItemId().equals(command.getOrderItemId())) {
       return effects().reply(Empty.getDefaultInstance()); // already added, idempotent
@@ -114,7 +115,7 @@ public class ShipSkuItem extends AbstractShipSkuItem {
   }
 
   private Effect<Empty> handle(ShipSkuItemEntity.SkuItemState state, ShipSkuItemApi.ReleaseOrderItemFromSkuItem command) {
-    log.info("state: {}, ReleaseOrderItemFromSkuItem: {}", state, command);
+    log.info("state: {}\nReleaseOrderItemFromSkuItem: {}", state, command);
 
     return effects()
         .emitEvent(eventFor(state, command))

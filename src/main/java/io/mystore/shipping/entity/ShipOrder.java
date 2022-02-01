@@ -78,7 +78,7 @@ public class ShipOrder extends AbstractShipOrder {
   }
 
   Effect<Empty> handle(ShipOrderEntity.ShipOrderState state, ShipOrderApi.CreateShipOrderCommand command) {
-    log.info("state: {}, CreateShipOrderCommand: {}", state, command);
+    log.info("state: {}\nCreateShipOrderCommand: {}", state, command);
 
     return effects()
         .emitEvent(eventFor(state, command))
@@ -86,7 +86,7 @@ public class ShipOrder extends AbstractShipOrder {
   }
 
   Effect<Empty> handle(ShipOrderEntity.ShipOrderState state, ShipOrderApi.ShippedOrderItemCommand command) {
-    log.info("state: {}, ShippedOrderItemCommand: {}", state, command);
+    log.info("state: {}\nShippedOrderItemCommand: {}", state, command);
 
     return effects()
         .emitEvents(eventsFor(state, command))

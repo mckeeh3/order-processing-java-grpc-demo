@@ -40,12 +40,6 @@ public class ShipSkuItemToShipOrderItemAction extends AbstractShipSkuItemToShipO
     return effects().forward(components().shipOrderItem().joinToSkuItem(toJoinToSkuItem(joinedToOrderItem)));
   }
 
-  // @Override
-  // public Effect<Empty> onReleasedFromOrderItem(ShipSkuItemEntity.ReleasedFromOrderItem releasedFromOrderItem) {
-  // log.info("onReleasedFromOrderItem: {}", releasedFromOrderItem);
-  // return notifySkuItemOfBackOrderedOrderItem(releasedFromOrderItem.getSkuId(), releasedFromOrderItem.getSkuItemId());
-  // }
-
   @Override
   public Effect<Empty> ignoreOtherEvents(Any any) {
     return effects().reply(Empty.getDefaultInstance());
@@ -59,12 +53,12 @@ public class ShipSkuItemToShipOrderItemAction extends AbstractShipSkuItemToShipO
                 .setSkuId(skuId)
                 .build())
             .execute()
-            .thenCompose(response -> joinBackOrderedToSkuItem(skuItemId, response)));
+            .thenCompose(response -> joinBackOrderedToSkuItem(skuId, skuItemId, response)));
   }
 
-  private CompletionStage<Empty> joinBackOrderedToSkuItem(String skuItemId, BackOrderedShipOrderItemsBySkuModel.GetBackOrderedOrderItemsBySkuResponse response) {
+  private CompletionStage<Empty> joinBackOrderedToSkuItem(String skuId, String skuItemId, BackOrderedShipOrderItemsBySkuModel.GetBackOrderedOrderItemsBySkuResponse response) {
     var count = response.getShipOrderItemsCount();
-    log.info("joinBackOrderedToSkuItem: count: {}", count);
+    log.info("joinBackOrderedToSkuItem: skuId: {}, count: {}", count);
 
     if (count > 0) {
       return joinBackOrderedToSkuItem(skuItemId, response.getShipOrderItemsList().get(random.nextInt(count)));

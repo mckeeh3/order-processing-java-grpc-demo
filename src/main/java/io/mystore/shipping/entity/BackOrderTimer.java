@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.mystore.shipping.api.BackOrderTimerApi;
-import io.mystore.shipping.entity.BackOrderTimerEntity.BackOrderTimerState;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
 //
@@ -34,7 +33,7 @@ public class BackOrderTimer extends AbstractBackOrderTimer {
 
   @Override
   public Effect<Empty> createBackOrderTimer(BackOrderTimerEntity.BackOrderTimerState state, BackOrderTimerApi.CreateBackOrderTimerCommand command) {
-    log.info("state: {}, CreateBackOrderTimerCommand:{}", state, command);
+    log.info("state: {}\nCreateBackOrderTimerCommand:{}", state, command);
     return effects()
         .updateState(
             state.toBuilder()
@@ -48,7 +47,7 @@ public class BackOrderTimer extends AbstractBackOrderTimer {
 
   @Override
   public Effect<Empty> pingBackOrderTimer(BackOrderTimerEntity.BackOrderTimerState state, BackOrderTimerApi.PingBackOrderTimerCommand command) {
-    log.info("pingBackOrderTimer: {}", state);
+    log.info("pingBackOrderTimer: stop in {}\nstate: {}", stopAfter(state), state);
 
     if (timestampNow().getSeconds() > state.getStopAfter().getSeconds()) {
       return effects().reply(Empty.getDefaultInstance());
@@ -71,7 +70,7 @@ public class BackOrderTimer extends AbstractBackOrderTimer {
     return effects().reply(toApi(state));
   }
 
-  private BackOrderTimerApi.GetBackOrderTimerResponse toApi(BackOrderTimerState state) {
+  static BackOrderTimerApi.GetBackOrderTimerResponse toApi(BackOrderTimerEntity.BackOrderTimerState state) {
     return BackOrderTimerApi.GetBackOrderTimerResponse
         .newBuilder()
         .setSkuId(state.getSkuId())
@@ -117,5 +116,11 @@ public class BackOrderTimer extends AbstractBackOrderTimer {
     } catch (InterruptedException e) {
       log.error("Interrupted while waiting for ping interval", e);
     }
+  }
+
+  static String stopAfter(BackOrderTimerEntity.BackOrderTimerState state) {
+    var seconds = state.getStopAfter().getSeconds() - timestampNow().getSeconds();
+    var minutes = seconds / 60;
+    return String.format("%dm%ds", minutes, seconds % 60);
   }
 }
