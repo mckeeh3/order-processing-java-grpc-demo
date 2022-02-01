@@ -18,6 +18,8 @@ message OrderItemState {
   string order_id = 2;
   string sku_id = 3;
   string sku_name = 4;
-  int32 quantity = 5;
-  google.protobuf.Timestamp ordered_utc = 6;
+  string sku_item_id = 5;
+  int32 quantity = 6;
+  google.protobuf.Timestamp ordered_utc = 7;
+  google.protobuf.Timestamp shipped_utc = 8;
 }

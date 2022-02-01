@@ -25,6 +25,13 @@ service OrderItemService {
     };
   }
 
+  rpc ShippedOrderItem(ShippedOrderItemCommand) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/order-items/{order_id}/{sku_id}/ship"
+      body: "*"
+    };
+  }
+
   rpc GetOrderItem(GetOrderItemRequest) returns (GetOrderItemResponse) {
     option (google.api.http) = {
       get: "/order-items/{order_id}/{sku_id}"
@@ -41,6 +48,12 @@ message CreateOrderItemCommand {
   google.protobuf.Timestamp ordered_utc = 6;
 }
 
+message ShippedOrderItemCommand {
+  string order_id = 1 [(akkaserverless.field).entity_key = true];
+  string sku_id = 2 [(akkaserverless.field).entity_key = true];
+  google.protobuf.Timestamp shipped_utc = 3;
+}
+
 message GetOrderItemRequest {
   string order_id = 1 [(akkaserverless.field).entity_key = true];
   string sku_id = 2 [(akkaserverless.field).entity_key = true];
@@ -53,4 +66,5 @@ message GetOrderItemResponse {
   string sku_name = 4;
   int32 quantity = 5;
   google.protobuf.Timestamp ordered_utc = 6;
+  google.protobuf.Timestamp shipped_utc = 7;
 }

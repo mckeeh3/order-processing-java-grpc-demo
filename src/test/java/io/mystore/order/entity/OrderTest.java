@@ -74,7 +74,7 @@ public class OrderTest {
                     .build()))
         .build());
 
-    testKit.shippedOrderItem(OrderApi.ShippedOrderItemCommand
+    testKit.shippedOrderItem(OrderApi.ShippedOrderSkuCommand
         .newBuilder()
         .setOrderId("order-1")
         .setSkuId("sku-1")
@@ -90,7 +90,7 @@ public class OrderTest {
     assertTrue(order.getReply().getOrderItemsList().get(0).getShippedUtc() != null);
     assertTrue(order.getReply().getOrderItemsList().get(0).getShippedUtc().getSeconds() > 0);
 
-    testKit.shippedOrderItem(OrderApi.ShippedOrderItemCommand
+    testKit.shippedOrderItem(OrderApi.ShippedOrderSkuCommand
         .newBuilder()
         .setOrderId("order-1")
         .setSkuId("sku-2")
@@ -106,7 +106,7 @@ public class OrderTest {
     assertTrue(order.getReply().getOrderItemsList().get(1).getShippedUtc() != null);
     assertTrue(order.getReply().getOrderItemsList().get(1).getShippedUtc().getSeconds() > 0);
 
-    testKit.shippedOrderItem(OrderApi.ShippedOrderItemCommand
+    testKit.shippedOrderItem(OrderApi.ShippedOrderSkuCommand
         .newBuilder()
         .setOrderId("order-1")
         .setSkuId("sku-3")
@@ -174,7 +174,7 @@ public class OrderTest {
                 .build()))
         .build());
 
-    testKit.shippedOrderItem(OrderApi.ShippedOrderItemCommand
+    testKit.shippedOrderItem(OrderApi.ShippedOrderSkuCommand
         .newBuilder()
         .setOrderId("order-1")
         .setSkuId("sku-1")

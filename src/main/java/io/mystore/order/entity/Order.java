@@ -56,7 +56,7 @@ public class Order extends AbstractOrder {
   }
 
   @Override
-  public Effect<Empty> shippedOrderItem(OrderEntity.OrderState state, OrderApi.ShippedOrderItemCommand command) {
+  public Effect<Empty> shippedOrderItem(OrderEntity.OrderState state, OrderApi.ShippedOrderSkuCommand command) {
     return handle(state, command);
   }
 
@@ -196,8 +196,8 @@ public class Order extends AbstractOrder {
         .thenReply(newState -> Empty.getDefaultInstance());
   }
 
-  private Effect<Empty> handle(OrderEntity.OrderState state, OrderApi.ShippedOrderItemCommand command) {
-    log.info("state: {}, ShippedOrderItemCommand: {}", state, command);
+  private Effect<Empty> handle(OrderEntity.OrderState state, OrderApi.ShippedOrderSkuCommand command) {
+    log.info("state: {}, ShippedOrderSkuCommand: {}", state, command);
 
     return effects()
         .emitEvents(eventsFor(state, command))
@@ -243,7 +243,7 @@ public class Order extends AbstractOrder {
         .build();
   }
 
-  private List<?> eventsFor(OrderEntity.OrderState state, OrderApi.ShippedOrderItemCommand command) {
+  private List<?> eventsFor(OrderEntity.OrderState state, OrderApi.ShippedOrderSkuCommand command) {
     var orderItemShipped = OrderEntity.OrderItemShipped
         .newBuilder()
         .setOrderId(state.getOrderId())

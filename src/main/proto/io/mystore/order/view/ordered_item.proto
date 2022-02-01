@@ -13,4 +13,5 @@ message OrderedItem {
   string sku_name = 4;
   int32 quantity = 5;
   google.protobuf.Timestamp ordered_utc = 6;
+  google.protobuf.Timestamp shipped_utc = 7;
 }

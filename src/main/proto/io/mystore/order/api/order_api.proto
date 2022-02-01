@@ -40,9 +40,9 @@ service OrderService {
     };
   }
 
-  rpc ShippedOrderItem(ShippedOrderItemCommand) returns (google.protobuf.Empty) {
+  rpc ShippedOrderItem(ShippedOrderSkuCommand) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      put: "/order/{order_id}/shipped-order-item"
+      put: "/order/{order_id}/shipped-order-sku"
       body: "*"
     };
   }
@@ -84,7 +84,7 @@ message ShippedOrderCommand {
   google.protobuf.Timestamp shipped_utc = 2;
 }
 
-message ShippedOrderItemCommand {
+message ShippedOrderSkuCommand {
   string order_id = 1 [(akkaserverless.field).entity_key = true];
   string sku_id = 2;
   google.protobuf.Timestamp shipped_utc = 3;

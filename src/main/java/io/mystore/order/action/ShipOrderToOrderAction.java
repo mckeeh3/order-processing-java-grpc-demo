@@ -40,8 +40,8 @@ public class ShipOrderToOrderAction extends AbstractShipOrderToOrderAction {
         .build();
   }
 
-  private OrderApi.ShippedOrderItemCommand toShippedOrderItem(ShipOrderEntity.OrderSkuShipped orderSkuShipped) {
-    return OrderApi.ShippedOrderItemCommand
+  private OrderApi.ShippedOrderSkuCommand toShippedOrderItem(ShipOrderEntity.OrderSkuShipped orderSkuShipped) {
+    return OrderApi.ShippedOrderSkuCommand
         .newBuilder()
         .setOrderId(orderSkuShipped.getOrderId())
         .setSkuId(orderSkuShipped.getSkuId())

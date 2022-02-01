@@ -39,6 +39,26 @@ service OrdersByDate {
     };
   }
 
+  rpc OnOrderShipped(entity.OrderShipped) returns (Order) {
+    option (akkaserverless.method).eventing.in = {
+      event_sourced_entity: "order"
+    };
+    option (akkaserverless.method).view.update = {
+      table: "orders_by_date"
+      transform_updates: true
+    };
+  }
+
+  rpc OnOrderItemShipped(entity.OrderItemShipped) returns (Order) {
+    option (akkaserverless.method).eventing.in = {
+      event_sourced_entity: "order"
+    };
+    option (akkaserverless.method).view.update = {
+      table: "orders_by_date"
+      transform_updates: true
+    };
+  }
+
   rpc IgnoreOtherEvents(google.protobuf.Any) returns (Order) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "order"

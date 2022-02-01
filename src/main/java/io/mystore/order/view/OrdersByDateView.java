@@ -36,6 +36,35 @@ public class OrdersByDateView extends AbstractOrdersByDateView {
             .build());
   }
 
+  @Override
+  public UpdateEffect<OrderModel.Order> onOrderShipped(OrderModel.Order state, OrderEntity.OrderShipped orderShipped) {
+    return effects().updateState(
+        state.toBuilder()
+            .setShippedUtc(orderShipped.getShippedUtc())
+            .build());
+  }
+
+  @Override
+  public UpdateEffect<OrderModel.Order> onOrderItemShipped(OrderModel.Order state, OrderEntity.OrderItemShipped orderItemShipped) {
+    var orderItems = state.getOrderItemsList().stream()
+        .map(item -> {
+          if (item.getSkuId().equals(orderItemShipped.getSkuId())) {
+            return item.toBuilder()
+                .setShippedUtc(orderItemShipped.getShippedUtc())
+                .build();
+          } else {
+            return item;
+          }
+        })
+        .collect(Collectors.toList());
+
+    return effects().updateState(
+        state.toBuilder()
+            .clearOrderItems()
+            .addAllOrderItems(orderItems)
+            .build());
+  }
+
   private List<OrderModel.OrderItem> toOrderItems(List<OrderEntity.OrderItem> orderItems) {
     return orderItems.stream()
         .map(lineItem -> OrderModel.OrderItem.newBuilder()

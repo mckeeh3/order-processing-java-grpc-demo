@@ -30,6 +30,7 @@ public class OrderedItemsByDateView extends AbstractOrderedItemsByDateView {
             .setSkuName(orderItemState.getSkuName())
             .setQuantity(orderItemState.getQuantity())
             .setOrderedUtc(orderItemState.getOrderedUtc())
+            .setShippedUtc(orderItemState.getShippedUtc())
             .build());
   }
 

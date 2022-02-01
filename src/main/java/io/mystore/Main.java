@@ -8,6 +8,7 @@ import io.mystore.cart.view.CartsByDateView;
 import io.mystore.order.action.CartToOrderAction;
 import io.mystore.order.action.OrderToOrderedItemsAction;
 import io.mystore.order.action.ShipOrderToOrderAction;
+import io.mystore.order.action.ShipOrderToOrderItemAction;
 import io.mystore.order.entity.Order;
 import io.mystore.order.entity.OrderItem;
 import io.mystore.order.view.OrderedItemsByCustomerByDateView;
@@ -79,6 +80,7 @@ public final class Main {
       ShipOrderItemToShipOrderAction::new,
       ShipOrderItemToShipSkuItemAction::new,
       ShipOrderToOrderAction::new,
+      ShipOrderToOrderItemAction::new,
       ShipOrderToShipOrderItemAction::new,
       ShipSkuItemToShipOrderItemAction::new,
       ShipSkuItemToStockItemAction::new,

@@ -26,7 +26,16 @@ public class OrderItem extends AbstractOrderItem {
 
   @Override
   public Effect<Empty> createOrderItem(OrderItemEntity.OrderItemState state, OrderItemApi.CreateOrderItemCommand command) {
-    log.info("state: {}\ncreateOrderItemCommand: {}", state, command);
+    log.info("state: {}\nCreateOrderItemCommand: {}", state, command);
+
+    return effects()
+        .updateState(updateState(state, command))
+        .thenReply(Empty.getDefaultInstance());
+  }
+
+  @Override
+  public Effect<Empty> shippedOrderItem(OrderItemEntity.OrderItemState state, OrderItemApi.ShippedOrderItemCommand command) {
+    log.info("state: {}\nShipOrderItemCommand: {}", state, command);
 
     return effects()
         .updateState(updateState(state, command))
@@ -50,6 +59,13 @@ public class OrderItem extends AbstractOrderItem {
         .build();
   }
 
+  private OrderItemEntity.OrderItemState updateState(OrderItemEntity.OrderItemState state, OrderItemApi.ShippedOrderItemCommand command) {
+    return state
+        .toBuilder()
+        .setShippedUtc(command.getShippedUtc())
+        .build();
+  }
+
   private OrderItemApi.GetOrderItemResponse toApi(OrderItemEntity.OrderItemState state) {
     return OrderItemApi.GetOrderItemResponse
         .newBuilder()
@@ -59,6 +75,7 @@ public class OrderItem extends AbstractOrderItem {
         .setSkuName(state.getSkuName())
         .setQuantity(state.getQuantity())
         .setOrderedUtc(state.getOrderedUtc())
+        .setShippedUtc(state.getShippedUtc())
         .build();
   }
 }

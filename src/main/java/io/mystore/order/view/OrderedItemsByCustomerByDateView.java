@@ -3,6 +3,7 @@ package io.mystore.order.view;
 import com.akkaserverless.javasdk.view.View;
 import com.akkaserverless.javasdk.view.ViewContext;
 import com.google.protobuf.Any;
+
 import io.mystore.order.entity.OrderItemEntity;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
@@ -30,6 +31,7 @@ public class OrderedItemsByCustomerByDateView extends AbstractOrderedItemsByCust
             .setSkuName(orderItemState.getSkuName())
             .setQuantity(orderItemState.getQuantity())
             .setOrderedUtc(orderItemState.getOrderedUtc())
+            .setShippedUtc(orderItemState.getShippedUtc())
             .build());
   }
 

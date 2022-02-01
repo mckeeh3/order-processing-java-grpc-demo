@@ -4,7 +4,7 @@
 
   <groupId>io.mystore</groupId>
   <artifactId>mystore-esaas-with-views-java</artifactId>
-  <version>v3</version>
+  <version>v2</version>
   <packaging>jar</packaging>
 
   <name>mystore-esaas-with-views-java</name>
