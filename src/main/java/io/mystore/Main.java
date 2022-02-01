@@ -15,6 +15,7 @@ import io.mystore.order.view.OrderedItemsByDateView;
 import io.mystore.order.view.OrderedItemsBySkuByDateView;
 import io.mystore.order.view.OrdersByCustomerByDateView;
 import io.mystore.order.view.OrdersByDateView;
+import io.mystore.shipping.action.BackOrderCheckTimerAction;
 import io.mystore.shipping.action.OrderToShipOrderAction;
 import io.mystore.shipping.action.ShipOrderItemToShipOrderAction;
 import io.mystore.shipping.action.ShipOrderItemToShipSkuItemAction;
@@ -23,6 +24,7 @@ import io.mystore.shipping.action.ShipSkuItemToShipOrderItemAction;
 import io.mystore.shipping.action.ShipSkuItemToStockItemAction;
 import io.mystore.shipping.action.StockItemFrontendAction;
 import io.mystore.shipping.action.StockItemToShipSkuItemAction;
+import io.mystore.shipping.entity.BackOrderTimer;
 import io.mystore.shipping.entity.ShipOrder;
 import io.mystore.shipping.entity.ShipOrderItem;
 import io.mystore.shipping.entity.ShipSkuItem;
@@ -50,6 +52,7 @@ public final class Main {
     // If you prefer, you may remove this and manually register these components in a
     // `new AkkaServerless()` instance.
     return AkkaServerlessFactory.withComponents(
+      BackOrderTimer::new,
       Order::new,
       OrderItem::new,
       ShipOrder::new,
@@ -59,6 +62,7 @@ public final class Main {
       StockItem::new,
       AvailableShipSkuItemsView::new,
       AvailableStockItemsView::new,
+      BackOrderCheckTimerAction::new,
       BackOrderedShipOrderItemsView::new,
       BackOrderedShipOrderItemsBySkuView::new,
       CartToOrderAction::new,

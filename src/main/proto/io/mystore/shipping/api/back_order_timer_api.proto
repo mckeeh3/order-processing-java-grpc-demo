@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+import "akkaserverless/annotations.proto";
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/duration.proto";
+
+package io.mystore.shipping.api;
+
+option java_outer_classname = "BackOrderTimerApi";
+
+service BackOrderTimer {
+  option (akkaserverless.codegen) = {
+    value_entity: {
+      name: "io.mystore.shipping.entity.BackOrderTimer"
+      entity_type: "back_order_timer"
+      state: "io.mystore.shipping.entity.BackOrderTimerState"  //
+    }
+  };
+
+  rpc CreateBackOrderTimer(CreateBackOrderTimerCommand) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/back-order-timer/{sku_id}/create"
+      body: "*"
+    };
+  }
+
+  rpc PingBackOrderTimer(PingBackOrderTimerCommand) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/back-order-timer/{sku_id}/ping"
+      body: "*"
+    };
+  }
+
+  rpc GetBackOrderTimer(GetBackOrderTimerRequest) returns (GetBackOrderTimerResponse) {
+    option (google.api.http) = {
+      get: "/back-order-timer/{sku_id}"
+    };
+  }
+}
+
+message CreateBackOrderTimerCommand {
+  string sku_id = 1 [(akkaserverless.field).entity_key = true];
+}
+
+message PingBackOrderTimerCommand {
+  string sku_id = 1 [(akkaserverless.field).entity_key = true];
+}
+
+message GetBackOrderTimerRequest {
+  string sku_id = 1 [(akkaserverless.field).entity_key = true];
+}
+
+message GetBackOrderTimerResponse {
+  string sku_id = 1;
+  google.protobuf.Timestamp started = 2;
+  google.protobuf.Timestamp stop_after = 3;
+  google.protobuf.Duration ping_interval = 4;
+  google.protobuf.Timestamp last_pinged = 5;
+}

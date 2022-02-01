@@ -15,8 +15,7 @@ import io.mystore.shipping.api.ShipOrderItemApi;
 import io.mystore.shipping.api.ShipSkuItemApi;
 import io.mystore.shipping.entity.ShipSkuItemEntity;
 import io.mystore.shipping.view.BackOrderedShipOrderItemsBySkuModel;
-import io.mystore.shipping.view.BackOrderedShipOrderItemsBySkuModel.GetBackOrderedOrderItemsBySkuResponse;
-import io.mystore.shipping.view.ShipOrderItemModel.ShipOrderItem;
+import io.mystore.shipping.view.ShipOrderItemModel;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
 //
@@ -41,11 +40,11 @@ public class ShipSkuItemToShipOrderItemAction extends AbstractShipSkuItemToShipO
     return effects().forward(components().shipOrderItem().joinToSkuItem(toJoinToSkuItem(joinedToOrderItem)));
   }
 
-  @Override
-  public Effect<Empty> onReleasedFromOrderItem(ShipSkuItemEntity.ReleasedFromOrderItem releasedFromOrderItem) {
-    log.info("onReleasedFromOrderItem: {}", releasedFromOrderItem);
-    return notifySkuItemOfBackOrderedOrderItem(releasedFromOrderItem.getSkuId(), releasedFromOrderItem.getSkuItemId());
-  }
+  // @Override
+  // public Effect<Empty> onReleasedFromOrderItem(ShipSkuItemEntity.ReleasedFromOrderItem releasedFromOrderItem) {
+  // log.info("onReleasedFromOrderItem: {}", releasedFromOrderItem);
+  // return notifySkuItemOfBackOrderedOrderItem(releasedFromOrderItem.getSkuId(), releasedFromOrderItem.getSkuItemId());
+  // }
 
   @Override
   public Effect<Empty> ignoreOtherEvents(Any any) {
@@ -63,7 +62,7 @@ public class ShipSkuItemToShipOrderItemAction extends AbstractShipSkuItemToShipO
             .thenCompose(response -> joinBackOrderedToSkuItem(skuItemId, response)));
   }
 
-  private CompletionStage<Empty> joinBackOrderedToSkuItem(String skuItemId, GetBackOrderedOrderItemsBySkuResponse response) {
+  private CompletionStage<Empty> joinBackOrderedToSkuItem(String skuItemId, BackOrderedShipOrderItemsBySkuModel.GetBackOrderedOrderItemsBySkuResponse response) {
     var count = response.getShipOrderItemsCount();
     log.info("joinBackOrderedToSkuItem: count: {}", count);
 
@@ -74,12 +73,13 @@ public class ShipSkuItemToShipOrderItemAction extends AbstractShipSkuItemToShipO
     }
   }
 
-  private CompletionStage<Empty> joinBackOrderedToSkuItem(String skuItemId, ShipOrderItem shipOrderItem) {
+  private CompletionStage<Empty> joinBackOrderedToSkuItem(String skuItemId, ShipOrderItemModel.ShipOrderItem shipOrderItem) {
     return components().shipSkuItem().joinToOrderItem(
         ShipSkuItemApi.JoinToOrderItemCommand
             .newBuilder()
             .setOrderId(shipOrderItem.getOrderId())
             .setOrderItemId(shipOrderItem.getOrderItemId())
+            .setSkuId(shipOrderItem.getSkuId())
             .setSkuItemId(skuItemId)
             .build())
         .execute();

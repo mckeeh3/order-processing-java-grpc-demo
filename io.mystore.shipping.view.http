@@ -1,6 +1,6 @@
 
 @urlPrefix = https://blue-shape-3166.us-east1.akkaserverless.app
-@skuId = sku-2
+@skuId = sku-1
 @orderId = cart-1
 
 ### io.mystore.shipping.view.BackOrderedShipOrderItems.GetBackOrderedShipOrderItems

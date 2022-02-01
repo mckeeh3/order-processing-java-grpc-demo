@@ -184,6 +184,9 @@ public class ShipOrderItem extends AbstractShipOrderItem {
   private ShipOrderItemEntity.OrderItemBackOrdered eventFor(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.BackOrderOrderItemCommand command) {
     return ShipOrderItemEntity.OrderItemBackOrdered
         .newBuilder()
+        .setOrderId(state.getOrderId())
+        .setOrderItemId(state.getOrderItemId())
+        .setSkuId(state.getSkuId())
         .setBackOrderedUtc(timestampNow())
         .build();
   }

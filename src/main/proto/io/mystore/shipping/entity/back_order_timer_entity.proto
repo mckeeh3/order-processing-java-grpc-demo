@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package io.mystore.shipping.entity;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/duration.proto";
+
+option java_outer_classname = "BackOrderTimerEntity";
+
+message BackOrderTimerState {
+  string sku_id = 1;
+  google.protobuf.Timestamp started = 2;
+  google.protobuf.Timestamp stop_after = 3;
+  google.protobuf.Duration ping_interval = 4;
+  google.protobuf.Timestamp last_pinged = 5;
+}

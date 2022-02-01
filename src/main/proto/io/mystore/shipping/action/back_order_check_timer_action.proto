@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package io.mystore.shipping.action;
+
+import "akkaserverless/annotations.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/any.proto";
+import "io/mystore/shipping/entity/ship_sku_item_entity.proto";
+import "io/mystore/shipping/entity/ship_order_item_entity.proto";
+import "io/mystore/shipping/entity/back_order_timer_entity.proto";
+
+option java_outer_classname = "BackOrderCheckTimerService";
+
+service BackOrderCheckTimer {
+  option (akkaserverless.codegen) = {
+    action: {}
+  };
+
+  rpc OnOrderItemBackOrdered(shipping.entity.OrderItemBackOrdered) returns (google.protobuf.Empty) {
+    option (akkaserverless.method).eventing.in = {
+      event_sourced_entity: "ship_order_item"
+    };
+  }
+
+  rpc IgnoreOtherOrderItemEvents(google.protobuf.Any) returns (google.protobuf.Empty) {
+    option (akkaserverless.method).eventing.in = {
+      event_sourced_entity: "ship_order_item"
+    };
+  }
+
+  rpc OnReleasedFromOrderItem(shipping.entity.ReleasedFromOrderItem) returns (google.protobuf.Empty) {
+    option (akkaserverless.method).eventing.in = {
+      event_sourced_entity: "ship_sku_item"
+    };
+  }
+
+  rpc IgnoreOtherSkuItemEvents(google.protobuf.Any) returns (google.protobuf.Empty) {
+    option (akkaserverless.method).eventing.in = {
+      event_sourced_entity: "ship_sku_item"
+    };
+  }
+
+  rpc OnBackOrderTimerPing(shipping.entity.BackOrderTimerState) returns (google.protobuf.Empty) {
+    option (akkaserverless.method).eventing.in = {
+      value_entity: "back_order_timer"
+    };
+  }
+}

@@ -26,12 +26,6 @@ service ShipSkuItemToShipOrderItem {
     };
   }
 
-  rpc OnReleasedFromOrderItem(shipping.entity.ReleasedFromOrderItem) returns (google.protobuf.Empty) {
-    option (akkaserverless.method).eventing.in = {
-      event_sourced_entity: "ship_sku_item"
-    };
-  }
-
   rpc IgnoreOtherEvents(google.protobuf.Any) returns (google.protobuf.Empty) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "ship_sku_item"
