@@ -36,8 +36,8 @@ public class Cart {
   }
 
   private static CartModel.LineItem incrementQuantity(CartEntity.ItemAdded event, CartModel.LineItem lineItem) {
-    return CartModel.LineItem
-        .newBuilder()
+    return lineItem
+        .toBuilder()
         .setQuantity(lineItem.getQuantity() + event.getLineItem().getQuantity())
         .build();
   }
@@ -85,20 +85,6 @@ public class Cart {
     return this;
   }
 
-  Cart handle(CartEntity.CartShipped event) {
-    state = state.toBuilder()
-        .setShippedUtc(event.getShippedUtc())
-        .build();
-    return this;
-  }
-
-  Cart handle(CartEntity.CartDelivered event) {
-    state = state.toBuilder()
-        .setDeliveredUtc(event.getDeliveredUtc())
-        .build();
-    return this;
-  }
-
   Cart handle(CartEntity.CartDeleted event) {
     state = state.toBuilder()
         .setDeletedUtc(event.getDeletedUtc())
@@ -109,8 +95,6 @@ public class Cart {
   Cart handle(CartEntity.DatesChanged event) {
     state = state.toBuilder()
         .setCheckedOutUtc(event.getCheckedOutUtc())
-        .setShippedUtc(event.getShippedUtc())
-        .setDeliveredUtc(event.getDeliveredUtc())
         .setDeletedUtc(event.getDeletedUtc())
         .build();
     return this;

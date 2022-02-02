@@ -20,8 +20,6 @@ service ShoppingCartService {
         "io.mystore.cart.entity.ItemChanged",
         "io.mystore.cart.entity.ItemRemoved",
         "io.mystore.cart.entity.CartCheckedOut",
-        "io.mystore.cart.entity.CartShipped",
-        "io.mystore.cart.entity.CartDelivered",
         "io.mystore.cart.entity.CartDeleted",
         "io.mystore.cart.entity.DatesChanged"  // force line breaks
       ]
@@ -51,18 +49,6 @@ service ShoppingCartService {
   rpc CheckoutCart(CheckoutShoppingCart) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       put: "/cart/{cart_id}/checkout"
-    };
-  }
-
-  rpc ShippedCart(ShippedShoppingCart) returns (google.protobuf.Empty) {
-    option (google.api.http) = {
-      put: "/cart/{cart_id}/shipped"
-    };
-  }
-
-  rpc DeliveredCart(DeliveredShoppingCart) returns (google.protobuf.Empty) {
-    option (google.api.http) = {
-      put: "/cart/{cart_id}/delivered"
     };
   }
 
@@ -109,14 +95,6 @@ message CheckoutShoppingCart {
   string cart_id = 1 [(akkaserverless.field).entity_key = true];
 }
 
-message ShippedShoppingCart {
-  string cart_id = 1 [(akkaserverless.field).entity_key = true];
-}
-
-message DeliveredShoppingCart {
-  string cart_id = 1 [(akkaserverless.field).entity_key = true];
-}
-
 message DeleteShoppingCart {
   string cart_id = 1 [(akkaserverless.field).entity_key = true];
 }
@@ -124,8 +102,6 @@ message DeleteShoppingCart {
 message SetShoppingCartDates {
   string cart_id = 1 [(akkaserverless.field).entity_key = true];
   google.protobuf.Timestamp checked_out_utc = 2;
-  google.protobuf.Timestamp shipped_utc = 3;
-  google.protobuf.Timestamp delivered_utc = 4;
   google.protobuf.Timestamp deleted_utc = 5;
 }
 
@@ -137,10 +113,8 @@ message ShoppingCart {
   string cart_id = 1;
   string customer_id = 2;
   google.protobuf.Timestamp checked_out_utc = 3;
-  google.protobuf.Timestamp shipped_utc = 4;
-  google.protobuf.Timestamp delivered_utc = 5;
-  google.protobuf.Timestamp deleted_utc = 6;
-  repeated LineItem line_items = 7;
+  google.protobuf.Timestamp deleted_utc = 4;
+  repeated LineItem line_items = 5;
 }
 
 message LineItem {

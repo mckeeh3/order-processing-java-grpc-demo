@@ -1,25 +1,20 @@
 
 @urlPrefix = https://blue-shape-3166.us-east1.akkaserverless.app
 @customerId = customer-1
-@cartId = cart-1
-@skuId = sku-1
 @fromDate = 2022-01-01T00:00:00.000-05:00
 @toDate = 2023-01-01T00:00:00.000-05:00
 
 ### io.mystore.cart.view.CartsByCustomer.GetCartsByCustomer
 
-curl -XPOST -H "Content-Type: application/json"
-  -d '{"customer_id":"{{customerId}}"}'
-  {{urlPrefix}}/carts-by-customer
+curl -XGET -H "Content-Type: application/json"
+  '{{urlPrefix}}/carts-by-customer?customer_id={{customerId}}'
 
 ### io.mystore.cart.view.CartsByCustomerByDate.GetCartsByCustomerByDate
 
-curl -XPOST -H "Content-Type: application/json"
-  -d '{"customer_id":"{{customerId}}","from_date":"{{fromDate}}","to_date":"{{toDate}}"}'
-  {{urlPrefix}}/carts-by-customer-by-date
+curl -XGET -H "Content-Type: application/json"
+  '{{urlPrefix}}/carts-by-customer-by-date?customer_id={{customerId}}&from_date={{fromDate}}&to_date={{toDate}}'
 
 ### io.mystore.cart.view.CartsByDate.GetCartsByDate
 
-curl -XPOST -H "Content-Type: application/json"
-  -d '{"from_date":"{{fromDate}}","to_date":"{{toDate}}"}'
-  {{urlPrefix}}/carts-by-date
+curl -XGET -H "Content-Type: application/json"
+  '{{urlPrefix}}/carts-by-date?from_date={{fromDate}}&to_date={{toDate}}'

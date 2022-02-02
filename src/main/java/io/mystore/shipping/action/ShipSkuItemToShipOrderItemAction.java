@@ -58,7 +58,7 @@ public class ShipSkuItemToShipOrderItemAction extends AbstractShipSkuItemToShipO
 
   private CompletionStage<Empty> joinBackOrderedToSkuItem(String skuId, String skuItemId, BackOrderedShipOrderItemsBySkuModel.GetBackOrderedOrderItemsBySkuResponse response) {
     var count = response.getShipOrderItemsCount();
-    log.info("joinBackOrderedToSkuItem: skuId: {}, count: {}", count);
+    log.info("joinBackOrderedToSkuItem: skuId: {}, count: {}", skuId, count);
 
     if (count > 0) {
       return joinBackOrderedToSkuItem(skuItemId, response.getShipOrderItemsList().get(random.nextInt(count)));

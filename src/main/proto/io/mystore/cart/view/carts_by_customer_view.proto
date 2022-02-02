@@ -21,8 +21,7 @@ service CartsByCustomer {
              " WHERE customer_id = :customer_id"
     };
     option (google.api.http) = {
-      post: "/carts-by-customer",
-      body: "*"
+      get: "/carts-by-customer"
     };
   }
 
@@ -57,26 +56,6 @@ service CartsByCustomer {
   }
 
   rpc ProcessCartCheckedOut(entity.CartCheckedOut) returns (Cart) {
-    option (akkaserverless.method).eventing.in = {
-      event_sourced_entity: "shopping_cart"
-    };
-    option (akkaserverless.method).view.update = {
-      table: "carts_by_customer"
-      transform_updates: true
-    };
-  }
-
-  rpc ProcessCartShipped(entity.CartShipped) returns (Cart) {
-    option (akkaserverless.method).eventing.in = {
-      event_sourced_entity: "shopping_cart"
-    };
-    option (akkaserverless.method).view.update = {
-      table: "carts_by_customer"
-      transform_updates: true
-    };
-  }
-
-  rpc ProcessCartDelivered(entity.CartDelivered) returns (Cart) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "shopping_cart"
     };

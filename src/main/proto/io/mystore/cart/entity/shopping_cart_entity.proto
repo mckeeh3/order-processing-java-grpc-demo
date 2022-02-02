@@ -27,16 +27,6 @@ message CartCheckedOut {
   CartState cart_state = 1;
 }
 
-message CartShipped {
-  string cart_id = 1;
-  google.protobuf.Timestamp shipped_utc = 2;
-}
-
-message CartDelivered {
-  string cart_id = 1;
-  google.protobuf.Timestamp delivered_utc = 2;
-}
-
 message CartDeleted {
   string cart_id = 1;
   google.protobuf.Timestamp deleted_utc = 2;
@@ -45,19 +35,16 @@ message CartDeleted {
 message DatesChanged {
   string cart_id = 1;
   google.protobuf.Timestamp checked_out_utc = 2;
-  google.protobuf.Timestamp shipped_utc = 3;
-  google.protobuf.Timestamp delivered_utc = 4;
-  google.protobuf.Timestamp deleted_utc = 5;
+  google.protobuf.Timestamp deleted_utc = 3;
 }
 
 message CartState {
   string cart_id = 1;
   string customer_id = 2;
   google.protobuf.Timestamp checked_out_utc = 3;
-  google.protobuf.Timestamp shipped_utc = 4;
-  google.protobuf.Timestamp delivered_utc = 5;
-  google.protobuf.Timestamp deleted_utc = 6;
-  repeated LineItem line_items = 7;
+  google.protobuf.Timestamp delivered_utc = 4;
+  google.protobuf.Timestamp deleted_utc = 5;
+  repeated LineItem line_items = 6;
 }
 
 message LineItem {

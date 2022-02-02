@@ -57,24 +57,6 @@ public class CartsByDateView extends AbstractCartsByDateView {
   }
 
   @Override
-  public View.UpdateEffect<CartModel.Cart> processCartShipped(CartModel.Cart state, CartEntity.CartShipped event) {
-    return effects()
-        .updateState(
-            Cart.fromState(state)
-                .handle(event)
-                .toState());
-  }
-
-  @Override
-  public View.UpdateEffect<CartModel.Cart> processCartDelivered(CartModel.Cart state, CartEntity.CartDelivered event) {
-    return effects()
-        .updateState(
-            Cart.fromState(state)
-                .handle(event)
-                .toState());
-  }
-
-  @Override
   public View.UpdateEffect<CartModel.Cart> processCartDeleted(CartModel.Cart state, CartEntity.CartDeleted event) {
     return effects()
         .updateState(

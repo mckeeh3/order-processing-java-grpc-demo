@@ -24,8 +24,7 @@ service CartsByCustomerByDate {
              "   AND checked_out_utc.seconds < :`to_date.seconds`"
     };
     option (google.api.http) = {
-      post: "/carts-by-customer-by-date",
-      body: "*"
+      get: "/carts-by-customer-by-date"
     };
   }
 
@@ -60,26 +59,6 @@ service CartsByCustomerByDate {
   }
 
   rpc ProcessCartCheckedOut(entity.CartCheckedOut) returns (Cart) {
-    option (akkaserverless.method).eventing.in = {
-      event_sourced_entity: "shopping_cart"
-    };
-    option (akkaserverless.method).view.update = {
-      table: "carts_by_customer_by_date"
-      transform_updates: true
-    };
-  }
-
-  rpc ProcessCartShipped(entity.CartShipped) returns (Cart) {
-    option (akkaserverless.method).eventing.in = {
-      event_sourced_entity: "shopping_cart"
-    };
-    option (akkaserverless.method).view.update = {
-      table: "carts_by_customer_by_date"
-      transform_updates: true
-    };
-  }
-
-  rpc ProcessCartDelivered(entity.CartDelivered) returns (Cart) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "shopping_cart"
     };

@@ -53,16 +53,6 @@ public class ShoppingCart extends AbstractShoppingCart {
   }
 
   @Override
-  public Effect<Empty> shippedCart(CartEntity.CartState state, CartApi.ShippedShoppingCart command) {
-    return reject(state, command).orElseGet(() -> handle(state, command));
-  }
-
-  @Override
-  public Effect<Empty> deliveredCart(CartEntity.CartState state, CartApi.DeliveredShoppingCart command) {
-    return reject(state, command).orElseGet(() -> handle(state, command));
-  }
-
-  @Override
   public Effect<Empty> deleteCart(CartEntity.CartState state, CartApi.DeleteShoppingCart command) {
     return reject(state, command).orElseGet(() -> handle(state, command));
   }
@@ -103,22 +93,6 @@ public class ShoppingCart extends AbstractShoppingCart {
 
   @Override
   public CartEntity.CartState cartCheckedOut(CartEntity.CartState state, CartEntity.CartCheckedOut event) {
-    return Cart
-        .fromState(state)
-        .handle(event)
-        .toState();
-  }
-
-  @Override
-  public CartEntity.CartState cartShipped(CartEntity.CartState state, CartEntity.CartShipped event) {
-    return Cart
-        .fromState(state)
-        .handle(event)
-        .toState();
-  }
-
-  @Override
-  public CartEntity.CartState cartDelivered(CartEntity.CartState state, CartEntity.CartDelivered event) {
     return Cart
         .fromState(state)
         .handle(event)
@@ -211,41 +185,9 @@ public class ShoppingCart extends AbstractShoppingCart {
     return Optional.empty();
   }
 
-  private Optional<Effect<Empty>> reject(CartEntity.CartState state, CartApi.ShippedShoppingCart command) {
-    if (state.getDeletedUtc().getSeconds() > 0) {
-      return Optional.of(effects().error("Shopping cart is deleted"));
-    }
-    if (state.getCheckedOutUtc().getSeconds() == 0) {
-      return Optional.of(effects().error("Shopping cart is not checked out"));
-    }
-    if (state.getShippedUtc().getSeconds() > 0) {
-      return Optional.of(effects().error("Shopping cart already shipped"));
-    }
-    return Optional.empty();
-  }
-
-  private Optional<Effect<Empty>> reject(CartEntity.CartState state, CartApi.DeliveredShoppingCart command) {
-    if (state.getDeletedUtc().getSeconds() > 0) {
-      return Optional.of(effects().error("Shopping cart is deleted"));
-    }
-    if (state.getCheckedOutUtc().getSeconds() == 0) {
-      return Optional.of(effects().error("Shopping cart is not checked out"));
-    }
-    if (state.getShippedUtc().getSeconds() == 0) {
-      return Optional.of(effects().error("Shopping cart is not shipped"));
-    }
-    if (state.getDeliveredUtc().getSeconds() > 0) {
-      return Optional.of(effects().error("Shopping cart already delivered"));
-    }
-    return Optional.empty();
-  }
-
   private Optional<Effect<Empty>> reject(CartEntity.CartState state, CartApi.DeleteShoppingCart command) {
     if (state.getDeliveredUtc().getSeconds() != 0) {
       return Optional.of(effects().error("Cannot delete delivered order"));
-    }
-    if (state.getShippedUtc().getSeconds() != 0) {
-      return Optional.of(effects().error("Cannot delete shipped order"));
     }
     if (state.getCheckedOutUtc().getSeconds() > 0) {
       return Optional.of(effects().error("Cannot delete checked out order"));
@@ -258,8 +200,6 @@ public class ShoppingCart extends AbstractShoppingCart {
 
   private Optional<Effect<CartApi.ShoppingCart>> reject(CartEntity.CartState state, CartApi.SetShoppingCartDates command) {
     return reject(command.getCheckedOutUtc(), "checked out")
-        .or(() -> reject(command.getShippedUtc(), "shipped"))
-        .or(() -> reject(command.getDeliveredUtc(), "delivered"))
         .or(() -> reject(command.getDeletedUtc(), "deleted"))
         .or(() -> Optional.empty());
   }
@@ -296,18 +236,6 @@ public class ShoppingCart extends AbstractShoppingCart {
   private Effect<Empty> handle(CartEntity.CartState state, CartApi.CheckoutShoppingCart command) {
     log.info("state: {}\ncheckoutShoppingCart: {}", state, command);
 
-    return effects()
-        .emitEvent(event(state, command))
-        .thenReply(newState -> Empty.getDefaultInstance());
-  }
-
-  private Effect<Empty> handle(CartEntity.CartState state, CartApi.ShippedShoppingCart command) {
-    return effects()
-        .emitEvent(event(state, command))
-        .thenReply(newState -> Empty.getDefaultInstance());
-  }
-
-  private Effect<Empty> handle(CartEntity.CartState state, CartApi.DeliveredShoppingCart command) {
     return effects()
         .emitEvent(event(state, command))
         .thenReply(newState -> Empty.getDefaultInstance());
@@ -370,22 +298,6 @@ public class ShoppingCart extends AbstractShoppingCart {
         .build();
   }
 
-  private static CartEntity.CartShipped event(CartEntity.CartState state, CartApi.ShippedShoppingCart command) {
-    return CartEntity.CartShipped
-        .newBuilder()
-        .setCartId(state.getCartId())
-        .setShippedUtc(Cart.timestampNow())
-        .build();
-  }
-
-  private static CartEntity.CartDelivered event(CartEntity.CartState state, CartApi.DeliveredShoppingCart command) {
-    return CartEntity.CartDelivered
-        .newBuilder()
-        .setCartId(state.getCartId())
-        .setDeliveredUtc(Cart.timestampNow())
-        .build();
-  }
-
   private static CartEntity.CartDeleted event(CartEntity.CartState state, CartApi.DeleteShoppingCart command) {
     return CartEntity.CartDeleted
         .newBuilder()
@@ -399,8 +311,6 @@ public class ShoppingCart extends AbstractShoppingCart {
         .newBuilder()
         .setCartId(state.getCartId())
         .setCheckedOutUtc(command.getCheckedOutUtc())
-        .setShippedUtc(command.getShippedUtc())
-        .setDeliveredUtc(command.getDeliveredUtc())
         .setDeletedUtc(command.getDeletedUtc())
         .build();
   }
@@ -411,8 +321,6 @@ public class ShoppingCart extends AbstractShoppingCart {
         .setCartId(state.getCartId())
         .setCustomerId(state.getCustomerId())
         .setCheckedOutUtc(state.getCheckedOutUtc())
-        .setShippedUtc(state.getShippedUtc())
-        .setDeliveredUtc(state.getDeliveredUtc())
         .setDeletedUtc(state.getDeletedUtc())
         .addAllLineItems(toApi(state.getLineItemsList()))
         .build();
@@ -507,22 +415,6 @@ public class ShoppingCart extends AbstractShoppingCart {
       return this;
     }
 
-    Cart handle(CartEntity.CartShipped event) {
-      state = state
-          .toBuilder()
-          .setShippedUtc(timestampNow())
-          .build();
-      return this;
-    }
-
-    Cart handle(CartEntity.CartDelivered event) {
-      state = state
-          .toBuilder()
-          .setDeliveredUtc(timestampNow())
-          .build();
-      return this;
-    }
-
     Cart handle(CartEntity.CartDeleted event) {
       state = state
           .toBuilder()
@@ -535,8 +427,6 @@ public class ShoppingCart extends AbstractShoppingCart {
       state = state
           .toBuilder()
           .setCheckedOutUtc(fromStateOrEvent(state.getCheckedOutUtc(), event.getCheckedOutUtc()))
-          .setShippedUtc(fromStateOrEvent(state.getShippedUtc(), event.getShippedUtc()))
-          .setDeliveredUtc(fromStateOrEvent(state.getDeliveredUtc(), event.getDeliveredUtc()))
           .setDeletedUtc(fromStateOrEvent(state.getDeletedUtc(), event.getDeletedUtc()))
           .build();
       return this;
