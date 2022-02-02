@@ -1,11 +1,11 @@
 package io.mystore.shipping.action;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import com.akkaserverless.javasdk.action.ActionCreationContext;
 import com.google.protobuf.Any;
@@ -103,26 +103,16 @@ public class BackOrderCheckTimerAction extends AbstractBackOrderCheckTimerAction
   private CompletionStage<Empty> joinBackOrderedItemsToSkuItems(String skuId, GetAvailableShipSkuItemsResponse availableSkuItems, GetBackOrderedOrderItemsBySkuResponse backOrderedOrderItems) {
     var countAvailableSkuItems = availableSkuItems.getShipSkuItemsCount();
     var countBackOrderedOrderItems = backOrderedOrderItems.getShipOrderItemsCount();
-    var skuItemOrderItems = new ArrayList<SkuItemOrderItem>();
 
     log.info("skuId: {}, available SKU items: {}, back ordered order items: {}", skuId, countAvailableSkuItems, countBackOrderedOrderItems);
 
-    for (int i = 0; i < Math.min(countAvailableSkuItems, countBackOrderedOrderItems); i++) {
-      var availableSkuItem = availableSkuItems.getShipSkuItems(i);
-      var backOrderedOrderItem = backOrderedOrderItems.getShipOrderItems(i);
-
-      skuItemOrderItems.add(new SkuItemOrderItem(availableSkuItem, backOrderedOrderItem));
-    }
-
-    return joinBackOrderedToSkuItem(skuId, skuItemOrderItems);
-  }
-
-  private CompletionStage<Empty> joinBackOrderedToSkuItem(String skuId, List<SkuItemOrderItem> skuItemOrderItems) {
-    var results = skuItemOrderItems.stream()
+    var results = IntStream.range(0, Math.min(countAvailableSkuItems, countBackOrderedOrderItems))
+        .mapToObj(i -> new SkuItemOrderItem(availableSkuItems.getShipSkuItems(i), backOrderedOrderItems.getShipOrderItems(i)))
         .map(skuItemOrderItem -> joinBackOrderedToSkuItemX(skuItemOrderItem.skuItem, skuItemOrderItem.orderItem))
         .collect(Collectors.toList());
 
     return CompletableFuture.allOf(results.toArray(new CompletableFuture[results.size()]))
+        .completeOnTimeout(null, 2, TimeUnit.SECONDS) // todo: make configurable
         .thenCompose(v -> pingBackOrderTimer(skuId));
   }
 

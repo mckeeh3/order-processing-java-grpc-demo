@@ -40,7 +40,6 @@ public class BackOrderTimer extends AbstractBackOrderTimer {
                 .setSkuId(command.getSkuId())
                 .setStarted(timestampNow())
                 .setStopAfter(timestampPlus(5, ChronoUnit.MINUTES)) // todo: make configurable
-                .setPingInterval(duration(2, ChronoUnit.SECONDS)) // todo: make configurable
                 .build())
         .thenReply(Empty.getDefaultInstance());
   }
@@ -52,10 +51,6 @@ public class BackOrderTimer extends AbstractBackOrderTimer {
     if (timestampNow().getSeconds() > state.getStopAfter().getSeconds()) {
       return effects().reply(Empty.getDefaultInstance());
     } else {
-      // ===============================================================================================================
-      waitInterval(state.getPingInterval()); // this is the ping interval delay - todo: is there a better way to do this?
-      // ===============================================================================================================
-
       return effects()
           .updateState(
               state.toBuilder()
@@ -76,7 +71,6 @@ public class BackOrderTimer extends AbstractBackOrderTimer {
         .setSkuId(state.getSkuId())
         .setStarted(state.getStarted())
         .setStopAfter(timestampPlus(state.getStopAfter().getSeconds(), ChronoUnit.SECONDS))
-        .setPingInterval(state.getPingInterval())
         .setLastPinged(state.getLastPinged())
         .build();
   }

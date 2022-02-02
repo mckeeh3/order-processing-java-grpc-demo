@@ -11,6 +11,5 @@ message BackOrderTimerState {
   string sku_id = 1;
   google.protobuf.Timestamp started = 2;
   google.protobuf.Timestamp stop_after = 3;
-  google.protobuf.Duration ping_interval = 4;
-  google.protobuf.Timestamp last_pinged = 5;
+  google.protobuf.Timestamp last_pinged = 4;
 }
