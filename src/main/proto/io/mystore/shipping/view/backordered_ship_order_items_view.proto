@@ -26,7 +26,7 @@ service BackOrderedShipOrderItems {
     };
   }
 
-  rpc ProcessOrderItemCreated(entity.OrderItemCreated) returns (ShipOrderItem) {
+  rpc OnOrderItemCreated(entity.OrderItemCreated) returns (ShipOrderItem) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "ship_order_item"
     };
@@ -46,7 +46,7 @@ service BackOrderedShipOrderItems {
     };
   }
 
-  rpc ProcessOrderItemBackOrdered(entity.OrderItemBackOrdered) returns (ShipOrderItem) {
+  rpc OnOrderItemBackOrdered(entity.OrderItemBackOrdered) returns (ShipOrderItem) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "ship_order_item"
     };

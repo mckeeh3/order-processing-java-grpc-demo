@@ -25,7 +25,7 @@ service CartsByCustomer {
     };
   }
 
-  rpc ProcessItemAdded(entity.ItemAdded) returns (Cart) {
+  rpc OnItemAdded(entity.ItemAdded) returns (Cart) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "shopping_cart"
     };
@@ -35,7 +35,7 @@ service CartsByCustomer {
     };
   }
 
-  rpc ProcessItemChanged(entity.ItemChanged) returns (Cart) {
+  rpc OnItemChanged(entity.ItemChanged) returns (Cart) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "shopping_cart"
     };
@@ -45,7 +45,7 @@ service CartsByCustomer {
     };
   }
 
-  rpc ProcessItemRemoved(entity.ItemRemoved) returns (Cart) {
+  rpc OnItemRemoved(entity.ItemRemoved) returns (Cart) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "shopping_cart"
     };
@@ -55,7 +55,7 @@ service CartsByCustomer {
     };
   }
 
-  rpc ProcessCartCheckedOut(entity.CartCheckedOut) returns (Cart) {
+  rpc OnCartCheckedOut(entity.CartCheckedOut) returns (Cart) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "shopping_cart"
     };
@@ -65,7 +65,7 @@ service CartsByCustomer {
     };
   }
 
-  rpc ProcessCartDeleted(entity.CartDeleted) returns (Cart) {
+  rpc OnCartDeleted(entity.CartDeleted) returns (Cart) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "shopping_cart"
     };
@@ -75,7 +75,7 @@ service CartsByCustomer {
     };
   }
 
-  rpc ProcessDatesChanged(entity.DatesChanged) returns (Cart) {
+  rpc OnDatesChanged(entity.DatesChanged) returns (Cart) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "shopping_cart"
     };

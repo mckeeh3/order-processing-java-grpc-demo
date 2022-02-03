@@ -21,7 +21,7 @@ public class CartsByDateView extends AbstractCartsByDateView {
   }
 
   @Override
-  public View.UpdateEffect<CartModel.Cart> processItemAdded(CartModel.Cart state, CartEntity.ItemAdded event) {
+  public View.UpdateEffect<CartModel.Cart> onItemAdded(CartModel.Cart state, CartEntity.ItemAdded event) {
     return effects()
         .updateState(
             Cart.fromState(state)
@@ -30,7 +30,7 @@ public class CartsByDateView extends AbstractCartsByDateView {
   }
 
   @Override
-  public View.UpdateEffect<CartModel.Cart> processItemChanged(CartModel.Cart state, CartEntity.ItemChanged event) {
+  public View.UpdateEffect<CartModel.Cart> onItemChanged(CartModel.Cart state, CartEntity.ItemChanged event) {
     return effects()
         .updateState(
             Cart.fromState(state)
@@ -39,7 +39,7 @@ public class CartsByDateView extends AbstractCartsByDateView {
   }
 
   @Override
-  public View.UpdateEffect<CartModel.Cart> processItemRemoved(CartModel.Cart state, CartEntity.ItemRemoved event) {
+  public View.UpdateEffect<CartModel.Cart> onItemRemoved(CartModel.Cart state, CartEntity.ItemRemoved event) {
     return effects()
         .updateState(
             Cart.fromState(state)
@@ -48,7 +48,7 @@ public class CartsByDateView extends AbstractCartsByDateView {
   }
 
   @Override
-  public View.UpdateEffect<CartModel.Cart> processCartCheckedOut(CartModel.Cart state, CartEntity.CartCheckedOut event) {
+  public View.UpdateEffect<CartModel.Cart> onCartCheckedOut(CartModel.Cart state, CartEntity.CartCheckedOut event) {
     return effects()
         .updateState(
             Cart.fromState(state)
@@ -57,7 +57,7 @@ public class CartsByDateView extends AbstractCartsByDateView {
   }
 
   @Override
-  public View.UpdateEffect<CartModel.Cart> processCartDeleted(CartModel.Cart state, CartEntity.CartDeleted event) {
+  public View.UpdateEffect<CartModel.Cart> onCartDeleted(CartModel.Cart state, CartEntity.CartDeleted event) {
     return effects()
         .updateState(
             Cart.fromState(state)
@@ -66,7 +66,7 @@ public class CartsByDateView extends AbstractCartsByDateView {
   }
 
   @Override
-  public View.UpdateEffect<CartModel.Cart> processDatesChanged(CartModel.Cart state, CartEntity.DatesChanged event) {
+  public View.UpdateEffect<CartModel.Cart> onDatesChanged(CartModel.Cart state, CartEntity.DatesChanged event) {
     return effects()
         .updateState(
             Cart.fromState(state)

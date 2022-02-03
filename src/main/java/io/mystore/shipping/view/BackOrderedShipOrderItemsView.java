@@ -23,7 +23,7 @@ public class BackOrderedShipOrderItemsView extends AbstractBackOrderedShipOrderI
   }
 
   @Override
-  public View.UpdateEffect<ShipOrderItemModel.ShipOrderItem> processOrderItemCreated(
+  public View.UpdateEffect<ShipOrderItemModel.ShipOrderItem> onOrderItemCreated(
       ShipOrderItemModel.ShipOrderItem state, ShipOrderItemEntity.OrderItemCreated orderItemCreated) {
     return effects()
         .updateState(
@@ -48,7 +48,7 @@ public class BackOrderedShipOrderItemsView extends AbstractBackOrderedShipOrderI
   }
 
   @Override
-  public View.UpdateEffect<ShipOrderItemModel.ShipOrderItem> processOrderItemBackOrdered(
+  public View.UpdateEffect<ShipOrderItemModel.ShipOrderItem> onOrderItemBackOrdered(
       ShipOrderItemModel.ShipOrderItem state, ShipOrderItemEntity.OrderItemBackOrdered orderItemBackOrdered) {
     return effects()
         .updateState(
