@@ -1,6 +1,5 @@
 
-# @urlPrefix = http://localhost:9000
-@urlPrefix = https://blue-shape-3166.us-east1.akkaserverless.app
+@urlPrefix = https://floral-band-7795.us-east1.akkaserverless.app
 @customerId = customer-1
 @orderId = cart-1
 @skuId = sku-1

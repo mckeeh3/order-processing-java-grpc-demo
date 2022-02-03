@@ -1,5 +1,5 @@
 
-@urlPrefix = https://blue-shape-3166.us-east1.akkaserverless.app
+@urlPrefix = https://floral-band-7795.us-east1.akkaserverless.app
 @customerId = customer-1
 @fromDate = 2022-01-01T00:00:00.000-05:00
 @toDate = 2023-01-01T00:00:00.000-05:00

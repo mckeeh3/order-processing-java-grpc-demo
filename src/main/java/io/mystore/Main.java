@@ -34,6 +34,8 @@ import io.mystore.shipping.view.AvailableShipSkuItemsView;
 import io.mystore.shipping.view.AvailableStockItemsView;
 import io.mystore.shipping.view.BackOrderedShipOrderItemsBySkuView;
 import io.mystore.shipping.view.BackOrderedShipOrderItemsView;
+import io.mystore.shipping.view.ShipOrdersByCustomerByDateView;
+import io.mystore.shipping.view.ShipOrdersByDateView;
 import io.mystore.shipping.view.ShippedStockItemsView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,6 +84,8 @@ public final class Main {
       ShipOrderToOrderAction::new,
       ShipOrderToOrderItemAction::new,
       ShipOrderToShipOrderItemAction::new,
+      ShipOrdersByCustomerByDateView::new,
+      ShipOrdersByDateView::new,
       ShipSkuItemToShipOrderItemAction::new,
       ShipSkuItemToStockItemAction::new,
       ShippedStockItemsView::new,

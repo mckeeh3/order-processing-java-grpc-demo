@@ -1,4 +1,4 @@
-@urlPrefix = https://blue-shape-3166.us-east1.akkaserverless.app
+@urlPrefix = https://floral-band-7795.us-east1.akkaserverless.app
 @orderId = cart-1
 @skuId = sku-1
 @skuName = sku name 1

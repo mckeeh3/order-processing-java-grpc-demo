@@ -176,6 +176,9 @@ public class ShoppingCart extends AbstractShoppingCart {
     if (state.getCartId().isEmpty()) {
       return Optional.of(effects().error("Shopping cart is empty"));
     }
+    if (state.getLineItemsCount() == 0) {
+      return Optional.of(effects().error("Shopping cart is empty"));
+    }
     if (state.getDeletedUtc().getSeconds() > 0) {
       return Optional.of(effects().error("Shopping cart is deleted"));
     }

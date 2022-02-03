@@ -1,7 +1,10 @@
 
-@urlPrefix = https://blue-shape-3166.us-east1.akkaserverless.app
+@urlPrefix = https://floral-band-7795.us-east1.akkaserverless.app
+@customerId = customer-1
 @skuId = sku-1
 @orderId = cart-1
+@fromDate = 2022-01-01T00:00:00.000-05:00
+@toDate = 2023-01-01T00:00:00.000-05:00
 
 ### io.mystore.shipping.view.BackOrderedShipOrderItems.GetBackOrderedShipOrderItems
 
@@ -27,3 +30,13 @@ curl -XGET -H "Content-Type: application/json"
 
 curl -XGET -H "Content-Type: application/json"
   '{{urlPrefix}}/shipped-stock-items'
+
+### io.mystore.shipping.view.ShipOrdersByCustomerByDate.GetShipOrdersByCustomerByDate
+
+curl -XGET -H "Content-Type: application/json"
+  '{{urlPrefix}}/ship-orders-by-customer-by-date?customer_id={{customerId}}&from_date={{fromDate}}&to_date={{toDate}}'
+
+### io.mystore.shipping.view.ShipOrdersByDate.GetShipOrdersByDate
+
+curl -XGET -H "Content-Type: application/json"
+  '{{urlPrefix}}/ship-orders-by-date?from_date={{fromDate}}&to_date={{toDate}}'

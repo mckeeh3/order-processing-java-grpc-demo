@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package io.mystore.shipping.view;
+
+import "google/protobuf/timestamp.proto";
+import "io/mystore/shipping/entity/ship_order_entity.proto";
+
+option java_outer_classname = "ShipOrderModel";
+
+message ShipOrder {
+  string order_id = 1;
+  string customer_id = 2;
+  google.protobuf.Timestamp ordered_utc = 3;
+  google.protobuf.Timestamp shipped_utc = 4;
+  repeated entity.OrderItem order_items = 5;
+  repeated entity.ShipOrderItems ship_order_items = 6;
+}
