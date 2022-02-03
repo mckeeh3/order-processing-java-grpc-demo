@@ -107,8 +107,7 @@ public class BackOrderCheckTimerAction extends AbstractBackOrderCheckTimerAction
     log.info("skuId: {}, available SKU items: {}, back ordered order items: {}", skuId, countAvailableSkuItems, countBackOrderedOrderItems);
 
     var results = IntStream.range(0, Math.min(countAvailableSkuItems, countBackOrderedOrderItems))
-        .mapToObj(i -> new SkuItemOrderItem(availableSkuItems.getShipSkuItems(i), backOrderedOrderItems.getShipOrderItems(i)))
-        .map(skuItemOrderItem -> joinBackOrderedToSkuItem(skuItemOrderItem.skuItem, skuItemOrderItem.orderItem))
+        .mapToObj(i -> joinBackOrderedToSkuItem(availableSkuItems.getShipSkuItems(i), backOrderedOrderItems.getShipOrderItems(i)))
         .collect(Collectors.toList());
 
     return CompletableFuture.allOf(results.toArray(new CompletableFuture[results.size()]))
@@ -137,15 +136,5 @@ public class BackOrderCheckTimerAction extends AbstractBackOrderCheckTimerAction
             .setSkuId(skuId)
             .build())
         .execute();
-  }
-
-  static class SkuItemOrderItem {
-    final AvailableShipSkuItemsModel.ShipSkuItem skuItem;
-    final ShipOrderItemModel.ShipOrderItem orderItem;
-
-    public SkuItemOrderItem(AvailableShipSkuItemsModel.ShipSkuItem availableSkuItem, ShipOrderItemModel.ShipOrderItem backOrderedOrderItem) {
-      this.skuItem = availableSkuItem;
-      this.orderItem = backOrderedOrderItem;
-    }
   }
 }
