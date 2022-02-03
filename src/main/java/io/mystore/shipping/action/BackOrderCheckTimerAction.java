@@ -108,7 +108,7 @@ public class BackOrderCheckTimerAction extends AbstractBackOrderCheckTimerAction
 
     var results = IntStream.range(0, Math.min(countAvailableSkuItems, countBackOrderedOrderItems))
         .mapToObj(i -> new SkuItemOrderItem(availableSkuItems.getShipSkuItems(i), backOrderedOrderItems.getShipOrderItems(i)))
-        .map(skuItemOrderItem -> joinBackOrderedToSkuItemX(skuItemOrderItem.skuItem, skuItemOrderItem.orderItem))
+        .map(skuItemOrderItem -> joinBackOrderedToSkuItem(skuItemOrderItem.skuItem, skuItemOrderItem.orderItem))
         .collect(Collectors.toList());
 
     return CompletableFuture.allOf(results.toArray(new CompletableFuture[results.size()]))
@@ -116,7 +116,7 @@ public class BackOrderCheckTimerAction extends AbstractBackOrderCheckTimerAction
         .thenCompose(v -> pingBackOrderTimer(skuId));
   }
 
-  private CompletionStage<Empty> joinBackOrderedToSkuItemX(AvailableShipSkuItemsModel.ShipSkuItem shipSkuItem, ShipOrderItemModel.ShipOrderItem shipOrderItem) {
+  private CompletionStage<Empty> joinBackOrderedToSkuItem(AvailableShipSkuItemsModel.ShipSkuItem shipSkuItem, ShipOrderItemModel.ShipOrderItem shipOrderItem) {
     log.info("join SKU item: {}\nback ordered order item: {}", shipSkuItem, shipOrderItem);
 
     return components().shipSkuItem().joinToOrderItem(
