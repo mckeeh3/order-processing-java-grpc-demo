@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package io.mystore.stock.entity;
+
+import "google/protobuf/timestamp.proto";
+
+option java_outer_classname = "StockSkuItemEntityX";
+
+message StockSkuItemState {
+  string sku_item_id = 1;
+  string sku_id = 2;
+  string sku_name = 3;
+  string order_id = 4;
+  string order_sku_item_id = 5;
+  google.protobuf.Timestamp shipped_utc = 6;
+  string stock_order_id = 7;
+}
+
+message StockSkuItemCreated {
+  string sku_item_id = 1;
+  string sku_id = 2;
+  string sku_name = 3;
+  string stock_order_id = 4;
+}
+
+message JoinedToStockSkuItem {
+  string sku_id = 1;
+  string sku_item_id = 2;
+  string order_id = 3;
+  string order_sku_item_id = 4;
+  google.protobuf.Timestamp shipped_utc = 5;
+  string stock_order_id = 6;
+}
+
+message ReleasedFromStockSkuItem {
+  string sku_id = 1;
+  string sku_item_id = 2;
+  string order_id = 3;
+  string order_sku_item_id = 4;
+  string stock_order_id = 5;
+}

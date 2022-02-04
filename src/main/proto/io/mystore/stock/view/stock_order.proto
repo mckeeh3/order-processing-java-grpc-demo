@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package io.mystore.stock.view;
+
+import "google/protobuf/timestamp.proto";
+import "io/mystore/stock/view/stock_sku_item.proto";
+
+message StockOrder {
+  string stock_order_id = 1;
+  string sku_id = 2;
+  string sku_name = 3;
+  int32 quantity = 4;
+  google.protobuf.Timestamp shipped_utc = 5;
+  repeated StockSkuItem stock_sku_items = 6;
+}

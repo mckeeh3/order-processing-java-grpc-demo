@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+import "akkaserverless/annotations.proto";
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "io/mystore/stock/api/stock_sku_item_events.proto";
+
+package io.mystore.stock.api;
+
+option java_outer_classname = "StockSkuItemApi";
+
+service StockSkuItemService {
+  option (akkaserverless.codegen) = {
+    event_sourced_entity: {
+      name: "io.mystore.stock.entity.StockSkuItem"
+      entity_type: "stock_sku_item"
+      state: "io.mystore.stock.entity.StockSkuItemState"
+      events: [
+        "io.mystore.stock.entity.StockSkuItemCreated",
+        "io.mystore.stock.entity.JoinedToStockSkuItem",
+        "io.mystore.stock.entity.ReleasedFromStockSkuItem"  // force line breaks
+      ]
+    }
+  };
+
+  rpc CreateStockSkuItem(CreateStockSkuItemCommand) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/stock-sku-items/{sku_item_id}/create-stock-sku-item"
+      body: "*"
+    };
+  }
+
+  rpc JoinStockSkuItem(JoinStockSkuItemCommand) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/stock-sku-items/{sku_item_id}/join-to-order-item"
+      body: "*"
+    };
+  }
+
+  rpc ReleaseStockSkuItem(ReleaseStockSkuItemCommand) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/stock-sku-items/{sku_item_id}/release-from-ship-sku-item"
+      body: "*"
+    };
+  }
+
+  rpc GetStockSkuItem(GetStockSKuItemRequest) returns (StockSkuItem) {
+    option (google.api.http) = {
+      get: "/stock-sku_items/{sku_item_id}"
+    };
+  }
+}
+
+message CreateStockSkuItemCommand {
+  string sku_item_id = 1 [(akkaserverless.field).entity_key = true];
+  string sku_id = 2;
+  string sku_name = 3;
+  string stock_order_id = 4;
+}
+
+message GetStockSKuItemRequest {
+  string sku_item_id = 1 [(akkaserverless.field).entity_key = true];
+}
+
+message StockSkuItem {
+  string sku_item_id = 1;
+  string sku_id = 2;
+  string sku_name = 3;
+  string order_id = 4;
+  string order_sku_item_id = 5;
+  google.protobuf.Timestamp shipped_utc = 6;
+  string stock_order_id = 7;
+}

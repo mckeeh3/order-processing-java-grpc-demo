@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package io.mystore.stock.action;
+
+import "akkaserverless/annotations.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/any.proto";
+import "io/mystore/stock/entity/stock_sku_item_entity.proto";
+
+option java_outer_classname = "StockSkuItemToStockOrderService";
+
+service StockSkuItemToStockOrder {
+  option (akkaserverless.codegen) = {
+    action: {}
+  };
+
+  rpc OnJoinedToStockSkuItem(entity.JoinedToStockSkuItem) returns (google.protobuf.Empty) {
+    option (akkaserverless.method).eventing.in = {
+      event_sourced_entity: "ship_sku_item"
+    };
+  }
+
+  rpc OnReleasedFromStockSkuItem(entity.ReleasedFromStockSkuItem) returns (google.protobuf.Empty) {
+    option (akkaserverless.method).eventing.in = {
+      event_sourced_entity: "ship_sku_item"
+    };
+  }
+
+  rpc IgnoreOtherEvents(google.protobuf.Any) returns (google.protobuf.Empty) {
+    option (akkaserverless.method).eventing.in = {
+      event_sourced_entity: "ship_sku_item"
+    };
+  }
+}

@@ -37,6 +37,15 @@ import io.mystore.shipping.view.BackOrderedShipOrderItemsView;
 import io.mystore.shipping.view.ShipOrdersByCustomerByDateView;
 import io.mystore.shipping.view.ShipOrdersByDateView;
 import io.mystore.shipping.view.ShippedStockItemsView;
+import io.mystore.stock.action.OrderSkuItemToStockSkuItemAction;
+import io.mystore.stock.action.StockOrderToStockSkuItemAction;
+import io.mystore.stock.action.StockSkuItemToStockOrderAction;
+import io.mystore.stock.entity.StockOrder;
+import io.mystore.stock.entity.StockSkuItem;
+import io.mystore.stock.view.StockOrdersAvailableView;
+import io.mystore.stock.view.StockOrdersShippedView;
+import io.mystore.stock.view.StockSkuItemsAvailableView;
+import io.mystore.stock.view.StockSkuItemsShippedView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,6 +72,8 @@ public final class Main {
       ShipSkuItem::new,
       ShoppingCart::new,
       StockItem::new,
+      StockOrder::new,
+      StockSkuItem::new,
       AvailableShipSkuItemsView::new,
       AvailableStockItemsView::new,
       BackOrderCheckTimerAction::new,
@@ -72,6 +83,7 @@ public final class Main {
       CartsByCustomerView::new,
       CartsByCustomerByDateView::new,
       CartsByDateView::new,
+      OrderSkuItemToStockSkuItemAction::new,
       OrderToOrderedItemsAction::new,
       OrderToShipOrderAction::new,
       OrderedItemsByCustomerByDateView::new,
@@ -90,7 +102,13 @@ public final class Main {
       ShipSkuItemToStockItemAction::new,
       ShippedStockItemsView::new,
       StockItemFrontendAction::new,
-      StockItemToShipSkuItemAction::new);
+      StockItemToShipSkuItemAction::new,
+      StockOrderToStockSkuItemAction::new,
+      StockOrdersAvailableView::new,
+      StockOrdersShippedView::new,
+      StockSkuItemToStockOrderAction::new,
+      StockSkuItemsAvailableView::new,
+      StockSkuItemsShippedView::new);
   }
 
   public static void main(String[] args) throws Exception {

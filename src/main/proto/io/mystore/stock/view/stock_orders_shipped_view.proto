@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+package io.mystore.stock.view;
+
+import "akkaserverless/annotations.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/any.proto";
+import "io/mystore/stock/entity/stock_order_entity.proto";
+import "io/mystore/stock/view/stock_order.proto";
+
+option java_outer_classname = "StockOrdersShippedModel";
+
+service StockOrdersShipped {
+  option (akkaserverless.codegen) = {
+    view: {}
+  };
+
+  rpc GetStockOrdersShipped(GetStockOrdersShippedRequest) returns (GetStockOrdersShippedResponse) {
+    option (akkaserverless.method).view.query = {
+      query: "SELECT * AS stock_orders"
+             "  FROM stock_orders_shipped"
+             " WHERE shipped_utc.seconds > 0"
+    };
+    option (google.api.http) = {
+      get: "/stock-orders-shipped"
+    };
+  }
+
+  rpc OnStockOrderCreated(entity.StockOrderCreated) returns (StockOrder) {
+    option (akkaserverless.method).eventing.in = {
+      event_sourced_entity: "stock_order"
+    };
+    option (akkaserverless.method).view.update = {
+      table: "stock_orders_shipped"
+      transform_updates: true
+    };
+  }
+
+  rpc OnStockSkuItemJoined(entity.StockSkuItemJoined) returns (StockOrder) {
+    option (akkaserverless.method).eventing.in = {
+      event_sourced_entity: "stock_order"
+    };
+    option (akkaserverless.method).view.update = {
+      table: "stock_orders_shipped"
+      transform_updates: true
+    };
+  }
+
+  rpc OnStockSkuItemReleased(entity.StockSkuItemReleased) returns (StockOrder) {
+    option (akkaserverless.method).eventing.in = {
+      event_sourced_entity: "stock_order"
+    };
+    option (akkaserverless.method).view.update = {
+      table: "stock_orders_shipped"
+      transform_updates: true
+    };
+  }
+
+  rpc IgnoreOtherEvents(google.protobuf.Any) returns (StockOrder) {
+    option (akkaserverless.method).eventing.in = {
+      event_sourced_entity: "stock_order"
+    };
+    option (akkaserverless.method).view.update = {
+      table: "stock_orders_shipped"
+      transform_updates: true
+    };
+  }
+}
+
+message GetStockOrdersShippedRequest {}
+
+message GetStockOrdersShippedResponse {
+  repeated StockOrder stock_orders = 1;
+}
