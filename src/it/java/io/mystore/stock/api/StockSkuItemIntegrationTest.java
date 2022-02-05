@@ -3,7 +3,7 @@ package io.mystore.stock.api;
 import com.akkaserverless.javasdk.testkit.junit.AkkaServerlessTestKitResource;
 import com.google.protobuf.Empty;
 import io.mystore.Main;
-import io.mystore.stock.entity.StockSkuItemEntity;
+import io.mystore.stock.entity.StockSkuItemEntityX;
 import org.junit.ClassRule;
 import org.junit.Test;
 

@@ -3,7 +3,7 @@ package io.mystore.stock.action;
 import com.akkaserverless.javasdk.action.ActionCreationContext;
 import com.google.protobuf.Any;
 import com.google.protobuf.Empty;
-import io.mystore.stock.entity.StockSkuItemEntityX;
+import io.mystore.stock.entity.StockSkuItemEntity;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
 //
@@ -13,18 +13,21 @@ import io.mystore.stock.entity.StockSkuItemEntityX;
 /** An action. */
 public class StockSkuItemToStockOrderAction extends AbstractStockSkuItemToStockOrderAction {
 
-  public StockSkuItemToStockOrderAction(ActionCreationContext creationContext) {}
+  public StockSkuItemToStockOrderAction(ActionCreationContext creationContext) {
+  }
 
   /** Handler for "OnJoinedToStockSkuItem". */
   @Override
-  public Effect<Empty> onJoinedToStockSkuItem(StockSkuItemEntityX.JoinedToStockSkuItem joinedToStockSkuItem) {
+  public Effect<Empty> onJoinedToStockSkuItem(StockSkuItemEntity.JoinedToStockSkuItem joinedToStockSkuItem) {
     throw new RuntimeException("The command handler for `OnJoinedToStockSkuItem` is not implemented, yet");
   }
+
   /** Handler for "OnReleasedFromStockSkuItem". */
   @Override
-  public Effect<Empty> onReleasedFromStockSkuItem(StockSkuItemEntityX.ReleasedFromStockSkuItem releasedFromStockSkuItem) {
+  public Effect<Empty> onReleasedFromStockSkuItem(StockSkuItemEntity.ReleasedFromStockSkuItem releasedFromStockSkuItem) {
     throw new RuntimeException("The command handler for `OnReleasedFromStockSkuItem` is not implemented, yet");
   }
+
   /** Handler for "IgnoreOtherEvents". */
   @Override
   public Effect<Empty> ignoreOtherEvents(Any any) {

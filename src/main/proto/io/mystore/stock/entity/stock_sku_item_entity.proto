@@ -4,7 +4,7 @@ package io.mystore.stock.entity;
 
 import "google/protobuf/timestamp.proto";
 
-option java_outer_classname = "StockSkuItemEntityX";
+option java_outer_classname = "StockSkuItemEntity";
 
 message StockSkuItemState {
   string sku_item_id = 1;

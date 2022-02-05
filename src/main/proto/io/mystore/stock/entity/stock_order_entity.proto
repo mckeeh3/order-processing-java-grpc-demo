@@ -38,7 +38,7 @@ message StockSkuItemJoined {
   string sku_id = 2;
   string sku_item_id = 3;
   string order_id = 4;
-  string order_item_id = 5;
+  string order_sku_item_id = 5;
   google.protobuf.Timestamp shipped_utc = 6;
 }
 
@@ -47,5 +47,5 @@ message StockSkuItemReleased {
   string sku_id = 2;
   string sku_item_id = 3;
   string order_id = 4;
-  string order_item_id = 5;
+  string order_sku_item_id = 5;
 }
