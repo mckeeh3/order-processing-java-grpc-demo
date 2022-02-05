@@ -5,7 +5,6 @@ import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "io/mystore/stock/api/stock_sku_item_api.proto";
-import "io/mystore/stock/api/stock_sku_item_commands.proto";
 
 package io.mystore.stock.api;
 

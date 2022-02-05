@@ -1,8 +1,13 @@
 package io.mystore.stock.action;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
+
 import com.akkaserverless.javasdk.action.ActionCreationContext;
 import com.google.protobuf.Any;
 import com.google.protobuf.Empty;
+
+import io.mystore.stock.api.StockSkuItemApi;
 import io.mystore.stock.entity.StockOrderEntity;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
@@ -10,19 +15,36 @@ import io.mystore.stock.entity.StockOrderEntity;
 // As long as this file exists it will not be overwritten: you can maintain it yourself,
 // or delete it so it is regenerated as needed.
 
-/** An action. */
 public class StockOrderToStockSkuItemAction extends AbstractStockOrderToStockSkuItemAction {
 
-  public StockOrderToStockSkuItemAction(ActionCreationContext creationContext) {}
+  public StockOrderToStockSkuItemAction(ActionCreationContext creationContext) {
+  }
 
-  /** Handler for "OnStockOrderCreated". */
   @Override
   public Effect<Empty> onStockOrderCreated(StockOrderEntity.StockOrderCreated stockOrderCreated) {
-    throw new RuntimeException("The command handler for `OnStockOrderCreated` is not implemented, yet");
+
+    var results = stockOrderCreated.getStockSkuItemsList().stream()
+        .map(stockSkuItem -> components().stockSkuItem().createStockSkuItem(toStockSkuItemCommand(stockSkuItem)).execute())
+        .collect(Collectors.toList());
+
+    var result = CompletableFuture.allOf(results.toArray(new CompletableFuture[results.size()]))
+        .thenApply(reply -> effects().reply(Empty.getDefaultInstance()));
+
+    return effects().asyncEffect(result);
   }
-  /** Handler for "IgnoreOtherEvents". */
+
   @Override
   public Effect<Empty> ignoreOtherEvents(Any any) {
-    throw new RuntimeException("The command handler for `IgnoreOtherEvents` is not implemented, yet");
+    return effects().reply(Empty.getDefaultInstance());
+  }
+
+  private StockSkuItemApi.CreateStockSkuItemCommand toStockSkuItemCommand(StockOrderEntity.StockSkuItem stockSkuItem) {
+    return StockSkuItemApi.CreateStockSkuItemCommand
+        .newBuilder()
+        .setSkuItemId(stockSkuItem.getSkuItemId())
+        .setSkuId(stockSkuItem.getSkuId())
+        .setSkuName(stockSkuItem.getSkuName())
+        .setStockOrderId(stockSkuItem.getStockOrderId())
+        .build();
   }
 }

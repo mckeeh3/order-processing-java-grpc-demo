@@ -3,7 +3,9 @@ syntax = "proto3";
 package io.mystore.stock.view;
 
 import "google/protobuf/timestamp.proto";
-import "io/mystore/stock/view/stock_sku_item.proto";
+import "io/mystore/stock/view/stock_sku_items_model.proto";
+
+option java_outer_classname = "StockOrdersModel";
 
 message StockOrder {
   string stock_order_id = 1;

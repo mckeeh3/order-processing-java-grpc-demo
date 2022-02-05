@@ -3,6 +3,7 @@ package io.mystore.stock.view;
 import com.akkaserverless.javasdk.view.View;
 import com.akkaserverless.javasdk.view.ViewContext;
 import com.google.protobuf.Any;
+
 import io.mystore.stock.entity.StockSkuItemEntity;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
@@ -16,31 +17,45 @@ public class StockSkuItemsAvailableView extends AbstractStockSkuItemsAvailableVi
   }
 
   @Override
-  public StockSkuItemOuterClass.StockSkuItem emptyState() {
-    throw new UnsupportedOperationException("Not implemented yet, replace with your empty view state");
+  public StockSkuItemsModel.StockSkuItem emptyState() {
+    return StockSkuItemsModel.StockSkuItem.getDefaultInstance();
   }
 
   @Override
-  public View.UpdateEffect<StockSkuItemOuterClass.StockSkuItem> onStockSkuItemCreated(
-      StockSkuItemOuterClass.StockSkuItem state, StockSkuItemEntity.StockSkuItemCreated stockSkuItemCreated) {
-    throw new UnsupportedOperationException("Update handler for 'OnStockSkuItemCreated' not implemented yet");
+  public View.UpdateEffect<StockSkuItemsModel.StockSkuItem> onStockSkuItemCreated(
+      StockSkuItemsModel.StockSkuItem state, StockSkuItemEntity.StockSkuItemCreated stockSkuItemCreated) {
+    return effects()
+        .updateState(
+            StockSkuItemEventHandler
+                .fromState(state)
+                .handle(stockSkuItemCreated)
+                .toState());
   }
 
   @Override
-  public View.UpdateEffect<StockSkuItemOuterClass.StockSkuItem> onJoinedToStockSkuItem(
-      StockSkuItemOuterClass.StockSkuItem state, StockSkuItemEntity.JoinedToStockSkuItem joinedToStockSkuItem) {
-    throw new UnsupportedOperationException("Update handler for 'OnJoinedToStockSkuItem' not implemented yet");
+  public View.UpdateEffect<StockSkuItemsModel.StockSkuItem> onJoinedToStockSkuItem(
+      StockSkuItemsModel.StockSkuItem state, StockSkuItemEntity.JoinedToStockSkuItem joinedToStockSkuItem) {
+    return effects()
+        .updateState(
+            StockSkuItemEventHandler
+                .fromState(state)
+                .handle(joinedToStockSkuItem)
+                .toState());
   }
 
   @Override
-  public View.UpdateEffect<StockSkuItemOuterClass.StockSkuItem> onReleasedFromStockSkuItem(
-      StockSkuItemOuterClass.StockSkuItem state, StockSkuItemEntity.ReleasedFromStockSkuItem releasedFromStockSkuItem) {
-    throw new UnsupportedOperationException("Update handler for 'OnReleasedFromStockSkuItem' not implemented yet");
+  public View.UpdateEffect<StockSkuItemsModel.StockSkuItem> onReleasedFromStockSkuItem(
+      StockSkuItemsModel.StockSkuItem state, StockSkuItemEntity.ReleasedFromStockSkuItem releasedFromStockSkuItem) {
+    return effects()
+        .updateState(
+            StockSkuItemEventHandler
+                .fromState(state)
+                .handle(releasedFromStockSkuItem)
+                .toState());
   }
 
   @Override
-  public View.UpdateEffect<StockSkuItemOuterClass.StockSkuItem> ignoreOtherEvents(
-      StockSkuItemOuterClass.StockSkuItem state, Any any) {
-    throw new UnsupportedOperationException("Update handler for 'IgnoreOtherEvents' not implemented yet");
+  public View.UpdateEffect<StockSkuItemsModel.StockSkuItem> ignoreOtherEvents(StockSkuItemsModel.StockSkuItem state, Any any) {
+    return effects().ignore();
   }
 }

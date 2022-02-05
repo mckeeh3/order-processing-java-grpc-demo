@@ -12,32 +12,46 @@ import io.mystore.stock.entity.StockOrderEntity;
 
 public class StockOrdersAvailableView extends AbstractStockOrdersAvailableView {
 
-  public StockOrdersAvailableView(ViewContext context) {}
-
-  @Override
-  public StockOrderOuterClass.StockOrder emptyState() {
-    throw new UnsupportedOperationException("Not implemented yet, replace with your empty view state");
+  public StockOrdersAvailableView(ViewContext context) {
   }
 
   @Override
-  public View.UpdateEffect<StockOrderOuterClass.StockOrder> onStockOrderCreated(
-    StockOrderOuterClass.StockOrder state, StockOrderEntity.StockOrderCreated stockOrderCreated) {
-    throw new UnsupportedOperationException("Update handler for 'OnStockOrderCreated' not implemented yet");
+  public StockOrdersModel.StockOrder emptyState() {
+    return StockOrdersModel.StockOrder.getDefaultInstance();
   }
+
   @Override
-  public View.UpdateEffect<StockOrderOuterClass.StockOrder> onStockSkuItemJoined(
-    StockOrderOuterClass.StockOrder state, StockOrderEntity.StockSkuItemJoined stockSkuItemJoined) {
-    throw new UnsupportedOperationException("Update handler for 'OnStockSkuItemJoined' not implemented yet");
+  public View.UpdateEffect<StockOrdersModel.StockOrder> onStockOrderCreated(
+      StockOrdersModel.StockOrder state, StockOrderEntity.StockOrderCreated stockOrderCreated) {
+    return effects().updateState(
+        StockOrderEventHandler
+            .fromState(state)
+            .handle(stockOrderCreated)
+            .toState());
   }
+
   @Override
-  public View.UpdateEffect<StockOrderOuterClass.StockOrder> onStockSkuItemReleased(
-    StockOrderOuterClass.StockOrder state, StockOrderEntity.StockSkuItemReleased stockSkuItemReleased) {
-    throw new UnsupportedOperationException("Update handler for 'OnStockSkuItemReleased' not implemented yet");
+  public View.UpdateEffect<StockOrdersModel.StockOrder> onStockSkuItemJoined(
+      StockOrdersModel.StockOrder state, StockOrderEntity.StockSkuItemJoined stockSkuItemJoined) {
+    return effects().updateState(
+        StockOrderEventHandler
+            .fromState(state)
+            .handle(stockSkuItemJoined)
+            .toState());
   }
+
   @Override
-  public View.UpdateEffect<StockOrderOuterClass.StockOrder> ignoreOtherEvents(
-    StockOrderOuterClass.StockOrder state, Any any) {
-    throw new UnsupportedOperationException("Update handler for 'IgnoreOtherEvents' not implemented yet");
+  public View.UpdateEffect<StockOrdersModel.StockOrder> onStockSkuItemReleased(
+      StockOrdersModel.StockOrder state, StockOrderEntity.StockSkuItemReleased stockSkuItemReleased) {
+    return effects().updateState(
+        StockOrderEventHandler
+            .fromState(state)
+            .handle(stockSkuItemReleased)
+            .toState());
+  }
+
+  @Override
+  public View.UpdateEffect<StockOrdersModel.StockOrder> ignoreOtherEvents(StockOrdersModel.StockOrder state, Any any) {
+    return effects().ignore();
   }
 }
-

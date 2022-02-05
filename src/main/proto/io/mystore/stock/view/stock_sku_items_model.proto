@@ -4,6 +4,8 @@ package io.mystore.stock.view;
 
 import "google/protobuf/timestamp.proto";
 
+option java_outer_classname = "StockSkuItemsModel";
+
 message StockSkuItem {
   string sku_item_id = 1;
   string sku_id = 2;

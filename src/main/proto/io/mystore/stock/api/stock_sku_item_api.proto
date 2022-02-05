@@ -4,7 +4,6 @@ import "akkaserverless/annotations.proto";
 import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
-import "io/mystore/stock/api/stock_sku_item_commands.proto";
 
 package io.mystore.stock.api;
 
@@ -57,6 +56,23 @@ message CreateStockSkuItemCommand {
   string sku_id = 2;
   string sku_name = 3;
   string stock_order_id = 4;
+}
+
+message JoinStockSkuItemCommand {
+  string stock_order_id = 1 [(akkaserverless.field).entity_key = true];
+  string sku_id = 2;
+  string sku_item_id = 3;
+  string order_id = 4;
+  string order_sku_item_id = 5;
+  google.protobuf.Timestamp shipped_utc = 6;
+}
+
+message ReleaseStockSkuItemCommand {
+  string stock_order_id = 1 [(akkaserverless.field).entity_key = true];
+  string sku_id = 2;
+  string sku_item_id = 3;
+  string order_id = 4;
+  string order_sku_item_id = 5;
 }
 
 message GetStockSKuItemRequest {
