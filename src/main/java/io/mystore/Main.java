@@ -37,6 +37,8 @@ import io.mystore.shipping.view.BackOrderedShipOrderItemsView;
 import io.mystore.shipping.view.ShipOrdersByCustomerByDateView;
 import io.mystore.shipping.view.ShipOrdersByDateView;
 import io.mystore.shipping.view.ShippedStockItemsView;
+import io.mystore.shipping2.entity.OrderSkuItem;
+import io.mystore.shipping2.entity.Shipping;
 import io.mystore.stock.action.OrderSkuItemToStockSkuItemAction;
 import io.mystore.stock.action.StockOrderToStockSkuItemAction;
 import io.mystore.stock.action.StockSkuItemToStockOrderAction;
@@ -67,9 +69,11 @@ public final class Main {
       BackOrderTimer::new,
       Order::new,
       OrderItem::new,
+      OrderSkuItem::new,
       ShipOrder::new,
       ShipOrderItem::new,
       ShipSkuItem::new,
+      Shipping::new,
       ShoppingCart::new,
       StockItem::new,
       StockOrder::new,

@@ -1,0 +1,95 @@
+syntax = "proto3";
+
+import "akkaserverless/annotations.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+package io.mystore.shipping2.api;
+
+option java_outer_classname = "OrderSkuItemApi";
+
+service OrderSkuItemService {
+  option (akkaserverless.codegen) = {
+    event_sourced_entity: {
+      name: "io.mystore.shipping2.entity.OrderSkuItem"
+      entity_type: "order_sku_item"
+      state: "io.mystore.shipping2.entity.OrderSkuItemState"
+      events: [
+        "io.mystore.shipping2.entity.CreatedOrderSkuItem",
+        "io.mystore.shipping2.entity.StockSkuItemRequired",
+        "io.mystore.shipping2.entity.JoinedToStockSkuItem",
+        "io.mystore.shipping2.entity.ReleasedFromOrderSkuItem",
+        "io.mystore.shipping2.entity.BackOrderedOrderSkuItem"  // force line breaks
+      ]
+    }
+  };
+
+  rpc CreateOrderSkuItem(CreateOrderSkuItemCommand) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/order-sku-items/{order_sku_item_id}/create-order-sku-item"
+      body: "*"
+    };
+  }
+
+  rpc JoinToStockSkuItem(JoinToStockSkuItemCommand) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/order-sku-items/{order_sku_item_id}/join-to-stock-sku-item"
+      body: "*"
+    };
+  }
+
+  rpc BackOrderOrderSkuItem(BackOrderOrderSkuItemCommand) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/order-sku-items/{order_sku_item_id}/back-order-order-sku-item"
+      body: "*"
+    };
+  }
+
+  rpc GetOrderSkuItem(GetOrderSkuItemRequest) returns (OrderSkuItem) {
+    option (google.api.http) = {
+      get: "/order-sku-items/{order_sku_item_id}"
+    };
+  }
+}
+
+message CreateOrderSkuItemCommand {
+  string order_sku_item_id = 1 [(akkaserverless.field).entity_key = true];
+  string customer_id = 2;
+  string order_id = 3;
+  string sku_id = 4;
+  string sku_name = 5;
+  google.protobuf.Timestamp ordered_utc = 6;
+}
+
+message JoinToStockSkuItemCommand {
+  string order_sku_item_id = 1 [(akkaserverless.field).entity_key = true];
+  string order_id = 2;
+  string sku_id = 3;
+  string stock_sku_item_id = 4;
+  google.protobuf.Timestamp shipped_utc = 5;
+}
+
+message BackOrderOrderSkuItemCommand {
+  string order_sku_item_id = 1 [(akkaserverless.field).entity_key = true];
+  string order_id = 2;
+  string sku_id = 3;
+}
+
+message GetOrderSkuItemRequest {
+  string order_sku_item_id = 1 [(akkaserverless.field).entity_key = true];
+  string order_id = 2;
+  string sku_id = 3;
+}
+
+message OrderSkuItem {
+  string customer_id = 1;
+  string order_id = 2;
+  string order_sku_item_id = 3;
+  string sku_id = 4;
+  string sku_name = 5;
+  string stock_sku_item_id = 6;
+  google.protobuf.Timestamp ordered_utc = 7;
+  google.protobuf.Timestamp shipped_utc = 8;
+  google.protobuf.Timestamp back_ordered_utc = 9;
+}
