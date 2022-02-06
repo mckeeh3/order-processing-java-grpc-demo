@@ -3,7 +3,7 @@ package io.mystore.stock.api;
 import com.akkaserverless.javasdk.testkit.junit.AkkaServerlessTestKitResource;
 import com.google.protobuf.Empty;
 import io.mystore.Main;
-import io.mystore.stock.entity.StockSkuItemEntityX;
+import io.mystore.stock.entity.StockSkuItemEntity;
 import org.junit.ClassRule;
 import org.junit.Test;
 
@@ -44,14 +44,14 @@ public class StockSkuItemIntegrationTest {
   @Test
   public void joinStockSkuItemOnNonExistingEntity() throws Exception {
     // TODO: set fields in command, and provide assertions to match replies
-    // client.joinStockSkuItem(StockSkuItemEvents.JoinStockSkuItemCommand.newBuilder().build())
+    // client.joinStockSkuItem(StockSkuItemApi.JoinStockSkuItemCommand.newBuilder().build())
     //         .toCompletableFuture().get(5, SECONDS);
   }
 
   @Test
   public void releaseStockSkuItemOnNonExistingEntity() throws Exception {
     // TODO: set fields in command, and provide assertions to match replies
-    // client.releaseStockSkuItem(StockSkuItemEvents.ReleaseStockSkuItemCommand.newBuilder().build())
+    // client.releaseStockSkuItem(StockSkuItemApi.ReleaseStockSkuItemCommand.newBuilder().build())
     //         .toCompletableFuture().get(5, SECONDS);
   }
 

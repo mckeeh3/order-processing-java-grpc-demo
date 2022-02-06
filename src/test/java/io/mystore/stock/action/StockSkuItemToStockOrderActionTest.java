@@ -6,7 +6,7 @@ import com.google.protobuf.Any;
 import com.google.protobuf.Empty;
 import io.mystore.stock.action.StockSkuItemToStockOrderAction;
 import io.mystore.stock.action.StockSkuItemToStockOrderActionTestKit;
-import io.mystore.stock.entity.StockSkuItemEntityX;
+import io.mystore.stock.entity.StockSkuItemEntity;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -30,13 +30,13 @@ public class StockSkuItemToStockOrderActionTest {
   @Test
   public void onJoinedToStockSkuItemTest() {
     StockSkuItemToStockOrderActionTestKit testKit = StockSkuItemToStockOrderActionTestKit.of(StockSkuItemToStockOrderAction::new);
-    // ActionResult<Empty> result = testKit.onJoinedToStockSkuItem(StockSkuItemEntityX.JoinedToStockSkuItem.newBuilder()...build());
+    // ActionResult<Empty> result = testKit.onJoinedToStockSkuItem(StockSkuItemEntity.JoinedToStockSkuItem.newBuilder()...build());
   }
 
   @Test
   public void onReleasedFromStockSkuItemTest() {
     StockSkuItemToStockOrderActionTestKit testKit = StockSkuItemToStockOrderActionTestKit.of(StockSkuItemToStockOrderAction::new);
-    // ActionResult<Empty> result = testKit.onReleasedFromStockSkuItem(StockSkuItemEntityX.ReleasedFromStockSkuItem.newBuilder()...build());
+    // ActionResult<Empty> result = testKit.onReleasedFromStockSkuItem(StockSkuItemEntity.ReleasedFromStockSkuItem.newBuilder()...build());
   }
 
   @Test

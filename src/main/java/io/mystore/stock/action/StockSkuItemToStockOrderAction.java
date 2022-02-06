@@ -4,7 +4,7 @@ import com.akkaserverless.javasdk.action.ActionCreationContext;
 import com.google.protobuf.Any;
 import com.google.protobuf.Empty;
 
-import io.mystore.stock.api.StockSkuItemApi;
+import io.mystore.stock.api.StockOrderApi;
 import io.mystore.stock.entity.StockSkuItemEntity;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
@@ -32,8 +32,8 @@ public class StockSkuItemToStockOrderAction extends AbstractStockSkuItemToStockO
     return effects().reply(Empty.getDefaultInstance());
   }
 
-  private StockSkuItemApi.JoinStockSkuItemCommand toStockOrder(StockSkuItemEntity.JoinedToStockSkuItem joinedToStockSkuItem) {
-    return StockSkuItemApi.JoinStockSkuItemCommand
+  private StockOrderApi.JoinStockSkuItemToStockOrderCommand toStockOrder(StockSkuItemEntity.JoinedToStockSkuItem joinedToStockSkuItem) {
+    return StockOrderApi.JoinStockSkuItemToStockOrderCommand
         .newBuilder()
         .setStockOrderId(joinedToStockSkuItem.getStockOrderId())
         .setSkuId(joinedToStockSkuItem.getSkuId())
@@ -44,8 +44,8 @@ public class StockSkuItemToStockOrderAction extends AbstractStockSkuItemToStockO
         .build();
   }
 
-  private StockSkuItemApi.ReleaseStockSkuItemCommand toStockOrder(StockSkuItemEntity.ReleasedFromStockSkuItem releasedFromStockSkuItem) {
-    return StockSkuItemApi.ReleaseStockSkuItemCommand
+  private StockOrderApi.ReleaseStockSkuItemFromStockOrderCommand toStockOrder(StockSkuItemEntity.ReleasedFromStockSkuItem releasedFromStockSkuItem) {
+    return StockOrderApi.ReleaseStockSkuItemFromStockOrderCommand
         .newBuilder()
         .setStockOrderId(releasedFromStockSkuItem.getStockOrderId())
         .setSkuId(releasedFromStockSkuItem.getSkuId())

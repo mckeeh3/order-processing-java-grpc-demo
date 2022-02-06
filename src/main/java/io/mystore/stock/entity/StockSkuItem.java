@@ -56,6 +56,7 @@ public class StockSkuItem extends AbstractStockSkuItem {
         .setSkuItemId(event.getSkuItemId())
         .setOrderId("")
         .setOrderSkuItemId("")
+        .setStockOrderId(event.getStockOrderId())
         .build();
   }
 
@@ -92,8 +93,8 @@ public class StockSkuItem extends AbstractStockSkuItem {
   }
 
   private Optional<Effect<StockSkuItemApi.StockSkuItem>> reject(StockSkuItemEntity.StockSkuItemState state, StockSkuItemApi.GetStockSKuItemRequest command) {
-    if (state.getStockOrderId().isEmpty()) {
-      return Optional.of(effects().error("No stock SKU item found"));
+    if (state.getSkuItemId().isEmpty()) {
+      return Optional.of(effects().error("No stock SKU item found for skuItemId: " + command.getSkuItemId()));
     }
     return Optional.empty();
   }
@@ -142,6 +143,7 @@ public class StockSkuItem extends AbstractStockSkuItem {
         .setSkuId(command.getSkuId())
         .setSkuName(command.getSkuName())
         .setSkuItemId(command.getSkuItemId())
+        .setStockOrderId(command.getStockOrderId())
         .build();
   }
 

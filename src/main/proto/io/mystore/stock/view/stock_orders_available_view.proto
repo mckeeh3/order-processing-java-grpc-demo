@@ -7,7 +7,6 @@ import "google/api/annotations.proto";
 import "google/protobuf/any.proto";
 import "io/mystore/stock/entity/stock_order_entity.proto";
 import "io/mystore/stock/view/stock_orders_model.proto";
-import "io/mystore/stock/view/stock_sku_items_model.proto";
 
 option java_outer_classname = "StockOrdersAvailableModel";
 

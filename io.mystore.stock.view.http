@@ -1,0 +1,23 @@
+
+@urlPrefix = https://floral-band-7795.us-east1.akkaserverless.app
+@skuId = sku-1
+
+### io.mystore.stock.view.StockOrdersAvailable.GetStockOrdersAvailable
+
+curl -XGET -H "Content-Type: application/json"
+  '{{urlPrefix}}/stock-orders-available'
+
+### io.mystore.stock.view.StockOrdersShipped.GetStockOrdersShipped
+
+curl -XGET -H "Content-Type: application/json"
+  '{{urlPrefix}}/stock-orders-shipped'
+
+### io.mystore.stock.view.StockSkuItemsAvailable.GetStockSkuItemsAvailable
+
+curl -XGET -H "Content-Type: application/json"
+  '{{urlPrefix}}/stock-sku-items-available?sku_id={{skuId}}'
+
+### io.mystore.stock.view.StockSkuItemsShipped.GetStockSkuItemsShipped
+
+curl -XGET -H "Content-Type: application/json"
+  '{{urlPrefix}}/stock-sku-items-shipped?sku_id={{skuId}}'

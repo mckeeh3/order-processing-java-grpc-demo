@@ -31,14 +31,14 @@ service StockOrderService {
     };
   }
 
-  rpc JoinStockSkuItem(JoinStockSkuItemCommand) returns (google.protobuf.Empty) {
+  rpc JoinStockSkuItem(JoinStockSkuItemToStockOrderCommand) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       put: "/stork-orders/{stock_order_id}/ship-stock-sku-item"
       body: "*"
     };
   }
 
-  rpc ReleaseStockSkuItem(ReleaseStockSkuItemCommand) returns (google.protobuf.Empty) {
+  rpc ReleaseStockSkuItem(ReleaseStockSkuItemFromStockOrderCommand) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       put: "/stork-orders/{stock_order_id}/release-stock-sku-item"
       body: "*"
@@ -57,6 +57,23 @@ message CreateStockOrderCommand {
   string sku_id = 2;
   string sku_name = 3;
   int32 quantity = 4;
+}
+
+message JoinStockSkuItemToStockOrderCommand {
+  string stock_order_id = 1 [(akkaserverless.field).entity_key = true];
+  string sku_id = 2;
+  string sku_item_id = 3;
+  string order_id = 4;
+  string order_sku_item_id = 5;
+  google.protobuf.Timestamp shipped_utc = 6;
+}
+
+message ReleaseStockSkuItemFromStockOrderCommand {
+  string stock_order_id = 1 [(akkaserverless.field).entity_key = true];
+  string sku_id = 2;
+  string sku_item_id = 3;
+  string order_id = 4;
+  string order_sku_item_id = 5;
 }
 
 message GetStockOrderRequest {

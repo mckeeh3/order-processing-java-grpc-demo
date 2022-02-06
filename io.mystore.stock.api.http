@@ -1,0 +1,19 @@
+
+@urlPrefix = https://floral-band-7795.us-east1.akkaserverless.app
+@stockOrderId = stock-order-id-3
+@skuId = sku-3
+@skuName = sku name 3
+@quantity = 3
+
+### io.mystore.stock.api.StockOrderService.CreateStockOrder
+
+curl -XPOST -H "Content-Type: application/json" -d '{
+  "sku_id":"{{skuId}}",
+  "sku_name":"{{skuName}}",
+  "quantity":{{quantity}}}'
+  {{urlPrefix}}/stork-orders/{{stockOrderId}}/create-stock-order
+
+### io.mystore.stock.api.StockOrderService.GetStockOrder
+
+curl -XGET -H "Content-Type: application/json"
+  '{{urlPrefix}}/stock-orders/{{stockOrderId}}'

@@ -3,7 +3,6 @@ syntax = "proto3";
 package io.mystore.shipping.entity;
 
 import "google/protobuf/timestamp.proto";
-import "google/protobuf/duration.proto";
 
 option java_outer_classname = "BackOrderTimerEntity";
 

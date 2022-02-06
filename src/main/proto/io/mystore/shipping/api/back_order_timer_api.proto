@@ -4,7 +4,6 @@ import "akkaserverless/annotations.proto";
 import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
-import "google/protobuf/duration.proto";
 
 package io.mystore.shipping.api;
 

@@ -5,7 +5,7 @@ import com.akkaserverless.javasdk.eventsourcedentity.EventSourcedEntityContext;
 import com.akkaserverless.javasdk.testkit.EventSourcedResult;
 import com.google.protobuf.Empty;
 import io.mystore.stock.api.StockOrderApi;
-import io.mystore.stock.api.StockSkuItemEvents;
+import io.mystore.stock.api.StockSkuItemApi;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
