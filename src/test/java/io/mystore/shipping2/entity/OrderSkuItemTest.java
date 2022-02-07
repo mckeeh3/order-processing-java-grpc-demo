@@ -1,19 +1,14 @@
 package io.mystore.shipping2.entity;
 
-import com.akkaserverless.javasdk.eventsourcedentity.EventSourcedEntity;
-import com.akkaserverless.javasdk.eventsourcedentity.EventSourcedEntityContext;
-import com.akkaserverless.javasdk.testkit.EventSourcedResult;
-import com.google.protobuf.Empty;
-
-import io.mystore.TimeTo;
-import io.mystore.shipping2.api.OrderSkuItemApi;
-import io.mystore.shipping2.api.ShippingApi;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.junit.Assert.*;
+import io.mystore.TimeTo;
+import io.mystore.shipping2.api.OrderSkuItemApi;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
 //
@@ -43,11 +38,15 @@ public class OrderSkuItemTest {
   public void createOrderSkuItemTest() {
     OrderSkuItemTestKit testKit = OrderSkuItemTestKit.of(OrderSkuItem::new);
 
+    var orderSkuItemId = "orderSkuItemId";
+    var orderId = "orderId";
+    var skuId = "skuId";
+
     testKit.createOrderSkuItem(OrderSkuItemApi.CreateOrderSkuItemCommand.newBuilder()
-        .setOrderSkuItemId("orderSkuItemId")
+        .setOrderSkuItemId(orderSkuItemId)
         .setCustomerId("customerId")
-        .setOrderId("order-1")
-        .setSkuId("sku-1")
+        .setOrderId(orderId)
+        .setSkuId(skuId)
         .setSkuName("sku name 1")
         .setOrderedUtc(TimeTo.now())
         .build());
@@ -56,19 +55,109 @@ public class OrderSkuItemTest {
         .setOrderSkuItemId("orderSkuItemId")
         .build());
     log.info("orderSkuItem: {}", orderSkuItem.getReply());
+
+    assertEquals(orderSkuItemId, orderSkuItem.getReply().getOrderSkuItemId());
+    assertEquals(orderId, orderSkuItem.getReply().getOrderId());
+    assertEquals(skuId, orderSkuItem.getReply().getSkuId());
+    assertNotEquals(0, orderSkuItem.getReply().getOrderedUtc().getSeconds());
+    assertEquals(0, orderSkuItem.getReply().getShippedUtc().getSeconds());
+    assertEquals(0, orderSkuItem.getReply().getBackOrderedUtc().getSeconds());
   }
 
   @Test
   public void joinToStockSkuItemTest() {
-    // OrderSkuItemTestKit testKit = OrderSkuItemTestKit.of(OrderSkuItem::new);
-    // EventSourcedResult<Empty> result = testKit.joinToStockSkuItem(JoinToStockSkuItemCommand.newBuilder()...build());
+    OrderSkuItemTestKit testKit = OrderSkuItemTestKit.of(OrderSkuItem::new);
+
+    var orderSkuItemId = "orderSkuItemId";
+    var orderId = "orderId";
+    var skuId = "skuId";
+    var stockSkuItemId = "stockSkuItemId";
+
+    testKit.createOrderSkuItem(OrderSkuItemApi.CreateOrderSkuItemCommand.newBuilder()
+        .setOrderSkuItemId(orderSkuItemId)
+        .setCustomerId("customerId")
+        .setOrderId(orderId)
+        .setSkuId(skuId)
+        .setSkuName("sku name 1")
+        .setOrderedUtc(TimeTo.now())
+        .build());
+
+    testKit.joinToStockSkuItem(OrderSkuItemApi.JoinToStockSkuItemCommand.newBuilder()
+        .setOrderSkuItemId(orderSkuItemId)
+        .setOrderId(orderId)
+        .setSkuId(skuId)
+        .setStockSkuItemId(stockSkuItemId)
+        .setShippedUtc(TimeTo.now())
+        .build());
+
+    var orderSkuItem = testKit.getOrderSkuItem(OrderSkuItemApi.GetOrderSkuItemRequest.newBuilder()
+        .setOrderSkuItemId(orderSkuItemId)
+        .build());
+    log.info("orderSkuItem: {}", orderSkuItem.getReply());
+
+    assertNotEquals(0, orderSkuItem.getReply().getShippedUtc().getSeconds());
   }
 
   @Test
   public void backOrderOrderSkuItemTest() {
-    // OrderSkuItemTestKit testKit = OrderSkuItemTestKit.of(OrderSkuItem::new);
-    // EventSourcedResult<Empty> result =
-    // testKit.backOrderOrderSkuItem(BackOrderOrderSkuItemCommand.newBuilder()...build());
+    OrderSkuItemTestKit testKit = OrderSkuItemTestKit.of(OrderSkuItem::new);
+
+    var orderSkuItemId = "orderSkuItemId";
+    var orderId = "orderId";
+    var skuId = "skuId";
+    var stockSkuItemId = "stockSkuItemId";
+
+    testKit.createOrderSkuItem(OrderSkuItemApi.CreateOrderSkuItemCommand.newBuilder()
+        .setOrderSkuItemId(orderSkuItemId)
+        .setCustomerId("customerId")
+        .setOrderId(orderId)
+        .setSkuId(skuId)
+        .setSkuName("sku name 1")
+        .setOrderedUtc(TimeTo.now())
+        .build());
+
+    testKit.backOrderOrderSkuItem(OrderSkuItemApi.BackOrderOrderSkuItemCommand.newBuilder()
+        .setOrderSkuItemId(orderSkuItemId)
+        .setOrderId(orderId)
+        .setSkuId(skuId)
+        .build());
+
+    var orderSkuItem = testKit.getOrderSkuItem(OrderSkuItemApi.GetOrderSkuItemRequest.newBuilder()
+        .setOrderSkuItemId(orderSkuItemId)
+        .build());
+    log.info("orderSkuItem: {}", orderSkuItem.getReply());
+
+    assertNotEquals(0, orderSkuItem.getReply().getBackOrderedUtc().getSeconds());
+
+    testKit.joinToStockSkuItem(OrderSkuItemApi.JoinToStockSkuItemCommand.newBuilder()
+        .setOrderSkuItemId(orderSkuItemId)
+        .setOrderId(orderId)
+        .setSkuId(skuId)
+        .setStockSkuItemId(stockSkuItemId)
+        .setShippedUtc(TimeTo.now())
+        .build());
+
+    orderSkuItem = testKit.getOrderSkuItem(OrderSkuItemApi.GetOrderSkuItemRequest.newBuilder()
+        .setOrderSkuItemId(orderSkuItemId)
+        .build());
+    log.info("orderSkuItem: {}", orderSkuItem.getReply());
+
+    assertNotEquals(0, orderSkuItem.getReply().getShippedUtc().getSeconds());
+    assertEquals(0, orderSkuItem.getReply().getBackOrderedUtc().getSeconds());
+
+    testKit.backOrderOrderSkuItem(OrderSkuItemApi.BackOrderOrderSkuItemCommand.newBuilder()
+        .setOrderSkuItemId(orderSkuItemId)
+        .setOrderId(orderId)
+        .setSkuId(skuId)
+        .build());
+
+    orderSkuItem = testKit.getOrderSkuItem(OrderSkuItemApi.GetOrderSkuItemRequest.newBuilder()
+        .setOrderSkuItemId(orderSkuItemId)
+        .build());
+    log.info("orderSkuItem: {}", orderSkuItem.getReply());
+
+    assertNotEquals(0, orderSkuItem.getReply().getShippedUtc().getSeconds());
+    assertEquals(0, orderSkuItem.getReply().getBackOrderedUtc().getSeconds());
   }
 
   @Test
@@ -76,5 +165,4 @@ public class OrderSkuItemTest {
     // OrderSkuItemTestKit testKit = OrderSkuItemTestKit.of(OrderSkuItem::new);
     // EventSourcedResult<OrderSkuItem> result = testKit.getOrderSkuItem(GetOrderSkuItemRequest.newBuilder()...build());
   }
-
 }
