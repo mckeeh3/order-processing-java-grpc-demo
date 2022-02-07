@@ -43,7 +43,7 @@ public class OrderSkuItemToStockSkuItemAction extends AbstractOrderSkuItemToStoc
             StockSkuItemApi.ReleaseStockSkuItemCommand
                 .newBuilder()
                 .setSkuId(skuItemReleasedFromOrder.getSkuId())
-                .setSkuItemId(skuItemReleasedFromOrder.getSkuItemId())
+                .setStockSkuItemId(skuItemReleasedFromOrder.getSkuItemId())
                 .setOrderId(skuItemReleasedFromOrder.getOrderId())
                 .setOrderSkuItemId(skuItemReleasedFromOrder.getOrderItemId())
                 .build())
@@ -72,7 +72,7 @@ public class OrderSkuItemToStockSkuItemAction extends AbstractOrderSkuItemToStoc
             .newBuilder()
             .setOrderId(skuItemRequired.getOrderId())
             .setOrderSkuItemId(skuItemRequired.getOrderItemId())
-            .setSkuItemId(shipSkuItem.getSkuItemId())
+            .setStockSkuItemId(shipSkuItem.getStockSkuItemId())
             .build())
         .execute();
   }

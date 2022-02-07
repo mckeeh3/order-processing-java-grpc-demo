@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package io.mystore.shipping2.action;
+
+import "akkaserverless/annotations.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/any.proto";
+import "io/mystore/shipping2/entity/shipping_entity.proto";
+
+option java_outer_classname = "ShippingToOrderSkuItemActionService";
+
+service ShippingToOrderSkuItem {
+  option (akkaserverless.codegen) = {
+    action: {}
+  };
+
+  rpc OnOrderCreated(entity.OrderCreated) returns (google.protobuf.Empty) {
+    option (akkaserverless.method).eventing.in = {
+      event_sourced_entity: "shipping"
+    };
+  }
+
+  rpc IgnoreOtherEvents(google.protobuf.Any) returns (google.protobuf.Empty) {
+    option (akkaserverless.method).eventing.in = {
+      event_sourced_entity: "shipping"
+    };
+  }
+}

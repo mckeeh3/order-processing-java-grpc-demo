@@ -7,7 +7,7 @@ import "google/protobuf/timestamp.proto";
 option java_outer_classname = "StockSkuItemEntity";
 
 message StockSkuItemState {
-  string sku_item_id = 1;
+  string stock_sku_item_id = 1;
   string sku_id = 2;
   string sku_name = 3;
   string order_id = 4;
@@ -17,7 +17,7 @@ message StockSkuItemState {
 }
 
 message StockSkuItemCreated {
-  string sku_item_id = 1;
+  string stock_sku_item_id = 1;
   string sku_id = 2;
   string sku_name = 3;
   string stock_order_id = 4;
@@ -25,7 +25,7 @@ message StockSkuItemCreated {
 
 message JoinedToStockSkuItem {
   string sku_id = 1;
-  string sku_item_id = 2;
+  string stock_sku_item_id = 2;
   string order_id = 3;
   string order_sku_item_id = 4;
   google.protobuf.Timestamp shipped_utc = 5;
@@ -34,7 +34,7 @@ message JoinedToStockSkuItem {
 
 message ReleasedFromStockSkuItem {
   string sku_id = 1;
-  string sku_item_id = 2;
+  string stock_sku_item_id = 2;
   string order_id = 3;
   string order_sku_item_id = 4;
   string stock_order_id = 5;

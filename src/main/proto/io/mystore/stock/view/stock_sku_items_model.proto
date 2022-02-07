@@ -7,7 +7,7 @@ import "google/protobuf/timestamp.proto";
 option java_outer_classname = "StockSkuItemsModel";
 
 message StockSkuItem {
-  string sku_item_id = 1;
+  string stock_sku_item_id = 1;
   string sku_id = 2;
   string sku_name = 3;
   string order_id = 4;

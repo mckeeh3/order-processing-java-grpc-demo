@@ -22,7 +22,7 @@ class StockSkuItemEventHandler {
   StockSkuItemEventHandler handle(StockSkuItemEntity.StockSkuItemCreated stockSkuItemCreated) {
     state = state
         .toBuilder()
-        .setSkuItemId(stockSkuItemCreated.getSkuItemId())
+        .setStockSkuItemId(stockSkuItemCreated.getStockSkuItemId())
         .setSkuId(stockSkuItemCreated.getSkuId())
         .setSkuName(stockSkuItemCreated.getSkuName())
         .setStockOrderId(stockSkuItemCreated.getStockOrderId())

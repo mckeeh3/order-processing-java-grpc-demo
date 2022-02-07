@@ -62,7 +62,7 @@ message CreateStockOrderCommand {
 message JoinStockSkuItemToStockOrderCommand {
   string stock_order_id = 1 [(akkaserverless.field).entity_key = true];
   string sku_id = 2;
-  string sku_item_id = 3;
+  string stock_sku_item_id = 3;
   string order_id = 4;
   string order_sku_item_id = 5;
   google.protobuf.Timestamp shipped_utc = 6;
@@ -71,7 +71,7 @@ message JoinStockSkuItemToStockOrderCommand {
 message ReleaseStockSkuItemFromStockOrderCommand {
   string stock_order_id = 1 [(akkaserverless.field).entity_key = true];
   string sku_id = 2;
-  string sku_item_id = 3;
+  string stock_sku_item_id = 3;
   string order_id = 4;
   string order_sku_item_id = 5;
 }

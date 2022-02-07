@@ -53,7 +53,7 @@ public class StockSkuItem extends AbstractStockSkuItem {
         .toBuilder()
         .setSkuId(event.getSkuId())
         .setSkuName(event.getSkuName())
-        .setSkuItemId(event.getSkuItemId())
+        .setStockSkuItemId(event.getStockSkuItemId())
         .setOrderId("")
         .setOrderSkuItemId("")
         .setStockOrderId(event.getStockOrderId())
@@ -93,8 +93,8 @@ public class StockSkuItem extends AbstractStockSkuItem {
   }
 
   private Optional<Effect<StockSkuItemApi.StockSkuItem>> reject(StockSkuItemEntity.StockSkuItemState state, StockSkuItemApi.GetStockSKuItemRequest command) {
-    if (state.getSkuItemId().isEmpty()) {
-      return Optional.of(effects().error("No stock SKU item found for skuItemId: " + command.getSkuItemId()));
+    if (state.getStockSkuItemId().isEmpty()) {
+      return Optional.of(effects().error("No stock SKU item found for skuItemId: " + command.getStockSkuItemId()));
     }
     return Optional.empty();
   }
@@ -130,7 +130,7 @@ public class StockSkuItem extends AbstractStockSkuItem {
             .setStockOrderId(state.getStockOrderId())
             .setSkuId(state.getSkuId())
             .setSkuName(state.getSkuName())
-            .setSkuItemId(state.getSkuItemId())
+            .setStockSkuItemId(state.getStockSkuItemId())
             .setOrderId(state.getOrderId())
             .setOrderSkuItemId(state.getOrderSkuItemId())
             .setShippedUtc(state.getShippedUtc())
@@ -142,7 +142,7 @@ public class StockSkuItem extends AbstractStockSkuItem {
         .newBuilder()
         .setSkuId(command.getSkuId())
         .setSkuName(command.getSkuName())
-        .setSkuItemId(command.getSkuItemId())
+        .setStockSkuItemId(command.getStockSkuItemId())
         .setStockOrderId(command.getStockOrderId())
         .build();
   }
@@ -151,7 +151,7 @@ public class StockSkuItem extends AbstractStockSkuItem {
     return StockSkuItemEntity.JoinedToStockSkuItem
         .newBuilder()
         .setSkuId(state.getSkuId())
-        .setSkuItemId(state.getSkuItemId())
+        .setStockSkuItemId(state.getStockSkuItemId())
         .setOrderId(command.getOrderId())
         .setOrderSkuItemId(command.getOrderSkuItemId())
         .setShippedUtc(TimeTo.now())
@@ -162,7 +162,7 @@ public class StockSkuItem extends AbstractStockSkuItem {
     return StockSkuItemEntity.ReleasedFromStockSkuItem
         .newBuilder()
         .setSkuId(state.getSkuId())
-        .setSkuItemId(state.getSkuItemId())
+        .setStockSkuItemId(state.getStockSkuItemId())
         .setOrderId(command.getOrderId())
         .setOrderSkuItemId(command.getOrderSkuItemId())
         .setStockOrderId(state.getStockOrderId())

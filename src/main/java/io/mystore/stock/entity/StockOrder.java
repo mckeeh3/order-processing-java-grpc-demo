@@ -168,7 +168,7 @@ public class StockOrder extends AbstractStockOrder {
         .newBuilder()
         .setStockOrderId(state.getStockOrderId())
         .setSkuId(command.getSkuId())
-        .setSkuItemId(command.getSkuItemId())
+        .setStockSkuItemId(command.getStockSkuItemId())
         .setOrderId(command.getOrderId())
         .setOrderSkuItemId(command.getOrderSkuItemId())
         .build();
@@ -179,7 +179,7 @@ public class StockOrder extends AbstractStockOrder {
         .newBuilder()
         .setStockOrderId(state.getStockOrderId())
         .setSkuId(command.getSkuId())
-        .setSkuItemId(command.getSkuItemId())
+        .setStockSkuItemId(command.getStockSkuItemId())
         .setOrderId(command.getOrderId())
         .setOrderSkuItemId(command.getOrderSkuItemId())
         .build();
@@ -188,7 +188,7 @@ public class StockOrder extends AbstractStockOrder {
   private List<StockOrderEntity.StockSkuItem> toStockSkuItemsList(StockOrderApi.CreateStockOrderCommand command) {
     return IntStream.range(0, command.getQuantity())
         .mapToObj(i -> StockOrderEntity.StockSkuItem.newBuilder()
-            .setSkuItemId(UUID.randomUUID().toString())
+            .setStockSkuItemId(UUID.randomUUID().toString())
             .setSkuId(command.getSkuId())
             .setSkuName(command.getSkuName())
             .setStockOrderId(command.getStockOrderId())
@@ -199,7 +199,7 @@ public class StockOrder extends AbstractStockOrder {
   private List<StockOrderEntity.StockSkuItem> toStockSkuItemsList(StockOrderEntity.StockOrderState state, StockOrderEntity.StockSkuItemJoined event) {
     return state.getStockSkuItemsList().stream()
         .map(stockSkuItem -> {
-          if (stockSkuItem.getSkuItemId().equals(event.getSkuItemId())) {
+          if (stockSkuItem.getStockSkuItemId().equals(event.getStockSkuItemId())) {
             return stockSkuItem.toBuilder()
                 .setOrderId(event.getStockOrderId())
                 .setOrderSkuItemId(event.getOrderSkuItemId())
@@ -215,7 +215,7 @@ public class StockOrder extends AbstractStockOrder {
   private List<StockOrderEntity.StockSkuItem> toStockSkuItemsList(StockOrderEntity.StockOrderState state, StockOrderEntity.StockSkuItemReleased event) {
     return state.getStockSkuItemsList().stream()
         .map(stockSkuItem -> {
-          if (stockSkuItem.getSkuItemId().equals(event.getSkuItemId())) {
+          if (stockSkuItem.getStockSkuItemId().equals(event.getStockSkuItemId())) {
             return stockSkuItem.toBuilder()
                 .setOrderId("")
                 .setOrderSkuItemId("")
@@ -240,7 +240,7 @@ public class StockOrder extends AbstractStockOrder {
         .map(stockSkuItem -> StockSkuItemApi.StockSkuItem
             .newBuilder()
             .setStockOrderId(stockSkuItem.getStockOrderId())
-            .setSkuItemId(stockSkuItem.getSkuItemId())
+            .setStockSkuItemId(stockSkuItem.getStockSkuItemId())
             .setSkuId(stockSkuItem.getSkuId())
             .setSkuName(stockSkuItem.getSkuName())
             .setOrderId(stockSkuItem.getOrderId())

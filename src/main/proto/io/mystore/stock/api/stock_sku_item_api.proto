@@ -25,41 +25,41 @@ service StockSkuItemService {
 
   rpc CreateStockSkuItem(CreateStockSkuItemCommand) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      post: "/stock-sku-items/{sku_item_id}/create-stock-sku-item"
+      post: "/stock-sku-items/{stock_sku_item_id}/create-stock-sku-item"
       body: "*"
     };
   }
 
   rpc JoinStockSkuItem(JoinStockSkuItemCommand) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      put: "/stock-sku-items/{sku_item_id}/join-to-order-item"
+      put: "/stock-sku-items/{stock_sku_item_id}/join-to-order-item"
       body: "*"
     };
   }
 
   rpc ReleaseStockSkuItem(ReleaseStockSkuItemCommand) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      put: "/stock-sku-items/{sku_item_id}/release-from-ship-sku-item"
+      put: "/stock-sku-items/{stock_sku_item_id}/release-from-ship-sku-item"
       body: "*"
     };
   }
 
   rpc GetStockSkuItem(GetStockSKuItemRequest) returns (StockSkuItem) {
     option (google.api.http) = {
-      get: "/stock-sku_items/{sku_item_id}"
+      get: "/stock-sku_items/{stock_sku_item_id}"
     };
   }
 }
 
 message CreateStockSkuItemCommand {
-  string sku_item_id = 1 [(akkaserverless.field).entity_key = true];
+  string stock_sku_item_id = 1 [(akkaserverless.field).entity_key = true];
   string sku_id = 2;
   string sku_name = 3;
   string stock_order_id = 4;
 }
 
 message JoinStockSkuItemCommand {
-  string sku_item_id = 1 [(akkaserverless.field).entity_key = true];
+  string stock_sku_item_id = 1 [(akkaserverless.field).entity_key = true];
   string sku_id = 2;
   string order_id = 3;
   string order_sku_item_id = 4;
@@ -68,7 +68,7 @@ message JoinStockSkuItemCommand {
 }
 
 message ReleaseStockSkuItemCommand {
-  string sku_item_id = 1 [(akkaserverless.field).entity_key = true];
+  string stock_sku_item_id = 1 [(akkaserverless.field).entity_key = true];
   string sku_id = 2;
   string order_id = 3;
   string order_sku_item_id = 4;
@@ -76,11 +76,11 @@ message ReleaseStockSkuItemCommand {
 }
 
 message GetStockSKuItemRequest {
-  string sku_item_id = 1 [(akkaserverless.field).entity_key = true];
+  string stock_sku_item_id = 1 [(akkaserverless.field).entity_key = true];
 }
 
 message StockSkuItem {
-  string sku_item_id = 1;
+  string stock_sku_item_id = 1;
   string sku_id = 2;
   string sku_name = 3;
   string order_id = 4;

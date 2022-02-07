@@ -64,7 +64,7 @@ class StockOrderEventHandler {
     return stockOrderCreated.getStockSkuItemsList().stream()
         .map(stockSkuItem -> StockSkuItemsModel.StockSkuItem
             .newBuilder()
-            .setSkuItemId(stockSkuItem.getSkuItemId())
+            .setStockSkuItemId(stockSkuItem.getStockSkuItemId())
             .setSkuId(stockSkuItem.getSkuId())
             .setSkuName(stockSkuItem.getSkuName())
             .setStockOrderId(stockSkuItem.getStockOrderId())
@@ -75,7 +75,7 @@ class StockOrderEventHandler {
   static List<StockSkuItemsModel.StockSkuItem> toStockSkuItems(StockOrdersModel.StockOrder state, StockOrderEntity.StockSkuItemJoined event) {
     return state.getStockSkuItemsList().stream()
         .map(stockSkuItem -> {
-          if (stockSkuItem.getSkuItemId().equals(event.getSkuItemId())) {
+          if (stockSkuItem.getStockSkuItemId().equals(event.getStockSkuItemId())) {
             return stockSkuItem.toBuilder()
                 .setOrderId(event.getStockOrderId())
                 .setOrderSkuItemId(event.getOrderSkuItemId())
@@ -91,7 +91,7 @@ class StockOrderEventHandler {
   static List<StockSkuItemsModel.StockSkuItem> toStockSkuItems(StockOrdersModel.StockOrder state, StockOrderEntity.StockSkuItemReleased event) {
     return state.getStockSkuItemsList().stream()
         .map(stockSkuItem -> {
-          if (stockSkuItem.getSkuItemId().equals(event.getSkuItemId())) {
+          if (stockSkuItem.getStockSkuItemId().equals(event.getStockSkuItemId())) {
             return stockSkuItem.toBuilder()
                 .setOrderId("")
                 .setOrderSkuItemId("")

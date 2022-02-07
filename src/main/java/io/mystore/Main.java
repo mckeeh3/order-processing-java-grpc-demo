@@ -37,11 +37,19 @@ import io.mystore.shipping.view.BackOrderedShipOrderItemsView;
 import io.mystore.shipping.view.ShipOrdersByCustomerByDateView;
 import io.mystore.shipping.view.ShipOrdersByDateView;
 import io.mystore.shipping.view.ShippedStockItemsView;
+import io.mystore.shipping2.action.OrderSkuItemToShippingAction;
+import io.mystore.shipping2.action.OrderToShippingAction;
+import io.mystore.shipping2.action.ShippingToOrderSkuItemAction;
+import io.mystore.shipping2.action.StockSkuItemToOrderSkuItemAction;
 import io.mystore.shipping2.entity.OrderSkuItem;
 import io.mystore.shipping2.entity.Shipping;
+import io.mystore.shipping2.view.OrderSkuItemsBackOrderedBySkuView;
+import io.mystore.shipping2.view.OrderSkuItemsShippedBySkuView;
 import io.mystore.stock.action.OrderSkuItemToStockSkuItemAction;
+import io.mystore.stock.action.ShippableSkuItemsTimerAction;
 import io.mystore.stock.action.StockOrderToStockSkuItemAction;
 import io.mystore.stock.action.StockSkuItemToStockOrderAction;
+import io.mystore.stock.entity.ShippableSkuItemsTimer;
 import io.mystore.stock.entity.StockOrder;
 import io.mystore.stock.entity.StockSkuItem;
 import io.mystore.stock.view.StockOrdersAvailableView;
@@ -73,6 +81,7 @@ public final class Main {
       ShipOrder::new,
       ShipOrderItem::new,
       ShipSkuItem::new,
+      ShippableSkuItemsTimer::new,
       Shipping::new,
       ShoppingCart::new,
       StockItem::new,
@@ -87,9 +96,13 @@ public final class Main {
       CartsByCustomerView::new,
       CartsByCustomerByDateView::new,
       CartsByDateView::new,
+      OrderSkuItemToShippingAction::new,
       OrderSkuItemToStockSkuItemAction::new,
+      OrderSkuItemsBackOrderedBySkuView::new,
+      OrderSkuItemsShippedBySkuView::new,
       OrderToOrderedItemsAction::new,
       OrderToShipOrderAction::new,
+      OrderToShippingAction::new,
       OrderedItemsByCustomerByDateView::new,
       OrderedItemsByDateView::new,
       OrderedItemsBySkuByDateView::new,
@@ -104,12 +117,15 @@ public final class Main {
       ShipOrdersByDateView::new,
       ShipSkuItemToShipOrderItemAction::new,
       ShipSkuItemToStockItemAction::new,
+      ShippableSkuItemsTimerAction::new,
       ShippedStockItemsView::new,
+      ShippingToOrderSkuItemAction::new,
       StockItemFrontendAction::new,
       StockItemToShipSkuItemAction::new,
       StockOrderToStockSkuItemAction::new,
       StockOrdersAvailableView::new,
       StockOrdersShippedView::new,
+      StockSkuItemToOrderSkuItemAction::new,
       StockSkuItemToStockOrderAction::new,
       StockSkuItemsAvailableView::new,
       StockSkuItemsShippedView::new);

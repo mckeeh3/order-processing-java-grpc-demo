@@ -37,7 +37,7 @@ public class StockSkuItemToStockOrderAction extends AbstractStockSkuItemToStockO
         .newBuilder()
         .setStockOrderId(joinedToStockSkuItem.getStockOrderId())
         .setSkuId(joinedToStockSkuItem.getSkuId())
-        .setSkuItemId(joinedToStockSkuItem.getSkuItemId())
+        .setStockSkuItemId(joinedToStockSkuItem.getStockSkuItemId())
         .setOrderId(joinedToStockSkuItem.getOrderId())
         .setOrderSkuItemId(joinedToStockSkuItem.getOrderSkuItemId())
         .setShippedUtc(joinedToStockSkuItem.getShippedUtc())
@@ -49,7 +49,7 @@ public class StockSkuItemToStockOrderAction extends AbstractStockSkuItemToStockO
         .newBuilder()
         .setStockOrderId(releasedFromStockSkuItem.getStockOrderId())
         .setSkuId(releasedFromStockSkuItem.getSkuId())
-        .setSkuItemId(releasedFromStockSkuItem.getSkuItemId())
+        .setStockSkuItemId(releasedFromStockSkuItem.getStockSkuItemId())
         .setOrderId(releasedFromStockSkuItem.getOrderId())
         .setOrderSkuItemId(releasedFromStockSkuItem.getOrderSkuItemId())
         .build();

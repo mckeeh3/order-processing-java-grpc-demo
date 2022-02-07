@@ -14,7 +14,7 @@ service ShippingService {
   option (akkaserverless.codegen) = {
     event_sourced_entity: {
       name: "io.mystore.shipping2.entity.Shipping"
-      entity_type: "order"
+      entity_type: "shipping"
       state: "io.mystore.shipping2.entity.OrderState"
       events: [
         "io.mystore.shipping2.entity.OrderCreated",
