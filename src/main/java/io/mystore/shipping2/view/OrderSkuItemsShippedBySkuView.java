@@ -25,37 +25,31 @@ public class OrderSkuItemsShippedBySkuView extends AbstractOrderSkuItemsShippedB
   @Override
   public View.UpdateEffect<OrderSkuItemModel.OrderSkuItem> onCreatedOrderSkuItem(
       OrderSkuItemModel.OrderSkuItem state, OrderSkuItemEntity.CreatedOrderSkuItem createdOrderSkuItem) {
-    return effects()
-        .updateState(
-            state
-                .toBuilder()
-                .setOrderId(createdOrderSkuItem.getOrderId())
-                .setOrderSkuItemId(createdOrderSkuItem.getOrderSkuItemId())
-                .setSkuId(createdOrderSkuItem.getSkuId())
-                .setSkuName(createdOrderSkuItem.getSkuName())
-                .build());
+    return effects().updateState(
+        OrderSkuItemEventHandler
+            .fromState(state)
+            .handle(createdOrderSkuItem)
+            .toState());
   }
 
   @Override
   public View.UpdateEffect<OrderSkuItemModel.OrderSkuItem> onJoinedToStockSkuItem(
       OrderSkuItemModel.OrderSkuItem state, OrderSkuItemEntity.JoinedToStockSkuItem joinedToStockSkuItem) {
-    return effects()
-        .updateState(
-            state
-                .toBuilder()
-                .setBackOrderedUtc(TimeTo.zero())
-                .build());
+    return effects().updateState(
+        OrderSkuItemEventHandler
+            .fromState(state)
+            .handle(joinedToStockSkuItem)
+            .toState());
   }
 
   @Override
   public View.UpdateEffect<OrderSkuItemModel.OrderSkuItem> onBackOrderedOrderSkuItem(
       OrderSkuItemModel.OrderSkuItem state, OrderSkuItemEntity.BackOrderedOrderSkuItem backOrderedOrderSkuItem) {
-    return effects()
-        .updateState(
-            state
-                .toBuilder()
-                .setBackOrderedUtc(backOrderedOrderSkuItem.getBackOrderedUtc())
-                .build());
+    return effects().updateState(
+        OrderSkuItemEventHandler
+            .fromState(state)
+            .handle(backOrderedOrderSkuItem)
+            .toState());
   }
 
   @Override

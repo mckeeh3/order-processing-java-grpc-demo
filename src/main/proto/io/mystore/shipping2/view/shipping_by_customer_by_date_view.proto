@@ -1,0 +1,90 @@
+syntax = "proto3";
+
+package io.mystore.shipping2.view;
+
+import "google/api/annotations.proto";
+import "google/protobuf/any.proto";
+import "akkaserverless/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "io/mystore/shipping2/entity/shipping_entity.proto";
+import "io/mystore/shipping2/view/shipping.proto";
+
+option java_outer_classname = "ShippingByCustomerByDateModel";
+
+service ShippingByCustomerByDate {
+  option (akkaserverless.codegen) = {
+    view: {}
+  };
+
+  rpc GetShippingByCustomerByDate(ShippingByCustomerByDateRequest) returns (ShippingByCustomerByDateResponse) {
+    option (akkaserverless.method).view.query = {
+      query: "SELECT * AS shipping"
+             "  FROM shipping_by_customer_by_date"
+             " WHERE ordered_utc.seconds >= :`from_date.seconds`"
+             "   AND ordered_utc.seconds < :`to_date.seconds`"
+             "   AND customer_id = :customer_id"
+    };
+    option (google.api.http) = {
+      get: "/shipping-by-customer-by-date"
+    };
+  }
+
+  rpc OnOrderCreated(entity.OrderCreated) returns (Shipping) {
+    option (akkaserverless.method).eventing.in = {
+      event_sourced_entity: "shipping"
+    };
+    option (akkaserverless.method).view.update = {
+      table: "shipping_by_customer_by_date"
+      transform_updates: true
+    };
+  }
+
+  rpc OnOrderShipped(entity.OrderShipped) returns (Shipping) {
+    option (akkaserverless.method).eventing.in = {
+      event_sourced_entity: "shipping"
+    };
+    option (akkaserverless.method).view.update = {
+      table: "shipping_by_customer_by_date"
+      transform_updates: true
+    };
+  }
+
+  rpc OnOrderItemShipped(entity.OrderItemShipped) returns (Shipping) {
+    option (akkaserverless.method).eventing.in = {
+      event_sourced_entity: "shipping"
+    };
+    option (akkaserverless.method).view.update = {
+      table: "shipping_by_customer_by_date"
+      transform_updates: true
+    };
+  }
+
+  rpc OnOrderSkuItemShipped(entity.OrderSkuItemShipped) returns (Shipping) {
+    option (akkaserverless.method).eventing.in = {
+      event_sourced_entity: "shipping"
+    };
+    option (akkaserverless.method).view.update = {
+      table: "shipping_by_customer_by_date"
+      transform_updates: true
+    };
+  }
+
+  rpc IgnoreOtherEvents(google.protobuf.Any) returns (Shipping) {
+    option (akkaserverless.method).eventing.in = {
+      event_sourced_entity: "shipping"
+    };
+    option (akkaserverless.method).view.update = {
+      table: "shipping_by_customer_by_date"
+      transform_updates: true
+    };
+  }
+}
+
+message ShippingByCustomerByDateRequest {
+  google.protobuf.Timestamp from_date = 1;
+  google.protobuf.Timestamp to_date = 2;
+}
+
+message ShippingByCustomerByDateResponse {
+  repeated Shipping shipping = 1;
+}
