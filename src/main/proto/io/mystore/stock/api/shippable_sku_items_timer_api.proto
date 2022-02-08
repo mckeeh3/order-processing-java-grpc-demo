@@ -13,7 +13,7 @@ service ShippableSkuItemsTimerService {
   option (akkaserverless.codegen) = {
     value_entity: {
       name: "io.mystore.stock.entity.ShippableSkuItemsTimer"
-      entity_type: "back_order_timer"
+      entity_type: "shippable_sku_items_timer"
       state: "io.mystore.stock.entity.ShippableSkuItemsTimerState"  //
     }
   };

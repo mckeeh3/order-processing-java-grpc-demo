@@ -7,8 +7,8 @@ import com.akkaserverless.javasdk.action.ActionCreationContext;
 import com.google.protobuf.Any;
 import com.google.protobuf.Empty;
 
-import io.mystore.shipping.api.ShipOrderItemApi;
-import io.mystore.shipping.entity.ShipOrderItemEntity;
+import io.mystore.shipping2.api.OrderSkuItemApi;
+import io.mystore.shipping2.entity.OrderSkuItemEntity;
 import io.mystore.stock.api.StockSkuItemApi;
 import io.mystore.stock.view.StockSkuItemsAvailableModel;
 import io.mystore.stock.view.StockSkuItemsModel.StockSkuItem;
@@ -25,27 +25,27 @@ public class OrderSkuItemToStockSkuItemAction extends AbstractOrderSkuItemToStoc
   }
 
   @Override
-  public Effect<Empty> onStockSkuItemRequired(ShipOrderItemEntity.SkuItemRequired skuItemRequired) {
+  public Effect<Empty> onStockSkuItemRequired(OrderSkuItemEntity.StockSkuItemRequired stockSkuItemRequired) {
     return effects().asyncReply(
         components().stockSkuItemsAvailableView().getStockSkuItemsAvailable(
             StockSkuItemsAvailableModel.GetStockSkuItemsAvailableRequest
                 .newBuilder()
-                .setSkuId(skuItemRequired.getSkuId())
+                .setSkuId(stockSkuItemRequired.getSkuId())
                 .build())
             .execute()
-            .thenCompose(response -> onAvailableShipSkuItems(skuItemRequired, response)));
+            .thenCompose(response -> onAvailableShipSkuItems(stockSkuItemRequired, response)));
   }
 
   @Override
-  public Effect<Empty> onStockSkuItemReleased(ShipOrderItemEntity.SkuItemReleasedFromOrder skuItemReleasedFromOrder) {
+  public Effect<Empty> onStockSkuItemReleased(OrderSkuItemEntity.ReleasedFromOrderSkuItem releasedFromOrderSkuItem) {
     return effects().asyncReply(
         components().stockSkuItem().releaseStockSkuItem(
             StockSkuItemApi.ReleaseStockSkuItemCommand
                 .newBuilder()
-                .setSkuId(skuItemReleasedFromOrder.getSkuId())
-                .setStockSkuItemId(skuItemReleasedFromOrder.getSkuItemId())
-                .setOrderId(skuItemReleasedFromOrder.getOrderId())
-                .setOrderSkuItemId(skuItemReleasedFromOrder.getOrderItemId())
+                .setSkuId(releasedFromOrderSkuItem.getSkuId())
+                .setStockSkuItemId(releasedFromOrderSkuItem.getStockSkuItemId())
+                .setOrderId(releasedFromOrderSkuItem.getOrderId())
+                .setOrderSkuItemId(releasedFromOrderSkuItem.getOrderSkuItemId())
                 .build())
             .execute());
   }
@@ -56,33 +56,33 @@ public class OrderSkuItemToStockSkuItemAction extends AbstractOrderSkuItemToStoc
   }
 
   private CompletionStage<Empty> onAvailableShipSkuItems(
-      ShipOrderItemEntity.SkuItemRequired skuItemRequired, StockSkuItemsAvailableModel.GetStockSkuItemsAvailableResponse response) {
+      OrderSkuItemEntity.StockSkuItemRequired stockSkuItemRequired, StockSkuItemsAvailableModel.GetStockSkuItemsAvailableResponse response) {
     var count = response.getStockSkuItemsCount();
     if (count > 0) {
-      return requestShipSkuItem(skuItemRequired, response.getStockSkuItemsList().get(random.nextInt(count)));
+      return requestShipSkuItem(stockSkuItemRequired, response.getStockSkuItemsList().get(random.nextInt(count)));
     } else {
-      return backOrderShipOrderItem(skuItemRequired);
+      return backOrderShipOrderItem(stockSkuItemRequired);
     }
   }
 
   private CompletionStage<Empty> requestShipSkuItem(
-      ShipOrderItemEntity.SkuItemRequired skuItemRequired, StockSkuItem shipSkuItem) {
+      OrderSkuItemEntity.StockSkuItemRequired skuItemRequired, StockSkuItem shipSkuItem) {
     return components().stockSkuItem().joinStockSkuItem(
         StockSkuItemApi.JoinStockSkuItemCommand
             .newBuilder()
             .setOrderId(skuItemRequired.getOrderId())
-            .setOrderSkuItemId(skuItemRequired.getOrderItemId())
+            .setOrderSkuItemId(skuItemRequired.getOrderSkuItemId())
             .setStockSkuItemId(shipSkuItem.getStockSkuItemId())
             .build())
         .execute();
   }
 
-  private CompletionStage<Empty> backOrderShipOrderItem(ShipOrderItemEntity.SkuItemRequired skuItemRequired) {
-    return components().shipOrderItem().backOrderOrderItem(
-        ShipOrderItemApi.BackOrderOrderItemCommand
+  private CompletionStage<Empty> backOrderShipOrderItem(OrderSkuItemEntity.StockSkuItemRequired skuItemRequired) {
+    return components().orderSkuItem().backOrderOrderSkuItem(
+        OrderSkuItemApi.BackOrderOrderSkuItemCommand
             .newBuilder()
             .setOrderId(skuItemRequired.getOrderId())
-            .setOrderItemId(skuItemRequired.getOrderItemId())
+            .setOrderSkuItemId(skuItemRequired.getOrderSkuItemId())
             .build())
         .execute();
   }

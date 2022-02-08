@@ -9,6 +9,7 @@ import io.mystore.order.action.CartToOrderAction;
 import io.mystore.order.action.OrderToOrderedItemsAction;
 import io.mystore.order.action.ShipOrderToOrderAction;
 import io.mystore.order.action.ShipOrderToOrderItemAction;
+import io.mystore.order.action.ShippingToOrderAction;
 import io.mystore.order.entity.Order;
 import io.mystore.order.entity.OrderItem;
 import io.mystore.order.view.OrderedItemsByCustomerByDateView;
@@ -17,7 +18,6 @@ import io.mystore.order.view.OrderedItemsBySkuByDateView;
 import io.mystore.order.view.OrdersByCustomerByDateView;
 import io.mystore.order.view.OrdersByDateView;
 import io.mystore.shipping.action.BackOrderCheckTimerAction;
-import io.mystore.shipping.action.OrderToShipOrderAction;
 import io.mystore.shipping.action.ShipOrderItemToShipOrderAction;
 import io.mystore.shipping.action.ShipOrderItemToShipSkuItemAction;
 import io.mystore.shipping.action.ShipOrderToShipOrderItemAction;
@@ -101,7 +101,6 @@ public final class Main {
       OrderSkuItemsBackOrderedBySkuView::new,
       OrderSkuItemsShippedBySkuView::new,
       OrderToOrderedItemsAction::new,
-      OrderToShipOrderAction::new,
       OrderToShippingAction::new,
       OrderedItemsByCustomerByDateView::new,
       OrderedItemsByDateView::new,
@@ -119,6 +118,7 @@ public final class Main {
       ShipSkuItemToStockItemAction::new,
       ShippableSkuItemsTimerAction::new,
       ShippedStockItemsView::new,
+      ShippingToOrderAction::new,
       ShippingToOrderSkuItemAction::new,
       StockItemFrontendAction::new,
       StockItemToShipSkuItemAction::new,

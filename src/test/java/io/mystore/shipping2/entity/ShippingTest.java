@@ -3,6 +3,7 @@ package io.mystore.shipping2.entity;
 import static org.junit.Assert.assertEquals;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.akkaserverless.javasdk.testkit.EventSourcedResult;
 
@@ -39,8 +40,40 @@ public class ShippingTest {
 
   @Test
   public void createOrderTest() {
-    // ShippingTestKit testKit = ShippingTestKit.of(Shipping::new);
-    // EventSourcedResult<Empty> result = testKit.createOrder(CreateOrderCommand.newBuilder()...build());
+    ShippingTestKit testKit = ShippingTestKit.of(Shipping::new);
+
+    var sku2quantity = 2;
+    var sku3quantity = 3;
+    var result = testKit.createOrder(ShippingApi.CreateOrderCommand.newBuilder()
+        .setOrderId("order-id")
+        .setCustomerId("customer-id")
+        .setOrderedUtc(TimeTo.now())
+        .addAllOrderItems(
+            List.of(
+                ShippingApi.OrderItem.newBuilder()
+                    .setSkuId("sku-2")
+                    .setSkuName("sku name 2")
+                    .setQuantity(sku2quantity)
+                    .build(),
+                ShippingApi.OrderItem.newBuilder()
+                    .setSkuId("sku-3")
+                    .setSkuName("sku name 3")
+                    .setQuantity(sku3quantity)
+                    .build()))
+        .build());
+
+    var events = result.getAllEvents();
+    events.forEach(event -> log.info("event: {}", event));
+
+    assertEquals(1, events.size());
+
+    var orderCreated = (ShippingEntity.OrderCreated) events.get(0);
+    var results = orderCreated.getOrderItemsList().stream()
+        .flatMap(orderItems -> orderItems.getOrderSkuItemsList().stream())
+        .collect(Collectors.toList());
+
+    log.info("results({}): {}", results.size(), results);
+    assertEquals(sku2quantity + sku3quantity, results.size());
   }
 
   @Test
@@ -81,7 +114,7 @@ public class ShippingTest {
   }
 
   @Test
-  public void shippedOrderWithMultipleOrderItemsMultipleQuantlty() {
+  public void shippedOrderWithMultipleOrderItemsMultipleQuantity() {
     ShippingTestKit testKit = ShippingTestKit.of(Shipping::new);
 
     testKit.createOrder(ShippingApi.CreateOrderCommand.newBuilder()
