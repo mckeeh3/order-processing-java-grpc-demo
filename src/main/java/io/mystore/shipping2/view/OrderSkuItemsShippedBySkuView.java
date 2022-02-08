@@ -4,7 +4,6 @@ import com.akkaserverless.javasdk.view.View;
 import com.akkaserverless.javasdk.view.ViewContext;
 import com.google.protobuf.Any;
 
-import io.mystore.TimeTo;
 import io.mystore.shipping2.entity.OrderSkuItemEntity;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
