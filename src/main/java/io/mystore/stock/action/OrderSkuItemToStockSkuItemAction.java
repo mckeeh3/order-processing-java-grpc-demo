@@ -7,6 +7,9 @@ import com.akkaserverless.javasdk.action.ActionCreationContext;
 import com.google.protobuf.Any;
 import com.google.protobuf.Empty;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.mystore.shipping2.api.OrderSkuItemApi;
 import io.mystore.shipping2.entity.OrderSkuItemEntity;
 import io.mystore.stock.api.StockSkuItemApi;
@@ -20,12 +23,15 @@ import io.mystore.stock.view.StockSkuItemsModel.StockSkuItem;
 
 public class OrderSkuItemToStockSkuItemAction extends AbstractOrderSkuItemToStockSkuItemAction {
   static final Random random = new Random();
+  static final Logger log = LoggerFactory.getLogger(OrderSkuItemToStockSkuItemAction.class);
 
   public OrderSkuItemToStockSkuItemAction(ActionCreationContext creationContext) {
   }
 
   @Override
   public Effect<Empty> onStockSkuItemRequired(OrderSkuItemEntity.StockSkuItemRequired stockSkuItemRequired) {
+    log.info("onStockSkuItemRequired: {}", stockSkuItemRequired);
+
     return effects().asyncReply(
         components().stockSkuItemsAvailableView().getStockSkuItemsAvailable(
             StockSkuItemsAvailableModel.GetStockSkuItemsAvailableRequest
@@ -38,6 +44,8 @@ public class OrderSkuItemToStockSkuItemAction extends AbstractOrderSkuItemToStoc
 
   @Override
   public Effect<Empty> onStockSkuItemReleased(OrderSkuItemEntity.ReleasedFromOrderSkuItem releasedFromOrderSkuItem) {
+    log.info("onStockSkuItemReleased: {}", releasedFromOrderSkuItem);
+
     return effects().asyncReply(
         components().stockSkuItem().releaseStockSkuItem(
             StockSkuItemApi.ReleaseStockSkuItemCommand

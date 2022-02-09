@@ -6,17 +6,19 @@ import java.util.stream.Collectors;
 import com.akkaserverless.javasdk.action.ActionCreationContext;
 import com.google.protobuf.Any;
 import com.google.protobuf.Empty;
-import io.mystore.order.entity.OrderEntity;
+
 import io.mystore.order.api.OrderItemApi;
+import io.mystore.order.entity.OrderEntity;
+import io.mystore.order.entity.OrderEntity.OrderItemShipped;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
 //
 // As long as this file exists it will not be overwritten: you can maintain it yourself,
 // or delete it so it is regenerated as needed.
 
-public class OrderToOrderedItemsAction extends AbstractOrderToOrderedItemsAction {
+public class OrderToOrderItemAction extends AbstractOrderToOrderItemAction {
 
-  public OrderToOrderedItemsAction(ActionCreationContext creationContext) {
+  public OrderToOrderItemAction(ActionCreationContext creationContext) {
   }
 
   @Override
@@ -38,6 +40,20 @@ public class OrderToOrderedItemsAction extends AbstractOrderToOrderedItemsAction
         .thenApply(reply -> effects().reply(Empty.getDefaultInstance()));
 
     return effects().asyncEffect(result);
+  }
+
+  @Override
+  public Effect<Empty> onOrderItemShipped(OrderEntity.OrderItemShipped orderItemShipped) {
+    return effects().forward(components().orderItem().shippedOrderItem(toApi(orderItemShipped)));
+  }
+
+  private OrderItemApi.ShippedOrderItemCommand toApi(OrderItemShipped orderItemShipped) {
+    return OrderItemApi.ShippedOrderItemCommand
+        .newBuilder()
+        .setOrderId(orderItemShipped.getOrderId())
+        .setSkuId(orderItemShipped.getSkuId())
+        .setShippedUtc(orderItemShipped.getShippedUtc())
+        .build();
   }
 
   @Override

@@ -83,6 +83,7 @@ service ShippingByCustomerByDate {
 message ShippingByCustomerByDateRequest {
   google.protobuf.Timestamp from_date = 1;
   google.protobuf.Timestamp to_date = 2;
+  string customer_id = 3;
 }
 
 message ShippingByCustomerByDateResponse {

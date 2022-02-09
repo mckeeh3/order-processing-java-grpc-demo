@@ -6,7 +6,7 @@ import io.mystore.cart.view.CartsByCustomerByDateView;
 import io.mystore.cart.view.CartsByCustomerView;
 import io.mystore.cart.view.CartsByDateView;
 import io.mystore.order.action.CartToOrderAction;
-import io.mystore.order.action.OrderToOrderedItemsAction;
+import io.mystore.order.action.OrderToOrderItemAction;
 import io.mystore.order.action.ShipOrderToOrderAction;
 import io.mystore.order.action.ShipOrderToOrderItemAction;
 import io.mystore.order.action.ShippingToOrderAction;
@@ -102,7 +102,7 @@ public final class Main {
       OrderSkuItemToStockSkuItemAction::new,
       OrderSkuItemsBackOrderedBySkuView::new,
       OrderSkuItemsShippedBySkuView::new,
-      OrderToOrderedItemsAction::new,
+      OrderToOrderItemAction::new,
       OrderToShippingAction::new,
       OrderedItemsByCustomerByDateView::new,
       OrderedItemsByDateView::new,

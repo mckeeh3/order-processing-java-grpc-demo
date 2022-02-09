@@ -7,14 +7,20 @@ import "google/protobuf/empty.proto";
 import "google/protobuf/any.proto";
 import "io/mystore/order/entity/order_entity.proto";
 
-option java_outer_classname = "OrderToOrderedItemsService";
+option java_outer_classname = "OrderToOrderItemService";
 
-service OrderToOrderedItems {
+service OrderToOrderItem {
   option (akkaserverless.codegen) = {
     action: {}
   };
 
   rpc OnOrderCreated(entity.OrderCreated) returns (google.protobuf.Empty) {
+    option (akkaserverless.method).eventing.in = {
+      event_sourced_entity: "order"
+    };
+  }
+
+  rpc OnOrderItemShipped(entity.OrderItemShipped) returns (google.protobuf.Empty) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "order"
     };

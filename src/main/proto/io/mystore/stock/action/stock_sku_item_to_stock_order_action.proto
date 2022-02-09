@@ -16,19 +16,19 @@ service StockSkuItemToStockOrder {
 
   rpc OnJoinedToStockSkuItem(entity.JoinedToStockSkuItem) returns (google.protobuf.Empty) {
     option (akkaserverless.method).eventing.in = {
-      event_sourced_entity: "ship_sku_item"
+      event_sourced_entity: "stock_sku_item"
     };
   }
 
   rpc OnReleasedFromStockSkuItem(entity.ReleasedFromStockSkuItem) returns (google.protobuf.Empty) {
     option (akkaserverless.method).eventing.in = {
-      event_sourced_entity: "ship_sku_item"
+      event_sourced_entity: "stock_sku_item"
     };
   }
 
   rpc IgnoreOtherEvents(google.protobuf.Any) returns (google.protobuf.Empty) {
     option (akkaserverless.method).eventing.in = {
-      event_sourced_entity: "ship_sku_item"
+      event_sourced_entity: "stock_sku_item"
     };
   }
 }

@@ -20,7 +20,8 @@ class OrderSkuItemEventHandler {
   }
 
   OrderSkuItemEventHandler handle(OrderSkuItemEntity.CreatedOrderSkuItem createdOrderSkuItem) {
-    state = state.toBuilder()
+    state = state
+        .toBuilder()
         .setOrderId(createdOrderSkuItem.getOrderId())
         .setOrderSkuItemId(createdOrderSkuItem.getOrderSkuItemId())
         .setSkuId(createdOrderSkuItem.getSkuId())

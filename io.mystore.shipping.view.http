@@ -6,37 +6,22 @@
 @fromDate = 2022-01-01T00:00:00.000-05:00
 @toDate = 2023-01-01T00:00:00.000-05:00
 
-### io.mystore.shipping.view.BackOrderedShipOrderItems.GetBackOrderedShipOrderItems
+### io.mystore.shipping2.view.OrderSkuItemsBackOrderedBySku.GetOrderSkuItemsBackOrderedBySku
 
 curl -XGET -H "Content-Type: application/json"
-  '{{urlPrefix}}/back-ordered-ship-order-items'
+  '{{urlPrefix}}/order-sku-items-back-ordered-by-sku?skuId={{skuId}}'
 
-### io.mystore.shipping.view.BackOrderedShipOrderItemsBySku.GetBackOrderedShipOrderItemsBySku
-
-curl -XGET -H "Content-Type: application/json"
-  '{{urlPrefix}}/back-ordered-ship-order-items-by-sku?skuId={{skuId}}'
-
-### io.mystore.shipping.view.AvailableStockItems.GetAvailableStockItems
+### io.mystore.shipping2.view.OrderSkuItemsShippedBySku.GetOrderSkuItemsShippedBySku
 
 curl -XGET -H "Content-Type: application/json"
-  '{{urlPrefix}}/available-stock-items'
+  '{{urlPrefix}}/order-sku-items-back-ordered-by-sku?skuId={{skuId}}'
 
-### io.mystore.shipping.view.AvailableShipSkuItems.GetAvailableShipSkuItems
-
-curl -XGET -H "Content-Type: application/json"
-  '{{urlPrefix}}/available-ship-sku-items?sku_id={{skuId}}'
-
-### io.mystore.shipping.view.ShippedStockItems.GetShippedStockItems
+### io.mystore.shipping2.view.ShippingByCustomerByDate.GetShippingByCustomerByDate
 
 curl -XGET -H "Content-Type: application/json"
-  '{{urlPrefix}}/shipped-stock-items'
+  '{{urlPrefix}}/shipping-by-customer-by-date?from_date={{fromDate}}&to_date={{toDate}}&customer_id={{customerId}}'
 
-### io.mystore.shipping.view.ShipOrdersByCustomerByDate.GetShipOrdersByCustomerByDate
-
-curl -XGET -H "Content-Type: application/json"
-  '{{urlPrefix}}/ship-orders-by-customer-by-date?customer_id={{customerId}}&from_date={{fromDate}}&to_date={{toDate}}'
-
-### io.mystore.shipping.view.ShipOrdersByDate.GetShipOrdersByDate
+### io.mystore.shipping2.view.ShippingByDate.GetShippingByDate
 
 curl -XGET -H "Content-Type: application/json"
-  '{{urlPrefix}}/ship-orders-by-date?from_date={{fromDate}}&to_date={{toDate}}'
+  '{{urlPrefix}}/shipping-by-date?from_date={{fromDate}}&to_date={{toDate}}'

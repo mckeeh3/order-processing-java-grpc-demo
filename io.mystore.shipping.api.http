@@ -3,26 +3,14 @@
 @skuId = sku-1
 @skuName = sku name 1
 @quantity = 1
-@orderItemId = a6f75256-83db-481f-ba3f-f32d40f251f0
+@orderSkuItemId = 1b47c9d6-34aa-4e28-ac69-03c9702aee50
 
-### io.mystore.shipping.action.StockItemFrontend.createStockItems
-
-curl -XPOST -H "Content-Type: application/json" -d '{
-  "sku_name":"{{skuName}}",
-  "quantity":{{quantity}}}'
-  {{urlPrefix}}/stock-item-frontend/{{skuId}}/create
-
-### io.mystore.order.api.OrderService.GetOrder
+### io.mystore.shipping2.api.ShippingService.GetOrder
 
 curl -XGET -H "Content-Type: application/json"
-  '{{urlPrefix}}/order/{{orderId}}'
+  '{{urlPrefix}}/orders/{{orderId}}'
 
-### io.mystore.shipping.api.ShipOrderService.GetShipOrder
-
-curl -XGET -H "Content-Type: application/json"
-  '{{urlPrefix}}/ship-order/{{orderId}}'
-
-### io.mystore.shipping.api.ShipOrderItemService.GetShipOrderItem
+### io.mystore.shipping2.api.OrderSkuItemService.GetOrderSkuItem
 
 curl -XGET -H "Content-Type: application/json"
-  '{{urlPrefix}}/ship-order-items/{{orderItemId}}'
+  '{{urlPrefix}}/order-sku-items/{{orderSkuItemId}}'

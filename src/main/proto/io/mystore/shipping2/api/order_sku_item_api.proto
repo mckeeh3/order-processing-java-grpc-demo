@@ -78,8 +78,6 @@ message BackOrderOrderSkuItemCommand {
 
 message GetOrderSkuItemRequest {
   string order_sku_item_id = 1 [(akkaserverless.field).entity_key = true];
-  string order_id = 2;
-  string sku_id = 3;
 }
 
 message OrderSkuItem {

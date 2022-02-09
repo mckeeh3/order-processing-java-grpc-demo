@@ -23,7 +23,7 @@ service OrderSkuItemsShippedBySku {
              "   AND sku_id = :skuId"
     };
     option (google.api.http) = {
-      get: "/order-sku-items-back-ordered-by-sku"
+      get: "/order-sku-items-shipped-by-sku"
     };
   }
 

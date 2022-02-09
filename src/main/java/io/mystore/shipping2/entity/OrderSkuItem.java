@@ -183,8 +183,8 @@ public class OrderSkuItem extends AbstractOrderSkuItem {
     var stockSkuItemRequired = OrderSkuItemEntity.StockSkuItemRequired
         .newBuilder()
         .setOrderSkuItemId(command.getOrderSkuItemId())
-        .setOrderId(state.getOrderId())
-        .setSkuId(state.getSkuId())
+        .setOrderId(command.getOrderId())
+        .setSkuId(command.getSkuId())
         .build();
 
     return List.of(orderSkuItemCreated, stockSkuItemRequired);

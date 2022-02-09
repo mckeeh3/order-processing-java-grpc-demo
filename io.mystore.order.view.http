@@ -6,40 +6,28 @@
 @fromDate = 2022-01-01T00:00:00.000-05:00
 @toDate = 2023-01-01T00:00:00.000-05:00
 
-### io.mystore.order.view.OrdersByCustomerByDate.GetOrdersByCustomerByDate
-
-curl -XPOST -H "Content-Type: application/json" -d '{
-  "customer_id":"{{customerId}}",
-  "from_date":"{{fromDate}}",
-  "to_date":"{{toDate}}"}'
-  {{urlPrefix}}/orders-by-customer-by-date
-
-### io.mystore.order.view.OrdersByDate.GetOrdersByDate
-
-curl -XPOST -H "Content-Type: application/json" -d '{
-  "from_date":"{{fromDate}}",
-  "to_date":"{{toDate}}"}'
-  {{urlPrefix}}/orders-by-date
-
 ### io.mystore.order.view.OrderedItemsByCustomerByDate.GetOrderedItemsByCustomerByDate
 
-curl -XPOST -H "Content-Type: application/json" -d '{
-  "customer_id":"{{customerId}}",
-  "from_date":"{{fromDate}}",
-  "to_date":"{{toDate}}"}'
-  {{urlPrefix}}/ordered-items-by-customer-by-date
+curl -XGET -H "Content-Type: application/json"
+  '{{urlPrefix}}/ordered-items-by-customer-by-date?customer_id={{customerId}}&from_date={{fromDate}}&to_date={{toDate}}'
 
 ### io.mystore.order.view.OrderedItemsByDate.GetOrderedItemsByDate
 
-curl -XPOST -H "Content-Type: application/json" -d '{
-  "from_date":"{{fromDate}}",
-  "to_date":"{{toDate}}"}'
-  {{urlPrefix}}/ordered-items-by-date
+curl -XGET -H "Content-Type: application/json"
+  '{{urlPrefix}}/ordered-items-by-date?from_date={{fromDate}}&to_date={{toDate}}'
 
 ### io.mystore.order.view.OrderedItemsBySkuByDate.GetOrderedItemsBySkuByDate
 
-curl -XPOST -H "Content-Type: application/json" -d '{
-  "sku_id":"{{skuId}}",
-  "from_date":"{{fromDate}}",
-  "to_date":"{{toDate}}"}'
-  {{urlPrefix}}/ordered-items-by-sku-by-date
+curl -XGET -H "Content-Type: application/json"
+  '{{urlPrefix}}/ordered-items-by-sku-by-date?sku_id={{skuId}}&from_date={{fromDate}}&to_date={{toDate}}'
+
+### io.mystore.order.view.OrdersByCustomerByDate.GetOrdersByCustomerByDate
+
+curl -XGET -H "Content-Type: application/json"
+  '{{urlPrefix}}/orders-by-customer-by-date?customer_id={{customerId}}&from_date={{fromDate}}&to_date={{toDate}}'
+
+### io.mystore.order.view.OrdersByDate.GetOrdersByDate
+
+curl -XGET -H "Content-Type: application/json"
+  '{{urlPrefix}}/orders-by-date?from_date={{fromDate}}&to_date={{toDate}}'
+
