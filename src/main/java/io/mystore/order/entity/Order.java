@@ -204,7 +204,7 @@ public class Order extends AbstractOrder {
         .thenReply(newState -> Empty.getDefaultInstance());
   }
 
-  private OrderEntity.OrderCreated eventFor(OrderEntity.OrderState state, OrderApi.CreateOrderCommand command) {
+  static OrderEntity.OrderCreated eventFor(OrderEntity.OrderState state, OrderApi.CreateOrderCommand command) {
     return OrderEntity.OrderCreated
         .newBuilder()
         .setOrderId(command.getOrderId())
@@ -214,28 +214,28 @@ public class Order extends AbstractOrder {
         .build();
   }
 
-  private OrderEntity.OrderShipped eventFor(OrderEntity.OrderState state, OrderApi.ShippedOrderCommand command) {
+  static OrderEntity.OrderShipped eventFor(OrderEntity.OrderState state, OrderApi.ShippedOrderCommand command) {
     return OrderEntity.OrderShipped
         .newBuilder()
         .setShippedUtc(command.getShippedUtc())
         .build();
   }
 
-  private OrderEntity.OrderDelivered eventFor(OrderEntity.OrderState state, OrderApi.DeliveredOrderCommand command) {
+  static OrderEntity.OrderDelivered eventFor(OrderEntity.OrderState state, OrderApi.DeliveredOrderCommand command) {
     return OrderEntity.OrderDelivered
         .newBuilder()
         .setDeliveredUtc(timestampNow())
         .build();
   }
 
-  private OrderEntity.OrderReturned eventFor(OrderEntity.OrderState state, OrderApi.ReturnedOrderCommand command) {
+  static OrderEntity.OrderReturned eventFor(OrderEntity.OrderState state, OrderApi.ReturnedOrderCommand command) {
     return OrderEntity.OrderReturned
         .newBuilder()
         .setReturnedUtc(timestampNow())
         .build();
   }
 
-  private OrderEntity.OrderCancelled eventFor(OrderEntity.OrderState state, OrderApi.CanceledOrderCommand command) {
+  static OrderEntity.OrderCancelled eventFor(OrderEntity.OrderState state, OrderApi.CanceledOrderCommand command) {
     return OrderEntity.OrderCancelled
         .newBuilder()
         .setOrderId(state.getOrderId())
@@ -243,7 +243,7 @@ public class Order extends AbstractOrder {
         .build();
   }
 
-  private List<?> eventsFor(OrderEntity.OrderState state, OrderApi.ShippedOrderSkuCommand command) {
+  static List<?> eventsFor(OrderEntity.OrderState state, OrderApi.ShippedOrderSkuCommand command) {
     var orderItemShipped = OrderEntity.OrderItemShipped
         .newBuilder()
         .setOrderId(state.getOrderId())
@@ -283,7 +283,7 @@ public class Order extends AbstractOrder {
             .build());
   }
 
-  private List<OrderApi.OrderItem> toOrderItems(List<OrderEntity.OrderItem> orderItems) {
+  static List<OrderApi.OrderItem> toOrderItems(List<OrderEntity.OrderItem> orderItems) {
     return orderItems.stream()
         .map(orderItem -> OrderApi.OrderItem
             .newBuilder()
@@ -295,7 +295,7 @@ public class Order extends AbstractOrder {
         .collect(Collectors.toList());
   }
 
-  private List<OrderEntity.OrderItem> toOrderITems(List<OrderApi.OrderItem> orderItems) {
+  static List<OrderEntity.OrderItem> toOrderITems(List<OrderApi.OrderItem> orderItems) {
     return orderItems.stream()
         .map(orderItem -> OrderEntity.OrderItem
             .newBuilder()
@@ -306,7 +306,7 @@ public class Order extends AbstractOrder {
         .collect(Collectors.toList());
   }
 
-  private List<OrderEntity.OrderItem> updateShippedOrderItem(List<OrderEntity.OrderItem> orderItems, OrderEntity.OrderItemShipped event) {
+  static List<OrderEntity.OrderItem> updateShippedOrderItem(List<OrderEntity.OrderItem> orderItems, OrderEntity.OrderItemShipped event) {
     return orderItems.stream()
         .map(orderItem -> {
           if (orderItem.getSkuId().equals(event.getSkuId())) {

@@ -1,16 +1,15 @@
 package io.mystore.shipping.entity;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
 import com.akkaserverless.javasdk.eventsourcedentity.EventSourcedEntityContext;
 import com.google.protobuf.Empty;
-import com.google.protobuf.Timestamp;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.mystore.TimeTo;
 import io.mystore.shipping.api.ShipOrderItemApi;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
@@ -74,7 +73,7 @@ public class ShipOrderItem extends AbstractShipOrderItem {
         .toBuilder()
         .setSkuItemId(event.getSkuItemId())
         .setShippedUtc(event.getShippedUtc())
-        .setBackOrderedUtc(timestampZero())
+        .setBackOrderedUtc(TimeTo.zero())
         .build();
   }
 
@@ -149,7 +148,7 @@ public class ShipOrderItem extends AbstractShipOrderItem {
             .build());
   }
 
-  private List<?> eventsFor(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.CreateOrderItemCommand command) {
+  static List<?> eventsFor(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.CreateOrderItemCommand command) {
     var orderItemCreated = ShipOrderItemEntity.OrderItemCreated
         .newBuilder()
         .setCustomerId(command.getCustomerId())
@@ -170,7 +169,7 @@ public class ShipOrderItem extends AbstractShipOrderItem {
     return List.of(orderItemCreated, shipSkuItemRequired);
   }
 
-  private ShipOrderItemEntity.JoinedToSkuItem eventFor(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.JoinToSkuItemCommand command) {
+  static ShipOrderItemEntity.JoinedToSkuItem eventFor(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.JoinToSkuItemCommand command) {
     return ShipOrderItemEntity.JoinedToSkuItem
         .newBuilder()
         .setOrderId(state.getOrderId())
@@ -181,40 +180,23 @@ public class ShipOrderItem extends AbstractShipOrderItem {
         .build();
   }
 
-  private ShipOrderItemEntity.OrderItemBackOrdered eventFor(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.BackOrderOrderItemCommand command) {
+  static ShipOrderItemEntity.OrderItemBackOrdered eventFor(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.BackOrderOrderItemCommand command) {
     return ShipOrderItemEntity.OrderItemBackOrdered
         .newBuilder()
         .setOrderId(state.getOrderId())
         .setOrderItemId(state.getOrderItemId())
         .setSkuId(state.getSkuId())
-        .setBackOrderedUtc(timestampNow())
+        .setBackOrderedUtc(TimeTo.now())
         .build();
   }
 
-  private ShipOrderItemEntity.SkuItemReleasedFromOrder eventForReleaseSkuItem(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.JoinToSkuItemCommand command) {
+  static ShipOrderItemEntity.SkuItemReleasedFromOrder eventForReleaseSkuItem(ShipOrderItemEntity.OrderItemState state, ShipOrderItemApi.JoinToSkuItemCommand command) {
     return ShipOrderItemEntity.SkuItemReleasedFromOrder
         .newBuilder()
         .setOrderId(state.getOrderId())
         .setOrderItemId(state.getOrderItemId())
         .setSkuId(state.getSkuId())
         .setSkuItemId(command.getSkuItemId())
-        .build();
-  }
-
-  static Timestamp timestampZero() {
-    return Timestamp
-        .newBuilder()
-        .setSeconds(0)
-        .setNanos(0)
-        .build();
-  }
-
-  static Timestamp timestampNow() {
-    var now = Instant.now();
-    return Timestamp
-        .newBuilder()
-        .setSeconds(now.getEpochSecond())
-        .setNanos(now.getNano())
         .build();
   }
 }

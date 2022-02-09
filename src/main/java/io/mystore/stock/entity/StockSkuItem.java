@@ -137,7 +137,7 @@ public class StockSkuItem extends AbstractStockSkuItem {
             .build());
   }
 
-  private StockSkuItemEntity.StockSkuItemCreated eventFor(StockSkuItemEntity.StockSkuItemState state, StockSkuItemApi.CreateStockSkuItemCommand command) {
+  static StockSkuItemEntity.StockSkuItemCreated eventFor(StockSkuItemEntity.StockSkuItemState state, StockSkuItemApi.CreateStockSkuItemCommand command) {
     return StockSkuItemEntity.StockSkuItemCreated
         .newBuilder()
         .setSkuId(command.getSkuId())
@@ -147,7 +147,7 @@ public class StockSkuItem extends AbstractStockSkuItem {
         .build();
   }
 
-  private StockSkuItemEntity.JoinedToStockSkuItem eventFor(StockSkuItemEntity.StockSkuItemState state, StockSkuItemApi.JoinStockSkuItemCommand command) {
+  static StockSkuItemEntity.JoinedToStockSkuItem eventFor(StockSkuItemEntity.StockSkuItemState state, StockSkuItemApi.JoinStockSkuItemCommand command) {
     return StockSkuItemEntity.JoinedToStockSkuItem
         .newBuilder()
         .setSkuId(state.getSkuId())
@@ -158,7 +158,7 @@ public class StockSkuItem extends AbstractStockSkuItem {
         .build();
   }
 
-  private StockSkuItemEntity.ReleasedFromStockSkuItem eventFor(StockSkuItemEntity.StockSkuItemState state, StockSkuItemApi.ReleaseStockSkuItemCommand command) {
+  static StockSkuItemEntity.ReleasedFromStockSkuItem eventFor(StockSkuItemEntity.StockSkuItemState state, StockSkuItemApi.ReleaseStockSkuItemCommand command) {
     return StockSkuItemEntity.ReleasedFromStockSkuItem
         .newBuilder()
         .setSkuId(state.getSkuId())

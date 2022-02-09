@@ -33,7 +33,7 @@ public class ShipOrderItemToShipOrderAction extends AbstractShipOrderItemToShipO
     return effects().reply(Empty.getDefaultInstance());
   }
 
-  private ShipOrderApi.ShippedOrderItemCommand toJoinedToSkuItem(ShipOrderItemEntity.JoinedToSkuItem joinedToSkuItem) {
+  static ShipOrderApi.ShippedOrderItemCommand toJoinedToSkuItem(ShipOrderItemEntity.JoinedToSkuItem joinedToSkuItem) {
     return ShipOrderApi.ShippedOrderItemCommand
         .newBuilder()
         .setOrderId(joinedToSkuItem.getOrderId())

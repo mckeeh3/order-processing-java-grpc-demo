@@ -157,7 +157,7 @@ public class Shipping extends AbstractShipping {
     }
   }
 
-  private ShippingEntity.OrderState updateState(ShippingEntity.OrderState state, ShippingEntity.OrderCreated event) {
+  static ShippingEntity.OrderState updateState(ShippingEntity.OrderState state, ShippingEntity.OrderCreated event) {
     return state
         .toBuilder()
         .setOrderId(event.getOrderId())
@@ -167,14 +167,14 @@ public class Shipping extends AbstractShipping {
         .build();
   }
 
-  private ShippingEntity.OrderState updateState(ShippingEntity.OrderState state, ShippingEntity.OrderShipped event) {
+  static ShippingEntity.OrderState updateState(ShippingEntity.OrderState state, ShippingEntity.OrderShipped event) {
     return state
         .toBuilder()
         .setShippedUtc(event.getShippedUtc())
         .build();
   }
 
-  private ShippingEntity.OrderState updateState(ShippingEntity.OrderState state, ShippingEntity.OrderItemShipped event) {
+  static ShippingEntity.OrderState updateState(ShippingEntity.OrderState state, ShippingEntity.OrderItemShipped event) {
     var orderItems = state.getOrderItemsList().stream()
         .map(orderItem -> {
           if (orderItem.getSkuId().equals(event.getSkuId())) {

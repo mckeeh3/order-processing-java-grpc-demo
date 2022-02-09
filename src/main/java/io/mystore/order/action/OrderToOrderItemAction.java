@@ -47,7 +47,7 @@ public class OrderToOrderItemAction extends AbstractOrderToOrderItemAction {
     return effects().forward(components().orderItem().shippedOrderItem(toApi(orderItemShipped)));
   }
 
-  private OrderItemApi.ShippedOrderItemCommand toApi(OrderItemShipped orderItemShipped) {
+  static OrderItemApi.ShippedOrderItemCommand toApi(OrderItemShipped orderItemShipped) {
     return OrderItemApi.ShippedOrderItemCommand
         .newBuilder()
         .setOrderId(orderItemShipped.getOrderId())

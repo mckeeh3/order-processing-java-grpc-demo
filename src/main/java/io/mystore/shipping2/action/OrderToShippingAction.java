@@ -29,7 +29,7 @@ public class OrderToShippingAction extends AbstractOrderToShippingAction {
     return effects().reply(Empty.getDefaultInstance());
   }
 
-  private ShippingApi.CreateOrderCommand toCreateOrderCommand(OrderEntity.OrderCreated orderCreated) {
+  static ShippingApi.CreateOrderCommand toCreateOrderCommand(OrderEntity.OrderCreated orderCreated) {
     return ShippingApi.CreateOrderCommand
         .newBuilder()
         .setOrderId(orderCreated.getOrderId())
@@ -39,7 +39,7 @@ public class OrderToShippingAction extends AbstractOrderToShippingAction {
         .build();
   }
 
-  private List<ShippingApi.OrderItem> toOrderItems(List<OrderEntity.OrderItem> orderItems) {
+  static List<ShippingApi.OrderItem> toOrderItems(List<OrderEntity.OrderItem> orderItems) {
     return orderItems.stream()
         .map(orderItem -> ShippingApi.OrderItem
             .newBuilder()

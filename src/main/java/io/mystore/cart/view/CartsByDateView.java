@@ -24,7 +24,7 @@ public class CartsByDateView extends AbstractCartsByDateView {
   public View.UpdateEffect<CartModel.Cart> onItemAdded(CartModel.Cart state, CartEntity.ItemAdded event) {
     return effects()
         .updateState(
-            Cart.fromState(state)
+            CartEventHandler.fromState(state)
                 .handle(event)
                 .toState());
   }
@@ -33,7 +33,7 @@ public class CartsByDateView extends AbstractCartsByDateView {
   public View.UpdateEffect<CartModel.Cart> onItemChanged(CartModel.Cart state, CartEntity.ItemChanged event) {
     return effects()
         .updateState(
-            Cart.fromState(state)
+            CartEventHandler.fromState(state)
                 .handle(event)
                 .toState());
   }
@@ -42,7 +42,7 @@ public class CartsByDateView extends AbstractCartsByDateView {
   public View.UpdateEffect<CartModel.Cart> onItemRemoved(CartModel.Cart state, CartEntity.ItemRemoved event) {
     return effects()
         .updateState(
-            Cart.fromState(state)
+            CartEventHandler.fromState(state)
                 .handle(event)
                 .toState());
   }
@@ -51,7 +51,7 @@ public class CartsByDateView extends AbstractCartsByDateView {
   public View.UpdateEffect<CartModel.Cart> onCartCheckedOut(CartModel.Cart state, CartEntity.CartCheckedOut event) {
     return effects()
         .updateState(
-            Cart.fromState(state)
+            CartEventHandler.fromState(state)
                 .handle(event)
                 .toState());
   }
@@ -60,7 +60,7 @@ public class CartsByDateView extends AbstractCartsByDateView {
   public View.UpdateEffect<CartModel.Cart> onCartDeleted(CartModel.Cart state, CartEntity.CartDeleted event) {
     return effects()
         .updateState(
-            Cart.fromState(state)
+            CartEventHandler.fromState(state)
                 .handle(event)
                 .toState());
   }
@@ -69,7 +69,7 @@ public class CartsByDateView extends AbstractCartsByDateView {
   public View.UpdateEffect<CartModel.Cart> onDatesChanged(CartModel.Cart state, CartEntity.DatesChanged event) {
     return effects()
         .updateState(
-            Cart.fromState(state)
+            CartEventHandler.fromState(state)
                 .handle(event)
                 .toState());
   }

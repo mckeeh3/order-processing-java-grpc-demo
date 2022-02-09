@@ -3,8 +3,8 @@ package io.mystore.shipping.view;
 import com.akkaserverless.javasdk.view.View;
 import com.akkaserverless.javasdk.view.ViewContext;
 import com.google.protobuf.Any;
-import com.google.protobuf.Timestamp;
 
+import io.mystore.TimeTo;
 import io.mystore.shipping.entity.StockItemEntity;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
@@ -53,20 +53,12 @@ public class AvailableStockItemsView extends AbstractAvailableStockItemsView {
         .updateState(
             state
                 .toBuilder()
-                .setShippedUtc(timestampZero())
+                .setShippedUtc(TimeTo.zero())
                 .build());
   }
 
   @Override
   public View.UpdateEffect<AvailableStockItemsModel.AvailableStockItem> ignoreOtherEvents(AvailableStockItemsModel.AvailableStockItem state, Any any) {
     return effects().ignore();
-  }
-
-  static Timestamp timestampZero() {
-    return Timestamp
-        .newBuilder()
-        .setSeconds(0)
-        .setNanos(0)
-        .build();
   }
 }

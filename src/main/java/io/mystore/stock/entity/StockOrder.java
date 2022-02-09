@@ -152,7 +152,7 @@ public class StockOrder extends AbstractStockOrder {
             .build());
   }
 
-  private StockOrderEntity.StockOrderCreated eventFor(StockOrderEntity.StockOrderState state, StockOrderApi.CreateStockOrderCommand command) {
+  static StockOrderEntity.StockOrderCreated eventFor(StockOrderEntity.StockOrderState state, StockOrderApi.CreateStockOrderCommand command) {
     return StockOrderEntity.StockOrderCreated
         .newBuilder()
         .setStockOrderId(command.getStockOrderId())
@@ -163,7 +163,7 @@ public class StockOrder extends AbstractStockOrder {
         .build();
   }
 
-  private StockOrderEntity.StockSkuItemJoined eventFor(StockOrderEntity.StockOrderState state, StockOrderApi.JoinStockSkuItemToStockOrderCommand command) {
+  static StockOrderEntity.StockSkuItemJoined eventFor(StockOrderEntity.StockOrderState state, StockOrderApi.JoinStockSkuItemToStockOrderCommand command) {
     return StockOrderEntity.StockSkuItemJoined
         .newBuilder()
         .setStockOrderId(state.getStockOrderId())
@@ -174,7 +174,7 @@ public class StockOrder extends AbstractStockOrder {
         .build();
   }
 
-  private StockOrderEntity.StockSkuItemReleased eventFor(StockOrderEntity.StockOrderState state, StockOrderApi.ReleaseStockSkuItemFromStockOrderCommand command) {
+  static StockOrderEntity.StockSkuItemReleased eventFor(StockOrderEntity.StockOrderState state, StockOrderApi.ReleaseStockSkuItemFromStockOrderCommand command) {
     return StockOrderEntity.StockSkuItemReleased
         .newBuilder()
         .setStockOrderId(state.getStockOrderId())
@@ -185,7 +185,7 @@ public class StockOrder extends AbstractStockOrder {
         .build();
   }
 
-  private List<StockOrderEntity.StockSkuItem> toStockSkuItemsList(StockOrderApi.CreateStockOrderCommand command) {
+  static List<StockOrderEntity.StockSkuItem> toStockSkuItemsList(StockOrderApi.CreateStockOrderCommand command) {
     return IntStream.range(0, command.getQuantity())
         .mapToObj(i -> StockOrderEntity.StockSkuItem.newBuilder()
             .setStockSkuItemId(UUID.randomUUID().toString())
@@ -196,7 +196,7 @@ public class StockOrder extends AbstractStockOrder {
         .collect(Collectors.toList());
   }
 
-  private List<StockOrderEntity.StockSkuItem> toStockSkuItemsList(StockOrderEntity.StockOrderState state, StockOrderEntity.StockSkuItemJoined event) {
+  static List<StockOrderEntity.StockSkuItem> toStockSkuItemsList(StockOrderEntity.StockOrderState state, StockOrderEntity.StockSkuItemJoined event) {
     return state.getStockSkuItemsList().stream()
         .map(stockSkuItem -> {
           if (stockSkuItem.getStockSkuItemId().equals(event.getStockSkuItemId())) {
@@ -212,7 +212,7 @@ public class StockOrder extends AbstractStockOrder {
         .collect(Collectors.toList());
   }
 
-  private List<StockOrderEntity.StockSkuItem> toStockSkuItemsList(StockOrderEntity.StockOrderState state, StockOrderEntity.StockSkuItemReleased event) {
+  static List<StockOrderEntity.StockSkuItem> toStockSkuItemsList(StockOrderEntity.StockOrderState state, StockOrderEntity.StockSkuItemReleased event) {
     return state.getStockSkuItemsList().stream()
         .map(stockSkuItem -> {
           if (stockSkuItem.getStockSkuItemId().equals(event.getStockSkuItemId())) {
@@ -228,14 +228,14 @@ public class StockOrder extends AbstractStockOrder {
         .collect(Collectors.toList());
   }
 
-  private Timestamp areAllItemsShipped(List<StockOrderEntity.StockSkuItem> stockSkuItems) {
+  static Timestamp areAllItemsShipped(List<StockOrderEntity.StockSkuItem> stockSkuItems) {
     return stockSkuItems.stream()
         .filter(item -> item.getShippedUtc() == null || item.getShippedUtc().getSeconds() == 0)
         .findFirst()
         .isPresent() ? TimeTo.zero() : TimeTo.now();
   }
 
-  private List<StockSkuItemApi.StockSkuItem> toApi(List<StockOrderEntity.StockSkuItem> stockSkuItems) {
+  static List<StockSkuItemApi.StockSkuItem> toApi(List<StockOrderEntity.StockSkuItem> stockSkuItems) {
     return stockSkuItems.stream()
         .map(stockSkuItem -> StockSkuItemApi.StockSkuItem
             .newBuilder()

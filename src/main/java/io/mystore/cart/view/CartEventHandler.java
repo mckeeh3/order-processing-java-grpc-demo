@@ -5,24 +5,24 @@ import java.util.Map;
 
 import io.mystore.cart.entity.CartEntity;
 
-public class Cart {
+public class CartEventHandler {
   CartModel.Cart state;
   final Map<String, CartModel.LineItem> items = new LinkedHashMap<>();
 
-  private Cart(CartModel.Cart state) {
+  private CartEventHandler(CartModel.Cart state) {
     this.state = state;
     state.getLineItemsList().forEach(lineItem -> items.put(lineItem.getSkuId(), lineItem));
   }
 
-  static Cart fromState(CartModel.Cart state) {
-    return new Cart(state);
+  static CartEventHandler fromState(CartModel.Cart state) {
+    return new CartEventHandler(state);
   }
 
   CartModel.Cart toState() {
     return state;
   }
 
-  Cart handle(CartEntity.ItemAdded event) {
+  CartEventHandler handle(CartEntity.ItemAdded event) {
     items.computeIfPresent(event.getLineItem().getSkuId(), (skuId, lineItem) -> incrementQuantity(event, lineItem));
     items.computeIfAbsent(event.getLineItem().getSkuId(), skuId -> toLineItem(event.getLineItem()));
 
@@ -35,14 +35,14 @@ public class Cart {
     return this;
   }
 
-  private static CartModel.LineItem incrementQuantity(CartEntity.ItemAdded event, CartModel.LineItem lineItem) {
+  static CartModel.LineItem incrementQuantity(CartEntity.ItemAdded event, CartModel.LineItem lineItem) {
     return lineItem
         .toBuilder()
         .setQuantity(lineItem.getQuantity() + event.getLineItem().getQuantity())
         .build();
   }
 
-  private static CartModel.LineItem toLineItem(CartEntity.LineItem lineItem) {
+  static CartModel.LineItem toLineItem(CartEntity.LineItem lineItem) {
     return CartModel.LineItem
         .newBuilder()
         .setSkuId(lineItem.getSkuId())
@@ -51,7 +51,7 @@ public class Cart {
         .build();
   }
 
-  Cart handle(CartEntity.ItemChanged event) {
+  CartEventHandler handle(CartEntity.ItemChanged event) {
     items.computeIfPresent(event.getSkuId(), (skuId, lineItem) -> changeQuantity(event, lineItem));
 
     state = state.toBuilder()
@@ -61,14 +61,14 @@ public class Cart {
     return this;
   }
 
-  private CartModel.LineItem changeQuantity(CartEntity.ItemChanged event, CartModel.LineItem lineItem) {
+  CartModel.LineItem changeQuantity(CartEntity.ItemChanged event, CartModel.LineItem lineItem) {
     return lineItem
         .toBuilder()
         .setQuantity(event.getQuantity())
         .build();
   }
 
-  Cart handle(CartEntity.ItemRemoved event) {
+  CartEventHandler handle(CartEntity.ItemRemoved event) {
     items.remove(event.getSkuId());
 
     state = state.toBuilder()
@@ -78,21 +78,21 @@ public class Cart {
     return this;
   }
 
-  Cart handle(CartEntity.CartCheckedOut event) {
+  CartEventHandler handle(CartEntity.CartCheckedOut event) {
     state = state.toBuilder()
         .setCheckedOutUtc(event.getCartState().getCheckedOutUtc())
         .build();
     return this;
   }
 
-  Cart handle(CartEntity.CartDeleted event) {
+  CartEventHandler handle(CartEntity.CartDeleted event) {
     state = state.toBuilder()
         .setDeletedUtc(event.getDeletedUtc())
         .build();
     return this;
   }
 
-  Cart handle(CartEntity.DatesChanged event) {
+  CartEventHandler handle(CartEntity.DatesChanged event) {
     state = state.toBuilder()
         .setCheckedOutUtc(event.getCheckedOutUtc())
         .setDeletedUtc(event.getDeletedUtc())

@@ -4,11 +4,11 @@ import java.util.Optional;
 
 import com.akkaserverless.javasdk.eventsourcedentity.EventSourcedEntityContext;
 import com.google.protobuf.Empty;
-import com.google.protobuf.Timestamp;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.mystore.TimeTo;
 import io.mystore.shipping.api.StockItemApi;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
@@ -74,7 +74,7 @@ public class StockItem extends AbstractStockItem {
           .toBuilder()
           .setOrderId("")
           .setOrderItemId("")
-          .setShippedUtc(timestampZero())
+          .setShippedUtc(TimeTo.zero())
           .build();
     } else {
       return state;
@@ -146,7 +146,7 @@ public class StockItem extends AbstractStockItem {
             .build());
   }
 
-  private StockItemEntity.StockItemCreated eventFor(StockItemEntity.StockItemState state, StockItemApi.CreateStockItem command) {
+  static StockItemEntity.StockItemCreated eventFor(StockItemEntity.StockItemState state, StockItemApi.CreateStockItem command) {
     return StockItemEntity.StockItemCreated
         .newBuilder()
         .setSkuItemId(command.getSkuItemId())
@@ -155,7 +155,7 @@ public class StockItem extends AbstractStockItem {
         .build();
   }
 
-  private StockItemEntity.StockItemShipped eventFor(StockItemEntity.StockItemState state, StockItemApi.ShipStockItem command) {
+  static StockItemEntity.StockItemShipped eventFor(StockItemEntity.StockItemState state, StockItemApi.ShipStockItem command) {
     return StockItemEntity.StockItemShipped
         .newBuilder()
         .setOrderId(command.getOrderId())
@@ -164,20 +164,12 @@ public class StockItem extends AbstractStockItem {
         .build();
   }
 
-  private StockItemEntity.StockItemReleased eventFor(StockItemEntity.StockItemState state, StockItemApi.ReleaseStockItem command) {
+  static StockItemEntity.StockItemReleased eventFor(StockItemEntity.StockItemState state, StockItemApi.ReleaseStockItem command) {
     return StockItemEntity.StockItemReleased
         .newBuilder()
         .setSkuItemId(command.getSkuItemId())
         .setOrderId(command.getOrderId())
         .setOrderItemId(command.getOrderItemId())
-        .build();
-  }
-
-  static Timestamp timestampZero() {
-    return Timestamp
-        .newBuilder()
-        .setSeconds(0)
-        .setNanos(0)
         .build();
   }
 }

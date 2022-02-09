@@ -28,7 +28,7 @@ public class StockItemToShipSkuItemAction extends AbstractStockItemToShipSkuItem
     return effects().reply(Empty.getDefaultInstance());
   }
 
-  private ShipSkuItemApi.CreateSkuItemCommand toCreateSkuItemCommand(StockItemCreated stockItemCreated) {
+  static ShipSkuItemApi.CreateSkuItemCommand toCreateSkuItemCommand(StockItemCreated stockItemCreated) {
     return ShipSkuItemApi.CreateSkuItemCommand
         .newBuilder()
         .setSkuId(stockItemCreated.getSkuId())

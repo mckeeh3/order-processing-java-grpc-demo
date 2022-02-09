@@ -34,7 +34,7 @@ public class OrderSkuItemToShippingAction extends AbstractOrderSkuItemToShipping
     return effects().reply(Empty.getDefaultInstance());
   }
 
-  private ShippingApi.ShippedOrderSkuItemCommand toShippedOrderSkuItemCommand(JoinedToStockSkuItem joinedToStockSkuItem) {
+  static ShippingApi.ShippedOrderSkuItemCommand toShippedOrderSkuItemCommand(JoinedToStockSkuItem joinedToStockSkuItem) {
     return ShippingApi.ShippedOrderSkuItemCommand
         .newBuilder()
         .setOrderId(joinedToStockSkuItem.getOrderId())

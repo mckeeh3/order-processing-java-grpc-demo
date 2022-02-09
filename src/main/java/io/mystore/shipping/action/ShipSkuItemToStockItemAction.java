@@ -32,7 +32,7 @@ public class ShipSkuItemToStockItemAction extends AbstractShipSkuItemToStockItem
     return effects().reply(Empty.getDefaultInstance());
   }
 
-  private StockItemApi.ShipStockItem toStockItem(ShipSkuItemEntity.JoinedToOrderItem joinedToOrderItem) {
+  static StockItemApi.ShipStockItem toStockItem(ShipSkuItemEntity.JoinedToOrderItem joinedToOrderItem) {
     return StockItemApi.ShipStockItem
         .newBuilder()
         .setSkuId(joinedToOrderItem.getSkuId())
@@ -43,7 +43,7 @@ public class ShipSkuItemToStockItemAction extends AbstractShipSkuItemToStockItem
         .build();
   }
 
-  private StockItemApi.ReleaseStockItem toStockItem(ShipSkuItemEntity.ReleasedFromOrderItem releasedFromOrderItem) {
+  static StockItemApi.ReleaseStockItem toStockItem(ShipSkuItemEntity.ReleasedFromOrderItem releasedFromOrderItem) {
     return StockItemApi.ReleaseStockItem
         .newBuilder()
         .setSkuId(releasedFromOrderItem.getSkuId())

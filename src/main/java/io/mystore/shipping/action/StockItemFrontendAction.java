@@ -33,7 +33,7 @@ public class StockItemFrontendAction extends AbstractStockItemFrontendAction {
     return effects().asyncEffect(result);
   }
 
-  private Stream<StockItemApi.CreateStockItem> requests(StockFrontendService.CreateStockRequest createStockRequest) {
+  static Stream<StockItemApi.CreateStockItem> requests(StockFrontendService.CreateStockRequest createStockRequest) {
     return IntStream.range(0, createStockRequest.getQuantity())
         .mapToObj(i -> StockItemApi.CreateStockItem
             .newBuilder()

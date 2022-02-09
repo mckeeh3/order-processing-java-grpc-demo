@@ -65,7 +65,7 @@ public class OrdersByCustomerByDateView extends AbstractOrdersByCustomerByDateVi
             .build());
   }
 
-  private List<OrderModel.OrderItem> toOrderItems(List<OrderEntity.OrderItem> orderItems) {
+  static List<OrderModel.OrderItem> toOrderItems(List<OrderEntity.OrderItem> orderItems) {
     return orderItems.stream()
         .map(lineItem -> OrderModel.OrderItem.newBuilder()
             .setSkuId(lineItem.getSkuId())

@@ -3,8 +3,8 @@ package io.mystore.shipping.view;
 import com.akkaserverless.javasdk.view.View;
 import com.akkaserverless.javasdk.view.ViewContext;
 import com.google.protobuf.Any;
-import com.google.protobuf.Timestamp;
 
+import io.mystore.TimeTo;
 import io.mystore.shipping.entity.ShipSkuItemEntity;
 import io.mystore.shipping.view.AvailableShipSkuItemsModel.ShipSkuItem;
 
@@ -54,20 +54,12 @@ public class AvailableShipSkuItemsView extends AbstractAvailableShipSkuItemsView
         .updateState(
             state
                 .toBuilder()
-                .setShippedUtc(timestampZero())
+                .setShippedUtc(TimeTo.zero())
                 .build());
   }
 
   @Override
   public UpdateEffect<ShipSkuItem> ignoreOtherEvents(ShipSkuItem state, Any any) {
     return effects().ignore();
-  }
-
-  static Timestamp timestampZero() {
-    return Timestamp
-        .newBuilder()
-        .setSeconds(0)
-        .setNanos(0)
-        .build();
   }
 }

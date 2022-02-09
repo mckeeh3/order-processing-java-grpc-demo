@@ -60,7 +60,7 @@ class StockOrderEventHandler {
     return this;
   }
 
-  private List<StockSkuItemsModel.StockSkuItem> toStockSkuItems(StockOrderEntity.StockOrderCreated stockOrderCreated) {
+  static List<StockSkuItemsModel.StockSkuItem> toStockSkuItems(StockOrderEntity.StockOrderCreated stockOrderCreated) {
     return stockOrderCreated.getStockSkuItemsList().stream()
         .map(stockSkuItem -> StockSkuItemsModel.StockSkuItem
             .newBuilder()
@@ -104,7 +104,7 @@ class StockOrderEventHandler {
         .collect(Collectors.toList());
   }
 
-  private Timestamp areAllItemsShipped(List<StockSkuItemsModel.StockSkuItem> stockSkuItems) {
+  static Timestamp areAllItemsShipped(List<StockSkuItemsModel.StockSkuItem> stockSkuItems) {
     return stockSkuItems.stream()
         .filter(item -> item.getShippedUtc() == null || item.getShippedUtc().getSeconds() == 0)
         .findFirst()

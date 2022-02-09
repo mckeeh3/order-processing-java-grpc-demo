@@ -79,7 +79,7 @@ public class ShipSkuItemToShipOrderItemAction extends AbstractShipSkuItemToShipO
         .execute();
   }
 
-  private ShipOrderItemApi.JoinToSkuItemCommand toJoinToSkuItem(ShipSkuItemEntity.JoinedToOrderItem joinedToOrderItem) {
+  static ShipOrderItemApi.JoinToSkuItemCommand toJoinToSkuItem(ShipSkuItemEntity.JoinedToOrderItem joinedToOrderItem) {
     return ShipOrderItemApi.JoinToSkuItemCommand
         .newBuilder()
         .setOrderId(joinedToOrderItem.getOrderId())

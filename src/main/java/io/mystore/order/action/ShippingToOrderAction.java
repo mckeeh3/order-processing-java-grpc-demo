@@ -32,7 +32,7 @@ public class ShippingToOrderAction extends AbstractShippingToOrderAction {
     return effects().reply(Empty.getDefaultInstance());
   }
 
-  private OrderApi.ShippedOrderCommand toShippedOrder(ShippingEntity.OrderShipped orderShipped) {
+  static OrderApi.ShippedOrderCommand toShippedOrder(ShippingEntity.OrderShipped orderShipped) {
     return OrderApi.ShippedOrderCommand
         .newBuilder()
         .setOrderId(orderShipped.getOrderId())
@@ -40,7 +40,7 @@ public class ShippingToOrderAction extends AbstractShippingToOrderAction {
         .build();
   }
 
-  private OrderApi.ShippedOrderSkuCommand toShippedOrderItem(ShippingEntity.OrderItemShipped orderItemShipped) {
+  static OrderApi.ShippedOrderSkuCommand toShippedOrderItem(ShippingEntity.OrderItemShipped orderItemShipped) {
     return OrderApi.ShippedOrderSkuCommand
         .newBuilder()
         .setOrderId(orderItemShipped.getOrderId())

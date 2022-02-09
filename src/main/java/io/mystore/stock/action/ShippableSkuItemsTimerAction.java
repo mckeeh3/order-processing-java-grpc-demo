@@ -71,14 +71,14 @@ public class ShippableSkuItemsTimerAction extends AbstractShippableSkuItemsTimer
     return effects().asyncReply(queryStockSkuItemsAvailable(shippableSkuItemsTimerState.getSkuId()));
   }
 
-  private ShippableSkuItemsTimerApi.CreateShippableSkuItemsTimerCommand toShippableSkuItemsTimer(BackOrderedOrderSkuItem backOrderedOrderSkuItem) {
+  static ShippableSkuItemsTimerApi.CreateShippableSkuItemsTimerCommand toShippableSkuItemsTimer(BackOrderedOrderSkuItem backOrderedOrderSkuItem) {
     return ShippableSkuItemsTimerApi.CreateShippableSkuItemsTimerCommand
         .newBuilder()
         .setSkuId(backOrderedOrderSkuItem.getSkuId())
         .build();
   }
 
-  private CreateShippableSkuItemsTimerCommand toShippableSkuItemsTimer(ReleasedFromStockSkuItem releasedFromStockSkuItem) {
+  static CreateShippableSkuItemsTimerCommand toShippableSkuItemsTimer(ReleasedFromStockSkuItem releasedFromStockSkuItem) {
     return ShippableSkuItemsTimerApi.CreateShippableSkuItemsTimerCommand
         .newBuilder()
         .setSkuId(releasedFromStockSkuItem.getSkuId())

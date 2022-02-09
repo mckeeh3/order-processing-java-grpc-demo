@@ -36,7 +36,7 @@ public class ShipOrderToShipOrderItemAction extends AbstractShipOrderToShipOrder
     return effects().asyncEffect(result);
   }
 
-  private Stream<ShipOrderItemApi.CreateOrderItemCommand> toShipOrderItems(ShipOrderCreated shipOrderCreated, ShipOrderItems shipOrderItems) {
+  static Stream<ShipOrderItemApi.CreateOrderItemCommand> toShipOrderItems(ShipOrderCreated shipOrderCreated, ShipOrderItems shipOrderItems) {
     return shipOrderItems.getShipOrderItemsList().stream()
         .map(shipOrderItem -> ShipOrderItemApi.CreateOrderItemCommand
             .newBuilder()

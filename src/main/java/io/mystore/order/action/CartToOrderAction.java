@@ -28,7 +28,7 @@ public class CartToOrderAction extends AbstractCartToOrderAction {
     return effects().forward(getCartState);
   }
 
-  private OrderApi.CreateOrderCommand toCreateOrderCommand(CartState state) {
+  static OrderApi.CreateOrderCommand toCreateOrderCommand(CartState state) {
     return OrderApi.CreateOrderCommand
         .newBuilder()
         .setOrderId(state.getCartId())
@@ -38,7 +38,7 @@ public class CartToOrderAction extends AbstractCartToOrderAction {
         .build();
   }
 
-  private List<OrderApi.OrderItem> toOrderItems(List<CartEntity.LineItem> lineItems) {
+  static List<OrderApi.OrderItem> toOrderItems(List<CartEntity.LineItem> lineItems) {
     return lineItems.stream().map(
         lineItem -> OrderApi.OrderItem
             .newBuilder()

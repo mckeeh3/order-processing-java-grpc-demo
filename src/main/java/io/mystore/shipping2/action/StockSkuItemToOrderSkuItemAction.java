@@ -80,7 +80,7 @@ public class StockSkuItemToOrderSkuItemAction extends AbstractStockSkuItemToOrde
         .execute();
   }
 
-  private OrderSkuItemApi.JoinToStockSkuItemCommand toJoinToStockSkuItem(StockSkuItemEntity.JoinedToStockSkuItem joinedToStockSkuItem) {
+  static OrderSkuItemApi.JoinToStockSkuItemCommand toJoinToStockSkuItem(StockSkuItemEntity.JoinedToStockSkuItem joinedToStockSkuItem) {
     return OrderSkuItemApi.JoinToStockSkuItemCommand
         .newBuilder()
         .setOrderId(joinedToStockSkuItem.getOrderId())

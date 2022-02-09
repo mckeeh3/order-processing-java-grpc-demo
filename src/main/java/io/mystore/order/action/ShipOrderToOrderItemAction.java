@@ -22,7 +22,7 @@ public class ShipOrderToOrderItemAction extends AbstractShipOrderToOrderItemActi
     return effects().forward(components().orderItem().shippedOrderItem(toShippedOrderItem(orderSkuShipped)));
   }
 
-  private OrderItemApi.ShippedOrderItemCommand toShippedOrderItem(ShipOrderEntity.OrderSkuShipped orderSkuShipped) {
+  static OrderItemApi.ShippedOrderItemCommand toShippedOrderItem(ShipOrderEntity.OrderSkuShipped orderSkuShipped) {
     return OrderItemApi.ShippedOrderItemCommand
         .newBuilder()
         .setOrderId(orderSkuShipped.getOrderId())

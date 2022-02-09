@@ -133,7 +133,7 @@ public class OrderSkuItem extends AbstractOrderSkuItem {
             .build());
   }
 
-  private OrderSkuItemEntity.OrderSkuItemState updateState(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.CreatedOrderSkuItem event) {
+  static OrderSkuItemEntity.OrderSkuItemState updateState(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.CreatedOrderSkuItem event) {
     return state
         .toBuilder()
         .setOrderSkuItemId(event.getOrderSkuItemId())
@@ -145,11 +145,11 @@ public class OrderSkuItem extends AbstractOrderSkuItem {
         .build();
   }
 
-  private OrderSkuItemEntity.OrderSkuItemState updateState(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.StockSkuItemRequired event) {
+  static OrderSkuItemEntity.OrderSkuItemState updateState(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.StockSkuItemRequired event) {
     return state; // non-state changing event, this event notifies stock-sku-item to attempt to join to this order-sku-item
   }
 
-  private OrderSkuItemEntity.OrderSkuItemState updateState(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.JoinedToStockSkuItem event) {
+  static OrderSkuItemEntity.OrderSkuItemState updateState(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.JoinedToStockSkuItem event) {
     return state
         .toBuilder()
         .setStockSkuItemId(event.getStockSkuItemId())
@@ -158,18 +158,18 @@ public class OrderSkuItem extends AbstractOrderSkuItem {
         .build();
   }
 
-  private OrderSkuItemEntity.OrderSkuItemState updateState(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.ReleasedFromOrderSkuItem event) {
+  static OrderSkuItemEntity.OrderSkuItemState updateState(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.ReleasedFromOrderSkuItem event) {
     return state; // no state change, this event notifies stock-sku-item to release the sku-item
   }
 
-  private OrderSkuItemEntity.OrderSkuItemState updateState(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.BackOrderedOrderSkuItem event) {
+  static OrderSkuItemEntity.OrderSkuItemState updateState(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.BackOrderedOrderSkuItem event) {
     return state
         .toBuilder()
         .setBackOrderedUtc(event.getBackOrderedUtc())
         .build();
   }
 
-  private List<?> eventsFor(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemApi.CreateOrderSkuItemCommand command) {
+  static List<?> eventsFor(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemApi.CreateOrderSkuItemCommand command) {
     var orderSkuItemCreated = OrderSkuItemEntity.CreatedOrderSkuItem
         .newBuilder()
         .setOrderSkuItemId(command.getOrderSkuItemId())
@@ -190,7 +190,7 @@ public class OrderSkuItem extends AbstractOrderSkuItem {
     return List.of(orderSkuItemCreated, stockSkuItemRequired);
   }
 
-  private OrderSkuItemEntity.JoinedToStockSkuItem eventFor(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemApi.JoinToStockSkuItemCommand command) {
+  static OrderSkuItemEntity.JoinedToStockSkuItem eventFor(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemApi.JoinToStockSkuItemCommand command) {
     return OrderSkuItemEntity.JoinedToStockSkuItem
         .newBuilder()
         .setOrderId(state.getOrderId())
@@ -201,7 +201,7 @@ public class OrderSkuItem extends AbstractOrderSkuItem {
         .build();
   }
 
-  private OrderSkuItemEntity.BackOrderedOrderSkuItem eventFor(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemApi.BackOrderOrderSkuItemCommand command) {
+  static OrderSkuItemEntity.BackOrderedOrderSkuItem eventFor(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemApi.BackOrderOrderSkuItemCommand command) {
     return OrderSkuItemEntity.BackOrderedOrderSkuItem
         .newBuilder()
         .setOrderId(state.getOrderId())
@@ -211,7 +211,7 @@ public class OrderSkuItem extends AbstractOrderSkuItem {
         .build();
   }
 
-  private OrderSkuItemEntity.ReleasedFromOrderSkuItem eventForReleaseSkuItem(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemApi.JoinToStockSkuItemCommand command) {
+  static OrderSkuItemEntity.ReleasedFromOrderSkuItem eventForReleaseSkuItem(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemApi.JoinToStockSkuItemCommand command) {
     return OrderSkuItemEntity.ReleasedFromOrderSkuItem
         .newBuilder()
         .setOrderId(state.getOrderId())

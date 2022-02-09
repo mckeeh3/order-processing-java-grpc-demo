@@ -66,14 +66,14 @@ public class BackOrderCheckTimerAction extends AbstractBackOrderCheckTimerAction
     return effects().asyncReply(queryAvailableSkuItems(backOrderTimerState.getSkuId()));
   }
 
-  private BackOrderTimerApi.CreateBackOrderTimerCommand toBackOrderTimer(ShipOrderItemEntity.OrderItemBackOrdered orderItemBackOrdered) {
+  static BackOrderTimerApi.CreateBackOrderTimerCommand toBackOrderTimer(ShipOrderItemEntity.OrderItemBackOrdered orderItemBackOrdered) {
     return BackOrderTimerApi.CreateBackOrderTimerCommand
         .newBuilder()
         .setSkuId(orderItemBackOrdered.getSkuId())
         .build();
   }
 
-  private BackOrderTimerApi.CreateBackOrderTimerCommand toBackOrderTimer(ShipSkuItemEntity.ReleasedFromOrderItem releasedFromOrderItem) {
+  static BackOrderTimerApi.CreateBackOrderTimerCommand toBackOrderTimer(ShipSkuItemEntity.ReleasedFromOrderItem releasedFromOrderItem) {
     return BackOrderTimerApi.CreateBackOrderTimerCommand
         .newBuilder()
         .setSkuId(releasedFromOrderItem.getSkuId())

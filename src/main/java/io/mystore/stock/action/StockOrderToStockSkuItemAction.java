@@ -38,7 +38,7 @@ public class StockOrderToStockSkuItemAction extends AbstractStockOrderToStockSku
     return effects().reply(Empty.getDefaultInstance());
   }
 
-  private StockSkuItemApi.CreateStockSkuItemCommand toStockSkuItemCommand(StockOrderEntity.StockSkuItem stockSkuItem) {
+  static StockSkuItemApi.CreateStockSkuItemCommand toStockSkuItemCommand(StockOrderEntity.StockSkuItem stockSkuItem) {
     return StockSkuItemApi.CreateStockSkuItemCommand
         .newBuilder()
         .setStockSkuItemId(stockSkuItem.getStockSkuItemId())

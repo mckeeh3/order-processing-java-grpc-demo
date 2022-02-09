@@ -47,7 +47,7 @@ public class ShippingToOrderSkuItemAction extends AbstractShippingToOrderSkuItem
     return effects().reply(Empty.getDefaultInstance());
   }
 
-  private Stream<OrderSkuItemApi.CreateOrderSkuItemCommand> toCreateOrderSkuItemCommands(OrderCreated orderCreated, OrderItem orderItems) {
+  static Stream<OrderSkuItemApi.CreateOrderSkuItemCommand> toCreateOrderSkuItemCommands(OrderCreated orderCreated, OrderItem orderItems) {
     return orderItems.getOrderSkuItemsList().stream()
         .map(orderItem -> OrderSkuItemApi.CreateOrderSkuItemCommand
             .newBuilder()
