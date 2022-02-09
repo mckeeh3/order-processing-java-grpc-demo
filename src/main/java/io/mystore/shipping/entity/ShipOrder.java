@@ -1,6 +1,5 @@
 package io.mystore.shipping.entity;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -349,23 +348,6 @@ public class ShipOrder extends AbstractShipOrder {
         .filter(item -> item.getSkuId().equals(skuId) && isNotShipped(item.getShippedUtc()))
         .findFirst()
         .isEmpty();
-  }
-
-  static Timestamp timestampNow() {
-    var now = Instant.now();
-    return Timestamp
-        .newBuilder()
-        .setSeconds(now.getEpochSecond())
-        .setNanos(now.getNano())
-        .build();
-  }
-
-  static Timestamp timestampZero() {
-    return Timestamp
-        .newBuilder()
-        .setSeconds(0)
-        .setNanos(0)
-        .build();
   }
 
   static boolean isShipped(Timestamp shippedUtc) {

@@ -13,6 +13,7 @@ import com.google.protobuf.Timestamp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.mystore.TimeTo;
 import io.mystore.shipping.api.BackOrderTimerApi;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
@@ -38,7 +39,7 @@ public class BackOrderTimer extends AbstractBackOrderTimer {
         .updateState(
             state.toBuilder()
                 .setSkuId(command.getSkuId())
-                .setStarted(timestampNow())
+                .setStarted(TimeTo.now())
                 .setStopAfter(timestampPlus(5, ChronoUnit.MINUTES)) // todo: make configurable
                 .build())
         .thenReply(Empty.getDefaultInstance());
@@ -48,13 +49,13 @@ public class BackOrderTimer extends AbstractBackOrderTimer {
   public Effect<Empty> pingBackOrderTimer(BackOrderTimerEntity.BackOrderTimerState state, BackOrderTimerApi.PingBackOrderTimerCommand command) {
     log.info("pingBackOrderTimer: stop in {}\nstate: {}", stopAfter(state), state);
 
-    if (timestampNow().getSeconds() > state.getStopAfter().getSeconds()) {
+    if (TimeTo.now().getSeconds() > state.getStopAfter().getSeconds()) {
       return effects().reply(Empty.getDefaultInstance());
     } else {
       return effects()
           .updateState(
               state.toBuilder()
-                  .setLastPinged(timestampNow())
+                  .setLastPinged(TimeTo.now())
                   .build())
           .thenReply(Empty.getDefaultInstance());
     }
@@ -72,15 +73,6 @@ public class BackOrderTimer extends AbstractBackOrderTimer {
         .setStarted(state.getStarted())
         .setStopAfter(timestampPlus(state.getStopAfter().getSeconds(), ChronoUnit.SECONDS))
         .setLastPinged(state.getLastPinged())
-        .build();
-  }
-
-  static Timestamp timestampNow() {
-    var now = Instant.now();
-    return Timestamp
-        .newBuilder()
-        .setSeconds(now.getEpochSecond())
-        .setNanos(now.getNano())
         .build();
   }
 
@@ -113,7 +105,7 @@ public class BackOrderTimer extends AbstractBackOrderTimer {
   }
 
   static String stopAfter(BackOrderTimerEntity.BackOrderTimerState state) {
-    var seconds = state.getStopAfter().getSeconds() - timestampNow().getSeconds();
+    var seconds = state.getStopAfter().getSeconds() - TimeTo.now().getSeconds();
     var minutes = seconds / 60;
     return String.format("%dm%ds", minutes, seconds % 60);
   }

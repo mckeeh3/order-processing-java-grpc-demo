@@ -1,6 +1,5 @@
 package io.mystore.cart.entity;
 
-import java.time.Instant;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +13,7 @@ import com.google.protobuf.Timestamp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.mystore.TimeTo;
 import io.mystore.cart.api.CartApi;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
@@ -267,6 +267,7 @@ public class ShoppingCart extends AbstractShoppingCart {
         .setSkuName(command.getSkuName())
         .setQuantity(command.getQuantity())
         .build();
+
     return CartEntity.ItemAdded.newBuilder()
         .setCartId(command.getCartId())
         .setCustomerId(command.getCustomerId())
@@ -293,8 +294,9 @@ public class ShoppingCart extends AbstractShoppingCart {
 
   private static CartEntity.CartCheckedOut event(CartEntity.CartState state, CartApi.CheckoutShoppingCart command) {
     var checkedOutState = state.toBuilder()
-        .setCheckedOutUtc(Cart.timestampNow())
+        .setCheckedOutUtc(TimeTo.now())
         .build();
+
     return CartEntity.CartCheckedOut
         .newBuilder()
         .setCartState(checkedOutState)
@@ -305,7 +307,7 @@ public class ShoppingCart extends AbstractShoppingCart {
     return CartEntity.CartDeleted
         .newBuilder()
         .setCartId(state.getCartId())
-        .setDeletedUtc(Cart.timestampNow())
+        .setDeletedUtc(TimeTo.now())
         .build();
   }
 
@@ -357,7 +359,8 @@ public class ShoppingCart extends AbstractShoppingCart {
       lineItems.computeIfPresent(event.getLineItem().getSkuId(), (skuId, lineItem) -> incrementQuantity(event, lineItem));
       lineItems.computeIfAbsent(event.getLineItem().getSkuId(), skuId -> toLineItem(event));
 
-      state = state.toBuilder()
+      state = state
+          .toBuilder()
           .setCartId(event.getCartId())
           .setCustomerId(event.getCustomerId())
           .clearLineItems()
@@ -385,7 +388,8 @@ public class ShoppingCart extends AbstractShoppingCart {
     Cart handle(CartEntity.ItemChanged event) {
       lineItems.computeIfPresent(event.getSkuId(), (skuId, lineItem) -> changeQuantity(event, lineItem));
 
-      state = state.toBuilder()
+      state = state
+          .toBuilder()
           .clearLineItems()
           .addAllLineItems(lineItems.values())
           .build();
@@ -413,7 +417,7 @@ public class ShoppingCart extends AbstractShoppingCart {
     Cart handle(CartEntity.CartCheckedOut event) {
       state = state
           .toBuilder()
-          .setCheckedOutUtc(timestampNow())
+          .setCheckedOutUtc(TimeTo.now())
           .build();
       return this;
     }
@@ -421,7 +425,7 @@ public class ShoppingCart extends AbstractShoppingCart {
     Cart handle(CartEntity.CartDeleted event) {
       state = state
           .toBuilder()
-          .setDeletedUtc(timestampNow())
+          .setDeletedUtc(TimeTo.now())
           .build();
       return this;
     }
@@ -441,15 +445,6 @@ public class ShoppingCart extends AbstractShoppingCart {
 
     static Timestamp fromStateOrEvent(Timestamp state, Timestamp event) {
       return event.getSeconds() == 0 ? state : event;
-    }
-
-    static Timestamp timestampNow() {
-      var now = Instant.now();
-      return Timestamp
-          .newBuilder()
-          .setSeconds(now.getEpochSecond())
-          .setNanos(now.getNano())
-          .build();
     }
   }
 }

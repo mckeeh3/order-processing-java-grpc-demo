@@ -1,17 +1,16 @@
 package io.mystore.order.entity;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.akkaserverless.javasdk.eventsourcedentity.EventSourcedEntityContext;
 import com.google.protobuf.Empty;
-import com.google.protobuf.Timestamp;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.mystore.TimeTo;
 import io.mystore.order.api.OrderApi;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
@@ -224,14 +223,14 @@ public class Order extends AbstractOrder {
   static OrderEntity.OrderDelivered eventFor(OrderEntity.OrderState state, OrderApi.DeliveredOrderCommand command) {
     return OrderEntity.OrderDelivered
         .newBuilder()
-        .setDeliveredUtc(timestampNow())
+        .setDeliveredUtc(TimeTo.now())
         .build();
   }
 
   static OrderEntity.OrderReturned eventFor(OrderEntity.OrderState state, OrderApi.ReturnedOrderCommand command) {
     return OrderEntity.OrderReturned
         .newBuilder()
-        .setReturnedUtc(timestampNow())
+        .setReturnedUtc(TimeTo.now())
         .build();
   }
 
@@ -239,7 +238,7 @@ public class Order extends AbstractOrder {
     return OrderEntity.OrderCancelled
         .newBuilder()
         .setOrderId(state.getOrderId())
-        .setCanceledUtc(timestampNow())
+        .setCanceledUtc(TimeTo.now())
         .build();
   }
 
@@ -259,7 +258,7 @@ public class Order extends AbstractOrder {
       var orderShipped = OrderEntity.OrderShipped
           .newBuilder()
           .setOrderId(state.getOrderId())
-          .setShippedUtc(timestampNow())
+          .setShippedUtc(TimeTo.now())
           .build();
 
       return List.of(orderItemShipped, orderShipped);
@@ -319,14 +318,5 @@ public class Order extends AbstractOrder {
           }
         })
         .collect(Collectors.toList());
-  }
-
-  static Timestamp timestampNow() {
-    var now = Instant.now();
-    return Timestamp
-        .newBuilder()
-        .setSeconds(now.getEpochSecond())
-        .setNanos(now.getNano())
-        .build();
   }
 }
