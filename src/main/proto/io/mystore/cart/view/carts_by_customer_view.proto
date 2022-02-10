@@ -74,16 +74,6 @@ service CartsByCustomer {
       transform_updates: true
     };
   }
-
-  rpc OnDatesChanged(entity.DatesChanged) returns (Cart) {
-    option (akkaserverless.method).eventing.in = {
-      event_sourced_entity: "shopping_cart"
-    };
-    option (akkaserverless.method).view.update = {
-      table: "carts_by_customer"
-      transform_updates: true
-    };
-  }
 }
 
 message GetCartsRequest {

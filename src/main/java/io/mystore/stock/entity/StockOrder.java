@@ -202,7 +202,7 @@ public class StockOrder extends AbstractStockOrder {
         .map(stockSkuItem -> {
           if (stockSkuItem.getStockSkuItemId().equals(event.getStockSkuItemId())) {
             return stockSkuItem.toBuilder()
-                .setOrderId(event.getStockOrderId())
+                .setOrderId(event.getOrderId())
                 .setOrderSkuItemId(event.getOrderSkuItemId())
                 .setShippedUtc(event.getShippedUtc())
                 .build();

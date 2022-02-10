@@ -32,12 +32,6 @@ message CartDeleted {
   google.protobuf.Timestamp deleted_utc = 2;
 }
 
-message DatesChanged {
-  string cart_id = 1;
-  google.protobuf.Timestamp checked_out_utc = 2;
-  google.protobuf.Timestamp deleted_utc = 3;
-}
-
 message CartState {
   string cart_id = 1;
   string customer_id = 2;

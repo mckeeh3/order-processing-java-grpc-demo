@@ -105,6 +105,7 @@ public class StockOrderTest {
     stockSkuItem = stockOrder.getReply().getStockSkuItemsList().get(0);
 
     assertEquals(stockOrderId, stockOrder.getReply().getStockOrderId());
+    assertEquals(orderId, stockSkuItem.getOrderId());
     assertEquals(orderSkuItemId, stockSkuItem.getOrderSkuItemId());
     assertTrue(stockSkuItem.getShippedUtc().getSeconds() > 0);
     assertTrue(stockOrder.getReply().getShippedUtc().getSeconds() > 0);

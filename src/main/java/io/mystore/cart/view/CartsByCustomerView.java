@@ -64,13 +64,4 @@ public class CartsByCustomerView extends AbstractCartsByCustomerView {
                 .handle(event)
                 .toState());
   }
-
-  @Override
-  public View.UpdateEffect<CartModel.Cart> onDatesChanged(CartModel.Cart state, CartEntity.DatesChanged event) {
-    return effects()
-        .updateState(
-            CartEventHandler.fromState(state)
-                .handle(event)
-                .toState());
-  }
 }

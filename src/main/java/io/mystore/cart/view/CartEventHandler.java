@@ -91,12 +91,4 @@ public class CartEventHandler {
         .build();
     return this;
   }
-
-  CartEventHandler handle(CartEntity.DatesChanged event) {
-    state = state.toBuilder()
-        .setCheckedOutUtc(event.getCheckedOutUtc())
-        .setDeletedUtc(event.getDeletedUtc())
-        .build();
-    return this;
-  }
 }
