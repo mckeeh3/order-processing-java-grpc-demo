@@ -7,6 +7,9 @@ import com.akkaserverless.javasdk.action.ActionCreationContext;
 import com.google.protobuf.Any;
 import com.google.protobuf.Empty;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.mystore.order.api.OrderItemApi;
 import io.mystore.order.entity.OrderEntity;
 import io.mystore.order.entity.OrderEntity.OrderItemShipped;
@@ -17,12 +20,15 @@ import io.mystore.order.entity.OrderEntity.OrderItemShipped;
 // or delete it so it is regenerated as needed.
 
 public class OrderToOrderItemAction extends AbstractOrderToOrderItemAction {
+  static final Logger log = LoggerFactory.getLogger(OrderToOrderItemAction.class);
 
   public OrderToOrderItemAction(ActionCreationContext creationContext) {
   }
 
   @Override
   public Effect<Empty> onOrderCreated(OrderEntity.OrderCreated orderCreated) {
+    log.info("onOrderCreated: {}", orderCreated);
+
     var results = orderCreated.getOrderItemsList().stream()
         .map(orderItem -> OrderItemApi.CreateOrderItemCommand
             .newBuilder()
@@ -44,6 +50,8 @@ public class OrderToOrderItemAction extends AbstractOrderToOrderItemAction {
 
   @Override
   public Effect<Empty> onOrderItemShipped(OrderEntity.OrderItemShipped orderItemShipped) {
+    log.info("onOrderItemShipped: {}", orderItemShipped);
+
     return effects().forward(components().orderItem().shippedOrderItem(toApi(orderItemShipped)));
   }
 

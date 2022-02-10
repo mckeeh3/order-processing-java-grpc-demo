@@ -20,7 +20,7 @@ service OrderSkuItemsShippedBySku {
       query: "SELECT * AS order_sku_items"
              "  FROM order_sku_items_shipped_by_sku"
              " WHERE shipped_utc.seconds > 0"
-             "   AND sku_id = :skuId"
+             "   AND sku_id = :sku_id"
     };
     option (google.api.http) = {
       get: "/order-sku-items-shipped-by-sku"
@@ -69,7 +69,7 @@ service OrderSkuItemsShippedBySku {
 }
 
 message GetOrderSkuItemsShippedBySkuRequest {
-  string skuId = 1;
+  string sku_id = 1;
 }
 
 message GetOrderSkuItemsShippedBySkuResponse {

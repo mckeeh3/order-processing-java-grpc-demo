@@ -80,7 +80,9 @@ public class OrderSkuItemToStockSkuItemAction extends AbstractOrderSkuItemToStoc
             .newBuilder()
             .setOrderId(skuItemRequired.getOrderId())
             .setOrderSkuItemId(skuItemRequired.getOrderSkuItemId())
+            .setSkuId(skuItemRequired.getSkuId())
             .setStockSkuItemId(shipSkuItem.getStockSkuItemId())
+            .setStockOrderId(shipSkuItem.getStockOrderId())
             .build())
         .execute();
   }

@@ -11,6 +11,7 @@ message OrderSkuItem {
   string order_sku_item_id = 2;
   string sku_id = 3;
   string sku_name = 4;
-  google.protobuf.Timestamp shipped_utc = 5;
-  google.protobuf.Timestamp back_ordered_utc = 6;
+  string stock_sku_item_id = 5;
+  google.protobuf.Timestamp shipped_utc = 6;
+  google.protobuf.Timestamp back_ordered_utc = 7;
 }

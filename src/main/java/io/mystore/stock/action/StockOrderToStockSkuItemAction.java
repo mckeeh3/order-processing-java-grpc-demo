@@ -7,6 +7,9 @@ import com.akkaserverless.javasdk.action.ActionCreationContext;
 import com.google.protobuf.Any;
 import com.google.protobuf.Empty;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.mystore.stock.api.StockSkuItemApi;
 import io.mystore.stock.entity.StockOrderEntity;
 
@@ -16,12 +19,14 @@ import io.mystore.stock.entity.StockOrderEntity;
 // or delete it so it is regenerated as needed.
 
 public class StockOrderToStockSkuItemAction extends AbstractStockOrderToStockSkuItemAction {
+  static final Logger log = LoggerFactory.getLogger(StockOrderToStockSkuItemAction.class);
 
   public StockOrderToStockSkuItemAction(ActionCreationContext creationContext) {
   }
 
   @Override
   public Effect<Empty> onStockOrderCreated(StockOrderEntity.StockOrderCreated stockOrderCreated) {
+    log.info("onStockOrderCreated: {}", stockOrderCreated);
 
     var results = stockOrderCreated.getStockSkuItemsList().stream()
         .map(stockSkuItem -> components().stockSkuItem().createStockSkuItem(toStockSkuItemCommand(stockSkuItem)).execute())

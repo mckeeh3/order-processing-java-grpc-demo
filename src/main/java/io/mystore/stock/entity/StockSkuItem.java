@@ -108,7 +108,7 @@ public class StockSkuItem extends AbstractStockSkuItem {
   }
 
   private Effect<Empty> handle(StockSkuItemEntity.StockSkuItemState state, StockSkuItemApi.JoinStockSkuItemCommand command) {
-    log.info("state: {}\nJoinToOrderItemCommand: {}", state, command);
+    log.info("state: {}\nJoinStockSkuItemCommand: {}", state, command);
 
     return effects()
         .emitEvent(eventFor(state, command))
@@ -155,6 +155,7 @@ public class StockSkuItem extends AbstractStockSkuItem {
         .setOrderId(command.getOrderId())
         .setOrderSkuItemId(command.getOrderSkuItemId())
         .setShippedUtc(TimeTo.now())
+        .setStockOrderId(state.getStockOrderId())
         .build();
   }
 

@@ -4,6 +4,9 @@ import com.akkaserverless.javasdk.action.ActionCreationContext;
 import com.google.protobuf.Any;
 import com.google.protobuf.Empty;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.mystore.order.api.OrderApi;
 import io.mystore.shipping2.entity.ShippingEntity;
 
@@ -13,17 +16,22 @@ import io.mystore.shipping2.entity.ShippingEntity;
 // or delete it so it is regenerated as needed.
 
 public class ShippingToOrderAction extends AbstractShippingToOrderAction {
+  static final Logger log = LoggerFactory.getLogger(ShippingToOrderAction.class);
 
   public ShippingToOrderAction(ActionCreationContext creationContext) {
   }
 
   @Override
   public Effect<Empty> onOrderShipped(ShippingEntity.OrderShipped orderShipped) {
+    log.info("onOrderShipped: {}", orderShipped);
+
     return effects().forward(components().order().shippedOrder(toShippedOrder(orderShipped)));
   }
 
   @Override
   public Effect<Empty> onOrderItemShipped(ShippingEntity.OrderItemShipped orderItemShipped) {
+    log.info("onOrderItemShipped: {}", orderItemShipped);
+
     return effects().forward(components().order().shippedOrderItem(toShippedOrderItem(orderItemShipped)));
   }
 

@@ -45,6 +45,7 @@ public class ShippableSkuItemsTimerAction extends AbstractShippableSkuItemsTimer
   @Override
   public Effect<Empty> onBackOrderedOrderSkuItem(OrderSkuItemEntity.BackOrderedOrderSkuItem backOrderedOrderSkuItem) {
     log.info("onBackOrderedOrderSkuItem: {}", backOrderedOrderSkuItem);
+
     return effects().forward(components().shippableSkuItemsTimer().createShippableSkuItemsTimer(toShippableSkuItemsTimer(backOrderedOrderSkuItem)));
   }
 
@@ -56,6 +57,7 @@ public class ShippableSkuItemsTimerAction extends AbstractShippableSkuItemsTimer
   @Override
   public Effect<Empty> onReleasedFromStockSkuItem(StockSkuItemEntity.ReleasedFromStockSkuItem releasedFromStockSkuItem) {
     log.info("onReleasedFromStockSkuItem: {}", releasedFromStockSkuItem);
+
     return effects().forward(components().shippableSkuItemsTimer().createShippableSkuItemsTimer(toShippableSkuItemsTimer(releasedFromStockSkuItem)));
   }
 

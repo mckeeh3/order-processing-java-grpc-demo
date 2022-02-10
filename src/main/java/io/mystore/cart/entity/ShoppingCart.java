@@ -219,25 +219,31 @@ public class ShoppingCart extends AbstractShoppingCart {
   }
 
   private Effect<Empty> handle(CartEntity.CartState state, CartApi.AddLineItem command) {
+    log.info("state: {}\nAddLineItem: {}", state, command);
+
     return effects()
         .emitEvent(event(state, command))
         .thenReply(newState -> Empty.getDefaultInstance());
   }
 
   private Effect<Empty> handle(CartEntity.CartState state, CartApi.ChangeLineItem command) {
+    log.info("state: {}\nChangeLineItem: {}", state, command);
+
     return effects()
         .emitEvent(event(state, command))
         .thenReply(newState -> Empty.getDefaultInstance());
   }
 
   private Effect<Empty> handle(CartEntity.CartState state, CartApi.RemoveLineItem command) {
+    log.info("state: {}\nRemoveLineItem: {}", state, command);
+
     return effects()
         .emitEvent(event(state, command))
         .thenReply(newState -> Empty.getDefaultInstance());
   }
 
   private Effect<Empty> handle(CartEntity.CartState state, CartApi.CheckoutShoppingCart command) {
-    log.info("state: {}\ncheckoutShoppingCart: {}", state, command);
+    log.info("state: {}\nCheckoutShoppingCart: {}", state, command);
 
     return effects()
         .emitEvent(event(state, command))
@@ -245,6 +251,8 @@ public class ShoppingCart extends AbstractShoppingCart {
   }
 
   private Effect<Empty> handle(CartEntity.CartState state, CartApi.DeleteShoppingCart command) {
+    log.info("state: {}\nDeleteShoppingCart: {}", state, command);
+
     return effects()
         .emitEvent(event(state, command))
         .thenReply(newState -> Empty.getDefaultInstance());

@@ -171,6 +171,7 @@ public class StockOrder extends AbstractStockOrder {
         .setStockSkuItemId(command.getStockSkuItemId())
         .setOrderId(command.getOrderId())
         .setOrderSkuItemId(command.getOrderSkuItemId())
+        .setShippedUtc(command.getShippedUtc())
         .build();
   }
 

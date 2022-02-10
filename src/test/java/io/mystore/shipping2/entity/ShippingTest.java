@@ -63,7 +63,7 @@ public class ShippingTest {
         .build());
 
     var events = result.getAllEvents();
-    events.forEach(event -> log.info("event: {}", event));
+    events.forEach(event -> log.info("event({}): {}", event.getClass().getName(), event));
 
     assertEquals(1, events.size());
 
@@ -157,7 +157,7 @@ public class ShippingTest {
         .setOrderId("order-id")
         .setOrderSkuItemId(shipOrderBefore.getReply().getOrderItemsList().get(skuIdx).getOrderSkuItemsList().get(orderSkuItemIdx).getOrderSkuItemId())
         .setSkuId(skuId)
-        .setStockSkuItemId(orderSkuItemId)
+        .setStockSkuItemId("stock-sku-item-id-" + skuId)
         .setShippedUtc(TimeTo.now())
         .build();
     testKit.shippedOrderSkuItem(command);

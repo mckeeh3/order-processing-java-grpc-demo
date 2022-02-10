@@ -94,6 +94,7 @@ class ShippingEventHandler {
           if (orderSkuItem.getOrderSkuItemId().equals(orderSkuItemShipped.getOrderSkuItemId())) {
             return orderSkuItem
                 .toBuilder()
+                .setStockSkuItemId(orderSkuItemShipped.getStockSkuItemId())
                 .setShippedUtc(orderSkuItemShipped.getShippedUtc())
                 .build();
           } else {

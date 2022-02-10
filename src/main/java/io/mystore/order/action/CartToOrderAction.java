@@ -7,6 +7,9 @@ import com.akkaserverless.javasdk.action.ActionCreationContext;
 import com.google.protobuf.Any;
 import com.google.protobuf.Empty;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.mystore.cart.entity.CartEntity;
 import io.mystore.cart.entity.CartEntity.CartState;
 import io.mystore.order.api.OrderApi;
@@ -17,12 +20,15 @@ import io.mystore.order.api.OrderApi;
 // or delete it so it is regenerated as needed.
 
 public class CartToOrderAction extends AbstractCartToOrderAction {
+  static final Logger log = LoggerFactory.getLogger(CartToOrderAction.class);
 
   public CartToOrderAction(ActionCreationContext creationContext) {
   }
 
   @Override
   public Effect<Empty> onCartCheckedOut(CartEntity.CartCheckedOut command) {
+    log.info("onCartCheckedOut: {}", command);
+
     var getCartState = components().order().createOrder(toCreateOrderCommand(command.getCartState()));
 
     return effects().forward(getCartState);

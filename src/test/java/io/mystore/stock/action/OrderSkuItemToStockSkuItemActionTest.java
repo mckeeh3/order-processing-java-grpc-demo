@@ -4,7 +4,7 @@ import akka.stream.javadsl.Source;
 import com.akkaserverless.javasdk.testkit.ActionResult;
 import com.google.protobuf.Any;
 import com.google.protobuf.Empty;
-import io.mystore.shipping.entity.ShipOrderItemEntity;
+import io.mystore.shipping2.entity.OrderSkuItemEntity;
 import io.mystore.stock.action.OrderSkuItemToStockSkuItemAction;
 import io.mystore.stock.action.OrderSkuItemToStockSkuItemActionTestKit;
 import org.junit.Test;
@@ -30,13 +30,13 @@ public class OrderSkuItemToStockSkuItemActionTest {
   @Test
   public void onStockSkuItemRequiredTest() {
     OrderSkuItemToStockSkuItemActionTestKit testKit = OrderSkuItemToStockSkuItemActionTestKit.of(OrderSkuItemToStockSkuItemAction::new);
-    // ActionResult<Empty> result = testKit.onStockSkuItemRequired(ShipOrderItemEntity.SkuItemRequired.newBuilder()...build());
+    // ActionResult<Empty> result = testKit.onStockSkuItemRequired(OrderSkuItemEntity.StockSkuItemRequired.newBuilder()...build());
   }
 
   @Test
   public void onStockSkuItemReleasedTest() {
     OrderSkuItemToStockSkuItemActionTestKit testKit = OrderSkuItemToStockSkuItemActionTestKit.of(OrderSkuItemToStockSkuItemAction::new);
-    // ActionResult<Empty> result = testKit.onStockSkuItemReleased(ShipOrderItemEntity.SkuItemReleasedFromOrder.newBuilder()...build());
+    // ActionResult<Empty> result = testKit.onStockSkuItemReleased(OrderSkuItemEntity.ReleasedFromOrderSkuItem.newBuilder()...build());
   }
 
   @Test

@@ -34,6 +34,7 @@ class OrderSkuItemEventHandler {
   OrderSkuItemEventHandler handle(OrderSkuItemEntity.JoinedToStockSkuItem joinedToStockSkuItem) {
     state = state
         .toBuilder()
+        .setStockSkuItemId(joinedToStockSkuItem.getStockSkuItemId())
         .setShippedUtc(joinedToStockSkuItem.getShippedUtc())
         .setBackOrderedUtc(TimeTo.zero())
         .build();

@@ -1,5 +1,5 @@
 
-@urlPrefix = https://floral-band-7795.us-east1.akkaserverless.app
+@urlPrefix = https://wispy-sun-4785.us-east1.akkaserverless.app
 @customerId = customer-1
 @skuId = sku-1
 @orderId = cart-1
@@ -9,12 +9,17 @@
 ### io.mystore.shipping2.view.OrderSkuItemsBackOrderedBySku.GetOrderSkuItemsBackOrderedBySku
 
 curl -XGET -H "Content-Type: application/json"
-  '{{urlPrefix}}/order-sku-items-back-ordered-by-sku?skuId={{skuId}}'
+  '{{urlPrefix}}/order-sku-items-back-ordered-by-sku?sku_id={{skuId}}'
+
+### io.mystore.shipping2.view.OrderSkuItemsByOrder.GetOrderSkuItemsByOrder
+
+curl -XGET -H "Content-Type: application/json"
+  '{{urlPrefix}}/order-sku-items-by-order?order_id={{orderId}}'
 
 ### io.mystore.shipping2.view.OrderSkuItemsShippedBySku.GetOrderSkuItemsShippedBySku
 
 curl -XGET -H "Content-Type: application/json"
-  '{{urlPrefix}}/order-sku-items-back-ordered-by-sku?skuId={{skuId}}'
+  '{{urlPrefix}}/order-sku-items-shipped-by-sku?sku_id={{skuId}}'
 
 ### io.mystore.shipping2.view.ShippingByCustomerByDate.GetShippingByCustomerByDate
 

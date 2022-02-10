@@ -28,8 +28,8 @@ message OrderShipped {
 
 message OrderItemShipped {
   string order_id = 1;
-  string sku_id = 3;
-  google.protobuf.Timestamp shipped_utc = 5;
+  string sku_id = 2;
+  google.protobuf.Timestamp shipped_utc = 3;
 }
 
 message OrderSkuItemShipped {

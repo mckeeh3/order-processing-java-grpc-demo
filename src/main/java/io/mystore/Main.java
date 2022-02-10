@@ -7,8 +7,6 @@ import io.mystore.cart.view.CartsByCustomerView;
 import io.mystore.cart.view.CartsByDateView;
 import io.mystore.order.action.CartToOrderAction;
 import io.mystore.order.action.OrderToOrderItemAction;
-import io.mystore.order.action.ShipOrderToOrderAction;
-import io.mystore.order.action.ShipOrderToOrderItemAction;
 import io.mystore.order.action.ShippingToOrderAction;
 import io.mystore.order.entity.Order;
 import io.mystore.order.entity.OrderItem;
@@ -17,26 +15,6 @@ import io.mystore.order.view.OrderedItemsByDateView;
 import io.mystore.order.view.OrderedItemsBySkuByDateView;
 import io.mystore.order.view.OrdersByCustomerByDateView;
 import io.mystore.order.view.OrdersByDateView;
-import io.mystore.shipping.action.BackOrderCheckTimerAction;
-import io.mystore.shipping.action.ShipOrderItemToShipOrderAction;
-import io.mystore.shipping.action.ShipOrderItemToShipSkuItemAction;
-import io.mystore.shipping.action.ShipOrderToShipOrderItemAction;
-import io.mystore.shipping.action.ShipSkuItemToShipOrderItemAction;
-import io.mystore.shipping.action.ShipSkuItemToStockItemAction;
-import io.mystore.shipping.action.StockItemFrontendAction;
-import io.mystore.shipping.action.StockItemToShipSkuItemAction;
-import io.mystore.shipping.entity.BackOrderTimer;
-import io.mystore.shipping.entity.ShipOrder;
-import io.mystore.shipping.entity.ShipOrderItem;
-import io.mystore.shipping.entity.ShipSkuItem;
-import io.mystore.shipping.entity.StockItem;
-import io.mystore.shipping.view.AvailableShipSkuItemsView;
-import io.mystore.shipping.view.AvailableStockItemsView;
-import io.mystore.shipping.view.BackOrderedShipOrderItemsBySkuView;
-import io.mystore.shipping.view.BackOrderedShipOrderItemsView;
-import io.mystore.shipping.view.ShipOrdersByCustomerByDateView;
-import io.mystore.shipping.view.ShipOrdersByDateView;
-import io.mystore.shipping.view.ShippedStockItemsView;
 import io.mystore.shipping2.action.OrderSkuItemToShippingAction;
 import io.mystore.shipping2.action.OrderToShippingAction;
 import io.mystore.shipping2.action.ShippingToOrderSkuItemAction;
@@ -44,6 +22,7 @@ import io.mystore.shipping2.action.StockSkuItemToOrderSkuItemAction;
 import io.mystore.shipping2.entity.OrderSkuItem;
 import io.mystore.shipping2.entity.Shipping;
 import io.mystore.shipping2.view.OrderSkuItemsBackOrderedBySkuView;
+import io.mystore.shipping2.view.OrderSkuItemsByOrderView;
 import io.mystore.shipping2.view.OrderSkuItemsShippedBySkuView;
 import io.mystore.shipping2.view.ShippingByCustomerByDateView;
 import io.mystore.shipping2.view.ShippingByDateView;
@@ -76,24 +55,14 @@ public final class Main {
     // If you prefer, you may remove this and manually register these components in a
     // `new AkkaServerless()` instance.
     return AkkaServerlessFactory.withComponents(
-      BackOrderTimer::new,
       Order::new,
       OrderItem::new,
       OrderSkuItem::new,
-      ShipOrder::new,
-      ShipOrderItem::new,
-      ShipSkuItem::new,
       ShippableSkuItemsTimer::new,
       Shipping::new,
       ShoppingCart::new,
-      StockItem::new,
       StockOrder::new,
       StockSkuItem::new,
-      AvailableShipSkuItemsView::new,
-      AvailableStockItemsView::new,
-      BackOrderCheckTimerAction::new,
-      BackOrderedShipOrderItemsView::new,
-      BackOrderedShipOrderItemsBySkuView::new,
       CartToOrderAction::new,
       CartsByCustomerView::new,
       CartsByCustomerByDateView::new,
@@ -101,6 +70,7 @@ public final class Main {
       OrderSkuItemToShippingAction::new,
       OrderSkuItemToStockSkuItemAction::new,
       OrderSkuItemsBackOrderedBySkuView::new,
+      OrderSkuItemsByOrderView::new,
       OrderSkuItemsShippedBySkuView::new,
       OrderToOrderItemAction::new,
       OrderToShippingAction::new,
@@ -109,23 +79,11 @@ public final class Main {
       OrderedItemsBySkuByDateView::new,
       OrdersByCustomerByDateView::new,
       OrdersByDateView::new,
-      ShipOrderItemToShipOrderAction::new,
-      ShipOrderItemToShipSkuItemAction::new,
-      ShipOrderToOrderAction::new,
-      ShipOrderToOrderItemAction::new,
-      ShipOrderToShipOrderItemAction::new,
-      ShipOrdersByCustomerByDateView::new,
-      ShipOrdersByDateView::new,
-      ShipSkuItemToShipOrderItemAction::new,
-      ShipSkuItemToStockItemAction::new,
       ShippableSkuItemsTimerAction::new,
-      ShippedStockItemsView::new,
       ShippingByCustomerByDateView::new,
       ShippingByDateView::new,
       ShippingToOrderAction::new,
       ShippingToOrderSkuItemAction::new,
-      StockItemFrontendAction::new,
-      StockItemToShipSkuItemAction::new,
       StockOrderToStockSkuItemAction::new,
       StockOrdersAvailableView::new,
       StockOrdersShippedView::new,
