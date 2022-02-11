@@ -10,8 +10,8 @@ import com.google.protobuf.Empty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.mystore.shipping2.api.OrderSkuItemApi;
-import io.mystore.shipping2.entity.OrderSkuItemEntity;
+import io.mystore.shipping.api.OrderSkuItemApi;
+import io.mystore.shipping.entity.OrderSkuItemEntity;
 import io.mystore.stock.api.StockSkuItemApi;
 import io.mystore.stock.view.StockSkuItemsAvailableModel;
 import io.mystore.stock.view.StockSkuItemsModel.StockSkuItem;

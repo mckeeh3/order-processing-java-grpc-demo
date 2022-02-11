@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package io.mystore.shipping.view;
+
+import "google/protobuf/timestamp.proto";
+
+option java_outer_classname = "OrderSkuItemModel";
+
+message OrderSkuItem {
+  string order_id = 1;
+  string order_sku_item_id = 2;
+  string sku_id = 3;
+  string sku_name = 4;
+  string stock_sku_item_id = 5;
+  google.protobuf.Timestamp shipped_utc = 6;
+  google.protobuf.Timestamp back_ordered_utc = 7;
+}

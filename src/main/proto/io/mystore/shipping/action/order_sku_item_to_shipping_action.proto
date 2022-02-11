@@ -1,27 +1,20 @@
 syntax = "proto3";
 
-package io.mystore.stock.action;
+package io.mystore.shipping.action;
 
 import "akkaserverless/annotations.proto";
 import "google/protobuf/empty.proto";
 import "google/protobuf/any.proto";
 import "io/mystore/shipping/entity/order_sku_item_entity.proto";
-import "io/mystore/stock/entity/stock_sku_item_entity.proto";
 
-option java_outer_classname = "OrderSkuItemToStockSkuItemService";
+option java_outer_classname = "OrderSkuItemToShippingService";
 
-service OrderSkuItemToStockSkuItem {
+service OrderSkuItemToShipping {
   option (akkaserverless.codegen) = {
     action: {}
   };
 
-  rpc OnStockSkuItemRequired(shipping.entity.StockSkuItemRequired) returns (google.protobuf.Empty) {
-    option (akkaserverless.method).eventing.in = {
-      event_sourced_entity: "order_sku_item"
-    };
-  }
-
-  rpc OnStockSkuItemReleased(shipping.entity.ReleasedFromOrderSkuItem) returns (google.protobuf.Empty) {
+  rpc OnJoinedToStockSkuItem(entity.JoinedToStockSkuItem) returns (google.protobuf.Empty) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "order_sku_item"
     };

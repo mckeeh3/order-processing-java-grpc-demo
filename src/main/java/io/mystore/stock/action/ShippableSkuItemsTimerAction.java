@@ -15,11 +15,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.mystore.TimeTo;
-import io.mystore.shipping2.entity.OrderSkuItemEntity;
-import io.mystore.shipping2.entity.OrderSkuItemEntity.BackOrderedOrderSkuItem;
-import io.mystore.shipping2.view.OrderSkuItemsBackOrderedBySkuModel.GetOrderSkuItemsBackOrderedBySkuRequest;
-import io.mystore.shipping2.view.OrderSkuItemsBackOrderedBySkuModel.GetOrderSkuItemsBackOrderedBySkuResponse;
-import io.mystore.shipping2.view.OrderSkuItemModel.OrderSkuItem;
+import io.mystore.shipping.entity.OrderSkuItemEntity;
+import io.mystore.shipping.entity.OrderSkuItemEntity.BackOrderedOrderSkuItem;
+import io.mystore.shipping.view.OrderSkuItemsBackOrderedBySkuModel.GetOrderSkuItemsBackOrderedBySkuRequest;
+import io.mystore.shipping.view.OrderSkuItemsBackOrderedBySkuModel.GetOrderSkuItemsBackOrderedBySkuResponse;
+import io.mystore.shipping.view.OrderSkuItemModel.OrderSkuItem;
 import io.mystore.stock.api.ShippableSkuItemsTimerApi;
 import io.mystore.stock.api.StockSkuItemApi;
 import io.mystore.stock.api.ShippableSkuItemsTimerApi.CreateShippableSkuItemsTimerCommand;

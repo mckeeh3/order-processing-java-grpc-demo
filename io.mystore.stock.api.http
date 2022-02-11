@@ -1,6 +1,6 @@
 
 @urlPrefix = https://wispy-sun-4785.us-east1.akkaserverless.app
-@stockOrderId = stock-order-id-3
+@stockOrderId = stock-order-id-6
 @skuId = sku-3
 @skuName = sku name 3
 @quantity = 3

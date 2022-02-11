@@ -4,7 +4,7 @@ import akka.stream.javadsl.Source;
 import com.akkaserverless.javasdk.testkit.ActionResult;
 import com.google.protobuf.Any;
 import com.google.protobuf.Empty;
-import io.mystore.shipping2.entity.OrderSkuItemEntity;
+import io.mystore.shipping.entity.OrderSkuItemEntity;
 import io.mystore.stock.action.ShippableSkuItemsTimerAction;
 import io.mystore.stock.action.ShippableSkuItemsTimerActionTestKit;
 import io.mystore.stock.entity.ShippableSkuItemsTimerEntity;

@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.mystore.order.api.OrderApi;
-import io.mystore.shipping2.entity.ShippingEntity;
+import io.mystore.shipping.entity.ShippingEntity;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
 //

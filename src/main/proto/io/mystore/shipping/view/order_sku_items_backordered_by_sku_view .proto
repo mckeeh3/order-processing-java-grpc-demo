@@ -1,0 +1,77 @@
+syntax = "proto3";
+
+package io.mystore.shipping.view;
+
+import "akkaserverless/annotations.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/any.proto";
+import "io/mystore/shipping/view/order_sku_item.proto";
+import "io/mystore/shipping/entity/order_sku_item_entity.proto";
+
+option java_outer_classname = "OrderSkuItemsBackOrderedBySkuModel";
+
+service OrderSkuItemsBackOrderedBySku {
+  option (akkaserverless.codegen) = {
+    view: {}
+  };
+
+  rpc GetOrderSkuItemsBackOrderedBySku(GetOrderSkuItemsBackOrderedBySkuRequest) returns (GetOrderSkuItemsBackOrderedBySkuResponse) {
+    option (akkaserverless.method).view.query = {
+      query: "SELECT * AS order_sku_items"
+             "  FROM order_sku_items_back_ordered_by_sku"
+             " WHERE back_ordered_utc.seconds > 0"
+             "   AND sku_id = :sku_id"
+    };
+    option (google.api.http) = {
+      get: "/order-sku-items-back-ordered-by-sku"
+    };
+  }
+
+  rpc OnCreatedOrderSkuItem(entity.CreatedOrderSkuItem) returns (OrderSkuItem) {
+    option (akkaserverless.method).eventing.in = {
+      event_sourced_entity: "order_sku_item"
+    };
+    option (akkaserverless.method).view.update = {
+      table: "order_sku_items_back_ordered_by_sku"
+      transform_updates: true
+    };
+  }
+
+  rpc OnJoinedToStockSkuItem(entity.JoinedToStockSkuItem) returns (OrderSkuItem) {
+    option (akkaserverless.method).eventing.in = {
+      event_sourced_entity: "order_sku_item"
+    };
+    option (akkaserverless.method).view.update = {
+      table: "order_sku_items_back_ordered_by_sku"
+      transform_updates: true
+    };
+  }
+
+  rpc OnBackOrderedOrderSkuItem(entity.BackOrderedOrderSkuItem) returns (OrderSkuItem) {
+    option (akkaserverless.method).eventing.in = {
+      event_sourced_entity: "order_sku_item"
+    };
+    option (akkaserverless.method).view.update = {
+      table: "order_sku_items_back_ordered_by_sku"
+      transform_updates: true
+    };
+  }
+
+  rpc IgnoreOtherEvents(google.protobuf.Any) returns (OrderSkuItem) {
+    option (akkaserverless.method).eventing.in = {
+      event_sourced_entity: "order_sku_item"
+    };
+    option (akkaserverless.method).view.update = {
+      table: "order_sku_items_back_ordered_by_sku"
+      transform_updates: true
+    };
+  }
+}
+
+message GetOrderSkuItemsBackOrderedBySkuRequest {
+  string sku_id = 1;
+}
+
+message GetOrderSkuItemsBackOrderedBySkuResponse {
+  repeated OrderSkuItem order_sku_items = 1;
+}
