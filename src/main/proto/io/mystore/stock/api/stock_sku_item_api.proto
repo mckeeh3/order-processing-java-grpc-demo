@@ -18,6 +18,7 @@ service StockSkuItemService {
       events: [
         "io.mystore.stock.entity.StockSkuItemCreated",
         "io.mystore.stock.entity.JoinedToStockSkuItem",
+        "io.mystore.stock.entity.JoinToStockSkuItemRejected",
         "io.mystore.stock.entity.ReleasedFromStockSkuItem"  // force line breaks
       ]
     }

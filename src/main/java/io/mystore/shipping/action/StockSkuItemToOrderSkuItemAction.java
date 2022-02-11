@@ -42,6 +42,11 @@ public class StockSkuItemToOrderSkuItemAction extends AbstractStockSkuItemToOrde
   }
 
   @Override
+  public Effect<Empty> onJoinedToStockSkuItemRejected(StockSkuItemEntity.JoinToStockSkuItemRejected joinToStockSkuItemRejected) {
+    return effects().forward(components().orderSkuItem().joinToStockSkuItemRejected(toJoinToStockSkuItemRejected(joinToStockSkuItemRejected)));
+  }
+
+  @Override
   public Effect<Empty> ignoreOtherEvents(Any any) {
     return effects().reply(Empty.getDefaultInstance());
   }
@@ -88,6 +93,16 @@ public class StockSkuItemToOrderSkuItemAction extends AbstractStockSkuItemToOrde
         .setSkuId(joinedToStockSkuItem.getSkuId())
         .setStockSkuItemId(joinedToStockSkuItem.getStockSkuItemId())
         .setShippedUtc(joinedToStockSkuItem.getShippedUtc())
+        .build();
+  }
+
+  private OrderSkuItemApi.JoinToStockSkuItemRejectedCommand toJoinToStockSkuItemRejected(StockSkuItemEntity.JoinToStockSkuItemRejected joinToStockSkuItemRejected) {
+    return OrderSkuItemApi.JoinToStockSkuItemRejectedCommand
+        .newBuilder()
+        .setOrderId(joinToStockSkuItemRejected.getOrderId())
+        .setOrderSkuItemId(joinToStockSkuItemRejected.getOrderSkuItemId())
+        .setSkuId(joinToStockSkuItemRejected.getSkuId())
+        .setStockSkuItemId(joinToStockSkuItemRejected.getStockSkuItemId())
         .build();
   }
 }

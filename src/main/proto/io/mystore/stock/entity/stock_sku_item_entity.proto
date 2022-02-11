@@ -32,6 +32,14 @@ message JoinedToStockSkuItem {
   string stock_order_id = 6;
 }
 
+message JoinToStockSkuItemRejected {
+  string sku_id = 1;
+  string stock_sku_item_id = 2;
+  string order_id = 3;
+  string order_sku_item_id = 4;
+  string stock_order_id = 5;
+}
+
 message ReleasedFromStockSkuItem {
   string sku_id = 1;
   string stock_sku_item_id = 2;

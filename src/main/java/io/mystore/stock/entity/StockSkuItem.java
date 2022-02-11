@@ -34,7 +34,7 @@ public class StockSkuItem extends AbstractStockSkuItem {
 
   @Override
   public Effect<Empty> joinStockSkuItem(StockSkuItemEntity.StockSkuItemState state, StockSkuItemApi.JoinStockSkuItemCommand command) {
-    return reject(state, command).orElseGet(() -> handle(state, command));
+    return handle(state, command);
   }
 
   @Override
@@ -71,6 +71,18 @@ public class StockSkuItem extends AbstractStockSkuItem {
   }
 
   @Override
+  public StockSkuItemEntity.StockSkuItemState joinToStockSkuItemRejected(StockSkuItemEntity.StockSkuItemState state, StockSkuItemEntity.JoinToStockSkuItemRejected event) {
+    return state
+        .toBuilder()
+        .setSkuId(event.getSkuId())
+        .setStockSkuItemId(event.getStockSkuItemId())
+        .setOrderId(event.getOrderId())
+        .setOrderSkuItemId(event.getOrderSkuItemId())
+        .setStockOrderId(event.getStockOrderId())
+        .build();
+  }
+
+  @Override
   public StockSkuItemEntity.StockSkuItemState releasedFromStockSkuItem(StockSkuItemEntity.StockSkuItemState state, StockSkuItemEntity.ReleasedFromStockSkuItem event) {
     if (state.getOrderSkuItemId().equals(event.getOrderSkuItemId())) {
       return state
@@ -84,17 +96,10 @@ public class StockSkuItem extends AbstractStockSkuItem {
     }
   }
 
-  private Optional<Effect<Empty>> reject(StockSkuItemEntity.StockSkuItemState state, StockSkuItemApi.JoinStockSkuItemCommand command) {
-    if (!state.getOrderSkuItemId().isEmpty() && !state.getOrderSkuItemId().equals(command.getOrderSkuItemId())) {
-      log.info("skuItem is already assigned to another orderItem\nstate:\n{}\nJoinToOrderItemCommand: {}", state, command);
-      return Optional.of(effects().error("skuItem is not available"));
-    }
-    return Optional.empty();
-  }
-
   private Optional<Effect<StockSkuItemApi.StockSkuItem>> reject(StockSkuItemEntity.StockSkuItemState state, StockSkuItemApi.GetStockSKuItemRequest command) {
     if (state.getStockSkuItemId().isEmpty()) {
-      return Optional.of(effects().error("No stock SKU item found for skuItemId: " + command.getStockSkuItemId()));
+      log.warn("No stock SKU item found for skuItemId: '{}'\nstate:\n{}\nGetStockSKuItemRequest: {}", command.getStockSkuItemId(), state, command);
+      return Optional.of(effects().error("No stock SKU item found for stockSkuItemId: " + command.getStockSkuItemId()));
     }
     return Optional.empty();
   }
@@ -110,9 +115,17 @@ public class StockSkuItem extends AbstractStockSkuItem {
   private Effect<Empty> handle(StockSkuItemEntity.StockSkuItemState state, StockSkuItemApi.JoinStockSkuItemCommand command) {
     log.info("state: {}\nJoinStockSkuItemCommand: {}", state, command);
 
-    return effects()
-        .emitEvent(eventFor(state, command))
-        .thenReply(newState -> Empty.getDefaultInstance());
+    if (state.getOrderSkuItemId().equals(command.getOrderSkuItemId())) {
+      return effects().reply(Empty.getDefaultInstance()); // already joined - idempotent
+    } else if (!state.getOrderSkuItemId().isEmpty() && !state.getOrderSkuItemId().equals(command.getOrderSkuItemId())) {
+      return effects()
+          .emitEvent(eventForRejected(state, command))
+          .thenReply(newState -> Empty.getDefaultInstance());
+    } else {
+      return effects()
+          .emitEvent(eventFor(state, command))
+          .thenReply(newState -> Empty.getDefaultInstance());
+    }
   }
 
   private Effect<Empty> handle(StockSkuItemEntity.StockSkuItemState state, StockSkuItemApi.ReleaseStockSkuItemCommand command) {
@@ -155,6 +168,17 @@ public class StockSkuItem extends AbstractStockSkuItem {
         .setOrderId(command.getOrderId())
         .setOrderSkuItemId(command.getOrderSkuItemId())
         .setShippedUtc(TimeTo.now())
+        .setStockOrderId(state.getStockOrderId())
+        .build();
+  }
+
+  static StockSkuItemEntity.JoinToStockSkuItemRejected eventForRejected(StockSkuItemEntity.StockSkuItemState state, StockSkuItemApi.JoinStockSkuItemCommand command) {
+    return StockSkuItemEntity.JoinToStockSkuItemRejected
+        .newBuilder()
+        .setSkuId(state.getSkuId())
+        .setStockSkuItemId(state.getStockSkuItemId())
+        .setOrderId(command.getOrderId())
+        .setOrderSkuItemId(command.getOrderSkuItemId())
         .setStockOrderId(state.getStockOrderId())
         .build();
   }

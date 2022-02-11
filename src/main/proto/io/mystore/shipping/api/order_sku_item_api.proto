@@ -39,6 +39,13 @@ service OrderSkuItemService {
     };
   }
 
+  rpc JoinToStockSkuItemRejected(JoinToStockSkuItemRejectedCommand) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/order-sku-items/{order_sku_item_id}/join-to-stock-sku-item"
+      body: "*"
+    };
+  }
+
   rpc BackOrderOrderSkuItem(BackOrderOrderSkuItemCommand) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       put: "/order-sku-items/{order_sku_item_id}/back-order-order-sku-item"
@@ -68,6 +75,13 @@ message JoinToStockSkuItemCommand {
   string sku_id = 3;
   string stock_sku_item_id = 4;
   google.protobuf.Timestamp shipped_utc = 5;
+}
+
+message JoinToStockSkuItemRejectedCommand {
+  string order_sku_item_id = 1 [(akkaserverless.field).entity_key = true];
+  string order_id = 2;
+  string sku_id = 3;
+  string stock_sku_item_id = 4;
 }
 
 message BackOrderOrderSkuItemCommand {

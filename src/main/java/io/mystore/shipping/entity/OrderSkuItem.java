@@ -40,6 +40,11 @@ public class OrderSkuItem extends AbstractOrderSkuItem {
   }
 
   @Override
+  public Effect<Empty> joinToStockSkuItemRejected(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemApi.JoinToStockSkuItemRejectedCommand command) {
+    return handle(state, command);
+  }
+
+  @Override
   public Effect<Empty> backOrderOrderSkuItem(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemApi.BackOrderOrderSkuItemCommand command) {
     return handle(state, command);
   }
@@ -103,6 +108,14 @@ public class OrderSkuItem extends AbstractOrderSkuItem {
           .emitEvent(eventForReleaseSkuItem(state, command))
           .thenReply(newState -> Empty.getDefaultInstance());
     }
+  }
+
+  private Effect<Empty> handle(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemApi.JoinToStockSkuItemRejectedCommand command) {
+    log.info("state: {}\nJoinToStockSkuItemRejectedCommand: {}", state, command);
+
+    return effects()
+        .emitEvent(eventFor(state, command))
+        .thenReply(newState -> Empty.getDefaultInstance());
   }
 
   private Effect<Empty> handle(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemApi.BackOrderOrderSkuItemCommand command) {
@@ -198,6 +211,15 @@ public class OrderSkuItem extends AbstractOrderSkuItem {
         .setSkuId(state.getSkuId())
         .setStockSkuItemId(command.getStockSkuItemId())
         .setShippedUtc(command.getShippedUtc())
+        .build();
+  }
+
+  private OrderSkuItemEntity.StockSkuItemRequired eventFor(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemApi.JoinToStockSkuItemRejectedCommand command) {
+    return OrderSkuItemEntity.StockSkuItemRequired
+        .newBuilder()
+        .setOrderSkuItemId(command.getOrderSkuItemId())
+        .setOrderId(command.getOrderId())
+        .setSkuId(command.getSkuId())
         .build();
   }
 
