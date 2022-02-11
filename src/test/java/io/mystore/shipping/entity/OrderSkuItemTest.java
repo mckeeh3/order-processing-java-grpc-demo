@@ -9,8 +9,6 @@ import org.slf4j.LoggerFactory;
 
 import io.mystore.TimeTo;
 import io.mystore.shipping.api.OrderSkuItemApi;
-import io.mystore.shipping.entity.OrderSkuItem;
-import io.mystore.shipping.entity.OrderSkuItemTestKit;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
 //
