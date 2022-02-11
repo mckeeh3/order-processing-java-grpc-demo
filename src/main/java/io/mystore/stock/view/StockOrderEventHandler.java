@@ -106,8 +106,12 @@ class StockOrderEventHandler {
 
   static Timestamp areAllItemsShipped(List<StockSkuItemsModel.StockSkuItem> stockSkuItems) {
     return stockSkuItems.stream()
-        .filter(item -> item.getShippedUtc() == null || item.getShippedUtc().getSeconds() == 0)
-        .findFirst()
-        .isPresent() ? TimeTo.zero() : TimeTo.now();
+        .allMatch(item -> isShipped(item.getShippedUtc()))
+            ? TimeTo.now()
+            : TimeTo.zero();
+  }
+
+  static boolean isShipped(Timestamp shippedUtc) {
+    return shippedUtc != null && shippedUtc.getSeconds() > 0;
   }
 }

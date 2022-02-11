@@ -237,32 +237,23 @@ public class Shipping extends AbstractShipping {
   }
 
   static Timestamp updateShippedUtc(List<ShippingEntity.OrderSkuItem> updatedOrderSkuItems, ShippingEntity.OrderSkuItemShipped event) {
-    var notAllShipped = updatedOrderSkuItems.stream()
-        .filter(orderSkuItem -> isNotShipped(orderSkuItem.getShippedUtc()))
-        .findAny()
-        .isPresent();
-
-    if (notAllShipped) {
-      return TimeTo.zero();
-    } else {
-      return event.getShippedUtc();
-    }
+    return updatedOrderSkuItems.stream()
+        .anyMatch(orderSkuItem -> isNotShipped(orderSkuItem.getShippedUtc()))
+            ? TimeTo.zero()
+            : event.getShippedUtc();
   }
 
   static boolean areAllOrderSkuItemsShipped(ShippingEntity.OrderState state, String skuId) {
     return state.getOrderItemsList().stream()
+        .filter(orderItem -> orderItem.getSkuId().equals(skuId))
         .flatMap(orderItem -> orderItem.getOrderSkuItemsList().stream())
-        .filter(orderSkuItem -> orderSkuItem.getSkuId().equals(skuId) && isNotShipped(orderSkuItem.getShippedUtc()))
-        .findFirst()
-        .isEmpty();
+        .allMatch(orderSkuItem -> orderSkuItem.getSkuId().equals(skuId) && isShipped(orderSkuItem.getShippedUtc()));
   }
 
   static boolean areAllOrderItemsShipped(ShippingEntity.OrderState state) {
     return state.getOrderItemsList().stream()
         .flatMap(orderItem -> orderItem.getOrderSkuItemsList().stream())
-        .filter(orderSkuItem -> isNotShipped(orderSkuItem.getShippedUtc()))
-        .findFirst()
-        .isEmpty();
+        .allMatch(orderSkuItem -> isShipped(orderSkuItem.getShippedUtc()));
   }
 
   static List<ShippingEntity.OrderItem> toEntityOrderItems(ShippingEntity.OrderState state, ShippingApi.CreateOrderCommand command) {
@@ -318,6 +309,10 @@ public class Shipping extends AbstractShipping {
             .setShippedUtc(orderSkuItem.getShippedUtc())
             .build())
         .collect(Collectors.toList());
+  }
+
+  static boolean isShipped(Timestamp shippedUtc) {
+    return shippedUtc != null && shippedUtc.getSeconds() > 0;
   }
 
   static boolean isNotShipped(Timestamp shippedUtc) {

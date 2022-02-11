@@ -231,9 +231,9 @@ public class StockOrder extends AbstractStockOrder {
 
   static Timestamp areAllItemsShipped(List<StockOrderEntity.StockSkuItem> stockSkuItems) {
     return stockSkuItems.stream()
-        .filter(item -> item.getShippedUtc() == null || item.getShippedUtc().getSeconds() == 0)
-        .findFirst()
-        .isPresent() ? TimeTo.zero() : TimeTo.now();
+        .allMatch(stockSkuItem -> isShipped(stockSkuItem.getShippedUtc()))
+            ? TimeTo.now()
+            : TimeTo.zero();
   }
 
   static List<StockSkuItemApi.StockSkuItem> toApi(List<StockOrderEntity.StockSkuItem> stockSkuItems) {
@@ -249,5 +249,9 @@ public class StockOrder extends AbstractStockOrder {
             .setShippedUtc(stockSkuItem.getShippedUtc())
             .build())
         .collect(Collectors.toList());
+  }
+
+  static boolean isShipped(Timestamp shippedUtc) {
+    return shippedUtc != null && shippedUtc.getSeconds() > 0;
   }
 }
