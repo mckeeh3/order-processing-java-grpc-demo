@@ -3,7 +3,6 @@ package io.mystore.shipping.entity;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import com.akkaserverless.javasdk.eventsourcedentity.EventSourcedEntityContext;
@@ -186,7 +185,7 @@ public class Shipping extends AbstractShipping {
             return orderItem;
           }
         })
-        .collect(Collectors.toList());
+        .toList();
 
     return state
         .toBuilder()
@@ -212,7 +211,7 @@ public class Shipping extends AbstractShipping {
             return orderItem;
           }
         })
-        .collect(Collectors.toList());
+        .toList();
   }
 
   static ShippingEntity.OrderItem updateOrderSkuItems(ShippingEntity.OrderItem orderItem, ShippingEntity.OrderSkuItemShipped event) {
@@ -227,7 +226,7 @@ public class Shipping extends AbstractShipping {
             return orderSkuItem;
           }
         })
-        .collect(Collectors.toList());
+        .toList();
 
     return orderItem.toBuilder()
         .setShippedUtc(updateShippedUtc(updatedOrderSkuItems, event))
@@ -265,7 +264,7 @@ public class Shipping extends AbstractShipping {
             .setQuantity(orderItem.getQuantity())
             .addAllOrderSkuItems(toEntityOrderSkuItems(state, command, orderItem))
             .build())
-        .collect(Collectors.toList());
+        .toList();
   }
 
   static List<ShippingEntity.OrderSkuItem> toEntityOrderSkuItems(ShippingEntity.OrderState state, ShippingApi.CreateOrderCommand command, ShippingApi.OrderItem orderItem) {
@@ -279,7 +278,7 @@ public class Shipping extends AbstractShipping {
             .setSkuName(orderItem.getSkuName())
             .setOrderedUtc(command.getOrderedUtc())
             .build())
-        .collect(Collectors.toList());
+        .toList();
   }
 
   static List<ShippingApi.OrderItem> toApi(List<ShippingEntity.OrderItem> orderItems) {
@@ -292,7 +291,7 @@ public class Shipping extends AbstractShipping {
             .setShippedUtc(orderItem.getShippedUtc())
             .addAllOrderSkuItems(toApiOrderSkuItems(orderItem.getOrderSkuItemsList()))
             .build())
-        .collect(Collectors.toList());
+        .toList();
   }
 
   static List<OrderSkuItemApi.OrderSkuItem> toApiOrderSkuItems(List<ShippingEntity.OrderSkuItem> orderSkuItems) {
@@ -308,7 +307,7 @@ public class Shipping extends AbstractShipping {
             .setOrderedUtc(orderSkuItem.getOrderedUtc())
             .setShippedUtc(orderSkuItem.getShippedUtc())
             .build())
-        .collect(Collectors.toList());
+        .toList();
   }
 
   static boolean isShipped(Timestamp shippedUtc) {

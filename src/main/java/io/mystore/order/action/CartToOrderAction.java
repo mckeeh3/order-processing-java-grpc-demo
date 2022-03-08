@@ -1,7 +1,6 @@
 package io.mystore.order.action;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.akkaserverless.javasdk.action.ActionCreationContext;
 import com.google.protobuf.Any;
@@ -52,7 +51,7 @@ public class CartToOrderAction extends AbstractCartToOrderAction {
             .setSkuName(lineItem.getSkuName())
             .setQuantity(lineItem.getQuantity())
             .build())
-        .collect(Collectors.toList());
+        .toList();
   }
 
   @Override

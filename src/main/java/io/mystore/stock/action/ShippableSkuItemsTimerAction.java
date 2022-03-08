@@ -4,7 +4,6 @@ import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import com.akkaserverless.javasdk.action.ActionCreationContext;
@@ -17,12 +16,12 @@ import org.slf4j.LoggerFactory;
 import io.mystore.TimeTo;
 import io.mystore.shipping.entity.OrderSkuItemEntity;
 import io.mystore.shipping.entity.OrderSkuItemEntity.BackOrderedOrderSkuItem;
+import io.mystore.shipping.view.OrderSkuItemModel.OrderSkuItem;
 import io.mystore.shipping.view.OrderSkuItemsBackOrderedBySkuModel.GetOrderSkuItemsBackOrderedBySkuRequest;
 import io.mystore.shipping.view.OrderSkuItemsBackOrderedBySkuModel.GetOrderSkuItemsBackOrderedBySkuResponse;
-import io.mystore.shipping.view.OrderSkuItemModel.OrderSkuItem;
 import io.mystore.stock.api.ShippableSkuItemsTimerApi;
-import io.mystore.stock.api.StockSkuItemApi;
 import io.mystore.stock.api.ShippableSkuItemsTimerApi.CreateShippableSkuItemsTimerCommand;
+import io.mystore.stock.api.StockSkuItemApi;
 import io.mystore.stock.entity.ShippableSkuItemsTimerEntity;
 import io.mystore.stock.entity.StockSkuItemEntity;
 import io.mystore.stock.entity.StockSkuItemEntity.ReleasedFromStockSkuItem;
@@ -116,7 +115,7 @@ public class ShippableSkuItemsTimerAction extends AbstractShippableSkuItemsTimer
 
     var results = IntStream.range(0, Math.min(countStockSkuItemsAvailable, countOrderSkuItemsBackOrdered))
         .mapToObj(i -> joinStockSkuItemToOrderSkuItem(stockSkuItemsAvailable.getStockSkuItems(i), orderSkuItemsBackOrdered.getOrderSkuItems(i)))
-        .collect(Collectors.toList());
+        .toList();
 
     return CompletableFuture.allOf(results.toArray(new CompletableFuture[results.size()]))
         .completeOnTimeout(null, 2, TimeUnit.SECONDS) // todo: make configurable

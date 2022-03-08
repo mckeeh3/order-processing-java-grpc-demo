@@ -1,7 +1,6 @@
 package io.mystore.stock.action;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 
 import com.akkaserverless.javasdk.action.ActionCreationContext;
 import com.google.protobuf.Any;
@@ -30,7 +29,7 @@ public class StockOrderToStockSkuItemAction extends AbstractStockOrderToStockSku
 
     var results = stockOrderCreated.getStockSkuItemsList().stream()
         .map(stockSkuItem -> components().stockSkuItem().createStockSkuItem(toStockSkuItemCommand(stockSkuItem)).execute())
-        .collect(Collectors.toList());
+        .toList();
 
     var result = CompletableFuture.allOf(results.toArray(new CompletableFuture[results.size()]))
         .thenApply(reply -> effects().reply(Empty.getDefaultInstance()));

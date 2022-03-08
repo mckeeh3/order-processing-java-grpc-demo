@@ -1,7 +1,6 @@
 package io.mystore.shipping.action;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.akkaserverless.javasdk.action.ActionCreationContext;
@@ -34,7 +33,7 @@ public class ShippingToOrderSkuItemAction extends AbstractShippingToOrderSkuItem
     var results = orderCreated.getOrderItemsList().stream()
         .flatMap(orderItems -> toCreateOrderSkuItemCommands(orderCreated, orderItems))
         .map(orderItem -> components().orderSkuItem().createOrderSkuItem(orderItem).execute())
-        .collect(Collectors.toList());
+        .toList();
 
     var result = CompletableFuture.allOf(results.toArray(new CompletableFuture[results.size()]))
         .thenApply(reply -> effects().reply(Empty.getDefaultInstance()));

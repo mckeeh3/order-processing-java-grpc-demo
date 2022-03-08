@@ -1,7 +1,6 @@
 package io.mystore.shipping.view;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import io.mystore.shipping.entity.ShippingEntity;
 
@@ -69,7 +68,7 @@ class ShippingEventHandler {
             return orderItem;
           }
         })
-        .collect(Collectors.toList());
+        .toList();
   }
 
   static List<ShippingEntity.OrderItem> updateOrderItems(ShippingModel.Shipping state, ShippingEntity.OrderSkuItemShipped orderSkuItemShipped) {
@@ -85,7 +84,7 @@ class ShippingEventHandler {
             return orderItem;
           }
         })
-        .collect(Collectors.toList());
+        .toList();
   }
 
   static List<ShippingEntity.OrderSkuItem> updateOrderSkuItems(List<ShippingEntity.OrderSkuItem> orderSkuItems, ShippingEntity.OrderSkuItemShipped orderSkuItemShipped) {
@@ -101,6 +100,6 @@ class ShippingEventHandler {
             return orderSkuItem;
           }
         })
-        .collect(Collectors.toList());
+        .toList();
   }
 }

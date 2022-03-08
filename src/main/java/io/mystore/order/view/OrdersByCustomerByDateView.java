@@ -1,7 +1,6 @@
 package io.mystore.order.view;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.akkaserverless.javasdk.view.View;
 import com.akkaserverless.javasdk.view.ViewContext;
@@ -56,7 +55,7 @@ public class OrdersByCustomerByDateView extends AbstractOrdersByCustomerByDateVi
             return item;
           }
         })
-        .collect(Collectors.toList());
+        .toList();
 
     return effects().updateState(
         state.toBuilder()
@@ -72,7 +71,7 @@ public class OrdersByCustomerByDateView extends AbstractOrdersByCustomerByDateVi
             .setSkuName(lineItem.getSkuName())
             .setQuantity(lineItem.getQuantity())
             .build())
-        .collect(Collectors.toList());
+        .toList();
   }
 
   @Override

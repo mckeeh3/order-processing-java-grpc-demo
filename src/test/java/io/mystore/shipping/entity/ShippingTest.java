@@ -3,7 +3,6 @@ package io.mystore.shipping.entity;
 import static org.junit.Assert.assertEquals;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.akkaserverless.javasdk.testkit.EventSourcedResult;
 
@@ -70,7 +69,7 @@ public class ShippingTest {
     var orderCreated = (ShippingEntity.OrderCreated) events.get(0);
     var results = orderCreated.getOrderItemsList().stream()
         .flatMap(orderItems -> orderItems.getOrderSkuItemsList().stream())
-        .collect(Collectors.toList());
+        .toList();
 
     log.info("results({}): {}", results.size(), results);
     assertEquals(sku2quantity + sku3quantity, results.size());

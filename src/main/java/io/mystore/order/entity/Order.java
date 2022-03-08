@@ -2,7 +2,6 @@ package io.mystore.order.entity;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import com.akkaserverless.javasdk.eventsourcedentity.EventSourcedEntityContext;
 import com.google.protobuf.Empty;
@@ -252,7 +251,7 @@ public class Order extends AbstractOrder {
 
     var notShipped = state.getOrderItemsList().stream()
         .filter(orderItem -> orderItem.getShippedUtc().getSeconds() == 0)
-        .collect(Collectors.toList());
+        .toList();
 
     if (notShipped.size() == 0 || notShipped.size() == 1 && notShipped.get(0).getSkuId().equals(command.getSkuId())) {
       var orderShipped = OrderEntity.OrderShipped
@@ -291,7 +290,7 @@ public class Order extends AbstractOrder {
             .setQuantity(orderItem.getQuantity())
             .setShippedUtc(orderItem.getShippedUtc())
             .build())
-        .collect(Collectors.toList());
+        .toList();
   }
 
   static List<OrderEntity.OrderItem> toOrderITems(List<OrderApi.OrderItem> orderItems) {
@@ -302,7 +301,7 @@ public class Order extends AbstractOrder {
             .setSkuName(orderItem.getSkuName())
             .setQuantity(orderItem.getQuantity())
             .build())
-        .collect(Collectors.toList());
+        .toList();
   }
 
   static List<OrderEntity.OrderItem> updateShippedOrderItem(List<OrderEntity.OrderItem> orderItems, OrderEntity.OrderItemShipped event) {
@@ -317,6 +316,6 @@ public class Order extends AbstractOrder {
             return orderItem;
           }
         })
-        .collect(Collectors.toList());
+        .toList();
   }
 }

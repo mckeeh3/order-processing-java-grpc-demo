@@ -1,7 +1,6 @@
 package io.mystore.order.action;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 
 import com.akkaserverless.javasdk.action.ActionCreationContext;
 import com.google.protobuf.Any;
@@ -40,7 +39,7 @@ public class OrderToOrderItemAction extends AbstractOrderToOrderItemAction {
             .setOrderedUtc(orderCreated.getOrderedUtc())
             .build())
         .map(orderItemCommand -> components().orderItem().createOrderItem(orderItemCommand).execute())
-        .collect(Collectors.toList());
+        .toList();
 
     var result = CompletableFuture.allOf(results.toArray(new CompletableFuture[results.size()]))
         .thenApply(reply -> effects().reply(Empty.getDefaultInstance()));

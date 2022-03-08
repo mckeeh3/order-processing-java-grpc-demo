@@ -1,7 +1,6 @@
 package io.mystore.stock.view;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.google.protobuf.Timestamp;
 
@@ -69,7 +68,7 @@ class StockOrderEventHandler {
             .setSkuName(stockSkuItem.getSkuName())
             .setStockOrderId(stockSkuItem.getStockOrderId())
             .build())
-        .collect(Collectors.toList());
+        .toList();
   }
 
   static List<StockSkuItemsModel.StockSkuItem> toStockSkuItems(StockOrdersModel.StockOrder state, StockOrderEntity.StockSkuItemJoined event) {
@@ -85,7 +84,7 @@ class StockOrderEventHandler {
             return stockSkuItem;
           }
         })
-        .collect(Collectors.toList());
+        .toList();
   }
 
   static List<StockSkuItemsModel.StockSkuItem> toStockSkuItems(StockOrdersModel.StockOrder state, StockOrderEntity.StockSkuItemReleased event) {
@@ -101,7 +100,7 @@ class StockOrderEventHandler {
             return stockSkuItem;
           }
         })
-        .collect(Collectors.toList());
+        .toList();
   }
 
   static Timestamp areAllItemsShipped(List<StockSkuItemsModel.StockSkuItem> stockSkuItems) {

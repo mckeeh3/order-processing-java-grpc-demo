@@ -1,7 +1,6 @@
 package io.mystore.shipping.action;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.akkaserverless.javasdk.action.ActionCreationContext;
 import com.google.protobuf.Any;
@@ -54,6 +53,6 @@ public class OrderToShippingAction extends AbstractOrderToShippingAction {
             .setSkuName(orderItem.getSkuName())
             .setQuantity(orderItem.getQuantity())
             .build())
-        .collect(Collectors.toList());
+        .toList();
   }
 }

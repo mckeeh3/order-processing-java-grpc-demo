@@ -3,7 +3,6 @@ package io.mystore.stock.entity;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import com.akkaserverless.javasdk.eventsourcedentity.EventSourcedEntityContext;
@@ -194,7 +193,7 @@ public class StockOrder extends AbstractStockOrder {
             .setSkuName(command.getSkuName())
             .setStockOrderId(command.getStockOrderId())
             .build())
-        .collect(Collectors.toList());
+        .toList();
   }
 
   static List<StockOrderEntity.StockSkuItem> toStockSkuItemsList(StockOrderEntity.StockOrderState state, StockOrderEntity.StockSkuItemJoined event) {
@@ -210,7 +209,7 @@ public class StockOrder extends AbstractStockOrder {
             return stockSkuItem;
           }
         })
-        .collect(Collectors.toList());
+        .toList();
   }
 
   static List<StockOrderEntity.StockSkuItem> toStockSkuItemsList(StockOrderEntity.StockOrderState state, StockOrderEntity.StockSkuItemReleased event) {
@@ -226,7 +225,7 @@ public class StockOrder extends AbstractStockOrder {
             return stockSkuItem;
           }
         })
-        .collect(Collectors.toList());
+        .toList();
   }
 
   static Timestamp areAllItemsShipped(List<StockOrderEntity.StockSkuItem> stockSkuItems) {
@@ -248,7 +247,7 @@ public class StockOrder extends AbstractStockOrder {
             .setOrderSkuItemId(stockSkuItem.getOrderSkuItemId())
             .setShippedUtc(stockSkuItem.getShippedUtc())
             .build())
-        .collect(Collectors.toList());
+        .toList();
   }
 
   static boolean isShipped(Timestamp shippedUtc) {

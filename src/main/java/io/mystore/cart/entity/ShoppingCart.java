@@ -2,7 +2,6 @@ package io.mystore.cart.entity;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import com.akkaserverless.javasdk.eventsourcedentity.EventSourcedEntityContext;
 import com.google.protobuf.Empty;
@@ -293,7 +292,7 @@ public class ShoppingCart extends AbstractShoppingCart {
             .setSkuName(lineItem.getSkuName())
             .setQuantity(lineItem.getQuantity())
             .build())
-        .collect(Collectors.toList());
+        .toList();
   }
 
   static CartEntity.CartState handle(CartEntity.CartState state, CartEntity.ItemAdded event) {
@@ -351,7 +350,7 @@ public class ShoppingCart extends AbstractShoppingCart {
             return lineItem;
           }
         })
-        .collect(Collectors.toList());
+        .toList();
   }
 
   static List<CartEntity.LineItem> changeLineItemQuantity(CartEntity.CartState state, CartEntity.ItemChanged event) {
@@ -365,12 +364,12 @@ public class ShoppingCart extends AbstractShoppingCart {
             return lineItem;
           }
         })
-        .collect(Collectors.toList());
+        .toList();
   }
 
   static List<CartEntity.LineItem> removeLineItem(CartEntity.CartState state, String skuId) {
     return state.getLineItemsList().stream()
         .filter(lineItem -> !lineItem.getSkuId().equals(skuId))
-        .collect(Collectors.toList());
+        .toList();
   }
 }
