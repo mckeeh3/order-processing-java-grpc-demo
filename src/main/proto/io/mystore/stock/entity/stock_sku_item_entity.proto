@@ -23,7 +23,7 @@ message StockSkuItemCreated {
   string stock_order_id = 4;
 }
 
-message JoinedToStockSkuItem {
+message OrderRequestedJoinToStockAccepted {
   string sku_id = 1;
   string stock_sku_item_id = 2;
   string order_id = 3;
@@ -32,7 +32,7 @@ message JoinedToStockSkuItem {
   string stock_order_id = 6;
 }
 
-message JoinToStockSkuItemRejected {
+message OrderRequestedJoinToStockRejected {
   string sku_id = 1;
   string stock_sku_item_id = 2;
   string order_id = 3;
@@ -40,7 +40,22 @@ message JoinToStockSkuItemRejected {
   string stock_order_id = 5;
 }
 
-message ReleasedFromStockSkuItem {
+message StockRequestedJoinToOrder {
+  string sku_id = 1;
+  string stock_sku_item_id = 2;
+  string stock_order_id = 3;
+}
+
+message StockRequestedJoinToOrderAccepted {
+  string sku_id = 1;
+  string stock_sku_item_id = 2;
+  string order_id = 3;
+  string order_sku_item_id = 4;
+  google.protobuf.Timestamp shipped_utc = 5;
+  string stock_order_id = 6;
+}
+
+message StockRequestedJoinToOrderRejected {
   string sku_id = 1;
   string stock_sku_item_id = 2;
   string order_id = 3;

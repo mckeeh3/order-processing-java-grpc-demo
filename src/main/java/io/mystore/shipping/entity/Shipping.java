@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.mystore.TimeTo;
-import io.mystore.shipping.api.OrderSkuItemApi;
 import io.mystore.shipping.api.ShippingApi;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
@@ -294,9 +293,9 @@ public class Shipping extends AbstractShipping {
         .toList();
   }
 
-  static List<OrderSkuItemApi.OrderSkuItem> toApiOrderSkuItems(List<ShippingEntity.OrderSkuItem> orderSkuItems) {
+  static List<ShippingApi.OrderSkuItem> toApiOrderSkuItems(List<ShippingEntity.OrderSkuItem> orderSkuItems) {
     return orderSkuItems.stream()
-        .map(orderSkuItem -> OrderSkuItemApi.OrderSkuItem
+        .map(orderSkuItem -> ShippingApi.OrderSkuItem
             .newBuilder()
             .setCustomerId(orderSkuItem.getCustomerId())
             .setOrderId(orderSkuItem.getOrderId())

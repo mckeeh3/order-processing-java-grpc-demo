@@ -80,3 +80,15 @@ message OrderItem {
   google.protobuf.Timestamp shipped_utc = 4;
   repeated OrderSkuItem order_sku_items = 5;
 }
+
+message OrderSkuItem {
+  string customer_id = 1;
+  string order_id = 2;
+  string order_sku_item_id = 3;
+  string sku_id = 4;
+  string sku_name = 5;
+  string stock_sku_item_id = 6;
+  google.protobuf.Timestamp ordered_utc = 7;
+  google.protobuf.Timestamp shipped_utc = 8;
+  google.protobuf.Timestamp back_ordered_utc = 9;
+}

@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 
 import io.mystore.shipping.api.ShippingApi;
 import io.mystore.shipping.entity.OrderSkuItemEntity;
-import io.mystore.shipping.entity.OrderSkuItemEntity.JoinedToStockSkuItem;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
 //
@@ -23,25 +22,45 @@ public class OrderSkuItemToShippingAction extends AbstractOrderSkuItemToShipping
   }
 
   @Override
-  public Effect<Empty> onJoinedToStockSkuItem(OrderSkuItemEntity.JoinedToStockSkuItem joinedToStockSkuItem) {
-    log.info("onJoinedToStockSkuItem: JoinedToStockSkuItem {}", joinedToStockSkuItem);
+  public Effect<Empty> onStockRequestedJoinToOrderAccepted(OrderSkuItemEntity.StockRequestedJoinToOrderAccepted event) {
+    return effects().forward(components().shipping().shippedOrderSkuItem(
+        ShippingApi.ShippedOrderSkuItemCommand
+            .newBuilder()
+            .setOrderId(event.getOrderId())
+            .setOrderSkuItemId(event.getOrderSkuItemId())
+            .setSkuId(event.getSkuId())
+            .setStockSkuItemId(event.getStockSkuItemId())
+            .setShippedUtc(event.getShippedUtc())
+            .build()));
+  }
 
-    return effects().forward(components().shipping().shippedOrderSkuItem(toShippedOrderSkuItemCommand(joinedToStockSkuItem)));
+  @Override
+  public Effect<Empty> onStockRequestedJoinToOrderRejected(OrderSkuItemEntity.StockRequestedJoinToOrderRejected event) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public Effect<Empty> onOrderRequestedJoinToStockAccepted(OrderSkuItemEntity.OrderRequestedJoinToStockAccepted event) {
+    return effects().forward(components().shipping().shippedOrderSkuItem(
+        ShippingApi.ShippedOrderSkuItemCommand
+            .newBuilder()
+            .setOrderId(event.getOrderId())
+            .setOrderSkuItemId(event.getOrderSkuItemId())
+            .setSkuId(event.getSkuId())
+            .setStockSkuItemId(event.getStockSkuItemId())
+            .setShippedUtc(event.getShippedUtc())
+            .build()));
+  }
+
+  @Override
+  public Effect<Empty> onOrderRequestedJoinToStockRejected(OrderSkuItemEntity.OrderRequestedJoinToStockRejected event) {
+    // TODO Auto-generated method stub
+    return null;
   }
 
   @Override
   public Effect<Empty> ignoreOtherEvents(Any any) {
     return effects().reply(Empty.getDefaultInstance());
-  }
-
-  static ShippingApi.ShippedOrderSkuItemCommand toShippedOrderSkuItemCommand(JoinedToStockSkuItem joinedToStockSkuItem) {
-    return ShippingApi.ShippedOrderSkuItemCommand
-        .newBuilder()
-        .setOrderId(joinedToStockSkuItem.getOrderId())
-        .setOrderSkuItemId(joinedToStockSkuItem.getOrderSkuItemId())
-        .setSkuId(joinedToStockSkuItem.getSkuId())
-        .setStockSkuItemId(joinedToStockSkuItem.getStockSkuItemId())
-        .setShippedUtc(joinedToStockSkuItem.getShippedUtc())
-        .build();
   }
 }

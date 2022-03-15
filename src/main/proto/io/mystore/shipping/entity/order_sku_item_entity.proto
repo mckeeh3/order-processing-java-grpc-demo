@@ -13,12 +13,13 @@ message OrderSkuItemState {
   string sku_id = 4;
   string sku_name = 5;
   string stock_sku_item_id = 6;
-  google.protobuf.Timestamp ordered_utc = 7;
-  google.protobuf.Timestamp shipped_utc = 8;
-  google.protobuf.Timestamp back_ordered_utc = 9;
+  string stock_order_id = 7;
+  google.protobuf.Timestamp ordered_utc = 8;
+  google.protobuf.Timestamp shipped_utc = 9;
+  google.protobuf.Timestamp back_ordered_utc = 10;
 }
 
-message CreatedOrderSkuItem {
+message OrderSkuItemCreated {
   string customer_id = 1;
   string order_id = 2;
   string order_sku_item_id = 3;
@@ -27,19 +28,44 @@ message CreatedOrderSkuItem {
   google.protobuf.Timestamp ordered_utc = 6;
 }
 
-message JoinedToStockSkuItem {
+message StockRequestedJoinToOrderAccepted {
   string order_id = 1;
   string order_sku_item_id = 2;
   string sku_id = 3;
   string stock_sku_item_id = 4;
   google.protobuf.Timestamp shipped_utc = 5;
+  string stock_order_id = 6;
 }
 
-message ReleasedFromOrderSkuItem {
+message StockRequestedJoinToOrderRejected {
   string order_id = 1;
   string order_sku_item_id = 2;
   string sku_id = 3;
   string stock_sku_item_id = 4;
+  string stock_order_id = 5;
+}
+
+message OrderRequestedJoinToStock {
+  string order_id = 1;
+  string order_sku_item_id = 2;
+  string sku_id = 3;
+}
+
+message OrderRequestedJoinToStockAccepted {
+  string order_id = 1;
+  string order_sku_item_id = 2;
+  string sku_id = 3;
+  string stock_sku_item_id = 4;
+  google.protobuf.Timestamp shipped_utc = 5;
+  string stock_order_id = 6;
+}
+
+message OrderRequestedJoinToStockRejected {
+  string order_id = 1;
+  string order_sku_item_id = 2;
+  string sku_id = 3;
+  string stock_sku_item_id = 4;
+  string stock_order_id = 5;
 }
 
 message BackOrderedOrderSkuItem {
@@ -47,10 +73,4 @@ message BackOrderedOrderSkuItem {
   string order_sku_item_id = 2;
   string sku_id = 3;
   google.protobuf.Timestamp back_ordered_utc = 4;
-}
-
-message StockSkuItemRequired {
-  string order_id = 1;
-  string order_sku_item_id = 2;
-  string sku_id = 3;
 }

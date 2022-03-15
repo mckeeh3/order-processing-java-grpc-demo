@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 
 import io.mystore.TimeTo;
 import io.mystore.stock.api.StockOrderApi;
-import io.mystore.stock.api.StockSkuItemApi;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
 //
@@ -235,9 +234,9 @@ public class StockOrder extends AbstractStockOrder {
             : TimeTo.zero();
   }
 
-  static List<StockSkuItemApi.StockSkuItem> toApi(List<StockOrderEntity.StockSkuItem> stockSkuItems) {
+  static List<StockOrderApi.StockSkuItem> toApi(List<StockOrderEntity.StockSkuItem> stockSkuItems) {
     return stockSkuItems.stream()
-        .map(stockSkuItem -> StockSkuItemApi.StockSkuItem
+        .map(stockSkuItem -> StockOrderApi.StockSkuItem
             .newBuilder()
             .setStockOrderId(stockSkuItem.getStockOrderId())
             .setStockSkuItemId(stockSkuItem.getStockSkuItemId())

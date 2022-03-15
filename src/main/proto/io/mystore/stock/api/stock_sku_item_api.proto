@@ -17,37 +17,53 @@ service StockSkuItemService {
       state: "io.mystore.stock.entity.StockSkuItemState"
       events: [
         "io.mystore.stock.entity.StockSkuItemCreated",
-        "io.mystore.stock.entity.JoinedToStockSkuItem",
-        "io.mystore.stock.entity.JoinToStockSkuItemRejected",
-        "io.mystore.stock.entity.ReleasedFromStockSkuItem"  // force line breaks
+        "io.mystore.stock.entity.OrderRequestedJoinToStockAccepted",
+        "io.mystore.stock.entity.OrderRequestedJoinToStockRejected",
+        "io.mystore.stock.entity.StockRequestedJoinToOrder",
+        "io.mystore.stock.entity.StockRequestedJoinToOrderAccepted",
+        "io.mystore.stock.entity.StockRequestedJoinToOrderRejected"  //
       ]
     }
   };
 
   rpc CreateStockSkuItem(CreateStockSkuItemCommand) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      post: "/stock-sku-items/{stock_sku_item_id}/create-stock-sku-item"
+      post: "/stock-sku-items/create-stock-sku-item"
       body: "*"
     };
   }
 
-  rpc JoinStockSkuItem(JoinStockSkuItemCommand) returns (google.protobuf.Empty) {
+  rpc OrderRequestsJoinToStock(OrderRequestsJoinToStockCommand) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      put: "/stock-sku-items/{stock_sku_item_id}/join-to-order-item"
+      put: "/stock-sku-items/order-requests-join-to-stock"
       body: "*"
     };
   }
 
-  rpc ReleaseStockSkuItem(ReleaseStockSkuItemCommand) returns (google.protobuf.Empty) {
+  rpc OrderRequestsJoinToStockRejected(OrderRequestsJoinToStockRejectedCommand) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      put: "/stock-sku-items/{stock_sku_item_id}/release-from-ship-sku-item"
+      put: "/stock-sku-items/order-requests-join-to-stock-rejected"
       body: "*"
     };
   }
 
-  rpc GetStockSkuItem(GetStockSKuItemRequest) returns (StockSkuItem) {
+  rpc StockRequestedJoinToOrderAccepted(StockRequestedJoinToOrderAcceptedCommand) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      get: "/stock-sku_items/{stock_sku_item_id}"
+      put: "/stock-sku-items/stock-requested-join-to-order-accepted"
+      body: "*"
+    };
+  }
+
+  rpc StockRequestedJoinToOrderRejected(StockRequestedJoinToOrderRejectedCommand) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/stock-sku-items/stock-requested-to-join-order-rejected"
+      body: "*"
+    };
+  }
+
+  rpc GetStockSkuItem(GetStockSKuItemRequest) returns (GetStockSKuItemResponse) {
+    option (google.api.http) = {
+      get: "/stock-sku_items"
     };
   }
 }
@@ -59,7 +75,23 @@ message CreateStockSkuItemCommand {
   string stock_order_id = 4;
 }
 
-message JoinStockSkuItemCommand {
+message OrderRequestsJoinToStockCommand {
+  string stock_sku_item_id = 1 [(akkaserverless.field).entity_key = true];
+  string sku_id = 2;
+  string order_id = 3;
+  string order_sku_item_id = 4;
+  string stock_order_id = 5;
+}
+
+message OrderRequestsJoinToStockRejectedCommand {
+  string stock_sku_item_id = 1 [(akkaserverless.field).entity_key = true];
+  string sku_id = 2;
+  string order_id = 3;
+  string order_sku_item_id = 4;
+  string stock_order_id = 5;
+}
+
+message StockRequestedJoinToOrderAcceptedCommand {
   string stock_sku_item_id = 1 [(akkaserverless.field).entity_key = true];
   string sku_id = 2;
   string order_id = 3;
@@ -68,7 +100,7 @@ message JoinStockSkuItemCommand {
   string stock_order_id = 6;
 }
 
-message ReleaseStockSkuItemCommand {
+message StockRequestedJoinToOrderRejectedCommand {
   string stock_sku_item_id = 1 [(akkaserverless.field).entity_key = true];
   string sku_id = 2;
   string order_id = 3;
@@ -80,7 +112,7 @@ message GetStockSKuItemRequest {
   string stock_sku_item_id = 1 [(akkaserverless.field).entity_key = true];
 }
 
-message StockSkuItem {
+message GetStockSKuItemResponse {
   string stock_sku_item_id = 1;
   string sku_id = 2;
   string sku_name = 3;

@@ -22,36 +22,28 @@ public class StockSkuItemsAvailableView extends AbstractStockSkuItemsAvailableVi
   }
 
   @Override
-  public View.UpdateEffect<StockSkuItemsModel.StockSkuItem> onStockSkuItemCreated(
-      StockSkuItemsModel.StockSkuItem state, StockSkuItemEntity.StockSkuItemCreated stockSkuItemCreated) {
-    return effects()
-        .updateState(
-            StockSkuItemEventHandler
-                .fromState(state)
-                .handle(stockSkuItemCreated)
-                .toState());
+  public View.UpdateEffect<StockSkuItemsModel.StockSkuItem> onStockSkuItemCreated(StockSkuItemsModel.StockSkuItem state, StockSkuItemEntity.StockSkuItemCreated event) {
+    return effects().updateState(StockSkuItemEventHandler.handle(state, event));
   }
 
   @Override
-  public View.UpdateEffect<StockSkuItemsModel.StockSkuItem> onJoinedToStockSkuItem(
-      StockSkuItemsModel.StockSkuItem state, StockSkuItemEntity.JoinedToStockSkuItem joinedToStockSkuItem) {
-    return effects()
-        .updateState(
-            StockSkuItemEventHandler
-                .fromState(state)
-                .handle(joinedToStockSkuItem)
-                .toState());
+  public UpdateEffect<StockSkuItemsModel.StockSkuItem> onOrderRequestedJoinToStockAccepted(StockSkuItemsModel.StockSkuItem state, StockSkuItemEntity.OrderRequestedJoinToStockAccepted event) {
+    return effects().updateState(StockSkuItemEventHandler.handle(state, event));
   }
 
   @Override
-  public View.UpdateEffect<StockSkuItemsModel.StockSkuItem> onReleasedFromStockSkuItem(
-      StockSkuItemsModel.StockSkuItem state, StockSkuItemEntity.ReleasedFromStockSkuItem releasedFromStockSkuItem) {
-    return effects()
-        .updateState(
-            StockSkuItemEventHandler
-                .fromState(state)
-                .handle(releasedFromStockSkuItem)
-                .toState());
+  public UpdateEffect<StockSkuItemsModel.StockSkuItem> onOrderRequestedJoinToStockRejected(StockSkuItemsModel.StockSkuItem state, StockSkuItemEntity.OrderRequestedJoinToStockRejected event) {
+    return effects().updateState(StockSkuItemEventHandler.handle(state, event));
+  }
+
+  @Override
+  public UpdateEffect<StockSkuItemsModel.StockSkuItem> onStockRequestedJoinToOrderAccepted(StockSkuItemsModel.StockSkuItem state, StockSkuItemEntity.StockRequestedJoinToOrderAccepted event) {
+    return effects().updateState(StockSkuItemEventHandler.handle(state, event));
+  }
+
+  @Override
+  public UpdateEffect<StockSkuItemsModel.StockSkuItem> onStockRequestedJoinToOrderRejected(StockSkuItemsModel.StockSkuItem state, StockSkuItemEntity.StockRequestedJoinToOrderRejected event) {
+    return effects().updateState(StockSkuItemEventHandler.handle(state, event));
   }
 
   @Override

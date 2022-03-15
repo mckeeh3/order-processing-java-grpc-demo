@@ -2,52 +2,59 @@ package io.mystore.shipping.view;
 
 import io.mystore.TimeTo;
 import io.mystore.shipping.entity.OrderSkuItemEntity;
-import io.mystore.shipping.view.OrderSkuItemModel.OrderSkuItem;
 
 class OrderSkuItemEventHandler {
-  private OrderSkuItemModel.OrderSkuItem state;
 
-  public OrderSkuItemEventHandler(OrderSkuItem state) {
-    this.state = state;
-  }
-
-  static OrderSkuItemEventHandler fromState(OrderSkuItemModel.OrderSkuItem state) {
-    return new OrderSkuItemEventHandler(state);
-  }
-
-  OrderSkuItemModel.OrderSkuItem toState() {
-    return state;
-  }
-
-  OrderSkuItemEventHandler handle(OrderSkuItemEntity.CreatedOrderSkuItem createdOrderSkuItem) {
-    state = state
+  public static OrderSkuItemModel.OrderSkuItem handle(OrderSkuItemModel.OrderSkuItem state, OrderSkuItemEntity.OrderSkuItemCreated event) {
+    return state
         .toBuilder()
-        .setOrderId(createdOrderSkuItem.getOrderId())
-        .setOrderSkuItemId(createdOrderSkuItem.getOrderSkuItemId())
-        .setSkuId(createdOrderSkuItem.getSkuId())
-        .setSkuName(createdOrderSkuItem.getSkuName())
+        .setOrderId(event.getOrderId())
+        .setOrderSkuItemId(event.getOrderSkuItemId())
+        .setSkuId(event.getSkuId())
+        .setSkuName(event.getSkuName())
         .build();
-
-    return this;
   }
 
-  OrderSkuItemEventHandler handle(OrderSkuItemEntity.JoinedToStockSkuItem joinedToStockSkuItem) {
-    state = state
+  public static OrderSkuItemModel.OrderSkuItem handle(OrderSkuItemModel.OrderSkuItem state, OrderSkuItemEntity.StockRequestedJoinToOrderAccepted event) {
+    return state
         .toBuilder()
-        .setStockSkuItemId(joinedToStockSkuItem.getStockSkuItemId())
-        .setShippedUtc(joinedToStockSkuItem.getShippedUtc())
+        .setStockSkuItemId(event.getStockSkuItemId())
+        .setShippedUtc(event.getShippedUtc())
         .setBackOrderedUtc(TimeTo.zero())
         .build();
-
-    return this;
   }
 
-  OrderSkuItemEventHandler handle(OrderSkuItemEntity.BackOrderedOrderSkuItem backOrderedOrderSkuItem) {
-    state = state
+  public static OrderSkuItemModel.OrderSkuItem handle(OrderSkuItemModel.OrderSkuItem state, OrderSkuItemEntity.StockRequestedJoinToOrderRejected event) {
+    return state
         .toBuilder()
-        .setBackOrderedUtc(backOrderedOrderSkuItem.getBackOrderedUtc())
+        .setStockSkuItemId("")
+        .setShippedUtc(TimeTo.zero())
+        .setBackOrderedUtc(TimeTo.zero())
         .build();
+  }
 
-    return this;
+  public static OrderSkuItemModel.OrderSkuItem handle(OrderSkuItemModel.OrderSkuItem state, OrderSkuItemEntity.OrderRequestedJoinToStockAccepted event) {
+    return state
+        .toBuilder()
+        .setStockSkuItemId(event.getStockSkuItemId())
+        .setShippedUtc(event.getShippedUtc())
+        .setBackOrderedUtc(TimeTo.zero())
+        .build();
+  }
+
+  public static OrderSkuItemModel.OrderSkuItem handle(OrderSkuItemModel.OrderSkuItem state, OrderSkuItemEntity.OrderRequestedJoinToStockRejected event) {
+    return state
+        .toBuilder()
+        .setStockSkuItemId("")
+        .setShippedUtc(TimeTo.zero())
+        .setBackOrderedUtc(TimeTo.zero())
+        .build();
+  }
+
+  public static OrderSkuItemModel.OrderSkuItem handle(OrderSkuItemModel.OrderSkuItem state, OrderSkuItemEntity.BackOrderedOrderSkuItem event) {
+    return state
+        .toBuilder()
+        .setBackOrderedUtc(event.getBackOrderedUtc())
+        .build();
   }
 }

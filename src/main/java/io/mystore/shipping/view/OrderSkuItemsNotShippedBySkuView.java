@@ -6,13 +6,14 @@ import com.google.protobuf.Any;
 import io.mystore.shipping.entity.OrderSkuItemEntity;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
+// This is the implementation for the View Service described in your io/mystore/shipping/view/order_sku_items_not_shipped_by_sku_view.proto file.
 //
 // As long as this file exists it will not be overwritten: you can maintain it yourself,
 // or delete it so it is regenerated as needed.
 
-public class OrderSkuItemsByOrderView extends AbstractOrderSkuItemsByOrderView {
+public class OrderSkuItemsNotShippedBySkuView extends AbstractOrderSkuItemsNotShippedBySkuView {
 
-  public OrderSkuItemsByOrderView(ViewContext context) {
+  public OrderSkuItemsNotShippedBySkuView(ViewContext context) {
   }
 
   @Override

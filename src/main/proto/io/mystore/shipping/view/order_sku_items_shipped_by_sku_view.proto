@@ -27,7 +27,7 @@ service OrderSkuItemsShippedBySku {
     };
   }
 
-  rpc OnCreatedOrderSkuItem(entity.CreatedOrderSkuItem) returns (OrderSkuItem) {
+  rpc OnOrderSkuItemCreated(entity.OrderSkuItemCreated) returns (OrderSkuItem) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "order_sku_item"
     };
@@ -37,7 +37,37 @@ service OrderSkuItemsShippedBySku {
     };
   }
 
-  rpc OnJoinedToStockSkuItem(entity.JoinedToStockSkuItem) returns (OrderSkuItem) {
+  rpc OnStockRequestedJoinToOrderAccepted(entity.StockRequestedJoinToOrderAccepted) returns (OrderSkuItem) {
+    option (akkaserverless.method).eventing.in = {
+      event_sourced_entity: "order_sku_item"
+    };
+    option (akkaserverless.method).view.update = {
+      table: "order_sku_items_shipped_by_sku"
+      transform_updates: true
+    };
+  }
+
+  rpc OnStockRequestedJoinToOrderRejected(entity.StockRequestedJoinToOrderRejected) returns (OrderSkuItem) {
+    option (akkaserverless.method).eventing.in = {
+      event_sourced_entity: "order_sku_item"
+    };
+    option (akkaserverless.method).view.update = {
+      table: "order_sku_items_shipped_by_sku"
+      transform_updates: true
+    };
+  }
+
+  rpc OnOrderRequestedJoinToStockAccepted(entity.OrderRequestedJoinToStockAccepted) returns (OrderSkuItem) {
+    option (akkaserverless.method).eventing.in = {
+      event_sourced_entity: "order_sku_item"
+    };
+    option (akkaserverless.method).view.update = {
+      table: "order_sku_items_shipped_by_sku"
+      transform_updates: true
+    };
+  }
+
+  rpc OnOrderRequestedJoinToStockRejected(entity.OrderRequestedJoinToStockRejected) returns (OrderSkuItem) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "order_sku_item"
     };

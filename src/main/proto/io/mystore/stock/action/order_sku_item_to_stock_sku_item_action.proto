@@ -15,13 +15,19 @@ service OrderSkuItemToStockSkuItem {
     action: {}
   };
 
-  rpc OnStockSkuItemRequired(shipping.entity.StockSkuItemRequired) returns (google.protobuf.Empty) {
+  rpc OnOrderRequestedJoinToStockStock(shipping.entity.OrderRequestedJoinToStock) returns (google.protobuf.Empty) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "order_sku_item"
     };
   }
 
-  rpc OnStockSkuItemReleased(shipping.entity.ReleasedFromOrderSkuItem) returns (google.protobuf.Empty) {
+  rpc OnStockRequestedJoinToOrderAccepted(shipping.entity.StockRequestedJoinToOrderAccepted) returns (google.protobuf.Empty) {
+    option (akkaserverless.method).eventing.in = {
+      event_sourced_entity: "order_sku_item"
+    };
+  }
+
+  rpc OnStockRequestedJoinToOrderRejected(shipping.entity.StockRequestedJoinToOrderRejected) returns (google.protobuf.Empty) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "order_sku_item"
     };

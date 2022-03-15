@@ -23,6 +23,7 @@ import io.mystore.shipping.entity.OrderSkuItem;
 import io.mystore.shipping.entity.Shipping;
 import io.mystore.shipping.view.OrderSkuItemsBackOrderedBySkuView;
 import io.mystore.shipping.view.OrderSkuItemsByOrderView;
+import io.mystore.shipping.view.OrderSkuItemsNotShippedBySkuView;
 import io.mystore.shipping.view.OrderSkuItemsShippedBySkuView;
 import io.mystore.shipping.view.ShippingByCustomerByDateView;
 import io.mystore.shipping.view.ShippingByDateView;
@@ -71,6 +72,7 @@ public final class Main {
       OrderSkuItemToStockSkuItemAction::new,
       OrderSkuItemsBackOrderedBySkuView::new,
       OrderSkuItemsByOrderView::new,
+      OrderSkuItemsNotShippedBySkuView::new,
       OrderSkuItemsShippedBySkuView::new,
       OrderToOrderItemAction::new,
       OrderToShippingAction::new,

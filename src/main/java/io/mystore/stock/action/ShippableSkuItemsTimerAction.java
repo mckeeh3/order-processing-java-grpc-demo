@@ -24,7 +24,6 @@ import io.mystore.stock.api.ShippableSkuItemsTimerApi.CreateShippableSkuItemsTim
 import io.mystore.stock.api.StockSkuItemApi;
 import io.mystore.stock.entity.ShippableSkuItemsTimerEntity;
 import io.mystore.stock.entity.StockSkuItemEntity;
-import io.mystore.stock.entity.StockSkuItemEntity.ReleasedFromStockSkuItem;
 import io.mystore.stock.view.StockSkuItemsAvailableModel;
 import io.mystore.stock.view.StockSkuItemsAvailableModel.GetStockSkuItemsAvailableResponse;
 import io.mystore.stock.view.StockSkuItemsModel.StockSkuItem;
@@ -41,24 +40,27 @@ public class ShippableSkuItemsTimerAction extends AbstractShippableSkuItemsTimer
   public ShippableSkuItemsTimerAction(ActionCreationContext creationContext) {
   }
 
-  @Override
-  public Effect<Empty> onBackOrderedOrderSkuItem(OrderSkuItemEntity.BackOrderedOrderSkuItem backOrderedOrderSkuItem) {
-    log.info("onBackOrderedOrderSkuItem: {}", backOrderedOrderSkuItem);
+  // @Override
+  // public Effect<Empty> onBackOrderedOrderSkuItem(OrderSkuItemEntity.BackOrderedOrderSkuItem backOrderedOrderSkuItem) {
+  // log.info("onBackOrderedOrderSkuItem: {}", backOrderedOrderSkuItem);
 
-    return effects().forward(components().shippableSkuItemsTimer().createShippableSkuItemsTimer(toShippableSkuItemsTimer(backOrderedOrderSkuItem)));
-  }
+  // return
+  // effects().forward(components().shippableSkuItemsTimer().createShippableSkuItemsTimer(toShippableSkuItemsTimer(backOrderedOrderSkuItem)));
+  // }
 
-  @Override
-  public Effect<Empty> ignoreOtherOrderSkuItemEvents(Any any) {
-    return effects().reply(Empty.getDefaultInstance());
-  }
+  // @Override
+  // public Effect<Empty> ignoreOtherOrderSkuItemEvents(Any any) {
+  // return effects().reply(Empty.getDefaultInstance());
+  // }
 
-  @Override
-  public Effect<Empty> onReleasedFromStockSkuItem(StockSkuItemEntity.ReleasedFromStockSkuItem releasedFromStockSkuItem) {
-    log.info("onReleasedFromStockSkuItem: {}", releasedFromStockSkuItem);
+  // @Override
+  // public Effect<Empty> onReleasedFromStockSkuItem(StockSkuItemEntity.ReleasedFromStockSkuItem releasedFromStockSkuItem)
+  // {
+  // log.info("onReleasedFromStockSkuItem: {}", releasedFromStockSkuItem);
 
-    return effects().forward(components().shippableSkuItemsTimer().createShippableSkuItemsTimer(toShippableSkuItemsTimer(releasedFromStockSkuItem)));
-  }
+  // return
+  // effects().forward(components().shippableSkuItemsTimer().createShippableSkuItemsTimer(toShippableSkuItemsTimer(releasedFromStockSkuItem)));
+  // }
 
   @Override
   public Effect<Empty> ignoreOtherStockSkuItemEvents(Any any) {
@@ -69,7 +71,8 @@ public class ShippableSkuItemsTimerAction extends AbstractShippableSkuItemsTimer
   public Effect<Empty> onPingShippableSkuItemsTimer(ShippableSkuItemsTimerEntity.ShippableSkuItemsTimerState shippableSkuItemsTimerState) {
     log.info("onPingShippableSkuItemsTimer: {}", shippableSkuItemsTimerState);
 
-    return effects().asyncReply(queryStockSkuItemsAvailable(shippableSkuItemsTimerState.getSkuId()));
+    return null;
+    // return effects().asyncReply(queryStockSkuItemsAvailable(shippableSkuItemsTimerState.getSkuId()));
   }
 
   static ShippableSkuItemsTimerApi.CreateShippableSkuItemsTimerCommand toShippableSkuItemsTimer(BackOrderedOrderSkuItem backOrderedOrderSkuItem) {
@@ -79,64 +82,70 @@ public class ShippableSkuItemsTimerAction extends AbstractShippableSkuItemsTimer
         .build();
   }
 
-  static CreateShippableSkuItemsTimerCommand toShippableSkuItemsTimer(ReleasedFromStockSkuItem releasedFromStockSkuItem) {
-    return ShippableSkuItemsTimerApi.CreateShippableSkuItemsTimerCommand
-        .newBuilder()
-        .setSkuId(releasedFromStockSkuItem.getSkuId())
-        .build();
-  }
+  // static CreateShippableSkuItemsTimerCommand toShippableSkuItemsTimer(ReleasedFromStockSkuItem
+  // releasedFromStockSkuItem) {
+  // return ShippableSkuItemsTimerApi.CreateShippableSkuItemsTimerCommand
+  // .newBuilder()
+  // .setSkuId(releasedFromStockSkuItem.getSkuId())
+  // .build();
+  // }
 
-  private CompletionStage<Empty> queryStockSkuItemsAvailable(String skuId) {
-    return components().stockSkuItemsAvailableView().getStockSkuItemsAvailable(
-        StockSkuItemsAvailableModel.GetStockSkuItemsAvailableRequest
-            .newBuilder()
-            .setSkuId(skuId)
-            .build())
-        .execute()
-        .thenCompose(response -> queryOrderSkuItemsBackOrdered(skuId, response));
-  }
+  // private CompletionStage<Empty> queryStockSkuItemsAvailable(String skuId) {
+  // return components().stockSkuItemsAvailableView().getStockSkuItemsAvailable(
+  // StockSkuItemsAvailableModel.GetStockSkuItemsAvailableRequest
+  // .newBuilder()
+  // .setSkuId(skuId)
+  // .build())
+  // .execute()
+  // .thenCompose(response -> queryOrderSkuItemsBackOrdered(skuId, response));
+  // }
 
-  private CompletionStage<Empty> queryOrderSkuItemsBackOrdered(String skuId, GetStockSkuItemsAvailableResponse stockSkuItemsAvailable) {
-    return components().orderSkuItemsBackOrderedBySkuView().getOrderSkuItemsBackOrderedBySku(
-        GetOrderSkuItemsBackOrderedBySkuRequest
-            .newBuilder()
-            .setSkuId(skuId)
-            .build())
-        .execute()
-        .thenCompose(response -> joinStockSkuItemsToOrderSkuItems(skuId, stockSkuItemsAvailable, response));
-  }
+  // private CompletionStage<Empty> queryOrderSkuItemsBackOrdered(String skuId, GetStockSkuItemsAvailableResponse
+  // stockSkuItemsAvailable) {
+  // return components().orderSkuItemsBackOrderedBySkuView().getOrderSkuItemsBackOrderedBySku(
+  // GetOrderSkuItemsBackOrderedBySkuRequest
+  // .newBuilder()
+  // .setSkuId(skuId)
+  // .build())
+  // .execute()
+  // .thenCompose(response -> joinStockSkuItemsToOrderSkuItems(skuId, stockSkuItemsAvailable, response));
+  // }
 
-  private CompletionStage<Empty> joinStockSkuItemsToOrderSkuItems(
-      String skuId, GetStockSkuItemsAvailableResponse stockSkuItemsAvailable, GetOrderSkuItemsBackOrderedBySkuResponse orderSkuItemsBackOrdered) {
-    var countStockSkuItemsAvailable = stockSkuItemsAvailable.getStockSkuItemsCount();
-    var countOrderSkuItemsBackOrdered = orderSkuItemsBackOrdered.getOrderSkuItemsCount();
+  // private CompletionStage<Empty> joinStockSkuItemsToOrderSkuItems(
+  // String skuId, GetStockSkuItemsAvailableResponse stockSkuItemsAvailable, GetOrderSkuItemsBackOrderedBySkuResponse
+  // orderSkuItemsBackOrdered) {
+  // var countStockSkuItemsAvailable = stockSkuItemsAvailable.getStockSkuItemsCount();
+  // var countOrderSkuItemsBackOrdered = orderSkuItemsBackOrdered.getOrderSkuItemsCount();
 
-    log.info("skuId: {}, stock SKU items available: {}, order SKU items back ordered: {}", skuId, countStockSkuItemsAvailable, countOrderSkuItemsBackOrdered);
+  // log.info("skuId: {}, stock SKU items available: {}, order SKU items back ordered: {}", skuId,
+  // countStockSkuItemsAvailable, countOrderSkuItemsBackOrdered);
 
-    var results = IntStream.range(0, Math.min(countStockSkuItemsAvailable, countOrderSkuItemsBackOrdered))
-        .mapToObj(i -> joinStockSkuItemToOrderSkuItem(stockSkuItemsAvailable.getStockSkuItems(i), orderSkuItemsBackOrdered.getOrderSkuItems(i)))
-        .toList();
+  // var results = IntStream.range(0, Math.min(countStockSkuItemsAvailable, countOrderSkuItemsBackOrdered))
+  // .mapToObj(i -> joinStockSkuItemToOrderSkuItem(stockSkuItemsAvailable.getStockSkuItems(i),
+  // orderSkuItemsBackOrdered.getOrderSkuItems(i)))
+  // .toList();
 
-    return CompletableFuture.allOf(results.toArray(new CompletableFuture[results.size()]))
-        .completeOnTimeout(null, 2, TimeUnit.SECONDS) // todo: make configurable
-        .thenCompose(v -> pingBackOrderTimer(skuId));
-  }
+  // return CompletableFuture.allOf(results.toArray(new CompletableFuture[results.size()]))
+  // .completeOnTimeout(null, 2, TimeUnit.SECONDS) // todo: make configurable
+  // .thenCompose(v -> pingBackOrderTimer(skuId));
+  // }
 
-  private CompletionStage<Empty> joinStockSkuItemToOrderSkuItem(StockSkuItem stockSkuItem, OrderSkuItem orderSkuItem) {
-    log.info("join stockSkuItem: {}\nto back ordered orderSkuItem: {}", stockSkuItem, orderSkuItem);
+  // // private CompletionStage<Empty> joinStockSkuItemToOrderSkuItem(StockSkuItem stockSkuItem, OrderSkuItem
+  // orderSkuItem) {
+  // log.info("join stockSkuItem: {}\nto back ordered orderSkuItem: {}", stockSkuItem, orderSkuItem);
 
-    return components().stockSkuItem().joinStockSkuItem(
-        StockSkuItemApi.JoinStockSkuItemCommand
-            .newBuilder()
-            .setStockSkuItemId(stockSkuItem.getStockSkuItemId())
-            .setSkuId(stockSkuItem.getSkuId())
-            .setOrderId(orderSkuItem.getOrderId())
-            .setOrderSkuItemId(orderSkuItem.getOrderSkuItemId())
-            .setShippedUtc(TimeTo.now())
-            .setStockOrderId(stockSkuItem.getStockOrderId())
-            .build())
-        .execute();
-  }
+  // return components().stockSkuItem().joinStockSkuItem(
+  // StockSkuItemApi.JoinStockSkuItemCommand
+  // .newBuilder()
+  // .setStockSkuItemId(stockSkuItem.getStockSkuItemId())
+  // .setSkuId(stockSkuItem.getSkuId())
+  // .setOrderId(orderSkuItem.getOrderId())
+  // .setOrderSkuItemId(orderSkuItem.getOrderSkuItemId())
+  // .setShippedUtc(TimeTo.now())
+  // .setStockOrderId(stockSkuItem.getStockOrderId())
+  // .build())
+  // .execute();
+  // }
 
   private CompletionStage<Empty> pingBackOrderTimer(String skuId) {
     return components().shippableSkuItemsTimer().pingShippableSkuItemsTimer(

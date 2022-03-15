@@ -35,12 +35,22 @@ public class OrderSkuItem extends AbstractOrderSkuItem {
   }
 
   @Override
-  public Effect<Empty> joinToStockSkuItem(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemApi.JoinToStockSkuItemCommand command) {
+  public Effect<Empty> stockRequestsJoinToOrder(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemApi.StockRequestsJoinToOrderCommand command) {
     return handle(state, command);
   }
 
   @Override
-  public Effect<Empty> joinToStockSkuItemRejected(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemApi.JoinToStockSkuItemRejectedCommand command) {
+  public Effect<Empty> stockRequestsJoinToOrderRejected(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemApi.StockRequestsJoinToOrderRejectedCommand command) {
+    return handle(state, command);
+  }
+
+  @Override
+  public Effect<Empty> orderRequestedJoinToStockAccepted(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemApi.OrderRequestedJoinToStockAcceptedCommand command) {
+    return handle(state, command);
+  }
+
+  @Override
+  public Effect<Empty> orderRequestedJoinToStockRejected(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemApi.OrderRequestedJoinToStockRejectedCommand command) {
     return handle(state, command);
   }
 
@@ -50,36 +60,46 @@ public class OrderSkuItem extends AbstractOrderSkuItem {
   }
 
   @Override
-  public Effect<OrderSkuItemApi.OrderSkuItem> getOrderSkuItem(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemApi.GetOrderSkuItemRequest request) {
+  public Effect<OrderSkuItemApi.GetOrderSkuItemResponse> getOrderSkuItem(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemApi.GetOrderSkuItemRequest request) {
     return reject(state, request).orElseGet(() -> handle(state, request));
   }
 
   @Override
-  public OrderSkuItemEntity.OrderSkuItemState createdOrderSkuItem(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.CreatedOrderSkuItem event) {
-    return updateState(state, event);
+  public OrderSkuItemEntity.OrderSkuItemState orderSkuItemCreated(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.OrderSkuItemCreated event) {
+    return handle(state, event);
   }
 
   @Override
-  public OrderSkuItemEntity.OrderSkuItemState stockSkuItemRequired(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.StockSkuItemRequired event) {
-    return updateState(state, event);
+  public OrderSkuItemEntity.OrderSkuItemState stockRequestedJoinToOrderAccepted(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.StockRequestedJoinToOrderAccepted event) {
+    return handle(state, event);
   }
 
   @Override
-  public OrderSkuItemEntity.OrderSkuItemState joinedToStockSkuItem(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.JoinedToStockSkuItem event) {
-    return updateState(state, event);
+  public OrderSkuItemEntity.OrderSkuItemState stockRequestedJoinToOrderRejected(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.StockRequestedJoinToOrderRejected event) {
+    return handle(state, event);
   }
 
   @Override
-  public OrderSkuItemEntity.OrderSkuItemState releasedFromOrderSkuItem(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.ReleasedFromOrderSkuItem event) {
-    return updateState(state, event);
+  public OrderSkuItemEntity.OrderSkuItemState orderRequestedJoinToStock(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.OrderRequestedJoinToStock event) {
+    return handle(state, event);
+  }
+
+  @Override
+  public OrderSkuItemEntity.OrderSkuItemState orderRequestedJoinToStockAccepted(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.OrderRequestedJoinToStockAccepted event) {
+    return handle(state, event);
+  }
+
+  @Override
+  public OrderSkuItemEntity.OrderSkuItemState orderRequestedJoinToStockRejected(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.OrderRequestedJoinToStockRejected event) {
+    return handle(state, event);
   }
 
   @Override
   public OrderSkuItemEntity.OrderSkuItemState backOrderedOrderSkuItem(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.BackOrderedOrderSkuItem event) {
-    return updateState(state, event);
+    return handle(state, event);
   }
 
-  private Optional<Effect<OrderSkuItemApi.OrderSkuItem>> reject(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemApi.GetOrderSkuItemRequest request) {
+  private Optional<Effect<OrderSkuItemApi.GetOrderSkuItemResponse>> reject(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemApi.GetOrderSkuItemRequest request) {
     if (state.getOrderSkuItemId().isEmpty()) {
       return Optional.of(effects().error(String.format("Order SKU item for order-sku-item-id '%s' does not exist", request.getOrderSkuItemId())));
     }
@@ -94,28 +114,48 @@ public class OrderSkuItem extends AbstractOrderSkuItem {
         .thenReply(newState -> Empty.getDefaultInstance());
   }
 
-  private Effect<Empty> handle(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemApi.JoinToStockSkuItemCommand command) {
-    log.info("state: {}\nJoinToStockSkuItemCommand: {}", state, command);
+  private Effect<Empty> handle(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemApi.StockRequestsJoinToOrderCommand command) {
+    log.info("state: {}\nStockRequestsJoinToOrderCommand: {}", state, command);
+
+    if (state.getStockSkuItemId().equals(command.getStockSkuItemId())) {
+      return effects().reply(Empty.getDefaultInstance()); // already joined - idempotent
+    } else {
+      return effects()
+          .emitEvent(eventFor(state, command))
+          .thenReply(newState -> Empty.getDefaultInstance());
+    }
+  }
+
+  private Effect<Empty> handle(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemApi.StockRequestsJoinToOrderRejectedCommand command) {
+    log.info("state: {}\nStockRequestsJoinToOrderRejectedCommand: {}", state, command);
+
+    return effects()
+        .emitEvent(eventFor(state, command))
+        .thenReply(newState -> Empty.getDefaultInstance());
+  }
+
+  private Effect<Empty> handle(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemApi.OrderRequestedJoinToStockAcceptedCommand command) {
+    log.info("state: {}\nOrderRequestedJoinToStockAcceptedCommand: {}", state, command);
+
+    if (state.getStockSkuItemId().equals(command.getStockSkuItemId())) {
+      return effects().reply(Empty.getDefaultInstance()); // already joined - idempotent
+    } else {
+      return effects()
+          .emitEvents(eventsFor(state, command))
+          .thenReply(newState -> Empty.getDefaultInstance());
+    }
+  }
+
+  private Effect<Empty> handle(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemApi.OrderRequestedJoinToStockRejectedCommand command) {
+    log.info("state: {}\nOrderRequestedJoinToStockRejectedCommand: {}", state, command);
 
     if (state.getStockSkuItemId().isEmpty()) {
       return effects()
           .emitEvent(eventFor(state, command))
           .thenReply(newState -> Empty.getDefaultInstance());
-    } else if (state.getStockSkuItemId().equals(command.getStockSkuItemId())) {
-      return effects().reply(Empty.getDefaultInstance()); // idempotent
     } else {
-      return effects() // stock-sku-item already added to order-sku-item - tell stock-sku-item to release the from order-sku-item
-          .emitEvent(eventForReleaseSkuItem(state, command))
-          .thenReply(newState -> Empty.getDefaultInstance());
+      return effects().reply(Empty.getDefaultInstance()); // already joined - ignore
     }
-  }
-
-  private Effect<Empty> handle(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemApi.JoinToStockSkuItemRejectedCommand command) {
-    log.info("state: {}\nJoinToStockSkuItemRejectedCommand: {}", state, command);
-
-    return effects()
-        .emitEvent(eventFor(state, command))
-        .thenReply(newState -> Empty.getDefaultInstance());
   }
 
   private Effect<Empty> handle(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemApi.BackOrderOrderSkuItemCommand command) {
@@ -130,9 +170,115 @@ public class OrderSkuItem extends AbstractOrderSkuItem {
     }
   }
 
-  private Effect<OrderSkuItemApi.OrderSkuItem> handle(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemApi.GetOrderSkuItemRequest request) {
+  static List<?> eventsFor(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemApi.CreateOrderSkuItemCommand command) {
+    var orderSkuItemCreated = OrderSkuItemEntity.OrderSkuItemCreated
+        .newBuilder()
+        .setOrderSkuItemId(command.getOrderSkuItemId())
+        .setCustomerId(command.getCustomerId())
+        .setOrderId(command.getOrderId())
+        .setSkuId(command.getSkuId())
+        .setSkuName(command.getSkuName())
+        .setOrderedUtc(command.getOrderedUtc())
+        .build();
+
+    var stockSkuItemRequired = OrderSkuItemEntity.OrderRequestedJoinToStock
+        .newBuilder()
+        .setOrderSkuItemId(command.getOrderSkuItemId())
+        .setOrderId(command.getOrderId())
+        .setSkuId(command.getSkuId())
+        .build();
+
+    return List.of(orderSkuItemCreated, stockSkuItemRequired);
+  }
+
+  static Object eventFor(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemApi.StockRequestsJoinToOrderCommand command) {
+    if (!state.getStockSkuItemId().isEmpty() && !state.getStockSkuItemId().equals(command.getStockSkuItemId())) {
+      return OrderSkuItemEntity.StockRequestedJoinToOrderRejected
+          .newBuilder()
+          .setOrderId(command.getOrderId())
+          .setOrderSkuItemId(command.getOrderSkuItemId())
+          .setSkuId(command.getSkuId())
+          .setStockSkuItemId(command.getStockSkuItemId())
+          .setStockOrderId(command.getStockOrderId())
+          .build();
+    } else {
+      return OrderSkuItemEntity.StockRequestedJoinToOrderAccepted
+          .newBuilder()
+          .setOrderId(command.getOrderId())
+          .setOrderSkuItemId(command.getOrderSkuItemId())
+          .setSkuId(command.getSkuId())
+          .setStockSkuItemId(command.getStockSkuItemId())
+          .setShippedUtc(TimeTo.now())
+          .setStockOrderId(command.getStockOrderId())
+          .build();
+    }
+  }
+
+  private OrderSkuItemEntity.StockRequestedJoinToOrderRejected eventFor(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemApi.StockRequestsJoinToOrderRejectedCommand command) {
+    return OrderSkuItemEntity.StockRequestedJoinToOrderRejected
+        .newBuilder()
+        .setSkuId(command.getSkuId())
+        .setStockSkuItemId(command.getStockSkuItemId())
+        .setOrderId(command.getOrderId())
+        .setOrderSkuItemId(command.getOrderSkuItemId())
+        .setStockOrderId(command.getStockOrderId())
+        .build();
+  }
+
+  static List<?> eventsFor(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemApi.OrderRequestedJoinToStockAcceptedCommand command) {
+    if (state.getStockSkuItemId().isEmpty()) {
+      return List.of(OrderSkuItemEntity.OrderRequestedJoinToStockAccepted
+          .newBuilder()
+          .setOrderId(command.getOrderId())
+          .setOrderSkuItemId(command.getOrderSkuItemId())
+          .setSkuId(command.getSkuId())
+          .setStockSkuItemId(command.getStockSkuItemId())
+          .setShippedUtc(command.getShippedUtc())
+          .setStockOrderId(command.getStockOrderId())
+          .build());
+    } else {
+      var orderRequestedJoinToStock = OrderSkuItemEntity.OrderRequestedJoinToStock
+          .newBuilder()
+          .setOrderId(command.getOrderId())
+          .setOrderSkuItemId(command.getOrderSkuItemId())
+          .setSkuId(command.getSkuId())
+          .build();
+
+      var orderRequestedJoinToStockRejected = OrderSkuItemEntity.OrderRequestedJoinToStockRejected
+          .newBuilder()
+          .setOrderId(command.getOrderId())
+          .setOrderSkuItemId(command.getOrderSkuItemId())
+          .setSkuId(command.getSkuId())
+          .setStockSkuItemId(command.getStockSkuItemId())
+          .setStockOrderId(command.getStockOrderId())
+          .build();
+
+      return List.of(orderRequestedJoinToStock, orderRequestedJoinToStockRejected);
+    }
+  }
+
+  static OrderSkuItemEntity.OrderRequestedJoinToStock eventFor(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemApi.OrderRequestedJoinToStockRejectedCommand command) {
+    return OrderSkuItemEntity.OrderRequestedJoinToStock
+        .newBuilder()
+        .setOrderId(command.getOrderId())
+        .setOrderSkuItemId(command.getOrderSkuItemId())
+        .setSkuId(command.getSkuId())
+        .build();
+  }
+
+  static OrderSkuItemEntity.BackOrderedOrderSkuItem eventFor(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemApi.BackOrderOrderSkuItemCommand command) {
+    return OrderSkuItemEntity.BackOrderedOrderSkuItem
+        .newBuilder()
+        .setOrderId(command.getOrderId())
+        .setOrderSkuItemId(command.getOrderSkuItemId())
+        .setSkuId(command.getSkuId())
+        .setBackOrderedUtc(TimeTo.now())
+        .build();
+  }
+
+  private Effect<OrderSkuItemApi.GetOrderSkuItemResponse> handle(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemApi.GetOrderSkuItemRequest request) {
     return effects().reply(
-        OrderSkuItemApi.OrderSkuItem
+        OrderSkuItemApi.GetOrderSkuItemResponse
             .newBuilder()
             .setCustomerId(state.getCustomerId())
             .setOrderId(state.getOrderId())
@@ -146,100 +292,64 @@ public class OrderSkuItem extends AbstractOrderSkuItem {
             .build());
   }
 
-  static OrderSkuItemEntity.OrderSkuItemState updateState(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.CreatedOrderSkuItem event) {
-    return state
-        .toBuilder()
-        .setOrderSkuItemId(event.getOrderSkuItemId())
+  static OrderSkuItemEntity.OrderSkuItemState handle(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.OrderSkuItemCreated event) {
+    return state.toBuilder()
         .setCustomerId(event.getCustomerId())
         .setOrderId(event.getOrderId())
+        .setOrderSkuItemId(event.getOrderSkuItemId())
         .setSkuId(event.getSkuId())
         .setSkuName(event.getSkuName())
         .setOrderedUtc(event.getOrderedUtc())
         .build();
   }
 
-  static OrderSkuItemEntity.OrderSkuItemState updateState(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.StockSkuItemRequired event) {
-    return state; // non-state changing event, this event notifies stock-sku-item to attempt to join to this order-sku-item
-  }
-
-  static OrderSkuItemEntity.OrderSkuItemState updateState(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.JoinedToStockSkuItem event) {
-    return state
-        .toBuilder()
+  static OrderSkuItemEntity.OrderSkuItemState handle(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.StockRequestedJoinToOrderAccepted event) {
+    return state.toBuilder()
         .setStockSkuItemId(event.getStockSkuItemId())
+        .setStockOrderId(event.getStockOrderId())
         .setShippedUtc(event.getShippedUtc())
-        .setBackOrderedUtc(TimeTo.zero())
         .build();
   }
 
-  static OrderSkuItemEntity.OrderSkuItemState updateState(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.ReleasedFromOrderSkuItem event) {
-    return state; // no state change, this event notifies stock-sku-item to release the sku-item
+  static OrderSkuItemEntity.OrderSkuItemState handle(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.StockRequestedJoinToOrderRejected event) {
+    if (state.getStockSkuItemId().equals(event.getStockSkuItemId())) {
+      return state.toBuilder()
+          .setStockSkuItemId("")
+          .setStockOrderId("")
+          .setShippedUtc(TimeTo.zero())
+          .build();
+    } else {
+      return state;
+    }
   }
 
-  static OrderSkuItemEntity.OrderSkuItemState updateState(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.BackOrderedOrderSkuItem event) {
-    return state
-        .toBuilder()
+  static OrderSkuItemEntity.OrderSkuItemState handle(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.OrderRequestedJoinToStock event) {
+    return state;
+  }
+
+  static OrderSkuItemEntity.OrderSkuItemState handle(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.OrderRequestedJoinToStockAccepted event) {
+    return state.toBuilder()
+        .setStockSkuItemId(event.getStockSkuItemId())
+        .setStockOrderId(event.getStockOrderId())
+        .setShippedUtc(event.getShippedUtc())
+        .build();
+  }
+
+  static OrderSkuItemEntity.OrderSkuItemState handle(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.OrderRequestedJoinToStockRejected event) {
+    if (state.getStockSkuItemId().equals(event.getStockSkuItemId())) {
+      return state.toBuilder()
+          .setStockSkuItemId("")
+          .setStockOrderId("")
+          .setShippedUtc(TimeTo.zero())
+          .build();
+    } else {
+      return state;
+    }
+  }
+
+  private OrderSkuItemEntity.OrderSkuItemState handle(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.BackOrderedOrderSkuItem event) {
+    return state.toBuilder()
         .setBackOrderedUtc(event.getBackOrderedUtc())
-        .build();
-  }
-
-  static List<?> eventsFor(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemApi.CreateOrderSkuItemCommand command) {
-    var orderSkuItemCreated = OrderSkuItemEntity.CreatedOrderSkuItem
-        .newBuilder()
-        .setOrderSkuItemId(command.getOrderSkuItemId())
-        .setCustomerId(command.getCustomerId())
-        .setOrderId(command.getOrderId())
-        .setSkuId(command.getSkuId())
-        .setSkuName(command.getSkuName())
-        .setOrderedUtc(command.getOrderedUtc())
-        .build();
-
-    var stockSkuItemRequired = OrderSkuItemEntity.StockSkuItemRequired
-        .newBuilder()
-        .setOrderSkuItemId(command.getOrderSkuItemId())
-        .setOrderId(command.getOrderId())
-        .setSkuId(command.getSkuId())
-        .build();
-
-    return List.of(orderSkuItemCreated, stockSkuItemRequired);
-  }
-
-  static OrderSkuItemEntity.JoinedToStockSkuItem eventFor(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemApi.JoinToStockSkuItemCommand command) {
-    return OrderSkuItemEntity.JoinedToStockSkuItem
-        .newBuilder()
-        .setOrderId(state.getOrderId())
-        .setOrderSkuItemId(state.getOrderSkuItemId())
-        .setSkuId(state.getSkuId())
-        .setStockSkuItemId(command.getStockSkuItemId())
-        .setShippedUtc(command.getShippedUtc())
-        .build();
-  }
-
-  private OrderSkuItemEntity.StockSkuItemRequired eventFor(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemApi.JoinToStockSkuItemRejectedCommand command) {
-    return OrderSkuItemEntity.StockSkuItemRequired
-        .newBuilder()
-        .setOrderSkuItemId(command.getOrderSkuItemId())
-        .setOrderId(command.getOrderId())
-        .setSkuId(command.getSkuId())
-        .build();
-  }
-
-  static OrderSkuItemEntity.BackOrderedOrderSkuItem eventFor(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemApi.BackOrderOrderSkuItemCommand command) {
-    return OrderSkuItemEntity.BackOrderedOrderSkuItem
-        .newBuilder()
-        .setOrderId(state.getOrderId())
-        .setOrderSkuItemId(state.getOrderSkuItemId())
-        .setSkuId(state.getSkuId())
-        .setBackOrderedUtc(TimeTo.now())
-        .build();
-  }
-
-  static OrderSkuItemEntity.ReleasedFromOrderSkuItem eventForReleaseSkuItem(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemApi.JoinToStockSkuItemCommand command) {
-    return OrderSkuItemEntity.ReleasedFromOrderSkuItem
-        .newBuilder()
-        .setOrderId(state.getOrderId())
-        .setOrderSkuItemId(state.getOrderSkuItemId())
-        .setSkuId(state.getSkuId())
-        .setStockSkuItemId(command.getStockSkuItemId())
         .build();
   }
 }
