@@ -26,10 +26,19 @@ message OrderShipped {
   google.protobuf.Timestamp shipped_utc = 2;
 }
 
+message OrderReleased {
+  string order_id = 1;
+}
+
 message OrderItemShipped {
   string order_id = 1;
   string sku_id = 2;
   google.protobuf.Timestamp shipped_utc = 3;
+}
+
+message OrderItemReleased {
+  string order_id = 1;
+  string sku_id = 2;
 }
 
 message OrderSkuItemShipped {
@@ -38,6 +47,13 @@ message OrderSkuItemShipped {
   string sku_id = 3;
   string stock_sku_item_id = 4;
   google.protobuf.Timestamp shipped_utc = 5;
+}
+
+message OrderSkuItemReleased {
+  string order_id = 1;
+  string order_sku_item_id = 2;
+  string sku_id = 3;
+  string stock_sku_item_id = 4;
 }
 
 message OrderItem {

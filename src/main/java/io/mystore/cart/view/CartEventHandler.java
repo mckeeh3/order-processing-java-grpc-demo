@@ -1,38 +1,45 @@
 package io.mystore.cart.view;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.List;
 
 import io.mystore.cart.entity.CartEntity;
+import io.mystore.cart.entity.CartEntity.ItemAdded;
+import io.mystore.cart.view.CartModel.Cart;
+import io.mystore.cart.view.CartModel.LineItem;
 
 public class CartEventHandler {
-  CartModel.Cart state;
-  final Map<String, CartModel.LineItem> items = new LinkedHashMap<>();
 
-  private CartEventHandler(CartModel.Cart state) {
-    this.state = state;
-    state.getLineItemsList().forEach(lineItem -> items.put(lineItem.getSkuId(), lineItem));
+  static CartModel.Cart handle(CartModel.Cart state, CartEntity.ItemAdded event) {
+    var exists = state.getLineItemsList().stream()
+        .anyMatch(lineItem -> lineItem.getSkuId().equals(event.getLineItem().getSkuId()));
+
+    if (!exists) {
+      return state.toBuilder()
+          .setCartId(event.getCartId())
+          .setCustomerId(event.getCustomerId())
+          .clearLineItems()
+          .addLineItems(toLineItem(event.getLineItem()))
+          .build();
+    } else {
+      return state.toBuilder()
+          .setCartId(event.getCartId())
+          .setCustomerId(event.getCustomerId())
+          .clearLineItems()
+          .addAllLineItems(incrementQuantity(state, event))
+          .build();
+    }
   }
 
-  static CartEventHandler fromState(CartModel.Cart state) {
-    return new CartEventHandler(state);
-  }
-
-  CartModel.Cart toState() {
-    return state;
-  }
-
-  CartEventHandler handle(CartEntity.ItemAdded event) {
-    items.computeIfPresent(event.getLineItem().getSkuId(), (skuId, lineItem) -> incrementQuantity(event, lineItem));
-    items.computeIfAbsent(event.getLineItem().getSkuId(), skuId -> toLineItem(event.getLineItem()));
-
-    state = state.toBuilder()
-        .setCartId(event.getCartId())
-        .setCustomerId(event.getCustomerId())
-        .clearLineItems()
-        .addAllLineItems(items.values())
-        .build();
-    return this;
+  static List<LineItem> incrementQuantity(Cart state, ItemAdded event) {
+    return state.getLineItemsList().stream()
+        .map(lineItem -> {
+          if (lineItem.getSkuId().equals(event.getLineItem().getSkuId())) {
+            return incrementQuantity(event, lineItem);
+          } else {
+            return lineItem;
+          }
+        })
+        .toList();
   }
 
   static CartModel.LineItem incrementQuantity(CartEntity.ItemAdded event, CartModel.LineItem lineItem) {
@@ -51,44 +58,52 @@ public class CartEventHandler {
         .build();
   }
 
-  CartEventHandler handle(CartEntity.ItemChanged event) {
-    items.computeIfPresent(event.getSkuId(), (skuId, lineItem) -> changeQuantity(event, lineItem));
-
-    state = state.toBuilder()
+  static CartModel.Cart handle(CartModel.Cart state, CartEntity.ItemChanged event) {
+    return state.toBuilder()
         .clearLineItems()
-        .addAllLineItems(items.values())
+        .addAllLineItems(changeQuantity(state, event))
         .build();
-    return this;
   }
 
-  CartModel.LineItem changeQuantity(CartEntity.ItemChanged event, CartModel.LineItem lineItem) {
+  static List<CartModel.LineItem> changeQuantity(CartModel.Cart state, CartEntity.ItemChanged event) {
+    return state.getLineItemsList().stream()
+        .map(lineItem -> {
+          if (lineItem.getSkuId().equals(event.getSkuId())) {
+            return changeQuantity(event, lineItem);
+          } else {
+            return lineItem;
+          }
+        })
+        .toList();
+  }
+
+  static CartModel.LineItem changeQuantity(CartEntity.ItemChanged event, CartModel.LineItem lineItem) {
     return lineItem
         .toBuilder()
         .setQuantity(event.getQuantity())
         .build();
   }
 
-  CartEventHandler handle(CartEntity.ItemRemoved event) {
-    items.remove(event.getSkuId());
+  static CartModel.Cart handle(CartModel.Cart state, CartEntity.ItemRemoved event) {
+    var lineItems = state.getLineItemsList().stream()
+        .filter(lineItem -> !lineItem.getSkuId().equals(event.getSkuId()))
+        .toList();
 
-    state = state.toBuilder()
+    return state.toBuilder()
         .clearLineItems()
-        .addAllLineItems(items.values())
+        .addAllLineItems(lineItems)
         .build();
-    return this;
   }
 
-  CartEventHandler handle(CartEntity.CartCheckedOut event) {
-    state = state.toBuilder()
+  static CartModel.Cart handle(CartModel.Cart state, CartEntity.CartCheckedOut event) {
+    return state.toBuilder()
         .setCheckedOutUtc(event.getCartState().getCheckedOutUtc())
         .build();
-    return this;
   }
 
-  CartEventHandler handle(CartEntity.CartDeleted event) {
-    state = state.toBuilder()
+  static CartModel.Cart handle(CartModel.Cart state, CartEntity.CartDeleted event) {
+    return state.toBuilder()
         .setDeletedUtc(event.getDeletedUtc())
         .build();
-    return this;
   }
 }

@@ -21,39 +21,23 @@ public class ShippingByDateView extends AbstractShippingByDateView {
   }
 
   @Override
-  public View.UpdateEffect<ShippingModel.Shipping> onOrderCreated(ShippingModel.Shipping state, ShippingEntity.OrderCreated orderCreated) {
-    return effects().updateState(
-        ShippingEventHandler
-            .fromState(state)
-            .handle(orderCreated)
-            .toState());
+  public View.UpdateEffect<ShippingModel.Shipping> onOrderCreated(ShippingModel.Shipping state, ShippingEntity.OrderCreated event) {
+    return effects().updateState(ShippingEventHandler.handle(state, event));
   }
 
   @Override
-  public View.UpdateEffect<ShippingModel.Shipping> onOrderShipped(ShippingModel.Shipping state, ShippingEntity.OrderShipped orderShipped) {
-    return effects().updateState(
-        ShippingEventHandler
-            .fromState(state)
-            .handle(orderShipped)
-            .toState());
+  public View.UpdateEffect<ShippingModel.Shipping> onOrderShipped(ShippingModel.Shipping state, ShippingEntity.OrderShipped event) {
+    return effects().updateState(ShippingEventHandler.handle(state, event));
   }
 
   @Override
-  public View.UpdateEffect<ShippingModel.Shipping> onOrderItemShipped(ShippingModel.Shipping state, ShippingEntity.OrderItemShipped orderItemShipped) {
-    return effects().updateState(
-        ShippingEventHandler
-            .fromState(state)
-            .handle(orderItemShipped)
-            .toState());
+  public View.UpdateEffect<ShippingModel.Shipping> onOrderItemShipped(ShippingModel.Shipping state, ShippingEntity.OrderItemShipped event) {
+    return effects().updateState(ShippingEventHandler.handle(state, event));
   }
 
   @Override
-  public View.UpdateEffect<ShippingModel.Shipping> onOrderSkuItemShipped(ShippingModel.Shipping state, ShippingEntity.OrderSkuItemShipped orderSkuItemShipped) {
-    return effects().updateState(
-        ShippingEventHandler
-            .fromState(state)
-            .handle(orderSkuItemShipped)
-            .toState());
+  public View.UpdateEffect<ShippingModel.Shipping> onOrderSkuItemShipped(ShippingModel.Shipping state, ShippingEntity.OrderSkuItemShipped event) {
+    return effects().updateState(ShippingEventHandler.handle(state, event));
   }
 
   @Override

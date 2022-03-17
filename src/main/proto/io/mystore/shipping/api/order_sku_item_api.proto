@@ -115,6 +115,7 @@ message OrderRequestedJoinToStockRejectedCommand {
   string order_id = 2;
   string sku_id = 3;
   string stock_sku_item_id = 4;
+  string stock_order_id = 5;
 }
 
 message BackOrderOrderSkuItemCommand {

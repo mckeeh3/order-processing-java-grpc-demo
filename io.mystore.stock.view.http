@@ -1,6 +1,6 @@
 
-@urlPrefix = https://small-frog-9412.us-east1.akkaserverless.app
-@skuId = sku-1
+@urlPrefix = https://spring-frog-8357.us-east1.akkaserverless.app
+@skuId = sku-4
 
 ### io.mystore.stock.view.StockOrdersAvailable.GetStockOrdersAvailable
 

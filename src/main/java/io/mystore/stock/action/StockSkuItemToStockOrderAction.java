@@ -25,21 +25,22 @@ public class StockSkuItemToStockOrderAction extends AbstractStockSkuItemToStockO
   public Effect<Empty> onOrderRequestedJoinToStockAccepted(StockSkuItemEntity.OrderRequestedJoinToStockAccepted event) {
     log.info("onOrderRequestedJoinToStockAccepted: {}", event);
 
-    return effects().forward(components().stockOrder().joinStockSkuItem(toStockOrder(event)));
+    return effects().forward(components().stockOrder().shippedStockSkuItem(toStockOrder(event)));
   }
 
   @Override
   public Effect<Empty> onOrderRequestedJoinToStockRejected(StockSkuItemEntity.OrderRequestedJoinToStockRejected event) {
     log.info("onOrderRequestedJoinToStockRejected: {}", event);
 
-    return effects().forward(components().stockOrder().releaseStockSkuItem(toStockOrder(event)));
+    // return effects().forward(components().stockOrder().releaseStockSkuItem(toStockOrder(event)));
+    return effects().reply(Empty.getDefaultInstance()); // TODO remove this event handler
   }
 
   @Override
   public Effect<Empty> onStockRequestedJoinToOrderAccepted(StockSkuItemEntity.StockRequestedJoinToOrderAccepted event) {
     log.info("onStockRequestedJoinToOrderAccepted: {}", event);
 
-    return effects().forward(components().stockOrder().joinStockSkuItem(toStockOrder(event)));
+    return effects().forward(components().stockOrder().shippedStockSkuItem(toStockOrder(event)));
   }
 
   @Override
@@ -54,8 +55,8 @@ public class StockSkuItemToStockOrderAction extends AbstractStockSkuItemToStockO
     return effects().reply(Empty.getDefaultInstance());
   }
 
-  static StockOrderApi.JoinStockSkuItemToStockOrderCommand toStockOrder(StockSkuItemEntity.OrderRequestedJoinToStockAccepted event) {
-    return StockOrderApi.JoinStockSkuItemToStockOrderCommand
+  static StockOrderApi.ShippedStockSkuItemToStockOrderCommand toStockOrder(StockSkuItemEntity.OrderRequestedJoinToStockAccepted event) {
+    return StockOrderApi.ShippedStockSkuItemToStockOrderCommand
         .newBuilder()
         .setStockOrderId(event.getStockOrderId())
         .setSkuId(event.getSkuId())
@@ -66,8 +67,8 @@ public class StockSkuItemToStockOrderAction extends AbstractStockSkuItemToStockO
         .build();
   }
 
-  static StockOrderApi.JoinStockSkuItemToStockOrderCommand toStockOrder(StockSkuItemEntity.StockRequestedJoinToOrderAccepted event) {
-    return StockOrderApi.JoinStockSkuItemToStockOrderCommand
+  static StockOrderApi.ShippedStockSkuItemToStockOrderCommand toStockOrder(StockSkuItemEntity.StockRequestedJoinToOrderAccepted event) {
+    return StockOrderApi.ShippedStockSkuItemToStockOrderCommand
         .newBuilder()
         .setStockOrderId(event.getStockOrderId())
         .setSkuId(event.getSkuId())

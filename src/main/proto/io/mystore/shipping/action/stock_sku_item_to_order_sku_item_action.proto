@@ -20,6 +20,12 @@ service StockSkuItemToOrderSkuItem {
     };
   }
 
+  rpc OnStockRequestedJoinToOrderRejected(stock.entity.StockRequestedJoinToOrderRejected) returns (google.protobuf.Empty) {
+    option (akkaserverless.method).eventing.in = {
+      event_sourced_entity: "stock_sku_item"
+    };
+  }
+
   rpc OnOrderRequestedJoinToStockAccepted(stock.entity.OrderRequestedJoinToStockAccepted) returns (google.protobuf.Empty) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "stock_sku_item"

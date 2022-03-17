@@ -42,6 +42,11 @@ public class Shipping extends AbstractShipping {
   }
 
   @Override
+  public Effect<Empty> releaseOrderSkuItem(ShippingEntity.OrderState state, ShippingApi.ReleaseOrderSkuItemCommand command) {
+    return handle(state, command);
+  }
+
+  @Override
   public Effect<ShippingApi.Order> getOrder(ShippingEntity.OrderState state, ShippingApi.GetOrderRequest request) {
     return reject(state, request).orElseGet(() -> handle(state, request));
   }
@@ -57,13 +62,28 @@ public class Shipping extends AbstractShipping {
   }
 
   @Override
+  public ShippingEntity.OrderState orderReleased(ShippingEntity.OrderState state, ShippingEntity.OrderReleased event) {
+    return updateState(state, event);
+  }
+
+  @Override
   public ShippingEntity.OrderState orderItemShipped(ShippingEntity.OrderState state, ShippingEntity.OrderItemShipped event) {
     return updateState(state, event);
   }
 
   @Override
+  public ShippingEntity.OrderState orderItemReleased(ShippingEntity.OrderState state, ShippingEntity.OrderItemReleased event) {
+    return updateState(state, event);
+  }
+
+  @Override
   public ShippingEntity.OrderState orderSkuItemShipped(ShippingEntity.OrderState state, ShippingEntity.OrderSkuItemShipped event) {
-    return updateStateFor(state, event);
+    return updateState(state, event);
+  }
+
+  @Override
+  public ShippingEntity.OrderState orderSkuItemReleased(ShippingEntity.OrderState state, ShippingEntity.OrderSkuItemReleased event) {
+    return updateState(state, event);
   }
 
   private Optional<Effect<ShippingApi.Order>> reject(ShippingEntity.OrderState state, ShippingApi.GetOrderRequest request) {
@@ -74,7 +94,7 @@ public class Shipping extends AbstractShipping {
   }
 
   private Effect<Empty> handle(ShippingEntity.OrderState state, ShippingApi.CreateOrderCommand command) {
-    log.info("state: {}, CreateOrderCommand {}", state, command);
+    log.info("state: {}\nCreateOrderCommand {}", state, command);
 
     return effects()
         .emitEvent(eventFor(state, command))
@@ -82,7 +102,15 @@ public class Shipping extends AbstractShipping {
   }
 
   private Effect<Empty> handle(ShippingEntity.OrderState state, ShippingApi.ShippedOrderSkuItemCommand command) {
-    log.info("state: {}, ShippedOrderSkuItemCommand {}", state, command);
+    log.info("state: {}\nShippedOrderSkuItemCommand {}", state, command);
+
+    return effects()
+        .emitEvents(eventsFor(state, command))
+        .thenReply(newState -> Empty.getDefaultInstance());
+  }
+
+  private Effect<Empty> handle(ShippingEntity.OrderState state, ShippingApi.ReleaseOrderSkuItemCommand command) {
+    log.info("state: {}\nReleaseOrderSkuItemCommand {}", state, command);
 
     return effects()
         .emitEvents(eventsFor(state, command))
@@ -121,7 +149,7 @@ public class Shipping extends AbstractShipping {
         .setShippedUtc(command.getShippedUtc())
         .build();
 
-    var updatedState = updateStateFor(state, orderSkuItemShipped);
+    var updatedState = updateState(state, orderSkuItemShipped);
 
     var isOrderItemShipped = areAllOrderSkuItemsShipped(updatedState, command.getSkuId());
     var isOrderShipped = areAllOrderItemsShipped(updatedState);
@@ -155,6 +183,44 @@ public class Shipping extends AbstractShipping {
     }
   }
 
+  private List<?> eventsFor(ShippingEntity.OrderState state, ShippingApi.ReleaseOrderSkuItemCommand command) {
+    var isOrderShipped = state.getShippedUtc().getSeconds() > 0;
+    var isOrderItemShipped = areAllOrderSkuItemsShipped(state, command.getSkuId());
+
+    var orderSkuItemReleased = ShippingEntity.OrderSkuItemReleased
+        .newBuilder()
+        .setOrderId(command.getOrderId())
+        .setOrderSkuItemId(command.getOrderSkuItemId())
+        .setSkuId(command.getSkuId())
+        .setStockSkuItemId(command.getStockSkuItemId())
+        .build();
+
+    if (isOrderShipped && isOrderItemShipped) {
+      var orderItemReleased = ShippingEntity.OrderItemReleased
+          .newBuilder()
+          .setOrderId(command.getOrderId())
+          .setSkuId(command.getSkuId())
+          .build();
+
+      var orderReleased = ShippingEntity.OrderReleased
+          .newBuilder()
+          .setOrderId(command.getOrderId())
+          .build();
+
+      return List.of(orderSkuItemReleased, orderItemReleased, orderReleased);
+    } else if (isOrderItemShipped) {
+      var orderItemReleased = ShippingEntity.OrderItemReleased
+          .newBuilder()
+          .setOrderId(command.getOrderId())
+          .setSkuId(command.getSkuId())
+          .build();
+
+      return List.of(orderSkuItemReleased, orderItemReleased);
+    } else {
+      return List.of(orderSkuItemReleased);
+    }
+  }
+
   static ShippingEntity.OrderState updateState(ShippingEntity.OrderState state, ShippingEntity.OrderCreated event) {
     return state
         .toBuilder()
@@ -172,13 +238,28 @@ public class Shipping extends AbstractShipping {
         .build();
   }
 
+  private ShippingEntity.OrderState updateState(ShippingEntity.OrderState state, ShippingEntity.OrderReleased event) {
+    return state
+        .toBuilder()
+        .setShippedUtc(TimeTo.zero())
+        .build();
+  }
+
   static ShippingEntity.OrderState updateState(ShippingEntity.OrderState state, ShippingEntity.OrderItemShipped event) {
+    return updateOrderItem(state, event.getSkuId(), event.getShippedUtc());
+  }
+
+  private ShippingEntity.OrderState updateState(ShippingEntity.OrderState state, ShippingEntity.OrderItemReleased event) {
+    return updateOrderItem(state, event.getSkuId(), TimeTo.zero());
+  }
+
+  static ShippingEntity.OrderState updateOrderItem(ShippingEntity.OrderState state, String skuId, Timestamp shippedUtc) {
     var orderItems = state.getOrderItemsList().stream()
         .map(orderItem -> {
-          if (orderItem.getSkuId().equals(event.getSkuId())) {
+          if (orderItem.getSkuId().equals(skuId)) {
             return orderItem
                 .toBuilder()
-                .setShippedUtc(event.getShippedUtc())
+                .setShippedUtc(shippedUtc)
                 .build();
           } else {
             return orderItem;
@@ -193,19 +274,27 @@ public class Shipping extends AbstractShipping {
         .build();
   }
 
-  static ShippingEntity.OrderState updateStateFor(ShippingEntity.OrderState state, ShippingEntity.OrderSkuItemShipped event) {
+  static ShippingEntity.OrderState updateState(ShippingEntity.OrderState state, ShippingEntity.OrderSkuItemShipped event) {
     return state
         .toBuilder()
         .clearOrderItems()
-        .addAllOrderItems(updateOrderItems(state.getOrderItemsList(), event))
+        .addAllOrderItems(updateOrderItems(state.getOrderItemsList(), event.getSkuId(), event.getOrderSkuItemId(), event.getStockSkuItemId(), event.getShippedUtc()))
         .build();
   }
 
-  static List<ShippingEntity.OrderItem> updateOrderItems(List<ShippingEntity.OrderItem> orderItems, ShippingEntity.OrderSkuItemShipped event) {
+  private ShippingEntity.OrderState updateState(ShippingEntity.OrderState state, ShippingEntity.OrderSkuItemReleased event) {
+    return state
+        .toBuilder()
+        .clearOrderItems()
+        .addAllOrderItems(updateOrderItems(state.getOrderItemsList(), event.getSkuId(), event.getOrderSkuItemId(), event.getStockSkuItemId(), TimeTo.zero()))
+        .build();
+  }
+
+  static List<ShippingEntity.OrderItem> updateOrderItems(List<ShippingEntity.OrderItem> orderItems, String skuId, String orderSkuItemId, String stockSkuItemId, Timestamp shippedUtc) {
     return orderItems.stream()
         .map(orderItem -> {
-          if (orderItem.getSkuId().equals(event.getSkuId())) {
-            return updateOrderSkuItems(orderItem, event);
+          if (orderItem.getSkuId().equals(skuId)) {
+            return updateOrderSkuItems(orderItem, skuId, orderSkuItemId, stockSkuItemId, shippedUtc);
           } else {
             return orderItem;
           }
@@ -213,13 +302,13 @@ public class Shipping extends AbstractShipping {
         .toList();
   }
 
-  static ShippingEntity.OrderItem updateOrderSkuItems(ShippingEntity.OrderItem orderItem, ShippingEntity.OrderSkuItemShipped event) {
+  static ShippingEntity.OrderItem updateOrderSkuItems(ShippingEntity.OrderItem orderItem, String skuId, String orderSkuItemId, String stockSkuItemId, Timestamp shippedUtc) {
     var updatedOrderSkuItems = orderItem.getOrderSkuItemsList().stream()
         .map(orderSkuItem -> {
-          if (orderSkuItem.getOrderSkuItemId().equals(event.getOrderSkuItemId())) {
+          if (orderSkuItem.getOrderSkuItemId().equals(orderSkuItemId)) {
             return orderSkuItem.toBuilder()
-                .setStockSkuItemId(event.getStockSkuItemId())
-                .setShippedUtc(event.getShippedUtc())
+                .setStockSkuItemId(stockSkuItemId)
+                .setShippedUtc(shippedUtc)
                 .build();
           } else {
             return orderSkuItem;
@@ -228,17 +317,17 @@ public class Shipping extends AbstractShipping {
         .toList();
 
     return orderItem.toBuilder()
-        .setShippedUtc(updateShippedUtc(updatedOrderSkuItems, event))
+        .setShippedUtc(updateShippedUtc(updatedOrderSkuItems, shippedUtc))
         .clearOrderSkuItems()
         .addAllOrderSkuItems(updatedOrderSkuItems)
         .build();
   }
 
-  static Timestamp updateShippedUtc(List<ShippingEntity.OrderSkuItem> updatedOrderSkuItems, ShippingEntity.OrderSkuItemShipped event) {
+  static Timestamp updateShippedUtc(List<ShippingEntity.OrderSkuItem> updatedOrderSkuItems, Timestamp shippedUtc) {
     return updatedOrderSkuItems.stream()
         .anyMatch(orderSkuItem -> isNotShipped(orderSkuItem.getShippedUtc()))
             ? TimeTo.zero()
-            : event.getShippedUtc();
+            : shippedUtc;
   }
 
   static boolean areAllOrderSkuItemsShipped(ShippingEntity.OrderState state, String skuId) {

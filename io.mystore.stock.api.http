@@ -1,9 +1,9 @@
 
-@urlPrefix = https://small-frog-9412.us-east1.akkaserverless.app
-@stockOrderId = stock-order-id-6
-@skuId = sku-3
-@skuName = sku name 3
-@quantity = 30
+@urlPrefix = https://spring-frog-8357.us-east1.akkaserverless.app
+@stockOrderId = stock-order-1
+@skuId = sku-4
+@skuName = sku name 4
+@quantity = 4
 
 ### io.mystore.stock.api.StockOrderService.CreateStockOrder
 

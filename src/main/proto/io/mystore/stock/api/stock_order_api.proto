@@ -17,7 +17,7 @@ service StockOrderService {
       state: "io.mystore.stock.entity.StockOrderState"
       events: [
         "io.mystore.stock.entity.StockOrderCreated",
-        "io.mystore.stock.entity.StockSkuItemJoined",
+        "io.mystore.stock.entity.StockSkuItemShipped",
         "io.mystore.stock.entity.StockSkuItemReleased"  // force line breaks
       ]
     }
@@ -30,7 +30,7 @@ service StockOrderService {
     };
   }
 
-  rpc JoinStockSkuItem(JoinStockSkuItemToStockOrderCommand) returns (google.protobuf.Empty) {
+  rpc ShippedStockSkuItem(ShippedStockSkuItemToStockOrderCommand) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       put: "/stork-orders/{stock_order_id}/ship-stock-sku-item"
       body: "*"
@@ -58,7 +58,7 @@ message CreateStockOrderCommand {
   int32 quantity = 4;
 }
 
-message JoinStockSkuItemToStockOrderCommand {
+message ShippedStockSkuItemToStockOrderCommand {
   string stock_order_id = 1 [(akkaserverless.field).entity_key = true];
   string sku_id = 2;
   string stock_sku_item_id = 3;

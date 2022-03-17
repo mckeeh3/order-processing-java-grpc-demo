@@ -85,7 +85,7 @@ public class StockOrderTest {
     assertTrue(stockSkuItem.getOrderSkuItemId().isEmpty());
     assertTrue(stockSkuItem.getShippedUtc().getSeconds() == 0);
 
-    testKit.joinStockSkuItem(StockOrderApi.JoinStockSkuItemToStockOrderCommand
+    testKit.shippedStockSkuItem(StockOrderApi.ShippedStockSkuItemToStockOrderCommand
         .newBuilder()
         .setStockOrderId(stockOrderId)
         .setSkuId("sku-1")

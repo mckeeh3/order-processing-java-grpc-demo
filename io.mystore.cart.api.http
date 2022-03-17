@@ -1,10 +1,10 @@
 
-@urlPrefix = https://small-frog-9412.us-east1.akkaserverless.app
+@urlPrefix = https://spring-frog-8357.us-east1.akkaserverless.app
 @customerId = customer-1
-@cartId = cart-2
-@skuId = sku-3
-@skuName = sku name 3
-@quantity = 30
+@cartId = cart-1
+@skuId = sku-4
+@skuName = sku name 4
+@quantity = 4
 # @checkedOutUtc = 2022-01-01T00:00:00.000-0500
 @checkedOutUtc =
 # @shippedUtc = 2022-01-01T00:00:00.000-0500

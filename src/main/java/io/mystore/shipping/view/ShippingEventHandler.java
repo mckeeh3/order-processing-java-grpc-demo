@@ -5,55 +5,38 @@ import java.util.List;
 import io.mystore.shipping.entity.ShippingEntity;
 
 class ShippingEventHandler {
-  private ShippingModel.Shipping state;
 
-  private ShippingEventHandler(ShippingModel.Shipping state) {
-    this.state = state;
-  }
-
-  static ShippingEventHandler fromState(ShippingModel.Shipping state) {
-    return new ShippingEventHandler(state);
-  }
-
-  ShippingModel.Shipping toState() {
-    return state;
-  }
-
-  ShippingEventHandler handle(ShippingEntity.OrderCreated orderCreated) {
-    state = state
+  static ShippingModel.Shipping handle(ShippingModel.Shipping state, ShippingEntity.OrderCreated orderCreated) {
+    return state
         .toBuilder()
         .setCustomerId(orderCreated.getCustomerId())
         .setOrderId(orderCreated.getOrderId())
         .setOrderedUtc(orderCreated.getOrderedUtc())
         .addAllOrderItems(orderCreated.getOrderItemsList())
         .build();
-    return this;
   }
 
-  ShippingEventHandler handle(ShippingEntity.OrderShipped orderShipped) {
-    state = state
+  static ShippingModel.Shipping handle(ShippingModel.Shipping state, ShippingEntity.OrderShipped orderShipped) {
+    return state
         .toBuilder()
         .setShippedUtc(orderShipped.getShippedUtc())
         .build();
-    return this;
   }
 
-  ShippingEventHandler handle(ShippingEntity.OrderItemShipped orderItemShipped) {
-    state = state
+  static ShippingModel.Shipping handle(ShippingModel.Shipping state, ShippingEntity.OrderItemShipped orderItemShipped) {
+    return state
         .toBuilder()
         .clearOrderItems()
         .addAllOrderItems(updateOrderItems(state, orderItemShipped))
         .build();
-    return this;
   }
 
-  ShippingEventHandler handle(ShippingEntity.OrderSkuItemShipped orderSkuItemShipped) {
-    state = state
+  static ShippingModel.Shipping handle(ShippingModel.Shipping state, ShippingEntity.OrderSkuItemShipped orderSkuItemShipped) {
+    return state
         .toBuilder()
         .clearOrderItems()
         .addAllOrderItems(updateOrderItems(state, orderSkuItemShipped))
         .build();
-    return this;
   }
 
   static List<ShippingEntity.OrderItem> updateOrderItems(ShippingModel.Shipping state, ShippingEntity.OrderItemShipped orderItemShipped) {

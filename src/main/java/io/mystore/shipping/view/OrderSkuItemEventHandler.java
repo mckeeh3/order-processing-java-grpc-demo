@@ -25,12 +25,7 @@ class OrderSkuItemEventHandler {
   }
 
   public static OrderSkuItemModel.OrderSkuItem handle(OrderSkuItemModel.OrderSkuItem state, OrderSkuItemEntity.StockRequestedJoinToOrderRejected event) {
-    return state
-        .toBuilder()
-        .setStockSkuItemId("")
-        .setShippedUtc(TimeTo.zero())
-        .setBackOrderedUtc(TimeTo.zero())
-        .build();
+    return state; // no change
   }
 
   public static OrderSkuItemModel.OrderSkuItem handle(OrderSkuItemModel.OrderSkuItem state, OrderSkuItemEntity.OrderRequestedJoinToStockAccepted event) {

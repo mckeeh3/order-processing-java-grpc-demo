@@ -66,37 +66,37 @@ public class OrderSkuItem extends AbstractOrderSkuItem {
 
   @Override
   public OrderSkuItemEntity.OrderSkuItemState orderSkuItemCreated(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.OrderSkuItemCreated event) {
-    return handle(state, event);
+    return updateState(state, event);
   }
 
   @Override
   public OrderSkuItemEntity.OrderSkuItemState stockRequestedJoinToOrderAccepted(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.StockRequestedJoinToOrderAccepted event) {
-    return handle(state, event);
+    return updateState(state, event);
   }
 
   @Override
   public OrderSkuItemEntity.OrderSkuItemState stockRequestedJoinToOrderRejected(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.StockRequestedJoinToOrderRejected event) {
-    return handle(state, event);
+    return updateState(state, event);
   }
 
   @Override
   public OrderSkuItemEntity.OrderSkuItemState orderRequestedJoinToStock(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.OrderRequestedJoinToStock event) {
-    return handle(state, event);
+    return updateState(state, event);
   }
 
   @Override
   public OrderSkuItemEntity.OrderSkuItemState orderRequestedJoinToStockAccepted(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.OrderRequestedJoinToStockAccepted event) {
-    return handle(state, event);
+    return updateState(state, event);
   }
 
   @Override
   public OrderSkuItemEntity.OrderSkuItemState orderRequestedJoinToStockRejected(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.OrderRequestedJoinToStockRejected event) {
-    return handle(state, event);
+    return updateState(state, event);
   }
 
   @Override
   public OrderSkuItemEntity.OrderSkuItemState backOrderedOrderSkuItem(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.BackOrderedOrderSkuItem event) {
-    return handle(state, event);
+    return updateState(state, event);
   }
 
   private Optional<Effect<OrderSkuItemApi.GetOrderSkuItemResponse>> reject(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemApi.GetOrderSkuItemRequest request) {
@@ -292,7 +292,7 @@ public class OrderSkuItem extends AbstractOrderSkuItem {
             .build());
   }
 
-  static OrderSkuItemEntity.OrderSkuItemState handle(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.OrderSkuItemCreated event) {
+  static OrderSkuItemEntity.OrderSkuItemState updateState(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.OrderSkuItemCreated event) {
     return state.toBuilder()
         .setCustomerId(event.getCustomerId())
         .setOrderId(event.getOrderId())
@@ -303,7 +303,7 @@ public class OrderSkuItem extends AbstractOrderSkuItem {
         .build();
   }
 
-  static OrderSkuItemEntity.OrderSkuItemState handle(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.StockRequestedJoinToOrderAccepted event) {
+  static OrderSkuItemEntity.OrderSkuItemState updateState(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.StockRequestedJoinToOrderAccepted event) {
     return state.toBuilder()
         .setStockSkuItemId(event.getStockSkuItemId())
         .setStockOrderId(event.getStockOrderId())
@@ -311,7 +311,7 @@ public class OrderSkuItem extends AbstractOrderSkuItem {
         .build();
   }
 
-  static OrderSkuItemEntity.OrderSkuItemState handle(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.StockRequestedJoinToOrderRejected event) {
+  static OrderSkuItemEntity.OrderSkuItemState updateState(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.StockRequestedJoinToOrderRejected event) {
     if (state.getStockSkuItemId().equals(event.getStockSkuItemId())) {
       return state.toBuilder()
           .setStockSkuItemId("")
@@ -323,11 +323,11 @@ public class OrderSkuItem extends AbstractOrderSkuItem {
     }
   }
 
-  static OrderSkuItemEntity.OrderSkuItemState handle(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.OrderRequestedJoinToStock event) {
+  static OrderSkuItemEntity.OrderSkuItemState updateState(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.OrderRequestedJoinToStock event) {
     return state;
   }
 
-  static OrderSkuItemEntity.OrderSkuItemState handle(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.OrderRequestedJoinToStockAccepted event) {
+  static OrderSkuItemEntity.OrderSkuItemState updateState(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.OrderRequestedJoinToStockAccepted event) {
     return state.toBuilder()
         .setStockSkuItemId(event.getStockSkuItemId())
         .setStockOrderId(event.getStockOrderId())
@@ -335,7 +335,7 @@ public class OrderSkuItem extends AbstractOrderSkuItem {
         .build();
   }
 
-  static OrderSkuItemEntity.OrderSkuItemState handle(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.OrderRequestedJoinToStockRejected event) {
+  static OrderSkuItemEntity.OrderSkuItemState updateState(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.OrderRequestedJoinToStockRejected event) {
     if (state.getStockSkuItemId().equals(event.getStockSkuItemId())) {
       return state.toBuilder()
           .setStockSkuItemId("")
@@ -347,7 +347,7 @@ public class OrderSkuItem extends AbstractOrderSkuItem {
     }
   }
 
-  private OrderSkuItemEntity.OrderSkuItemState handle(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.BackOrderedOrderSkuItem event) {
+  private OrderSkuItemEntity.OrderSkuItemState updateState(OrderSkuItemEntity.OrderSkuItemState state, OrderSkuItemEntity.BackOrderedOrderSkuItem event) {
     return state.toBuilder()
         .setBackOrderedUtc(event.getBackOrderedUtc())
         .build();

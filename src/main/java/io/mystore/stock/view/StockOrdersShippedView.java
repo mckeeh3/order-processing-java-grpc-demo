@@ -21,33 +21,18 @@ public class StockOrdersShippedView extends AbstractStockOrdersShippedView {
   }
 
   @Override
-  public View.UpdateEffect<StockOrdersModel.StockOrder> onStockOrderCreated(
-      StockOrdersModel.StockOrder state, StockOrderEntity.StockOrderCreated stockOrderCreated) {
-    return effects().updateState(
-        StockOrderEventHandler
-            .fromState(state)
-            .handle(stockOrderCreated)
-            .toState());
+  public View.UpdateEffect<StockOrdersModel.StockOrder> onStockOrderCreated(StockOrdersModel.StockOrder state, StockOrderEntity.StockOrderCreated event) {
+    return effects().updateState(StockOrderEventHandler.handle(state, event));
   }
 
   @Override
-  public View.UpdateEffect<StockOrdersModel.StockOrder> onStockSkuItemJoined(
-      StockOrdersModel.StockOrder state, StockOrderEntity.StockSkuItemJoined stockSkuItemJoined) {
-    return effects().updateState(
-        StockOrderEventHandler
-            .fromState(state)
-            .handle(stockSkuItemJoined)
-            .toState());
+  public View.UpdateEffect<StockOrdersModel.StockOrder> onStockSkuItemShipped(StockOrdersModel.StockOrder state, StockOrderEntity.StockSkuItemShipped event) {
+    return effects().updateState(StockOrderEventHandler.handle(state, event));
   }
 
   @Override
-  public View.UpdateEffect<StockOrdersModel.StockOrder> onStockSkuItemReleased(
-      StockOrdersModel.StockOrder state, StockOrderEntity.StockSkuItemReleased stockSkuItemReleased) {
-    return effects().updateState(
-        StockOrderEventHandler
-            .fromState(state)
-            .handle(stockSkuItemReleased)
-            .toState());
+  public View.UpdateEffect<StockOrdersModel.StockOrder> onStockSkuItemReleased(StockOrdersModel.StockOrder state, StockOrderEntity.StockSkuItemReleased event) {
+    return effects().updateState(StockOrderEventHandler.handle(state, event));
   }
 
   @Override

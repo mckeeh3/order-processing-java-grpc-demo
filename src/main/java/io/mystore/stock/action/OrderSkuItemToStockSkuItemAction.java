@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import io.mystore.shipping.api.OrderSkuItemApi;
 import io.mystore.shipping.entity.OrderSkuItemEntity;
+import io.mystore.shipping.entity.OrderSkuItemEntity.OrderRequestedJoinToStockRejected;
 import io.mystore.stock.api.StockSkuItemApi;
 import io.mystore.stock.view.StockSkuItemsAvailableModel;
 import io.mystore.stock.view.StockSkuItemsModel;
@@ -29,10 +30,17 @@ public class OrderSkuItemToStockSkuItemAction extends AbstractOrderSkuItemToStoc
   }
 
   @Override
-  public Effect<Empty> onOrderRequestedJoinToStockStock(OrderSkuItemEntity.OrderRequestedJoinToStock event) {
+  public Effect<Empty> onOrderRequestedJoinToStock(OrderSkuItemEntity.OrderRequestedJoinToStock event) {
     log.info("onOrderRequestedJoinToStockStock: {}", event);
 
     return effects().asyncReply(extracted(event));
+  }
+
+  @Override
+  public Effect<Empty> onOrderRequestedJoinToStockRejected(OrderSkuItemEntity.OrderRequestedJoinToStockRejected event) {
+    log.info("onOrderRequestedJoinToStockRejected: {}", event);
+
+    return effects().forward(components().stockSkuItem().orderRequestsJoinToStockRejected(toOrderRequestedJoinToStockRejected(event)));
   }
 
   @Override
@@ -69,6 +77,7 @@ public class OrderSkuItemToStockSkuItemAction extends AbstractOrderSkuItemToStoc
     if (count > 0) {
       return orderRequestedJoinToStock(event, response.getStockSkuItemsList().get(random.nextInt(count)));
     } else {
+      log.info("No stock sku items available to join to order sku item {} {}", event.getSkuId(), event.getOrderSkuItemId());
       return backOrderShipOrderItem(event);
     }
   }
@@ -94,6 +103,17 @@ public class OrderSkuItemToStockSkuItemAction extends AbstractOrderSkuItemToStoc
             .setOrderSkuItemId(event.getOrderSkuItemId())
             .build())
         .execute();
+  }
+
+  static StockSkuItemApi.OrderRequestsJoinToStockRejectedCommand toOrderRequestedJoinToStockRejected(OrderRequestedJoinToStockRejected event) {
+    return StockSkuItemApi.OrderRequestsJoinToStockRejectedCommand
+        .newBuilder()
+        .setOrderSkuItemId(event.getOrderSkuItemId())
+        .setSkuId(event.getSkuId())
+        .setOrderId(event.getOrderId())
+        .setOrderSkuItemId(event.getOrderSkuItemId())
+        .setStockOrderId(event.getStockOrderId())
+        .build();
   }
 
   static StockSkuItemApi.StockRequestedJoinToOrderAcceptedCommand toStockRequestedJoinToOrderAcceptedCommand(OrderSkuItemEntity.StockRequestedJoinToOrderAccepted event) {

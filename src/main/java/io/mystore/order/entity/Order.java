@@ -155,7 +155,7 @@ public class Order extends AbstractOrder {
   }
 
   private Effect<Empty> handle(OrderEntity.OrderState state, OrderApi.CreateOrderCommand command) {
-    log.info("state: {}, CreateOrderCommand: {}", state, command);
+    log.info("state: {}\nCreateOrderCommand: {}", state, command);
 
     return effects()
         .emitEvent(eventFor(state, command))
@@ -163,7 +163,7 @@ public class Order extends AbstractOrder {
   }
 
   private Effect<Empty> handle(OrderEntity.OrderState state, OrderApi.ShippedOrderCommand command) {
-    log.info("state: {}, ShippedOrderCommand: {}", state, command);
+    log.info("state: {}\nShippedOrderCommand: {}", state, command);
 
     return effects()
         .emitEvent(eventFor(state, command))
@@ -171,7 +171,7 @@ public class Order extends AbstractOrder {
   }
 
   private Effect<Empty> handle(OrderEntity.OrderState state, OrderApi.DeliveredOrderCommand command) {
-    log.info("state: {}, DeliveredOrderCommand: {}", state, command);
+    log.info("state: {}\nDeliveredOrderCommand: {}", state, command);
 
     return effects()
         .emitEvent(eventFor(state, command))
@@ -179,7 +179,7 @@ public class Order extends AbstractOrder {
   }
 
   private Effect<Empty> handle(OrderEntity.OrderState state, OrderApi.ReturnedOrderCommand command) {
-    log.info("state: {}, ReturnedOrderCommand: {}", state, command);
+    log.info("state: {}\nReturnedOrderCommand: {}", state, command);
 
     return effects()
         .emitEvent(eventFor(state, command))
@@ -187,7 +187,7 @@ public class Order extends AbstractOrder {
   }
 
   private Effect<Empty> handle(OrderEntity.OrderState state, OrderApi.CanceledOrderCommand command) {
-    log.info("state: {}, CanceledOrderCommand: {}", state, command);
+    log.info("state: {}\nCanceledOrderCommand: {}", state, command);
 
     return effects()
         .emitEvent(eventFor(state, command))
@@ -195,7 +195,7 @@ public class Order extends AbstractOrder {
   }
 
   private Effect<Empty> handle(OrderEntity.OrderState state, OrderApi.ShippedOrderSkuCommand command) {
-    log.info("state: {}, ShippedOrderSkuCommand: {}", state, command);
+    log.info("state: {}\nShippedOrderSkuCommand: {}", state, command);
 
     return effects()
         .emitEvents(eventsFor(state, command))

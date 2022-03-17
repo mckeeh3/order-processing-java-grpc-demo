@@ -1,17 +1,14 @@
 package io.mystore.shipping.entity;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
-import java.util.List;
-
-import com.akkaserverless.javasdk.testkit.EventSourcedResult;
+import java.util.stream.IntStream;
 
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import io.mystore.TimeTo;
 import io.mystore.shipping.api.ShippingApi;
+import io.mystore.shipping.entity.ShippingEntity.OrderSkuItem;
 
 // This class was initially generated based on the .proto definition by Akka Serverless tooling.
 //
@@ -19,7 +16,6 @@ import io.mystore.shipping.api.ShippingApi;
 // or delete it so it is regenerated as needed.
 
 public class ShippingTest {
-  static final Logger log = LoggerFactory.getLogger(ShippingTest.class);
 
   @Test
   public void exampleTest() {
@@ -41,146 +37,224 @@ public class ShippingTest {
   public void createOrderTest() {
     ShippingTestKit testKit = ShippingTestKit.of(Shipping::new);
 
-    var sku2quantity = 2;
-    var sku3quantity = 3;
-    var result = testKit.createOrder(ShippingApi.CreateOrderCommand.newBuilder()
-        .setOrderId("order-id")
-        .setCustomerId("customer-id")
-        .setOrderedUtc(TimeTo.now())
-        .addAllOrderItems(
-            List.of(
-                ShippingApi.OrderItem.newBuilder()
-                    .setSkuId("sku-2")
-                    .setSkuName("sku name 2")
-                    .setQuantity(sku2quantity)
-                    .build(),
-                ShippingApi.OrderItem.newBuilder()
-                    .setSkuId("sku-3")
-                    .setSkuName("sku name 3")
-                    .setQuantity(sku3quantity)
-                    .build()))
-        .build());
+    var skuIdQuantity2 = 2;
+    var skuIdQuantity3 = 3;
+    var response = testKit.createOrder(toCreateOrderCommand(skuIdQuantity2, skuIdQuantity3));
 
-    var events = result.getAllEvents();
-    events.forEach(event -> log.info("event({}): {}", event.getClass().getName(), event));
+    assertEquals(1, response.getAllEvents().size());
+    var orderCreated = response.getNextEventOfType(ShippingEntity.OrderCreated.class);
 
-    assertEquals(1, events.size());
+    assertEquals(2, orderCreated.getOrderItemsCount());
+    assertEquals("sku-2", orderCreated.getOrderItems(0).getSkuId());
+    assertEquals("sku-3", orderCreated.getOrderItems(1).getSkuId());
+    assertEquals(skuIdQuantity2, orderCreated.getOrderItems(0).getQuantity());
+    assertEquals(skuIdQuantity3, orderCreated.getOrderItems(1).getQuantity());
 
-    var orderCreated = (ShippingEntity.OrderCreated) events.get(0);
-    var results = orderCreated.getOrderItemsList().stream()
+    var orderSkuItems = orderCreated.getOrderItemsList().stream()
         .flatMap(orderItems -> orderItems.getOrderSkuItemsList().stream())
         .toList();
 
-    log.info("results({}): {}", results.size(), results);
-    assertEquals(sku2quantity + sku3quantity, results.size());
+    assertEquals(skuIdQuantity2 + skuIdQuantity3, orderSkuItems.size());
+
+    assertEquals("sku-2", orderSkuItems.get(0).getSkuId());
+    assertEquals("sku-2", orderSkuItems.get(1).getSkuId());
+    assertEquals("sku-3", orderSkuItems.get(2).getSkuId());
+    assertEquals("sku-3", orderSkuItems.get(3).getSkuId());
+    assertEquals("sku-3", orderSkuItems.get(4).getSkuId());
+
+    assertEquals("sku name 2", orderSkuItems.get(0).getSkuName());
+    assertEquals("sku name 2", orderSkuItems.get(1).getSkuName());
+    assertEquals("sku name 3", orderSkuItems.get(2).getSkuName());
+    assertEquals("sku name 3", orderSkuItems.get(3).getSkuName());
+    assertEquals("sku name 3", orderSkuItems.get(4).getSkuName());
+
+    var state = testKit.getState();
+
+    assertEquals("order-id", state.getOrderId());
+    assertEquals("customer-id", state.getCustomerId());
+    assertTrue(state.getOrderedUtc().getSeconds() > 0);
+
+    assertEquals(2, state.getOrderItemsCount());
+    assertEquals(skuIdQuantity2, state.getOrderItems(0).getOrderSkuItemsCount());
+    assertEquals(skuIdQuantity3, state.getOrderItems(1).getOrderSkuItemsCount());
+
+    assertEquals("sku-2", state.getOrderItems(0).getSkuId());
+    assertEquals("sku-3", state.getOrderItems(1).getSkuId());
+    assertEquals("sku name 2", state.getOrderItems(0).getSkuName());
+    assertEquals("sku name 3", state.getOrderItems(1).getSkuName());
+    assertEquals(skuIdQuantity2, state.getOrderItems(0).getQuantity());
+    assertEquals(skuIdQuantity3, state.getOrderItems(1).getQuantity());
+
+    assertEquals("sku-2", state.getOrderItems(0).getOrderSkuItems(0).getSkuId());
+    assertEquals("sku-2", state.getOrderItems(0).getOrderSkuItems(1).getSkuId());
+    assertEquals("sku-3", state.getOrderItems(1).getOrderSkuItems(0).getSkuId());
+    assertEquals("sku-3", state.getOrderItems(1).getOrderSkuItems(1).getSkuId());
+    assertEquals("sku-3", state.getOrderItems(1).getOrderSkuItems(2).getSkuId());
+
+    assertEquals("sku name 2", state.getOrderItems(0).getOrderSkuItems(0).getSkuName());
+    assertEquals("sku name 2", state.getOrderItems(0).getOrderSkuItems(1).getSkuName());
+    assertEquals("sku name 3", state.getOrderItems(1).getOrderSkuItems(0).getSkuName());
+    assertEquals("sku name 3", state.getOrderItems(1).getOrderSkuItems(1).getSkuName());
+    assertEquals("sku name 3", state.getOrderItems(1).getOrderSkuItems(2).getSkuName());
+
+    assertEquals("customer-id", state.getOrderItems(0).getOrderSkuItems(0).getCustomerId());
+    assertEquals("order-id", state.getOrderItems(0).getOrderSkuItems(0).getOrderId());
+    assertTrue(state.getOrderItems(0).getOrderSkuItems(0).getOrderedUtc().getSeconds() > 0);
+    assertFalse(state.getOrderItems(0).getOrderSkuItems(0).getOrderSkuItemId().isEmpty());
   }
 
   @Test
   public void shippedOrderSkuItemTest() {
-    // ShippingTestKit testKit = ShippingTestKit.of(Shipping::new);
-    // EventSourcedResult<Empty> result = testKit.shippedOrderSkuItem(ShippedOrderSkuItemCommand.newBuilder()...build());
+    ShippingTestKit testKit = ShippingTestKit.of(Shipping::new);
+
+    testKit.createOrder(toCreateOrderCommand(1));
+
+    var state = testKit.getState();
+
+    var response = testKit.shippedOrderSkuItem(toShippedOrderSkuItemCommand("stock-sku-item-1", getOrderSkuItem(state, 0, 0)));
+
+    assertEquals(3, response.getAllEvents().size());
+
+    var orderSkuItemShipped = response.getNextEventOfType(ShippingEntity.OrderSkuItemShipped.class);
+    var orderItemShipped = response.getNextEventOfType(ShippingEntity.OrderItemShipped.class);
+    var orderShipped = response.getNextEventOfType(ShippingEntity.OrderShipped.class);
+
+    assertEquals("order-id", orderSkuItemShipped.getOrderId());
+    assertEquals(getOrderSkuItemId(state, 0, 0), orderSkuItemShipped.getOrderSkuItemId());
+    assertEquals("sku-1", orderSkuItemShipped.getSkuId());
+    assertEquals("stock-sku-item-1", orderSkuItemShipped.getStockSkuItemId());
+    assertTrue(orderSkuItemShipped.getShippedUtc().getSeconds() > 0);
+
+    assertEquals("order-id", orderItemShipped.getOrderId());
+    assertEquals("sku-1", orderItemShipped.getSkuId());
+    assertTrue(orderItemShipped.getShippedUtc().getSeconds() > 0);
+
+    assertEquals("order-id", orderShipped.getOrderId());
+    assertTrue(orderShipped.getShippedUtc().getSeconds() > 0);
+  }
+
+  @Test
+  public void releaseOrderSkuItemTest() {
+    ShippingTestKit testKit = ShippingTestKit.of(Shipping::new);
+
+    testKit.createOrder(toCreateOrderCommand(1));
+
+    var state = testKit.getState();
+
+    testKit.shippedOrderSkuItem(toShippedOrderSkuItemCommand("stock-sku-item-1", getOrderSkuItem(state, 0, 0)));
+    var response = testKit.releaseOrderSkuItem(toReleaseOrderSkuItemCommand("stock-sku-item-1", getOrderSkuItem(state, 0, 0)));
+
+    assertEquals(3, response.getAllEvents().size());
+
+    var orderSkuItemReleased = response.getNextEventOfType(ShippingEntity.OrderSkuItemReleased.class);
+    var orderItemReleased = response.getNextEventOfType(ShippingEntity.OrderItemReleased.class);
+    var orderReleased = response.getNextEventOfType(ShippingEntity.OrderReleased.class);
+
+    assertEquals("order-id", orderSkuItemReleased.getOrderId());
+    assertEquals(getOrderSkuItemId(state, 0, 0), orderSkuItemReleased.getOrderSkuItemId());
+    assertEquals("sku-1", orderSkuItemReleased.getSkuId());
+    assertEquals("stock-sku-item-1", orderSkuItemReleased.getStockSkuItemId());
+
+    assertEquals("order-id", orderItemReleased.getOrderId());
+    assertEquals("sku-1", orderItemReleased.getSkuId());
+
+    assertEquals("order-id", orderReleased.getOrderId());
   }
 
   @Test
   public void getOrderTest() {
-    // ShippingTestKit testKit = ShippingTestKit.of(Shipping::new);
-    // EventSourcedResult<Order> result = testKit.getOrder(GetOrderRequest.newBuilder()...build());
-  }
-
-  @Test
-  public void shippedOrderWithItemQuantltyOne() {
     ShippingTestKit testKit = ShippingTestKit.of(Shipping::new);
 
-    testKit.createOrder(ShippingApi.CreateOrderCommand.newBuilder()
-        .setOrderId("order-id")
-        .setCustomerId("customer-id")
-        .setOrderedUtc(TimeTo.now())
-        .addAllOrderItems(
-            List.of(
-                ShippingApi.OrderItem.newBuilder()
-                    .setSkuId("sku-1")
-                    .setSkuName("sku name 1")
-                    .setQuantity(1)
-                    .build()))
-        .build());
+    testKit.createOrder(toCreateOrderCommand(1));
 
-    var orderBefore = testKit.getOrder(ShippingApi.GetOrderRequest.newBuilder()
-        .setOrderId("order-id")
-        .build());
-    log.info("orderBefore: {}", orderBefore.getReply());
+    var reply = testKit.getOrder(
+        ShippingApi.GetOrderRequest
+            .newBuilder()
+            .setOrderId("order-id")
+            .build())
+        .getReply();
 
-    shipOrderItem("sku-1", 0, true, "order-sku-item-1-1", 0, true, true, testKit, orderBefore);
+    assertEquals("order-id", reply.getOrderId());
+    assertEquals("customer-id", reply.getCustomerId());
+    assertTrue(reply.getOrderedUtc().getSeconds() > 0);
+
+    assertEquals(1, reply.getOrderItemsCount());
+    assertEquals("sku-1", reply.getOrderItems(0).getSkuId());
+    assertEquals("sku name 1", reply.getOrderItems(0).getSkuName());
+    assertEquals(1, reply.getOrderItems(0).getQuantity());
   }
 
   @Test
   public void shippedOrderWithMultipleOrderItemsMultipleQuantity() {
     ShippingTestKit testKit = ShippingTestKit.of(Shipping::new);
 
-    testKit.createOrder(ShippingApi.CreateOrderCommand.newBuilder()
+    testKit.createOrder(toCreateOrderCommand(2, 3));
+
+    var state = testKit.getState();
+
+    var response = testKit.shippedOrderSkuItem(toShippedOrderSkuItemCommand("stock-sku-item-1", getOrderSkuItem(state, 0, 0)));
+    assertEquals(1, response.getAllEvents().size());
+    response = testKit.shippedOrderSkuItem(toShippedOrderSkuItemCommand("stock-sku-item-2", getOrderSkuItem(state, 0, 1)));
+    assertEquals(2, response.getAllEvents().size());
+
+    response.getNextEventOfType(ShippingEntity.OrderSkuItemShipped.class);
+    response.getNextEventOfType(ShippingEntity.OrderItemShipped.class);
+
+    response = testKit.shippedOrderSkuItem(toShippedOrderSkuItemCommand("stock-sku-item-3", getOrderSkuItem(state, 1, 0)));
+    assertEquals(1, response.getAllEvents().size());
+    response = testKit.shippedOrderSkuItem(toShippedOrderSkuItemCommand("stock-sku-item-4", getOrderSkuItem(state, 1, 1)));
+    assertEquals(1, response.getAllEvents().size());
+    response = testKit.shippedOrderSkuItem(toShippedOrderSkuItemCommand("stock-sku-item-5", getOrderSkuItem(state, 1, 2)));
+    assertEquals(3, response.getAllEvents().size());
+
+    response.getNextEventOfType(ShippingEntity.OrderSkuItemShipped.class);
+    response.getNextEventOfType(ShippingEntity.OrderItemShipped.class);
+    response.getNextEventOfType(ShippingEntity.OrderShipped.class);
+  }
+
+  static ShippingApi.CreateOrderCommand toCreateOrderCommand(int... skuIdQuantity) {
+    return ShippingApi.CreateOrderCommand
+        .newBuilder()
         .setOrderId("order-id")
         .setCustomerId("customer-id")
         .setOrderedUtc(TimeTo.now())
         .addAllOrderItems(
-            List.of(
-                ShippingApi.OrderItem.newBuilder()
-                    .setSkuId("sku-2")
-                    .setSkuName("sku name 2")
-                    .setQuantity(2)
-                    .build(),
-                ShippingApi.OrderItem.newBuilder()
-                    .setSkuId("sku-3")
-                    .setSkuName("sku name 3")
-                    .setQuantity(3)
-                    .build()))
-        .build());
-
-    var orderBefore = testKit.getOrder(ShippingApi.GetOrderRequest.newBuilder()
-        .setOrderId("order-id")
-        .build());
-    log.info("orderBefore: {}", orderBefore.getReply());
-
-    shipOrderItem("sku-2", 0, false, "order-sku-item-2-1", 0, true, false, testKit, orderBefore);
-    shipOrderItem("sku-2", 0, true, "order-sku-item-2-2", 1, true, false, testKit, orderBefore);
-    shipOrderItem("sku-3", 1, false, "order-sku-item-3-1", 0, true, false, testKit, orderBefore);
-    shipOrderItem("sku-3", 1, false, "order-sku-item-3-2", 1, true, false, testKit, orderBefore);
-    shipOrderItem("sku-3", 1, true, "order-sku-item-3-3", 2, true, true, testKit, orderBefore);
-  }
-
-  private void shipOrderItem(
-      String skuId, int skuIdx, boolean orderItemShipped,
-      String orderSkuItemId, int orderSkuItemIdx, boolean orderSkuItemShipped,
-      boolean orderShipped,
-      ShippingTestKit testKit, EventSourcedResult<ShippingApi.Order> shipOrderBefore) {
-    var command = ShippingApi.ShippedOrderSkuItemCommand
-        .newBuilder()
-        .setOrderId("order-id")
-        .setOrderSkuItemId(shipOrderBefore.getReply().getOrderItemsList().get(skuIdx).getOrderSkuItemsList().get(orderSkuItemIdx).getOrderSkuItemId())
-        .setSkuId(skuId)
-        .setStockSkuItemId("stock-sku-item-id-" + skuId)
-        .setShippedUtc(TimeTo.now())
+            IntStream.range(0, skuIdQuantity.length)
+                .mapToObj(i -> ShippingApi.OrderItem.newBuilder()
+                    .setSkuId("sku-" + skuIdQuantity[i])
+                    .setSkuName("sku name " + skuIdQuantity[i])
+                    .setQuantity(skuIdQuantity[i])
+                    .build())
+                .toList())
         .build();
-    testKit.shippedOrderSkuItem(command);
-
-    var shipOrderAfter = logOrder("order-id", "shipOrderAfter:", testKit);
-
-    assertEquals(orderShipped, 0 != shipOrderAfter.getReply().getShippedUtc().getSeconds());
-    assertEquals(orderItemShipped, 0 != shipOrderAfter.getReply()
-        .getOrderItemsList().get(skuIdx)
-        .getShippedUtc().getSeconds());
-    assertEquals(orderItemShipped, 0 != shipOrderAfter.getReply()
-        .getOrderItemsList().get(skuIdx)
-        .getShippedUtc().getSeconds());
-    assertEquals(orderSkuItemShipped, 0 != shipOrderAfter.getReply()
-        .getOrderItemsList().get(skuIdx)
-        .getOrderSkuItemsList().get(orderSkuItemIdx)
-        .getShippedUtc().getSeconds());
   }
 
-  static EventSourcedResult<ShippingApi.Order> logOrder(String orderId, String message, ShippingTestKit testKit) {
-    var shipOrder = testKit.getOrder(ShippingApi.GetOrderRequest.newBuilder()
-        .setOrderId(orderId)
-        .build());
-    log.info("{}: {}", message, shipOrder.getReply());
-    return shipOrder;
+  static ShippingApi.ShippedOrderSkuItemCommand toShippedOrderSkuItemCommand(String stockSkuItemId, OrderSkuItem orderSkuItems) {
+    return ShippingApi.ShippedOrderSkuItemCommand
+        .newBuilder()
+        .setOrderId(orderSkuItems.getOrderId())
+        .setOrderSkuItemId(orderSkuItems.getOrderSkuItemId())
+        .setSkuId(orderSkuItems.getSkuId())
+        .setShippedUtc(TimeTo.now())
+        .setStockSkuItemId(stockSkuItemId)
+        .build();
+  }
+
+  static ShippingApi.ReleaseOrderSkuItemCommand toReleaseOrderSkuItemCommand(String stockSkuItemId, OrderSkuItem orderSkuItems) {
+    return ShippingApi.ReleaseOrderSkuItemCommand
+        .newBuilder()
+        .setOrderId(orderSkuItems.getOrderId())
+        .setOrderSkuItemId(orderSkuItems.getOrderSkuItemId())
+        .setSkuId(orderSkuItems.getSkuId())
+        .setStockSkuItemId(stockSkuItemId)
+        .build();
+  }
+
+  static ShippingEntity.OrderSkuItem getOrderSkuItem(ShippingEntity.OrderState state, int orderItemIdx, int orderSkuItemIdx) {
+    return state.getOrderItems(orderItemIdx).getOrderSkuItems(orderSkuItemIdx);
+  }
+
+  static String getOrderSkuItemId(ShippingEntity.OrderState state, int orderItemIdx, int orderSkuItemIdx) {
+    return getOrderSkuItem(state, orderItemIdx, orderSkuItemIdx).getOrderSkuItemId();
   }
 }

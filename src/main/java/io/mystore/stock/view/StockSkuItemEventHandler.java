@@ -2,11 +2,10 @@ package io.mystore.stock.view;
 
 import io.mystore.TimeTo;
 import io.mystore.stock.entity.StockSkuItemEntity;
-import io.mystore.stock.view.StockSkuItemsModel.StockSkuItem;
 
 class StockSkuItemEventHandler {
 
-  public static StockSkuItem handle(StockSkuItemsModel.StockSkuItem state, StockSkuItemEntity.StockSkuItemCreated event) {
+  static StockSkuItemsModel.StockSkuItem handle(StockSkuItemsModel.StockSkuItem state, StockSkuItemEntity.StockSkuItemCreated event) {
     return state
         .toBuilder()
         .setStockSkuItemId(event.getStockSkuItemId())
@@ -16,7 +15,7 @@ class StockSkuItemEventHandler {
         .build();
   }
 
-  public static StockSkuItem handle(StockSkuItemsModel.StockSkuItem state, StockSkuItemEntity.OrderRequestedJoinToStockAccepted event) {
+  static StockSkuItemsModel.StockSkuItem handle(StockSkuItemsModel.StockSkuItem state, StockSkuItemEntity.OrderRequestedJoinToStockAccepted event) {
     return state
         .toBuilder()
         .setOrderId(event.getOrderId())
@@ -25,16 +24,11 @@ class StockSkuItemEventHandler {
         .build();
   }
 
-  public static StockSkuItem handle(StockSkuItemsModel.StockSkuItem state, StockSkuItemEntity.OrderRequestedJoinToStockRejected event) {
-    return state
-        .toBuilder()
-        .setOrderId("")
-        .setOrderSkuItemId("")
-        .setShippedUtc(TimeTo.zero())
-        .build();
+  static StockSkuItemsModel.StockSkuItem handle(StockSkuItemsModel.StockSkuItem state, StockSkuItemEntity.OrderRequestedJoinToStockRejected event) {
+    return state; // no change
   }
 
-  public static StockSkuItem handle(StockSkuItemsModel.StockSkuItem state, StockSkuItemEntity.StockRequestedJoinToOrderAccepted event) {
+  static StockSkuItemsModel.StockSkuItem handle(StockSkuItemsModel.StockSkuItem state, StockSkuItemEntity.StockRequestedJoinToOrderAccepted event) {
     return state
         .toBuilder()
         .setOrderId(event.getOrderId())
@@ -43,7 +37,7 @@ class StockSkuItemEventHandler {
         .build();
   }
 
-  public static StockSkuItem handle(StockSkuItemsModel.StockSkuItem state, StockSkuItemEntity.StockRequestedJoinToOrderRejected event) {
+  static StockSkuItemsModel.StockSkuItem handle(StockSkuItemsModel.StockSkuItem state, StockSkuItemEntity.StockRequestedJoinToOrderRejected event) {
     return state
         .toBuilder()
         .setOrderId("")

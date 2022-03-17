@@ -36,7 +36,7 @@ service StockOrdersShipped {
     };
   }
 
-  rpc OnStockSkuItemJoined(entity.StockSkuItemJoined) returns (StockOrder) {
+  rpc OnStockSkuItemShipped(entity.StockSkuItemShipped) returns (StockOrder) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "stock_order"
     };

@@ -30,16 +30,29 @@ public class StockSkuItemToOrderSkuItemAction extends AbstractStockSkuItemToOrde
 
   @Override
   public Effect<Empty> onStockRequestedJoinToOrder(StockSkuItemEntity.StockRequestedJoinToOrder event) {
+    log.info("onStockRequestedJoinToOrder: {}", event);
+
     return effects().asyncReply(queryNotShippedOrderSkuItems(event));
   }
 
   @Override
+  public Effect<Empty> onStockRequestedJoinToOrderRejected(StockSkuItemEntity.StockRequestedJoinToOrderRejected event) {
+    log.info("onStockRequestedJoinToOrderRejected: {}", event);
+
+    return effects().forward(components().orderSkuItem().stockRequestsJoinToOrderRejected(toStockRequestedJoinToOrderRejectedCommand(event)));
+  }
+
+  @Override
   public Effect<Empty> onOrderRequestedJoinToStockAccepted(StockSkuItemEntity.OrderRequestedJoinToStockAccepted event) {
+    log.info("onOrderRequestedJoinToStockAccepted: {}", event);
+
     return effects().forward(components().orderSkuItem().orderRequestedJoinToStockAccepted(toOrderRequestedJoinToStockAccepted(event)));
   }
 
   @Override
   public Effect<Empty> onOrderRequestedJoinToStockRejected(StockSkuItemEntity.OrderRequestedJoinToStockRejected event) {
+    log.info("onOrderRequestedJoinToStockRejected: {}", event);
+
     return effects().forward(components().orderSkuItem().orderRequestedJoinToStockRejected(toOrderRequestedJoinToStockRejected(event)));
   }
 
@@ -61,6 +74,7 @@ public class StockSkuItemToOrderSkuItemAction extends AbstractStockSkuItemToOrde
   private CompletionStage<Empty> onStockRequestedJoinToOrder(StockSkuItemEntity.StockRequestedJoinToOrder event, OrderSkuItemsNotShippedBySkuModel.GetOrderSkuItemsNotShippedBySkuResponse response) {
     var count = response.getOrderSkuItemsCount();
     if (count == 0) {
+      log.info("No order sku items available to join to stock sku item {} {}", event.getSkuId(), event.getStockSkuItemId());
       return CompletableFuture.completedFuture(Empty.getDefaultInstance());
     } else {
       var orderSkuItem = response.getOrderSkuItems(random.nextInt(count));
@@ -75,6 +89,18 @@ public class StockSkuItemToOrderSkuItemAction extends AbstractStockSkuItemToOrde
         .setOrderId(orderSkuItem.getOrderId())
         .setSkuId(event.getSkuId())
         .setStockSkuItemId(event.getStockSkuItemId())
+        .setStockOrderId(event.getStockOrderId())
+        .build();
+  }
+
+  static OrderSkuItemApi.StockRequestsJoinToOrderRejectedCommand toStockRequestedJoinToOrderRejectedCommand(StockSkuItemEntity.StockRequestedJoinToOrderRejected event) {
+    return OrderSkuItemApi.StockRequestsJoinToOrderRejectedCommand
+        .newBuilder()
+        .setOrderSkuItemId(event.getOrderSkuItemId())
+        .setOrderId(event.getOrderId())
+        .setSkuId(event.getSkuId())
+        .setStockSkuItemId(event.getStockSkuItemId())
+        .setStockOrderId(event.getStockOrderId())
         .build();
   }
 
@@ -86,6 +112,7 @@ public class StockSkuItemToOrderSkuItemAction extends AbstractStockSkuItemToOrde
         .setSkuId(event.getSkuId())
         .setStockSkuItemId(event.getStockSkuItemId())
         .setShippedUtc(event.getShippedUtc())
+        .setStockOrderId(event.getStockOrderId())
         .build();
   }
 
@@ -96,6 +123,7 @@ public class StockSkuItemToOrderSkuItemAction extends AbstractStockSkuItemToOrde
         .setOrderId(event.getOrderId())
         .setSkuId(event.getSkuId())
         .setStockSkuItemId(event.getStockSkuItemId())
+        .setStockOrderId(event.getStockOrderId())
         .build();
   }
 }

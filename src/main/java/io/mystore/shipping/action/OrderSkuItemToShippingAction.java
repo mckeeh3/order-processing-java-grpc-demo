@@ -36,8 +36,7 @@ public class OrderSkuItemToShippingAction extends AbstractOrderSkuItemToShipping
 
   @Override
   public Effect<Empty> onStockRequestedJoinToOrderRejected(OrderSkuItemEntity.StockRequestedJoinToOrderRejected event) {
-    // TODO Auto-generated method stub
-    return null;
+    return effects().reply(Empty.getDefaultInstance()); // TODO remove this event handler
   }
 
   @Override
@@ -55,8 +54,14 @@ public class OrderSkuItemToShippingAction extends AbstractOrderSkuItemToShipping
 
   @Override
   public Effect<Empty> onOrderRequestedJoinToStockRejected(OrderSkuItemEntity.OrderRequestedJoinToStockRejected event) {
-    // TODO Auto-generated method stub
-    return null;
+    return effects().forward(components().shipping().releaseOrderSkuItem(
+        ShippingApi.ReleaseOrderSkuItemCommand
+            .newBuilder()
+            .setOrderId(event.getOrderId())
+            .setOrderSkuItemId(event.getOrderSkuItemId())
+            .setSkuId(event.getSkuId())
+            .setStockSkuItemId(event.getStockSkuItemId())
+            .build()));
   }
 
   @Override

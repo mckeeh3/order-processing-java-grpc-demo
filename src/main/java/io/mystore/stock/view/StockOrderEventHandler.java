@@ -9,22 +9,8 @@ import io.mystore.stock.entity.StockOrderEntity;
 
 class StockOrderEventHandler {
 
-  private StockOrdersModel.StockOrder state;
-
-  StockOrderEventHandler(StockOrdersModel.StockOrder state) {
-    this.state = state;
-  }
-
-  static StockOrderEventHandler fromState(StockOrdersModel.StockOrder state) {
-    return new StockOrderEventHandler(state);
-  }
-
-  StockOrdersModel.StockOrder toState() {
-    return state;
-  }
-
-  StockOrderEventHandler handle(StockOrderEntity.StockOrderCreated stockOrderCreated) {
-    state = state
+  static StockOrdersModel.StockOrder handle(StockOrdersModel.StockOrder state, StockOrderEntity.StockOrderCreated stockOrderCreated) {
+    return state
         .toBuilder()
         .setStockOrderId(stockOrderCreated.getStockOrderId())
         .setSkuId(stockOrderCreated.getSkuId())
@@ -32,31 +18,25 @@ class StockOrderEventHandler {
         .setQuantity(stockOrderCreated.getQuantity())
         .addAllStockSkuItems(toStockSkuItems(stockOrderCreated))
         .build();
-
-    return this;
   }
 
-  StockOrderEventHandler handle(StockOrderEntity.StockSkuItemJoined stockSkuItemJoined) {
-    var stockSkuItems = toStockSkuItems(state, stockSkuItemJoined);
+  static StockOrdersModel.StockOrder handle(StockOrdersModel.StockOrder state, StockOrderEntity.StockSkuItemShipped stockSkuItemShipped) {
+    var stockSkuItems = toStockSkuItems(state, stockSkuItemShipped);
 
-    state = state
+    return state
         .toBuilder()
         .setShippedUtc(areAllItemsShipped(stockSkuItems))
         .clearStockSkuItems()
         .addAllStockSkuItems(stockSkuItems)
         .build();
-
-    return this;
   }
 
-  StockOrderEventHandler handle(StockOrderEntity.StockSkuItemReleased stockSkuItemReleased) {
-    state = state
+  static StockOrdersModel.StockOrder handle(StockOrdersModel.StockOrder state, StockOrderEntity.StockSkuItemReleased stockSkuItemReleased) {
+    return state
         .toBuilder()
         .clearStockSkuItems()
         .addAllStockSkuItems(toStockSkuItems(state, stockSkuItemReleased))
         .build();
-
-    return this;
   }
 
   static List<StockSkuItemsModel.StockSkuItem> toStockSkuItems(StockOrderEntity.StockOrderCreated stockOrderCreated) {
@@ -71,7 +51,7 @@ class StockOrderEventHandler {
         .toList();
   }
 
-  static List<StockSkuItemsModel.StockSkuItem> toStockSkuItems(StockOrdersModel.StockOrder state, StockOrderEntity.StockSkuItemJoined event) {
+  static List<StockSkuItemsModel.StockSkuItem> toStockSkuItems(StockOrdersModel.StockOrder state, StockOrderEntity.StockSkuItemShipped event) {
     return state.getStockSkuItemsList().stream()
         .map(stockSkuItem -> {
           if (stockSkuItem.getStockSkuItemId().equals(event.getStockSkuItemId())) {
