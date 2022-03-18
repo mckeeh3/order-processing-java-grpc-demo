@@ -28,7 +28,6 @@ import io.mystore.shipping.view.OrderSkuItemsShippedBySkuView;
 import io.mystore.shipping.view.ShippingByCustomerByDateView;
 import io.mystore.shipping.view.ShippingByDateView;
 import io.mystore.stock.action.OrderSkuItemToStockSkuItemAction;
-import io.mystore.stock.action.ShippableSkuItemsTimerAction;
 import io.mystore.stock.action.StockOrderToStockSkuItemAction;
 import io.mystore.stock.action.StockSkuItemToStockOrderAction;
 import io.mystore.stock.entity.ShippableSkuItemsTimer;
@@ -81,7 +80,6 @@ public final class Main {
       OrderedItemsBySkuByDateView::new,
       OrdersByCustomerByDateView::new,
       OrdersByDateView::new,
-      ShippableSkuItemsTimerAction::new,
       ShippingByCustomerByDateView::new,
       ShippingByDateView::new,
       ShippingToOrderAction::new,
