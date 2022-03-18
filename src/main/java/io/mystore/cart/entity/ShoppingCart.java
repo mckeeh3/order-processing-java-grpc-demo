@@ -59,27 +59,27 @@ public class ShoppingCart extends AbstractShoppingCart {
 
   @Override
   public CartEntity.CartState itemAdded(CartEntity.CartState state, CartEntity.ItemAdded event) {
-    return handle(state, event);
+    return updateState(state, event);
   }
 
   @Override
   public CartEntity.CartState itemChanged(CartEntity.CartState state, CartEntity.ItemChanged event) {
-    return handle(state, event);
+    return updateState(state, event);
   }
 
   @Override
   public CartEntity.CartState itemRemoved(CartEntity.CartState state, CartEntity.ItemRemoved event) {
-    return handle(state, event);
+    return updateState(state, event);
   }
 
   @Override
   public CartEntity.CartState cartCheckedOut(CartEntity.CartState state, CartEntity.CartCheckedOut event) {
-    return handle(state, event);
+    return updateState(state, event);
   }
 
   @Override
   public CartEntity.CartState cartDeleted(CartEntity.CartState state, CartEntity.CartDeleted event) {
-    return handle(state, event);
+    return updateState(state, event);
   }
 
   private Optional<Effect<Empty>> reject(CartEntity.CartState state, CartApi.AddLineItemCommand command) {
@@ -295,7 +295,7 @@ public class ShoppingCart extends AbstractShoppingCart {
         .toList();
   }
 
-  static CartEntity.CartState handle(CartEntity.CartState state, CartEntity.ItemAdded event) {
+  static CartEntity.CartState updateState(CartEntity.CartState state, CartEntity.ItemAdded event) {
     var skuInCart = state.getLineItemsList().stream()
         .anyMatch(lineItem -> lineItem.getSkuId().equals(event.getLineItem().getSkuId()));
 
@@ -313,27 +313,27 @@ public class ShoppingCart extends AbstractShoppingCart {
     }
   }
 
-  static CartEntity.CartState handle(CartEntity.CartState state, CartEntity.ItemChanged event) {
+  static CartEntity.CartState updateState(CartEntity.CartState state, CartEntity.ItemChanged event) {
     return state.toBuilder()
         .clearLineItems()
         .addAllLineItems(changeLineItemQuantity(state, event))
         .build();
   }
 
-  static CartEntity.CartState handle(CartEntity.CartState state, CartEntity.ItemRemoved event) {
+  static CartEntity.CartState updateState(CartEntity.CartState state, CartEntity.ItemRemoved event) {
     return state.toBuilder()
         .clearLineItems()
         .addAllLineItems(removeLineItem(state, event.getSkuId()))
         .build();
   }
 
-  static CartEntity.CartState handle(CartEntity.CartState state, CartEntity.CartCheckedOut event) {
+  static CartEntity.CartState updateState(CartEntity.CartState state, CartEntity.CartCheckedOut event) {
     return state.toBuilder()
         .setCheckedOutUtc(TimeTo.now())
         .build();
   }
 
-  static CartEntity.CartState handle(CartEntity.CartState state, CartEntity.CartDeleted event) {
+  static CartEntity.CartState updateState(CartEntity.CartState state, CartEntity.CartDeleted event) {
     return state.toBuilder()
         .setDeletedUtc(TimeTo.now())
         .build();

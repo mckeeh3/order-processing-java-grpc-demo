@@ -30,7 +30,6 @@ import io.mystore.shipping.view.ShippingByDateView;
 import io.mystore.stock.action.OrderSkuItemToStockSkuItemAction;
 import io.mystore.stock.action.StockOrderToStockSkuItemAction;
 import io.mystore.stock.action.StockSkuItemToStockOrderAction;
-import io.mystore.stock.entity.ShippableSkuItemsTimer;
 import io.mystore.stock.entity.StockOrder;
 import io.mystore.stock.entity.StockSkuItem;
 import io.mystore.stock.view.StockOrdersAvailableView;
@@ -58,7 +57,6 @@ public final class Main {
       Order::new,
       OrderItem::new,
       OrderSkuItem::new,
-      ShippableSkuItemsTimer::new,
       Shipping::new,
       ShoppingCart::new,
       StockOrder::new,
