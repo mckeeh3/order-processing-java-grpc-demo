@@ -1,32 +1,32 @@
 
-@urlPrefix = https://wispy-sun-4785.us-east1.akkaserverless.app
+@urlPrefix = https://spring-frog-8357.us-east1.akkaserverless.app
 @customerId = customer-1
 @skuId = sku-1
-@orderId = cart-1
+@orderId = cart-2
 @fromDate = 2022-01-01T00:00:00.000-05:00
 @toDate = 2023-01-01T00:00:00.000-05:00
 
-### io.mystore.shipping2.view.OrderSkuItemsBackOrderedBySku.GetOrderSkuItemsBackOrderedBySku
+### io.mystore.shipping.view.OrderSkuItemsBackOrderedBySku.GetOrderSkuItemsBackOrderedBySku
 
 curl -XGET -H "Content-Type: application/json"
   '{{urlPrefix}}/order-sku-items-back-ordered-by-sku?sku_id={{skuId}}'
 
-### io.mystore.shipping2.view.OrderSkuItemsByOrder.GetOrderSkuItemsByOrder
+### io.mystore.shipping.view.OrderSkuItemsByOrder.GetOrderSkuItemsByOrder
 
 curl -XGET -H "Content-Type: application/json"
   '{{urlPrefix}}/order-sku-items-by-order?order_id={{orderId}}'
 
-### io.mystore.shipping2.view.OrderSkuItemsShippedBySku.GetOrderSkuItemsShippedBySku
+### io.mystore.shipping.view.OrderSkuItemsShippedBySku.GetOrderSkuItemsShippedBySku
 
 curl -XGET -H "Content-Type: application/json"
   '{{urlPrefix}}/order-sku-items-shipped-by-sku?sku_id={{skuId}}'
 
-### io.mystore.shipping2.view.ShippingByCustomerByDate.GetShippingByCustomerByDate
+### io.mystore.shipping.view.ShippingByCustomerByDate.GetShippingByCustomerByDate
 
 curl -XGET -H "Content-Type: application/json"
   '{{urlPrefix}}/shipping-by-customer-by-date?from_date={{fromDate}}&to_date={{toDate}}&customer_id={{customerId}}'
 
-### io.mystore.shipping2.view.ShippingByDate.GetShippingByDate
+### io.mystore.shipping.view.ShippingByDate.GetShippingByDate
 
 curl -XGET -H "Content-Type: application/json"
   '{{urlPrefix}}/shipping-by-date?from_date={{fromDate}}&to_date={{toDate}}'

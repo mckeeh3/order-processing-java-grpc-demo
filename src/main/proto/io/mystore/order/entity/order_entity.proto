@@ -43,6 +43,11 @@ message OrderShipped {
   google.protobuf.Timestamp shipped_utc = 2;
 }
 
+message OrderReleased {
+  string order_id = 1;
+  google.protobuf.Timestamp shipped_utc = 2;
+}
+
 message OrderDelivered {
   string order_id = 1;
   google.protobuf.Timestamp delivered_utc = 2;
@@ -59,6 +64,12 @@ message OrderCancelled {
 }
 
 message OrderItemShipped {
+  string order_id = 1;
+  string sku_id = 2;
+  google.protobuf.Timestamp shipped_utc = 3;
+}
+
+message OrderItemReleased {
   string order_id = 1;
   string sku_id = 2;
   google.protobuf.Timestamp shipped_utc = 3;

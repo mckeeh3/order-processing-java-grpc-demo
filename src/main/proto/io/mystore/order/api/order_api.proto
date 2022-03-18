@@ -18,10 +18,12 @@ service OrderService {
       events: [
         "io.mystore.order.entity.OrderCreated",
         "io.mystore.order.entity.OrderShipped",
+        "io.mystore.order.entity.OrderReleased",
         "io.mystore.order.entity.OrderDelivered",
         "io.mystore.order.entity.OrderReturned",
         "io.mystore.order.entity.OrderCancelled",
-        "io.mystore.order.entity.OrderItemShipped"  //
+        "io.mystore.order.entity.OrderItemShipped",
+        "io.mystore.order.entity.OrderItemReleased"  //
       ]
     }
   };
@@ -40,9 +42,23 @@ service OrderService {
     };
   }
 
+  rpc ReleasedOrder(ReleasedOrderCommand) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/order/{order_id}/released-order"
+      body: "*"
+    };
+  }
+
   rpc ShippedOrderItem(ShippedOrderSkuCommand) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       put: "/order/{order_id}/shipped-order-sku"
+      body: "*"
+    };
+  }
+
+  rpc ReleasedOrderItem(ReleasedOrderSkuCommand) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/order/{order_id}/released-order-sku"
       body: "*"
     };
   }
@@ -84,10 +100,19 @@ message ShippedOrderCommand {
   google.protobuf.Timestamp shipped_utc = 2;
 }
 
+message ReleasedOrderCommand {
+  string order_id = 1 [(akkaserverless.field).entity_key = true];
+}
+
 message ShippedOrderSkuCommand {
   string order_id = 1 [(akkaserverless.field).entity_key = true];
   string sku_id = 2;
   google.protobuf.Timestamp shipped_utc = 3;
+}
+
+message ReleasedOrderSkuCommand {
+  string order_id = 1 [(akkaserverless.field).entity_key = true];
+  string sku_id = 2;
 }
 
 message DeliveredOrderCommand {

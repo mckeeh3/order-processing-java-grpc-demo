@@ -22,17 +22,31 @@ public class ShippingToOrderAction extends AbstractShippingToOrderAction {
   }
 
   @Override
-  public Effect<Empty> onOrderShipped(ShippingEntity.OrderShipped orderShipped) {
-    log.info("onOrderShipped: {}", orderShipped);
+  public Effect<Empty> onOrderShipped(ShippingEntity.OrderShipped event) {
+    log.info("onOrderShipped: {}", event);
 
-    return effects().forward(components().order().shippedOrder(toShippedOrder(orderShipped)));
+    return effects().forward(components().order().shippedOrder(toShippedOrder(event)));
   }
 
   @Override
-  public Effect<Empty> onOrderItemShipped(ShippingEntity.OrderItemShipped orderItemShipped) {
-    log.info("onOrderItemShipped: {}", orderItemShipped);
+  public Effect<Empty> onOrderReleased(ShippingEntity.OrderReleased event) {
+    log.info("onOrderReleased: {}", event);
 
-    return effects().forward(components().order().shippedOrderItem(toShippedOrderItem(orderItemShipped)));
+    return effects().forward(components().order().releasedOrder(toReleasedOrder(event)));
+  }
+
+  @Override
+  public Effect<Empty> onOrderItemShipped(ShippingEntity.OrderItemShipped event) {
+    log.info("onOrderItemShipped: {}", event);
+
+    return effects().forward(components().order().shippedOrderItem(toShippedOrderItem(event)));
+  }
+
+  @Override
+  public Effect<Empty> onOrderItemReleased(ShippingEntity.OrderItemReleased event) {
+    log.info("onOrderItemReleased: {}", event);
+
+    return effects().forward(components().order().releasedOrderItem(toShippedOrderItem(event)));
   }
 
   @Override
@@ -40,20 +54,35 @@ public class ShippingToOrderAction extends AbstractShippingToOrderAction {
     return effects().reply(Empty.getDefaultInstance());
   }
 
-  static OrderApi.ShippedOrderCommand toShippedOrder(ShippingEntity.OrderShipped orderShipped) {
+  static OrderApi.ShippedOrderCommand toShippedOrder(ShippingEntity.OrderShipped event) {
     return OrderApi.ShippedOrderCommand
         .newBuilder()
-        .setOrderId(orderShipped.getOrderId())
-        .setShippedUtc(orderShipped.getShippedUtc())
+        .setOrderId(event.getOrderId())
+        .setShippedUtc(event.getShippedUtc())
         .build();
   }
 
-  static OrderApi.ShippedOrderSkuCommand toShippedOrderItem(ShippingEntity.OrderItemShipped orderItemShipped) {
+  static OrderApi.ReleasedOrderCommand toReleasedOrder(ShippingEntity.OrderReleased event) {
+    return OrderApi.ReleasedOrderCommand
+        .newBuilder()
+        .setOrderId(event.getOrderId())
+        .build();
+  }
+
+  static OrderApi.ShippedOrderSkuCommand toShippedOrderItem(ShippingEntity.OrderItemShipped event) {
     return OrderApi.ShippedOrderSkuCommand
         .newBuilder()
-        .setOrderId(orderItemShipped.getOrderId())
-        .setSkuId(orderItemShipped.getSkuId())
-        .setShippedUtc(orderItemShipped.getShippedUtc())
+        .setOrderId(event.getOrderId())
+        .setSkuId(event.getSkuId())
+        .setShippedUtc(event.getShippedUtc())
+        .build();
+  }
+
+  static OrderApi.ReleasedOrderSkuCommand toShippedOrderItem(ShippingEntity.OrderItemReleased event) {
+    return OrderApi.ReleasedOrderSkuCommand
+        .newBuilder()
+        .setOrderId(event.getOrderId())
+        .setSkuId(event.getSkuId())
         .build();
   }
 }

@@ -74,7 +74,7 @@ public class StockSkuItemToOrderSkuItemAction extends AbstractStockSkuItemToOrde
   private CompletionStage<Empty> onStockRequestedJoinToOrder(StockSkuItemEntity.StockRequestedJoinToOrder event, OrderSkuItemsNotShippedBySkuModel.GetOrderSkuItemsNotShippedBySkuResponse response) {
     var count = response.getOrderSkuItemsCount();
     if (count == 0) {
-      log.info("No order sku items available to join to stock sku item {} {}", event.getSkuId(), event.getStockSkuItemId());
+      log.info("No order sku items available to join to stock sku item: {}, {}", event.getSkuId(), event.getStockSkuItemId());
       return CompletableFuture.completedFuture(Empty.getDefaultInstance());
     } else {
       var orderSkuItem = response.getOrderSkuItems(random.nextInt(count));

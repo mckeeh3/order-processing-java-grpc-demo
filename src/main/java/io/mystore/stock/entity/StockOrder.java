@@ -101,7 +101,7 @@ public class StockOrder extends AbstractStockOrder {
   }
 
   private Effect<Empty> handle(StockOrderEntity.StockOrderState state, StockOrderApi.ShippedStockSkuItemToStockOrderCommand command) {
-    log.info("state: {}\nJoinStockSkuItemCommand: {}", state, command);
+    log.info("state: {}\nShippedStockSkuItemToStockOrderCommand: {}", state, command);
 
     return effects()
         .emitEvent(eventFor(state, command))
