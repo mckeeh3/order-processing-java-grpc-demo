@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>io.mystore</groupId>
-  <artifactId>mystore-esaas-with-views-java</artifactId>
+  <artifactId>order-processing-java-demo</artifactId>
   <version>v2</version>
   <packaging>jar</packaging>
 
