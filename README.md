@@ -10,13 +10,17 @@ An order processing sequence typically involves first creating some stock SKU it
 |:--:
 | Figure 1 - Order Processing Design
 
-TODO
+The above design shows multiple service component entities that interact with each other via asynchronous event flows. The boxes represent entities encapsulating service APIs, processing logic, and emitting state change events. A more generic event flow diagram shown below (Figure 2) depicts a micro stream. Micro streams are these event-driven flows where services interact via asynchronous event streams. The arrows in these micro stream diagrams represent the events emitted by upstream services flowing to downstream services. Note that micro stream flows are often bidirectional. With Bidirectional flows, service A emits events consumed by service B, and service B emits events consumed by service A.
 
 | ![Micro Stream Event Flows](src/main/resources/images/micro-stream-event-flows.png)
 |:--:
 | Figure 2 - Micro Stream Event Flows |
 
-TODO
+The following diagram (Figure 3) shows more of the implementation details of micro streams. Each service entity includes a defined API and specific event types, and entities receive requests as commands via the API. Commands are requests to perform entity state-changing actions, such as a command to add an item to a shopping cart, and events represent specific entity state changes. So, commands are requests to perform actions while events are historical facts about things that have happened in the past.
+
+Each arrow represents an event store or event journal, and these event stores are also event/message delivery topics. Arrowheads represent actions that consume incoming events and then transform them into commands forwarded to downstream entities.
+
+The triangles in the diagram represent queryable views. Views also consume entity events transforming them into view data.
 
 | ![Micro Stream Overview](src/main/resources/images/micro-stream-overview.png)
 |:--:
