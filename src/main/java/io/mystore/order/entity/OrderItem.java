@@ -26,6 +26,20 @@ public class OrderItem extends AbstractOrderItem {
 
   @Override
   public Effect<Empty> createOrderItem(OrderItemEntity.OrderItemState state, OrderItemApi.CreateOrderItemCommand command) {
+    return handle(state, command);
+  }
+
+  @Override
+  public Effect<Empty> shippedOrderItem(OrderItemEntity.OrderItemState state, OrderItemApi.ShippedOrderItemCommand command) {
+    return handle(state, command);
+  }
+
+  @Override
+  public Effect<OrderItemApi.GetOrderItemResponse> getOrderItem(OrderItemEntity.OrderItemState state, OrderItemApi.GetOrderItemRequest request) {
+    return effects().reply(toApi(state));
+  }
+
+  private Effect<Empty> handle(OrderItemEntity.OrderItemState state, OrderItemApi.CreateOrderItemCommand command) {
     log.info("state: {}\nCreateOrderItemCommand: {}", state, command);
 
     return effects()
@@ -33,18 +47,12 @@ public class OrderItem extends AbstractOrderItem {
         .thenReply(Empty.getDefaultInstance());
   }
 
-  @Override
-  public Effect<Empty> shippedOrderItem(OrderItemEntity.OrderItemState state, OrderItemApi.ShippedOrderItemCommand command) {
+  private Effect<Empty> handle(OrderItemEntity.OrderItemState state, OrderItemApi.ShippedOrderItemCommand command) {
     log.info("state: {}\nShipOrderItemCommand: {}", state, command);
 
     return effects()
         .updateState(updateState(state, command))
         .thenReply(Empty.getDefaultInstance());
-  }
-
-  @Override
-  public Effect<OrderItemApi.GetOrderItemResponse> getOrderItem(OrderItemEntity.OrderItemState state, OrderItemApi.GetOrderItemRequest command) {
-    return effects().reply(toApi(state));
   }
 
   private OrderItemEntity.OrderItemState updateState(OrderItemEntity.OrderItemState state, OrderItemApi.CreateOrderItemCommand command) {
