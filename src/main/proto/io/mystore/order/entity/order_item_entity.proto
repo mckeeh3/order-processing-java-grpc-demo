@@ -2,16 +2,9 @@ syntax = "proto3";
 
 package io.mystore.order.entity;
 
-import "akkaserverless/annotations.proto";
 import "google/protobuf/timestamp.proto";
 
 option java_outer_classname = "OrderItemEntity";
-
-option (akkaserverless.file).value_entity = {
-  name: "OrderItem"
-  entity_type: "order_item"
-  state: "OrderItemState"
-};
 
 message OrderItemState {
   string customer_id = 1;
