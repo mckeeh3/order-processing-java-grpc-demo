@@ -33,7 +33,7 @@ public class OrderSkuItemToStockSkuItemAction extends AbstractOrderSkuItemToStoc
   public Effect<Empty> onOrderRequestedJoinToStock(OrderSkuItemEntity.OrderRequestedJoinToStock event) {
     log.info("onOrderRequestedJoinToStockStock: {}", event);
 
-    return effects().asyncReply(extracted(event));
+    return effects().asyncReply(queryAvailableStockItems(event));
   }
 
   @Override
@@ -62,7 +62,7 @@ public class OrderSkuItemToStockSkuItemAction extends AbstractOrderSkuItemToStoc
     return effects().reply(Empty.getDefaultInstance());
   }
 
-  private CompletionStage<Empty> extracted(OrderSkuItemEntity.OrderRequestedJoinToStock event) {
+  private CompletionStage<Empty> queryAvailableStockItems(OrderSkuItemEntity.OrderRequestedJoinToStock event) {
     return components().stockSkuItemsAvailableView().getStockSkuItemsAvailable(
         StockSkuItemsAvailableModel.GetStockSkuItemsAvailableRequest
             .newBuilder()
