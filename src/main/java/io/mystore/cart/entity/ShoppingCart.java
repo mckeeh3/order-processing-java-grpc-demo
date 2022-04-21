@@ -342,8 +342,8 @@ public class ShoppingCart extends AbstractShoppingCart {
   static List<CartEntity.LineItem> updateLineItemQuantity(CartEntity.CartState state, CartEntity.ItemAdded event) {
     return state.getLineItemsList().stream()
         .map(lineItem -> {
-          if (lineItem.getSkuId().equals(lineItem.getSkuId())) {
-            return lineItem.toBuilder()
+          if (lineItem.getSkuId().equals(event.getLineItem().getSkuId())) {
+             return lineItem.toBuilder()
                 .setQuantity(lineItem.getQuantity() + event.getLineItem().getQuantity())
                 .build();
           } else {
@@ -356,7 +356,7 @@ public class ShoppingCart extends AbstractShoppingCart {
   static List<CartEntity.LineItem> changeLineItemQuantity(CartEntity.CartState state, CartEntity.ItemChanged event) {
     return state.getLineItemsList().stream()
         .map(lineItem -> {
-          if (lineItem.getSkuId().equals(lineItem.getSkuId())) {
+          if (lineItem.getSkuId().equals(event.getSkuId())) {
             return lineItem.toBuilder()
                 .setQuantity(event.getQuantity())
                 .build();
