@@ -2,8 +2,8 @@ package io.mystore.order.view;
 
 import java.util.List;
 
-import com.akkaserverless.javasdk.view.View;
-import com.akkaserverless.javasdk.view.ViewContext;
+import kalix.javasdk.view.View;
+import kalix.javasdk.view.ViewContext;
 import com.google.protobuf.Any;
 
 import io.mystore.order.entity.OrderEntity;
@@ -44,7 +44,8 @@ public class OrdersByCustomerByDateView extends AbstractOrdersByCustomerByDateVi
   }
 
   @Override
-  public UpdateEffect<OrderModel.Order> onOrderItemShipped(OrderModel.Order state, OrderEntity.OrderItemShipped orderItemShipped) {
+  public UpdateEffect<OrderModel.Order> onOrderItemShipped(OrderModel.Order state,
+      OrderEntity.OrderItemShipped orderItemShipped) {
     var orderItems = state.getOrderItemsList().stream()
         .map(item -> {
           if (item.getSkuId().equals(orderItemShipped.getSkuId())) {

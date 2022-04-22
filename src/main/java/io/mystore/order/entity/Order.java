@@ -3,7 +3,7 @@ package io.mystore.order.entity;
 import java.util.List;
 import java.util.Optional;
 
-import com.akkaserverless.javasdk.eventsourcedentity.EventSourcedEntityContext;
+import kalix.javasdk.eventsourcedentity.EventSourcedEntityContext;
 import com.google.protobuf.Empty;
 
 import org.slf4j.Logger;
@@ -409,7 +409,8 @@ public class Order extends AbstractOrder {
         .toList();
   }
 
-  static List<OrderEntity.OrderItem> updateShippedOrderItem(List<OrderEntity.OrderItem> orderItems, OrderEntity.OrderItemShipped event) {
+  static List<OrderEntity.OrderItem> updateShippedOrderItem(List<OrderEntity.OrderItem> orderItems,
+      OrderEntity.OrderItemShipped event) {
     return orderItems.stream()
         .map(orderItem -> {
           if (orderItem.getSkuId().equals(event.getSkuId())) {
@@ -424,7 +425,8 @@ public class Order extends AbstractOrder {
         .toList();
   }
 
-  static List<OrderEntity.OrderItem> updateShippedOrderItem(List<OrderEntity.OrderItem> orderItems, OrderEntity.OrderItemReleased event) {
+  static List<OrderEntity.OrderItem> updateShippedOrderItem(List<OrderEntity.OrderItem> orderItems,
+      OrderEntity.OrderItemReleased event) {
     return orderItems.stream()
         .map(orderItem -> {
           if (orderItem.getSkuId().equals(event.getSkuId())) {

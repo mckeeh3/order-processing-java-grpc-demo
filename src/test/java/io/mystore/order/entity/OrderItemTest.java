@@ -1,7 +1,7 @@
 package io.mystore.order.entity;
 
-import com.akkaserverless.javasdk.testkit.ValueEntityResult;
-import com.akkaserverless.javasdk.valueentity.ValueEntity;
+import kalix.javasdk.testkit.ValueEntityResult;
+import kalix.javasdk.valueentity.ValueEntity;
 import com.google.protobuf.Empty;
 import io.mystore.order.api.OrderItemApi;
 import org.junit.Test;
@@ -31,14 +31,15 @@ public class OrderItemTest {
   @Test
   public void createOrderItemTest() {
     OrderItemTestKit testKit = OrderItemTestKit.of(OrderItem::new);
-    // ValueEntityResult<Empty> result = testKit.createOrderItem(OrderItemCommand.newBuilder()...build());
+    // ValueEntityResult<Empty> result =
+    // testKit.createOrderItem(OrderItemCommand.newBuilder()...build());
   }
-
 
   @Test
   public void getOrderItemTest() {
     OrderItemTestKit testKit = OrderItemTestKit.of(OrderItem::new);
-    // ValueEntityResult<GetOrderItemResponse> result = testKit.getOrderItem(GetOrderItemRequest.newBuilder()...build());
+    // ValueEntityResult<GetOrderItemResponse> result =
+    // testKit.getOrderItem(GetOrderItemRequest.newBuilder()...build());
   }
 
 }

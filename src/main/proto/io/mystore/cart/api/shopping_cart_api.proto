@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-import "akkaserverless/annotations.proto";
+import "kalix/annotations.proto";
 import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
@@ -10,7 +10,7 @@ package io.mystore.cart.api;
 option java_outer_classname = "CartApi";
 
 service ShoppingCartService {
-  option (akkaserverless.codegen) = {
+  option (kalix.codegen) = {
     event_sourced_entity: {
       name: "io.mystore.cart.entity.ShoppingCart"
       entity_type: "shopping_cart"
@@ -65,7 +65,7 @@ service ShoppingCartService {
 }
 
 message AddLineItemCommand {
-  string cart_id = 1 [(akkaserverless.field).entity_key = true];
+  string cart_id = 1 [(kalix.field).entity_key = true];
   string customer_id = 2;
   string sku_id = 3;
   string sku_name = 4;
@@ -73,26 +73,26 @@ message AddLineItemCommand {
 }
 
 message ChangeLineItemCommand {
-  string cart_id = 1 [(akkaserverless.field).entity_key = true];
+  string cart_id = 1 [(kalix.field).entity_key = true];
   string sku_id = 2;
   int32 quantity = 3;
 }
 
 message RemoveLineItemCommand {
-  string cart_id = 1 [(akkaserverless.field).entity_key = true];
+  string cart_id = 1 [(kalix.field).entity_key = true];
   string sku_id = 2;
 }
 
 message CheckoutShoppingCartCommand {
-  string cart_id = 1 [(akkaserverless.field).entity_key = true];
+  string cart_id = 1 [(kalix.field).entity_key = true];
 }
 
 message DeleteShoppingCartCommand {
-  string cart_id = 1 [(akkaserverless.field).entity_key = true];
+  string cart_id = 1 [(kalix.field).entity_key = true];
 }
 
 message GetShoppingCartRequest {
-  string cart_id = 1 [(akkaserverless.field).entity_key = true];
+  string cart_id = 1 [(kalix.field).entity_key = true];
 }
 
 message ShoppingCart {

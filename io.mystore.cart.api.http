@@ -1,5 +1,5 @@
 
-@urlPrefix = https://spring-frog-8357.us-east1.akkaserverless.app
+@urlPrefix = https://spring-frog-8357.us-east1.kalix.app
 @customerId = customer-1
 @cartId = cart-1
 @skuId = sku-4

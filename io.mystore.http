@@ -1,5 +1,5 @@
 
-@urlPrefix = https://blue-shape-3166.us-east1.akkaserverless.app
+@urlPrefix = https://blue-shape-3166.us-east1.kalix.app
 @orderId = cart-1
 
 ### io.mystore.shipping.api.ShipOrderService.ShippedOrder

@@ -1,7 +1,7 @@
 package io.mystore.stock.action;
 
 import akka.stream.javadsl.Source;
-import com.akkaserverless.javasdk.testkit.ActionResult;
+import kalix.javasdk.testkit.ActionResult;
 import com.google.protobuf.Any;
 import com.google.protobuf.Empty;
 import io.mystore.stock.action.StockOrderToStockSkuItemAction;
@@ -19,7 +19,8 @@ public class StockOrderToStockSkuItemActionTest {
 
   @Test
   public void exampleTest() {
-    StockOrderToStockSkuItemActionTestKit testKit = StockOrderToStockSkuItemActionTestKit.of(StockOrderToStockSkuItemAction::new);
+    StockOrderToStockSkuItemActionTestKit testKit = StockOrderToStockSkuItemActionTestKit
+        .of(StockOrderToStockSkuItemAction::new);
     // use the testkit to execute a command
     // ActionResult<SomeResponse> result = testKit.someOperation(SomeRequest);
     // verify the response
@@ -29,14 +30,18 @@ public class StockOrderToStockSkuItemActionTest {
 
   @Test
   public void onStockOrderCreatedTest() {
-    StockOrderToStockSkuItemActionTestKit testKit = StockOrderToStockSkuItemActionTestKit.of(StockOrderToStockSkuItemAction::new);
-    // ActionResult<Empty> result = testKit.onStockOrderCreated(StockOrderEntity.StockOrderCreated.newBuilder()...build());
+    StockOrderToStockSkuItemActionTestKit testKit = StockOrderToStockSkuItemActionTestKit
+        .of(StockOrderToStockSkuItemAction::new);
+    // ActionResult<Empty> result =
+    // testKit.onStockOrderCreated(StockOrderEntity.StockOrderCreated.newBuilder()...build());
   }
 
   @Test
   public void ignoreOtherEventsTest() {
-    StockOrderToStockSkuItemActionTestKit testKit = StockOrderToStockSkuItemActionTestKit.of(StockOrderToStockSkuItemAction::new);
-    // ActionResult<Empty> result = testKit.ignoreOtherEvents(Any.newBuilder()...build());
+    StockOrderToStockSkuItemActionTestKit testKit = StockOrderToStockSkuItemActionTestKit
+        .of(StockOrderToStockSkuItemAction::new);
+    // ActionResult<Empty> result =
+    // testKit.ignoreOtherEvents(Any.newBuilder()...build());
   }
 
 }

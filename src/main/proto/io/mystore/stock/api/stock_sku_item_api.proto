@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-import "akkaserverless/annotations.proto";
+import "kalix/annotations.proto";
 import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
@@ -10,7 +10,7 @@ package io.mystore.stock.api;
 option java_outer_classname = "StockSkuItemApi";
 
 service StockSkuItemService {
-  option (akkaserverless.codegen) = {
+  option (kalix.codegen) = {
     event_sourced_entity: {
       name: "io.mystore.stock.entity.StockSkuItem"
       entity_type: "stock_sku_item"
@@ -69,14 +69,14 @@ service StockSkuItemService {
 }
 
 message CreateStockSkuItemCommand {
-  string stock_sku_item_id = 1 [(akkaserverless.field).entity_key = true];
+  string stock_sku_item_id = 1 [(kalix.field).entity_key = true];
   string sku_id = 2;
   string sku_name = 3;
   string stock_order_id = 4;
 }
 
 message OrderRequestsJoinToStockCommand {
-  string stock_sku_item_id = 1 [(akkaserverless.field).entity_key = true];
+  string stock_sku_item_id = 1 [(kalix.field).entity_key = true];
   string sku_id = 2;
   string order_id = 3;
   string order_sku_item_id = 4;
@@ -84,7 +84,7 @@ message OrderRequestsJoinToStockCommand {
 }
 
 message OrderRequestsJoinToStockRejectedCommand {
-  string stock_sku_item_id = 1 [(akkaserverless.field).entity_key = true];
+  string stock_sku_item_id = 1 [(kalix.field).entity_key = true];
   string sku_id = 2;
   string order_id = 3;
   string order_sku_item_id = 4;
@@ -92,7 +92,7 @@ message OrderRequestsJoinToStockRejectedCommand {
 }
 
 message StockRequestedJoinToOrderAcceptedCommand {
-  string stock_sku_item_id = 1 [(akkaserverless.field).entity_key = true];
+  string stock_sku_item_id = 1 [(kalix.field).entity_key = true];
   string sku_id = 2;
   string order_id = 3;
   string order_sku_item_id = 4;
@@ -101,7 +101,7 @@ message StockRequestedJoinToOrderAcceptedCommand {
 }
 
 message StockRequestedJoinToOrderRejectedCommand {
-  string stock_sku_item_id = 1 [(akkaserverless.field).entity_key = true];
+  string stock_sku_item_id = 1 [(kalix.field).entity_key = true];
   string sku_id = 2;
   string order_id = 3;
   string order_sku_item_id = 4;
@@ -109,7 +109,7 @@ message StockRequestedJoinToOrderRejectedCommand {
 }
 
 message GetStockSKuItemRequest {
-  string stock_sku_item_id = 1 [(akkaserverless.field).entity_key = true];
+  string stock_sku_item_id = 1 [(kalix.field).entity_key = true];
 }
 
 message GetStockSKuItemResponse {

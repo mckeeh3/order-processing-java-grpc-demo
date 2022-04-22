@@ -3,7 +3,7 @@ package io.mystore.stock.action;
 import java.util.Random;
 import java.util.concurrent.CompletionStage;
 
-import com.akkaserverless.javasdk.action.ActionCreationContext;
+import kalix.javasdk.action.ActionCreationContext;
 import com.google.protobuf.Any;
 import com.google.protobuf.Empty;
 
@@ -40,21 +40,24 @@ public class OrderSkuItemToStockSkuItemAction extends AbstractOrderSkuItemToStoc
   public Effect<Empty> onOrderRequestedJoinToStockRejected(OrderSkuItemEntity.OrderRequestedJoinToStockRejected event) {
     log.info("onOrderRequestedJoinToStockRejected: {}", event);
 
-    return effects().forward(components().stockSkuItem().orderRequestsJoinToStockRejected(toOrderRequestedJoinToStockRejected(event)));
+    return effects().forward(
+        components().stockSkuItem().orderRequestsJoinToStockRejected(toOrderRequestedJoinToStockRejected(event)));
   }
 
   @Override
   public Effect<Empty> onStockRequestedJoinToOrderAccepted(OrderSkuItemEntity.StockRequestedJoinToOrderAccepted event) {
     log.info("onStockRequestedJoinToOrderAccepted: {}", event);
 
-    return effects().forward(components().stockSkuItem().stockRequestedJoinToOrderAccepted(toStockRequestedJoinToOrderAcceptedCommand(event)));
+    return effects().forward(components().stockSkuItem()
+        .stockRequestedJoinToOrderAccepted(toStockRequestedJoinToOrderAcceptedCommand(event)));
   }
 
   @Override
   public Effect<Empty> onStockRequestedJoinToOrderRejected(OrderSkuItemEntity.StockRequestedJoinToOrderRejected event) {
     log.info("onStockRequestedJoinToOrderRejected: {}", event);
 
-    return effects().forward(components().stockSkuItem().stockRequestedJoinToOrderRejected(toStockRequestedJoinToOrderRejectedCommand(event)));
+    return effects().forward(components().stockSkuItem()
+        .stockRequestedJoinToOrderRejected(toStockRequestedJoinToOrderRejectedCommand(event)));
   }
 
   @Override
@@ -72,17 +75,20 @@ public class OrderSkuItemToStockSkuItemAction extends AbstractOrderSkuItemToStoc
         .thenCompose(response -> onAvailableShipSkuItems(event, response));
   }
 
-  private CompletionStage<Empty> onAvailableShipSkuItems(OrderSkuItemEntity.OrderRequestedJoinToStock event, StockSkuItemsAvailableModel.GetStockSkuItemsAvailableResponse response) {
+  private CompletionStage<Empty> onAvailableShipSkuItems(OrderSkuItemEntity.OrderRequestedJoinToStock event,
+      StockSkuItemsAvailableModel.GetStockSkuItemsAvailableResponse response) {
     var count = response.getStockSkuItemsCount();
     if (count > 0) {
       return orderRequestedJoinToStock(event, response.getStockSkuItemsList().get(random.nextInt(count)));
     } else {
-      log.info("No stock sku items available to join to order sku item {} {}", event.getSkuId(), event.getOrderSkuItemId());
+      log.info("No stock sku items available to join to order sku item {} {}", event.getSkuId(),
+          event.getOrderSkuItemId());
       return backOrderShipOrderItem(event);
     }
   }
 
-  private CompletionStage<Empty> orderRequestedJoinToStock(OrderSkuItemEntity.OrderRequestedJoinToStock event, StockSkuItemsModel.StockSkuItem shipSkuItem) {
+  private CompletionStage<Empty> orderRequestedJoinToStock(OrderSkuItemEntity.OrderRequestedJoinToStock event,
+      StockSkuItemsModel.StockSkuItem shipSkuItem) {
     return components().stockSkuItem().orderRequestsJoinToStock(
         StockSkuItemApi.OrderRequestsJoinToStockCommand
             .newBuilder()
@@ -105,7 +111,8 @@ public class OrderSkuItemToStockSkuItemAction extends AbstractOrderSkuItemToStoc
         .execute();
   }
 
-  static StockSkuItemApi.OrderRequestsJoinToStockRejectedCommand toOrderRequestedJoinToStockRejected(OrderRequestedJoinToStockRejected event) {
+  static StockSkuItemApi.OrderRequestsJoinToStockRejectedCommand toOrderRequestedJoinToStockRejected(
+      OrderRequestedJoinToStockRejected event) {
     return StockSkuItemApi.OrderRequestsJoinToStockRejectedCommand
         .newBuilder()
         .setOrderSkuItemId(event.getOrderSkuItemId())
@@ -116,7 +123,8 @@ public class OrderSkuItemToStockSkuItemAction extends AbstractOrderSkuItemToStoc
         .build();
   }
 
-  static StockSkuItemApi.StockRequestedJoinToOrderAcceptedCommand toStockRequestedJoinToOrderAcceptedCommand(OrderSkuItemEntity.StockRequestedJoinToOrderAccepted event) {
+  static StockSkuItemApi.StockRequestedJoinToOrderAcceptedCommand toStockRequestedJoinToOrderAcceptedCommand(
+      OrderSkuItemEntity.StockRequestedJoinToOrderAccepted event) {
     return StockSkuItemApi.StockRequestedJoinToOrderAcceptedCommand
         .newBuilder()
         .setStockSkuItemId(event.getStockSkuItemId())
@@ -128,7 +136,8 @@ public class OrderSkuItemToStockSkuItemAction extends AbstractOrderSkuItemToStoc
         .build();
   }
 
-  static StockSkuItemApi.StockRequestedJoinToOrderRejectedCommand toStockRequestedJoinToOrderRejectedCommand(OrderSkuItemEntity.StockRequestedJoinToOrderRejected event) {
+  static StockSkuItemApi.StockRequestedJoinToOrderRejectedCommand toStockRequestedJoinToOrderRejectedCommand(
+      OrderSkuItemEntity.StockRequestedJoinToOrderRejected event) {
     return StockSkuItemApi.StockRequestedJoinToOrderRejectedCommand
         .newBuilder()
         .setStockSkuItemId(event.getStockSkuItemId())

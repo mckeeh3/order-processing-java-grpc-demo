@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package io.mystore.stock.action;
 
-import "akkaserverless/annotations.proto";
+import "kalix/annotations.proto";
 import "google/protobuf/empty.proto";
 import "google/protobuf/any.proto";
 import "io/mystore/stock/entity/stock_order_entity.proto";
@@ -10,18 +10,18 @@ import "io/mystore/stock/entity/stock_order_entity.proto";
 option java_outer_classname = "StockOrderToStockSkuItemService";
 
 service StockOrderToStockSkuItem {
-  option (akkaserverless.codegen) = {
+  option (kalix.codegen) = {
     action: {}
   };
 
   rpc OnStockOrderCreated(stock.entity.StockOrderCreated) returns (google.protobuf.Empty) {
-    option (akkaserverless.method).eventing.in = {
+    option (kalix.method).eventing.in = {
       event_sourced_entity: "stock_order"
     };
   }
 
   rpc IgnoreOtherEvents(google.protobuf.Any) returns (google.protobuf.Empty) {
-    option (akkaserverless.method).eventing.in = {
+    option (kalix.method).eventing.in = {
       event_sourced_entity: "stock_order"
     };
   }

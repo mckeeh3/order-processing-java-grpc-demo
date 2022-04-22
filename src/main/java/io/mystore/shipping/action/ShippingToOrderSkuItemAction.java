@@ -3,7 +3,7 @@ package io.mystore.shipping.action;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
 
-import com.akkaserverless.javasdk.action.ActionCreationContext;
+import kalix.javasdk.action.ActionCreationContext;
 import com.google.protobuf.Any;
 import com.google.protobuf.Empty;
 
@@ -46,7 +46,8 @@ public class ShippingToOrderSkuItemAction extends AbstractShippingToOrderSkuItem
     return effects().reply(Empty.getDefaultInstance());
   }
 
-  static Stream<OrderSkuItemApi.CreateOrderSkuItemCommand> toCreateOrderSkuItemCommands(OrderCreated orderCreated, OrderItem orderItems) {
+  static Stream<OrderSkuItemApi.CreateOrderSkuItemCommand> toCreateOrderSkuItemCommands(OrderCreated orderCreated,
+      OrderItem orderItems) {
     return orderItems.getOrderSkuItemsList().stream()
         .map(orderItem -> OrderSkuItemApi.CreateOrderSkuItemCommand
             .newBuilder()

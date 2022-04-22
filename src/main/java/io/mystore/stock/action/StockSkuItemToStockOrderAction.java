@@ -1,6 +1,6 @@
 package io.mystore.stock.action;
 
-import com.akkaserverless.javasdk.action.ActionCreationContext;
+import kalix.javasdk.action.ActionCreationContext;
 import com.google.protobuf.Any;
 import com.google.protobuf.Empty;
 
@@ -32,7 +32,8 @@ public class StockSkuItemToStockOrderAction extends AbstractStockSkuItemToStockO
   public Effect<Empty> onOrderRequestedJoinToStockRejected(StockSkuItemEntity.OrderRequestedJoinToStockRejected event) {
     log.info("onOrderRequestedJoinToStockRejected: {}", event);
 
-    // return effects().forward(components().stockOrder().releaseStockSkuItem(toStockOrder(event)));
+    // return
+    // effects().forward(components().stockOrder().releaseStockSkuItem(toStockOrder(event)));
     return effects().reply(Empty.getDefaultInstance()); // TODO remove this event handler
   }
 
@@ -55,7 +56,8 @@ public class StockSkuItemToStockOrderAction extends AbstractStockSkuItemToStockO
     return effects().reply(Empty.getDefaultInstance());
   }
 
-  static StockOrderApi.ShippedStockSkuItemToStockOrderCommand toStockOrder(StockSkuItemEntity.OrderRequestedJoinToStockAccepted event) {
+  static StockOrderApi.ShippedStockSkuItemToStockOrderCommand toStockOrder(
+      StockSkuItemEntity.OrderRequestedJoinToStockAccepted event) {
     return StockOrderApi.ShippedStockSkuItemToStockOrderCommand
         .newBuilder()
         .setStockOrderId(event.getStockOrderId())
@@ -67,7 +69,8 @@ public class StockSkuItemToStockOrderAction extends AbstractStockSkuItemToStockO
         .build();
   }
 
-  static StockOrderApi.ShippedStockSkuItemToStockOrderCommand toStockOrder(StockSkuItemEntity.StockRequestedJoinToOrderAccepted event) {
+  static StockOrderApi.ShippedStockSkuItemToStockOrderCommand toStockOrder(
+      StockSkuItemEntity.StockRequestedJoinToOrderAccepted event) {
     return StockOrderApi.ShippedStockSkuItemToStockOrderCommand
         .newBuilder()
         .setStockOrderId(event.getStockOrderId())
@@ -79,7 +82,8 @@ public class StockSkuItemToStockOrderAction extends AbstractStockSkuItemToStockO
         .build();
   }
 
-  static StockOrderApi.ReleaseStockSkuItemFromStockOrderCommand toStockOrder(StockSkuItemEntity.OrderRequestedJoinToStockRejected event) {
+  static StockOrderApi.ReleaseStockSkuItemFromStockOrderCommand toStockOrder(
+      StockSkuItemEntity.OrderRequestedJoinToStockRejected event) {
     return StockOrderApi.ReleaseStockSkuItemFromStockOrderCommand
         .newBuilder()
         .setStockOrderId(event.getStockOrderId())
@@ -90,7 +94,8 @@ public class StockSkuItemToStockOrderAction extends AbstractStockSkuItemToStockO
         .build();
   }
 
-  static StockOrderApi.ReleaseStockSkuItemFromStockOrderCommand toStockOrder(StockSkuItemEntity.StockRequestedJoinToOrderRejected event) {
+  static StockOrderApi.ReleaseStockSkuItemFromStockOrderCommand toStockOrder(
+      StockSkuItemEntity.StockRequestedJoinToOrderRejected event) {
     return StockOrderApi.ReleaseStockSkuItemFromStockOrderCommand
         .newBuilder()
         .setStockOrderId(event.getStockOrderId())

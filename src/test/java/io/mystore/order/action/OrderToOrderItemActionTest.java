@@ -1,7 +1,7 @@
 package io.mystore.order.action;
 
 import akka.stream.javadsl.Source;
-import com.akkaserverless.javasdk.testkit.ActionResult;
+import kalix.javasdk.testkit.ActionResult;
 import com.google.protobuf.Any;
 import com.google.protobuf.Empty;
 import io.mystore.order.action.OrderToOrderItemAction;
@@ -30,19 +30,22 @@ public class OrderToOrderItemActionTest {
   @Test
   public void onOrderCreatedTest() {
     OrderToOrderItemActionTestKit testKit = OrderToOrderItemActionTestKit.of(OrderToOrderItemAction::new);
-    // ActionResult<Empty> result = testKit.onOrderCreated(OrderEntity.OrderCreated.newBuilder()...build());
+    // ActionResult<Empty> result =
+    // testKit.onOrderCreated(OrderEntity.OrderCreated.newBuilder()...build());
   }
 
   @Test
   public void onOrderItemShippedTest() {
     OrderToOrderItemActionTestKit testKit = OrderToOrderItemActionTestKit.of(OrderToOrderItemAction::new);
-    // ActionResult<Empty> result = testKit.onOrderItemShipped(OrderEntity.OrderItemShipped.newBuilder()...build());
+    // ActionResult<Empty> result =
+    // testKit.onOrderItemShipped(OrderEntity.OrderItemShipped.newBuilder()...build());
   }
 
   @Test
   public void ignoreOtherEventsTest() {
     OrderToOrderItemActionTestKit testKit = OrderToOrderItemActionTestKit.of(OrderToOrderItemAction::new);
-    // ActionResult<Empty> result = testKit.ignoreOtherEvents(Any.newBuilder()...build());
+    // ActionResult<Empty> result =
+    // testKit.ignoreOtherEvents(Any.newBuilder()...build());
   }
 
 }

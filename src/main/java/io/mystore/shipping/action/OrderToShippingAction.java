@@ -2,7 +2,7 @@ package io.mystore.shipping.action;
 
 import java.util.List;
 
-import com.akkaserverless.javasdk.action.ActionCreationContext;
+import kalix.javasdk.action.ActionCreationContext;
 import com.google.protobuf.Any;
 import com.google.protobuf.Empty;
 

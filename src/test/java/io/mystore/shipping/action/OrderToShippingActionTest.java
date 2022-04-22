@@ -1,7 +1,7 @@
 package io.mystore.shipping.action;
 
 import akka.stream.javadsl.Source;
-import com.akkaserverless.javasdk.testkit.ActionResult;
+import kalix.javasdk.testkit.ActionResult;
 import com.google.protobuf.Any;
 import com.google.protobuf.Empty;
 import io.mystore.order.entity.OrderEntity;
@@ -30,13 +30,15 @@ public class OrderToShippingActionTest {
   @Test
   public void onOrderCreatedTest() {
     OrderToShippingActionTestKit testKit = OrderToShippingActionTestKit.of(OrderToShippingAction::new);
-    // ActionResult<Empty> result = testKit.onOrderCreated(OrderEntity.OrderCreated.newBuilder()...build());
+    // ActionResult<Empty> result =
+    // testKit.onOrderCreated(OrderEntity.OrderCreated.newBuilder()...build());
   }
 
   @Test
   public void ignoreOtherEventsTest() {
     OrderToShippingActionTestKit testKit = OrderToShippingActionTestKit.of(OrderToShippingAction::new);
-    // ActionResult<Empty> result = testKit.ignoreOtherEvents(Any.newBuilder()...build());
+    // ActionResult<Empty> result =
+    // testKit.ignoreOtherEvents(Any.newBuilder()...build());
   }
 
 }

@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package io.mystore.stock.view;
 
-import "akkaserverless/annotations.proto";
+import "kalix/annotations.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/any.proto";
 import "io/mystore/stock/entity/stock_sku_item_entity.proto";
@@ -11,12 +11,12 @@ import "io/mystore/stock/view/stock_sku_items_model.proto";
 option java_outer_classname = "StockSkuItemsAvailableModel";
 
 service StockSkuItemsAvailable {
-  option (akkaserverless.codegen) = {
+  option (kalix.codegen) = {
     view: {}
   };
 
   rpc GetStockSkuItemsAvailable(GetStockSkuItemsAvailableRequest) returns (GetStockSkuItemsAvailableResponse) {
-    option (akkaserverless.method).view.query = {
+    option (kalix.method).view.query = {
       query: "SELECT * AS stock_sku_items"
              "  FROM stock_sku_items_available"
              " WHERE sku_id = :sku_id"
@@ -28,60 +28,60 @@ service StockSkuItemsAvailable {
   }
 
   rpc OnStockSkuItemCreated(entity.StockSkuItemCreated) returns (StockSkuItem) {
-    option (akkaserverless.method).eventing.in = {
+    option (kalix.method).eventing.in = {
       event_sourced_entity: "stock_sku_item"
     };
-    option (akkaserverless.method).view.update = {
+    option (kalix.method).view.update = {
       table: "stock_sku_items_available"
       transform_updates: true
     };
   }
 
   rpc OnOrderRequestedJoinToStockAccepted(entity.OrderRequestedJoinToStockAccepted) returns (StockSkuItem) {
-    option (akkaserverless.method).eventing.in = {
+    option (kalix.method).eventing.in = {
       event_sourced_entity: "stock_sku_item"
     };
-    option (akkaserverless.method).view.update = {
+    option (kalix.method).view.update = {
       table: "stock_sku_items_available"
       transform_updates: true
     };
   }
 
   rpc OnOrderRequestedJoinToStockRejected(entity.OrderRequestedJoinToStockRejected) returns (StockSkuItem) {
-    option (akkaserverless.method).eventing.in = {
+    option (kalix.method).eventing.in = {
       event_sourced_entity: "stock_sku_item"
     };
-    option (akkaserverless.method).view.update = {
+    option (kalix.method).view.update = {
       table: "stock_sku_items_available"
       transform_updates: true
     };
   }
 
   rpc OnStockRequestedJoinToOrderAccepted(entity.StockRequestedJoinToOrderAccepted) returns (StockSkuItem) {
-    option (akkaserverless.method).eventing.in = {
+    option (kalix.method).eventing.in = {
       event_sourced_entity: "stock_sku_item"
     };
-    option (akkaserverless.method).view.update = {
+    option (kalix.method).view.update = {
       table: "stock_sku_items_available"
       transform_updates: true
     };
   }
 
   rpc OnStockRequestedJoinToOrderRejected(entity.StockRequestedJoinToOrderRejected) returns (StockSkuItem) {
-    option (akkaserverless.method).eventing.in = {
+    option (kalix.method).eventing.in = {
       event_sourced_entity: "stock_sku_item"
     };
-    option (akkaserverless.method).view.update = {
+    option (kalix.method).view.update = {
       table: "stock_sku_items_available"
       transform_updates: true
     };
   }
 
   rpc IgnoreOtherEvents(google.protobuf.Any) returns (StockSkuItem) {
-    option (akkaserverless.method).eventing.in = {
+    option (kalix.method).eventing.in = {
       event_sourced_entity: "stock_sku_item"
     };
-    option (akkaserverless.method).view.update = {
+    option (kalix.method).view.update = {
       table: "stock_sku_items_available"
       transform_updates: true
     };

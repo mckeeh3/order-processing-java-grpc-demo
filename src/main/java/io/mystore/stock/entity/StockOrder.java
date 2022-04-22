@@ -5,7 +5,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.IntStream;
 
-import com.akkaserverless.javasdk.eventsourcedentity.EventSourcedEntityContext;
+import kalix.javasdk.eventsourcedentity.EventSourcedEntityContext;
 import com.google.protobuf.Empty;
 import com.google.protobuf.Timestamp;
 
@@ -32,41 +32,49 @@ public class StockOrder extends AbstractStockOrder {
   }
 
   @Override
-  public Effect<Empty> createStockOrder(StockOrderEntity.StockOrderState state, StockOrderApi.CreateStockOrderCommand command) {
+  public Effect<Empty> createStockOrder(StockOrderEntity.StockOrderState state,
+      StockOrderApi.CreateStockOrderCommand command) {
     return reject(state, command).orElseGet(() -> handle(state, command));
   }
 
   @Override
-  public Effect<Empty> shippedStockSkuItem(StockOrderEntity.StockOrderState state, StockOrderApi.ShippedStockSkuItemToStockOrderCommand command) {
+  public Effect<Empty> shippedStockSkuItem(StockOrderEntity.StockOrderState state,
+      StockOrderApi.ShippedStockSkuItemToStockOrderCommand command) {
     return handle(state, command);
   }
 
   @Override
-  public Effect<Empty> releaseStockSkuItem(StockOrderEntity.StockOrderState state, StockOrderApi.ReleaseStockSkuItemFromStockOrderCommand command) {
+  public Effect<Empty> releaseStockSkuItem(StockOrderEntity.StockOrderState state,
+      StockOrderApi.ReleaseStockSkuItemFromStockOrderCommand command) {
     return handle(state, command);
   }
 
   @Override
-  public Effect<StockOrderApi.StockOrder> getStockOrder(StockOrderEntity.StockOrderState state, StockOrderApi.GetStockOrderRequest command) {
+  public Effect<StockOrderApi.StockOrder> getStockOrder(StockOrderEntity.StockOrderState state,
+      StockOrderApi.GetStockOrderRequest command) {
     return reject(state, command).orElseGet(() -> handle(state, command));
   }
 
   @Override
-  public StockOrderEntity.StockOrderState stockOrderCreated(StockOrderEntity.StockOrderState state, StockOrderEntity.StockOrderCreated event) {
+  public StockOrderEntity.StockOrderState stockOrderCreated(StockOrderEntity.StockOrderState state,
+      StockOrderEntity.StockOrderCreated event) {
     return updateState(state, event);
   }
 
   @Override
-  public StockOrderEntity.StockOrderState stockSkuItemShipped(StockOrderEntity.StockOrderState state, StockOrderEntity.StockSkuItemShipped event) {
+  public StockOrderEntity.StockOrderState stockSkuItemShipped(StockOrderEntity.StockOrderState state,
+      StockOrderEntity.StockSkuItemShipped event) {
     return updateState(state, event);
   }
 
   @Override
-  public StockOrderEntity.StockOrderState stockSkuItemReleased(StockOrderEntity.StockOrderState state, StockOrderEntity.StockSkuItemReleased event) {
+  public StockOrderEntity.StockOrderState stockSkuItemReleased(StockOrderEntity.StockOrderState state,
+      StockOrderEntity.StockSkuItemReleased event) {
     return updateState(state, event);
   }
 
-  private Optional<Effect<Empty>> reject(StockOrderEntity.StockOrderState state, StockOrderApi.CreateStockOrderCommand command) {
+  private Optional<Effect<Empty>> reject(StockOrderEntity.StockOrderState state,
+      StockOrderApi.CreateStockOrderCommand command) {
     if (command.getStockOrderId().isEmpty()) {
       return Optional.of(effects().error("stockOrderId is empty"));
     }
@@ -85,7 +93,8 @@ public class StockOrder extends AbstractStockOrder {
     return Optional.empty();
   }
 
-  private Optional<Effect<StockOrderApi.StockOrder>> reject(StockOrderEntity.StockOrderState state, StockOrderApi.GetStockOrderRequest command) {
+  private Optional<Effect<StockOrderApi.StockOrder>> reject(StockOrderEntity.StockOrderState state,
+      StockOrderApi.GetStockOrderRequest command) {
     if (state.getStockOrderId().isEmpty()) {
       return Optional.of(effects().error("stock order has not been created yet"));
     }
@@ -100,7 +109,8 @@ public class StockOrder extends AbstractStockOrder {
         .thenReply(newState -> Empty.getDefaultInstance());
   }
 
-  private Effect<Empty> handle(StockOrderEntity.StockOrderState state, StockOrderApi.ShippedStockSkuItemToStockOrderCommand command) {
+  private Effect<Empty> handle(StockOrderEntity.StockOrderState state,
+      StockOrderApi.ShippedStockSkuItemToStockOrderCommand command) {
     log.info("state: {}\nShippedStockSkuItemToStockOrderCommand: {}", state, command);
 
     return effects()
@@ -108,7 +118,8 @@ public class StockOrder extends AbstractStockOrder {
         .thenReply(newState -> Empty.getDefaultInstance());
   }
 
-  private Effect<Empty> handle(StockOrderEntity.StockOrderState state, StockOrderApi.ReleaseStockSkuItemFromStockOrderCommand command) {
+  private Effect<Empty> handle(StockOrderEntity.StockOrderState state,
+      StockOrderApi.ReleaseStockSkuItemFromStockOrderCommand command) {
     log.info("state: {}\nReleaseStockSkuItemCommand: {}", state, command);
 
     return effects()
@@ -116,7 +127,8 @@ public class StockOrder extends AbstractStockOrder {
         .thenReply(newState -> Empty.getDefaultInstance());
   }
 
-  private Effect<StockOrderApi.StockOrder> handle(StockOrderEntity.StockOrderState state, StockOrderApi.GetStockOrderRequest command) {
+  private Effect<StockOrderApi.StockOrder> handle(StockOrderEntity.StockOrderState state,
+      StockOrderApi.GetStockOrderRequest command) {
     return effects()
         .reply(StockOrderApi.StockOrder
             .newBuilder()
@@ -129,7 +141,8 @@ public class StockOrder extends AbstractStockOrder {
             .build());
   }
 
-  static StockOrderEntity.StockOrderCreated eventFor(StockOrderEntity.StockOrderState state, StockOrderApi.CreateStockOrderCommand command) {
+  static StockOrderEntity.StockOrderCreated eventFor(StockOrderEntity.StockOrderState state,
+      StockOrderApi.CreateStockOrderCommand command) {
     return StockOrderEntity.StockOrderCreated
         .newBuilder()
         .setStockOrderId(command.getStockOrderId())
@@ -140,7 +153,8 @@ public class StockOrder extends AbstractStockOrder {
         .build();
   }
 
-  static StockOrderEntity.StockSkuItemShipped eventFor(StockOrderEntity.StockOrderState state, StockOrderApi.ShippedStockSkuItemToStockOrderCommand command) {
+  static StockOrderEntity.StockSkuItemShipped eventFor(StockOrderEntity.StockOrderState state,
+      StockOrderApi.ShippedStockSkuItemToStockOrderCommand command) {
     return StockOrderEntity.StockSkuItemShipped
         .newBuilder()
         .setStockOrderId(state.getStockOrderId())
@@ -152,7 +166,8 @@ public class StockOrder extends AbstractStockOrder {
         .build();
   }
 
-  static StockOrderEntity.StockSkuItemReleased eventFor(StockOrderEntity.StockOrderState state, StockOrderApi.ReleaseStockSkuItemFromStockOrderCommand command) {
+  static StockOrderEntity.StockSkuItemReleased eventFor(StockOrderEntity.StockOrderState state,
+      StockOrderApi.ReleaseStockSkuItemFromStockOrderCommand command) {
     return StockOrderEntity.StockSkuItemReleased
         .newBuilder()
         .setStockOrderId(state.getStockOrderId())
@@ -174,7 +189,8 @@ public class StockOrder extends AbstractStockOrder {
         .toList();
   }
 
-  static List<StockOrderEntity.StockSkuItem> toStockSkuItemsList(StockOrderEntity.StockOrderState state, StockOrderEntity.StockSkuItemShipped event) {
+  static List<StockOrderEntity.StockSkuItem> toStockSkuItemsList(StockOrderEntity.StockOrderState state,
+      StockOrderEntity.StockSkuItemShipped event) {
     return state.getStockSkuItemsList().stream()
         .map(stockSkuItem -> {
           if (stockSkuItem.getStockSkuItemId().equals(event.getStockSkuItemId())) {
@@ -190,7 +206,8 @@ public class StockOrder extends AbstractStockOrder {
         .toList();
   }
 
-  static List<StockOrderEntity.StockSkuItem> toStockSkuItemsList(StockOrderEntity.StockOrderState state, StockOrderEntity.StockSkuItemReleased event) {
+  static List<StockOrderEntity.StockSkuItem> toStockSkuItemsList(StockOrderEntity.StockOrderState state,
+      StockOrderEntity.StockSkuItemReleased event) {
     return state.getStockSkuItemsList().stream()
         .map(stockSkuItem -> {
           if (stockSkuItem.getStockSkuItemId().equals(event.getStockSkuItemId())) {
@@ -232,7 +249,8 @@ public class StockOrder extends AbstractStockOrder {
     return shippedUtc != null && shippedUtc.getSeconds() > 0;
   }
 
-  static StockOrderEntity.StockOrderState updateState(StockOrderEntity.StockOrderState state, StockOrderEntity.StockOrderCreated event) {
+  static StockOrderEntity.StockOrderState updateState(StockOrderEntity.StockOrderState state,
+      StockOrderEntity.StockOrderCreated event) {
     return state
         .toBuilder()
         .setStockOrderId(event.getStockOrderId())
@@ -243,7 +261,8 @@ public class StockOrder extends AbstractStockOrder {
         .build();
   }
 
-  static StockOrderEntity.StockOrderState updateState(StockOrderEntity.StockOrderState state, StockOrderEntity.StockSkuItemShipped event) {
+  static StockOrderEntity.StockOrderState updateState(StockOrderEntity.StockOrderState state,
+      StockOrderEntity.StockSkuItemShipped event) {
     var stockSkuItems = toStockSkuItemsList(state, event);
 
     return state
@@ -254,7 +273,8 @@ public class StockOrder extends AbstractStockOrder {
         .build();
   }
 
-  static StockOrderEntity.StockOrderState updateState(StockOrderEntity.StockOrderState state, StockOrderEntity.StockSkuItemReleased event) {
+  static StockOrderEntity.StockOrderState updateState(StockOrderEntity.StockOrderState state,
+      StockOrderEntity.StockSkuItemReleased event) {
     var stockSkuItems = toStockSkuItemsList(state, event);
 
     return state

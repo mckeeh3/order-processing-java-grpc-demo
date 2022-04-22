@@ -1,7 +1,7 @@
 package io.mystore.shipping.view;
 
-import com.akkaserverless.javasdk.view.View;
-import com.akkaserverless.javasdk.view.ViewContext;
+import kalix.javasdk.view.View;
+import kalix.javasdk.view.ViewContext;
 import com.google.protobuf.Any;
 import io.mystore.shipping.entity.ShippingEntity;
 
@@ -21,22 +21,26 @@ public class ShippingByCustomerByDateView extends AbstractShippingByCustomerByDa
   }
 
   @Override
-  public View.UpdateEffect<ShippingModel.Shipping> onOrderCreated(ShippingModel.Shipping state, ShippingEntity.OrderCreated event) {
+  public View.UpdateEffect<ShippingModel.Shipping> onOrderCreated(ShippingModel.Shipping state,
+      ShippingEntity.OrderCreated event) {
     return effects().updateState(ShippingEventHandler.handle(state, event));
   }
 
   @Override
-  public View.UpdateEffect<ShippingModel.Shipping> onOrderShipped(ShippingModel.Shipping state, ShippingEntity.OrderShipped event) {
+  public View.UpdateEffect<ShippingModel.Shipping> onOrderShipped(ShippingModel.Shipping state,
+      ShippingEntity.OrderShipped event) {
     return effects().updateState(ShippingEventHandler.handle(state, event));
   }
 
   @Override
-  public View.UpdateEffect<ShippingModel.Shipping> onOrderItemShipped(ShippingModel.Shipping state, ShippingEntity.OrderItemShipped event) {
+  public View.UpdateEffect<ShippingModel.Shipping> onOrderItemShipped(ShippingModel.Shipping state,
+      ShippingEntity.OrderItemShipped event) {
     return effects().updateState(ShippingEventHandler.handle(state, event));
   }
 
   @Override
-  public View.UpdateEffect<ShippingModel.Shipping> onOrderSkuItemShipped(ShippingModel.Shipping state, ShippingEntity.OrderSkuItemShipped event) {
+  public View.UpdateEffect<ShippingModel.Shipping> onOrderSkuItemShipped(ShippingModel.Shipping state,
+      ShippingEntity.OrderSkuItemShipped event) {
     return effects().updateState(ShippingEventHandler.handle(state, event));
   }
 

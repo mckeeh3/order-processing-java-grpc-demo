@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-import "akkaserverless/annotations.proto";
+import "kalix/annotations.proto";
 import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
@@ -10,7 +10,7 @@ package io.mystore.order.api;
 option java_outer_classname = "OrderApi";
 
 service OrderService {
-  option (akkaserverless.codegen) = {
+  option (kalix.codegen) = {
     event_sourced_entity: {
       name: "io.mystore.order.entity.Order"
       entity_type: "order"
@@ -89,50 +89,50 @@ service OrderService {
 }
 
 message CreateOrderCommand {
-  string order_id = 1 [(akkaserverless.field).entity_key = true];
+  string order_id = 1 [(kalix.field).entity_key = true];
   string customer_id = 2;
   google.protobuf.Timestamp ordered_utc = 3;
   repeated OrderItem order_items = 4;
 }
 
 message ShippedOrderCommand {
-  string order_id = 1 [(akkaserverless.field).entity_key = true];
+  string order_id = 1 [(kalix.field).entity_key = true];
   google.protobuf.Timestamp shipped_utc = 2;
 }
 
 message ReleasedOrderCommand {
-  string order_id = 1 [(akkaserverless.field).entity_key = true];
+  string order_id = 1 [(kalix.field).entity_key = true];
 }
 
 message ShippedOrderSkuCommand {
-  string order_id = 1 [(akkaserverless.field).entity_key = true];
+  string order_id = 1 [(kalix.field).entity_key = true];
   string sku_id = 2;
   google.protobuf.Timestamp shipped_utc = 3;
 }
 
 message ReleasedOrderSkuCommand {
-  string order_id = 1 [(akkaserverless.field).entity_key = true];
+  string order_id = 1 [(kalix.field).entity_key = true];
   string sku_id = 2;
 }
 
 message DeliveredOrderCommand {
-  string order_id = 1 [(akkaserverless.field).entity_key = true];
+  string order_id = 1 [(kalix.field).entity_key = true];
 }
 
 message ReturnedOrderCommand {
-  string order_id = 1 [(akkaserverless.field).entity_key = true];
+  string order_id = 1 [(kalix.field).entity_key = true];
 }
 
 message CanceledOrderCommand {
-  string order_id = 1 [(akkaserverless.field).entity_key = true];
+  string order_id = 1 [(kalix.field).entity_key = true];
 }
 
 message GetOrderRequest {
-  string order_id = 1 [(akkaserverless.field).entity_key = true];
+  string order_id = 1 [(kalix.field).entity_key = true];
 }
 
 message Order {
-  string order_id = 1 [(akkaserverless.field).entity_key = true];
+  string order_id = 1 [(kalix.field).entity_key = true];
   string customer_id = 2;
   google.protobuf.Timestamp ordered_utc = 3;
   google.protobuf.Timestamp shipped_utc = 4;

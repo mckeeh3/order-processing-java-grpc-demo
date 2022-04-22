@@ -1,7 +1,7 @@
 package io.mystore.order.view;
 
-import com.akkaserverless.javasdk.view.View;
-import com.akkaserverless.javasdk.view.ViewContext;
+import kalix.javasdk.view.View;
+import kalix.javasdk.view.ViewContext;
 import com.google.protobuf.Any;
 import io.mystore.order.entity.OrderItemEntity;
 
@@ -21,7 +21,8 @@ public class OrderedItemsBySkuByDateView extends AbstractOrderedItemsBySkuByDate
   }
 
   @Override
-  public View.UpdateEffect<OrderItemModel.OrderedItem> onOrdered(OrderItemModel.OrderedItem state, OrderItemEntity.OrderItemState orderItemState) {
+  public View.UpdateEffect<OrderItemModel.OrderedItem> onOrdered(OrderItemModel.OrderedItem state,
+      OrderItemEntity.OrderItemState orderItemState) {
     return effects().updateState(
         state.toBuilder()
             .setCustomerId(orderItemState.getCustomerId())
