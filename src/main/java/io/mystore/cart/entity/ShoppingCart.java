@@ -344,7 +344,7 @@ public class ShoppingCart extends AbstractShoppingCart {
     return state.getLineItemsList().stream()
         .map(lineItem -> {
           if (lineItem.getSkuId().equals(event.getLineItem().getSkuId())) {
-             return lineItem.toBuilder()
+            return lineItem.toBuilder()
                 .setQuantity(lineItem.getQuantity() + event.getLineItem().getQuantity())
                 .build();
           } else {
