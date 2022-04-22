@@ -33,9 +33,9 @@ public class StockOrderToStockSkuItemAction extends AbstractStockOrderToStockSku
         .toList();
 
     var result = CompletableFuture.allOf(results.toArray(new CompletableFuture[results.size()]))
-        .thenApply(reply -> effects().reply(Empty.getDefaultInstance()));
+        .thenApply(reply -> Empty.getDefaultInstance());
 
-    return effects().asyncEffect(result);
+    return effects().asyncReply(result);
   }
 
   @Override
