@@ -1,7 +1,7 @@
 package io.mystore.shipping.action;
 
 import akka.stream.javadsl.Source;
-import com.akkaserverless.javasdk.testkit.ActionResult;
+import kalix.javasdk.testkit.ActionResult;
 import com.google.protobuf.Any;
 import com.google.protobuf.Empty;
 
@@ -21,7 +21,8 @@ public class ShippingToOrderSkuItemActionTest {
 
   @Test
   public void exampleTest() {
-    ShippingToOrderSkuItemActionTestKit testKit = ShippingToOrderSkuItemActionTestKit.of(ShippingToOrderSkuItemAction::new);
+    ShippingToOrderSkuItemActionTestKit testKit = ShippingToOrderSkuItemActionTestKit
+        .of(ShippingToOrderSkuItemAction::new);
     // use the testkit to execute a command
     // ActionResult<SomeResponse> result = testKit.someOperation(SomeRequest);
     // verify the response
@@ -31,14 +32,18 @@ public class ShippingToOrderSkuItemActionTest {
 
   @Test
   public void onOrderCreatedTest() {
-    ShippingToOrderSkuItemActionTestKit testKit = ShippingToOrderSkuItemActionTestKit.of(ShippingToOrderSkuItemAction::new);
-    // ActionResult<Empty> result = testKit.onOrderCreated(ShippingEntity.OrderCreated.newBuilder()...build());
+    ShippingToOrderSkuItemActionTestKit testKit = ShippingToOrderSkuItemActionTestKit
+        .of(ShippingToOrderSkuItemAction::new);
+    // ActionResult<Empty> result =
+    // testKit.onOrderCreated(ShippingEntity.OrderCreated.newBuilder()...build());
   }
 
   @Test
   public void ignoreOtherEventsTest() {
-    ShippingToOrderSkuItemActionTestKit testKit = ShippingToOrderSkuItemActionTestKit.of(ShippingToOrderSkuItemAction::new);
-    // ActionResult<Empty> result = testKit.ignoreOtherEvents(Any.newBuilder()...build());
+    ShippingToOrderSkuItemActionTestKit testKit = ShippingToOrderSkuItemActionTestKit
+        .of(ShippingToOrderSkuItemAction::new);
+    // ActionResult<Empty> result =
+    // testKit.ignoreOtherEvents(Any.newBuilder()...build());
   }
 
 }

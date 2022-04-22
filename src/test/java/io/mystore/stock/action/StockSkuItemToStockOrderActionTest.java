@@ -1,7 +1,7 @@
 package io.mystore.stock.action;
 
 import akka.stream.javadsl.Source;
-import com.akkaserverless.javasdk.testkit.ActionResult;
+import kalix.javasdk.testkit.ActionResult;
 import com.google.protobuf.Any;
 import com.google.protobuf.Empty;
 import io.mystore.stock.action.StockSkuItemToStockOrderAction;
@@ -19,7 +19,8 @@ public class StockSkuItemToStockOrderActionTest {
 
   @Test
   public void exampleTest() {
-    StockSkuItemToStockOrderActionTestKit testKit = StockSkuItemToStockOrderActionTestKit.of(StockSkuItemToStockOrderAction::new);
+    StockSkuItemToStockOrderActionTestKit testKit = StockSkuItemToStockOrderActionTestKit
+        .of(StockSkuItemToStockOrderAction::new);
     // use the testkit to execute a command
     // ActionResult<SomeResponse> result = testKit.someOperation(SomeRequest);
     // verify the response
@@ -29,20 +30,26 @@ public class StockSkuItemToStockOrderActionTest {
 
   @Test
   public void onJoinedToStockSkuItemTest() {
-    StockSkuItemToStockOrderActionTestKit testKit = StockSkuItemToStockOrderActionTestKit.of(StockSkuItemToStockOrderAction::new);
-    // ActionResult<Empty> result = testKit.onJoinedToStockSkuItem(StockSkuItemEntity.JoinedToStockSkuItem.newBuilder()...build());
+    StockSkuItemToStockOrderActionTestKit testKit = StockSkuItemToStockOrderActionTestKit
+        .of(StockSkuItemToStockOrderAction::new);
+    // ActionResult<Empty> result =
+    // testKit.onJoinedToStockSkuItem(StockSkuItemEntity.JoinedToStockSkuItem.newBuilder()...build());
   }
 
   @Test
   public void onReleasedFromStockSkuItemTest() {
-    StockSkuItemToStockOrderActionTestKit testKit = StockSkuItemToStockOrderActionTestKit.of(StockSkuItemToStockOrderAction::new);
-    // ActionResult<Empty> result = testKit.onReleasedFromStockSkuItem(StockSkuItemEntity.ReleasedFromStockSkuItem.newBuilder()...build());
+    StockSkuItemToStockOrderActionTestKit testKit = StockSkuItemToStockOrderActionTestKit
+        .of(StockSkuItemToStockOrderAction::new);
+    // ActionResult<Empty> result =
+    // testKit.onReleasedFromStockSkuItem(StockSkuItemEntity.ReleasedFromStockSkuItem.newBuilder()...build());
   }
 
   @Test
   public void ignoreOtherEventsTest() {
-    StockSkuItemToStockOrderActionTestKit testKit = StockSkuItemToStockOrderActionTestKit.of(StockSkuItemToStockOrderAction::new);
-    // ActionResult<Empty> result = testKit.ignoreOtherEvents(Any.newBuilder()...build());
+    StockSkuItemToStockOrderActionTestKit testKit = StockSkuItemToStockOrderActionTestKit
+        .of(StockSkuItemToStockOrderAction::new);
+    // ActionResult<Empty> result =
+    // testKit.ignoreOtherEvents(Any.newBuilder()...build());
   }
 
 }

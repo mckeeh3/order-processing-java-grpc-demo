@@ -1,7 +1,7 @@
 package io.mystore.cart.view;
 
-import com.akkaserverless.javasdk.view.View;
-import com.akkaserverless.javasdk.view.ViewContext;
+import kalix.javasdk.view.View;
+import kalix.javasdk.view.ViewContext;
 
 import io.mystore.cart.entity.CartEntity;
 

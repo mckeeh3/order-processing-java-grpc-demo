@@ -1,7 +1,7 @@
 package io.mystore.stock.view;
 
-import com.akkaserverless.javasdk.view.View;
-import com.akkaserverless.javasdk.view.ViewContext;
+import kalix.javasdk.view.View;
+import kalix.javasdk.view.ViewContext;
 import com.google.protobuf.Any;
 
 import io.mystore.stock.entity.StockSkuItemEntity;
@@ -22,32 +22,38 @@ public class StockSkuItemsAvailableView extends AbstractStockSkuItemsAvailableVi
   }
 
   @Override
-  public View.UpdateEffect<StockSkuItemsModel.StockSkuItem> onStockSkuItemCreated(StockSkuItemsModel.StockSkuItem state, StockSkuItemEntity.StockSkuItemCreated event) {
+  public View.UpdateEffect<StockSkuItemsModel.StockSkuItem> onStockSkuItemCreated(StockSkuItemsModel.StockSkuItem state,
+      StockSkuItemEntity.StockSkuItemCreated event) {
     return effects().updateState(StockSkuItemEventHandler.handle(state, event));
   }
 
   @Override
-  public UpdateEffect<StockSkuItemsModel.StockSkuItem> onOrderRequestedJoinToStockAccepted(StockSkuItemsModel.StockSkuItem state, StockSkuItemEntity.OrderRequestedJoinToStockAccepted event) {
+  public UpdateEffect<StockSkuItemsModel.StockSkuItem> onOrderRequestedJoinToStockAccepted(
+      StockSkuItemsModel.StockSkuItem state, StockSkuItemEntity.OrderRequestedJoinToStockAccepted event) {
     return effects().updateState(StockSkuItemEventHandler.handle(state, event));
   }
 
   @Override
-  public UpdateEffect<StockSkuItemsModel.StockSkuItem> onOrderRequestedJoinToStockRejected(StockSkuItemsModel.StockSkuItem state, StockSkuItemEntity.OrderRequestedJoinToStockRejected event) {
+  public UpdateEffect<StockSkuItemsModel.StockSkuItem> onOrderRequestedJoinToStockRejected(
+      StockSkuItemsModel.StockSkuItem state, StockSkuItemEntity.OrderRequestedJoinToStockRejected event) {
     return effects().updateState(StockSkuItemEventHandler.handle(state, event));
   }
 
   @Override
-  public UpdateEffect<StockSkuItemsModel.StockSkuItem> onStockRequestedJoinToOrderAccepted(StockSkuItemsModel.StockSkuItem state, StockSkuItemEntity.StockRequestedJoinToOrderAccepted event) {
+  public UpdateEffect<StockSkuItemsModel.StockSkuItem> onStockRequestedJoinToOrderAccepted(
+      StockSkuItemsModel.StockSkuItem state, StockSkuItemEntity.StockRequestedJoinToOrderAccepted event) {
     return effects().updateState(StockSkuItemEventHandler.handle(state, event));
   }
 
   @Override
-  public UpdateEffect<StockSkuItemsModel.StockSkuItem> onStockRequestedJoinToOrderRejected(StockSkuItemsModel.StockSkuItem state, StockSkuItemEntity.StockRequestedJoinToOrderRejected event) {
+  public UpdateEffect<StockSkuItemsModel.StockSkuItem> onStockRequestedJoinToOrderRejected(
+      StockSkuItemsModel.StockSkuItem state, StockSkuItemEntity.StockRequestedJoinToOrderRejected event) {
     return effects().updateState(StockSkuItemEventHandler.handle(state, event));
   }
 
   @Override
-  public View.UpdateEffect<StockSkuItemsModel.StockSkuItem> ignoreOtherEvents(StockSkuItemsModel.StockSkuItem state, Any any) {
+  public View.UpdateEffect<StockSkuItemsModel.StockSkuItem> ignoreOtherEvents(StockSkuItemsModel.StockSkuItem state,
+      Any any) {
     return effects().ignore();
   }
 }

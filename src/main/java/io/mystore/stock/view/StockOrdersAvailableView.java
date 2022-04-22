@@ -1,7 +1,7 @@
 package io.mystore.stock.view;
 
-import com.akkaserverless.javasdk.view.View;
-import com.akkaserverless.javasdk.view.ViewContext;
+import kalix.javasdk.view.View;
+import kalix.javasdk.view.ViewContext;
 import com.google.protobuf.Any;
 import io.mystore.stock.entity.StockOrderEntity;
 
@@ -21,17 +21,20 @@ public class StockOrdersAvailableView extends AbstractStockOrdersAvailableView {
   }
 
   @Override
-  public View.UpdateEffect<StockOrdersModel.StockOrder> onStockOrderCreated(StockOrdersModel.StockOrder state, StockOrderEntity.StockOrderCreated event) {
+  public View.UpdateEffect<StockOrdersModel.StockOrder> onStockOrderCreated(StockOrdersModel.StockOrder state,
+      StockOrderEntity.StockOrderCreated event) {
     return effects().updateState(StockOrderEventHandler.handle(state, event));
   }
 
   @Override
-  public View.UpdateEffect<StockOrdersModel.StockOrder> onStockSkuItemShipped(StockOrdersModel.StockOrder state, StockOrderEntity.StockSkuItemShipped event) {
+  public View.UpdateEffect<StockOrdersModel.StockOrder> onStockSkuItemShipped(StockOrdersModel.StockOrder state,
+      StockOrderEntity.StockSkuItemShipped event) {
     return effects().updateState(StockOrderEventHandler.handle(state, event));
   }
 
   @Override
-  public View.UpdateEffect<StockOrdersModel.StockOrder> onStockSkuItemReleased(StockOrdersModel.StockOrder state, StockOrderEntity.StockSkuItemReleased event) {
+  public View.UpdateEffect<StockOrdersModel.StockOrder> onStockSkuItemReleased(StockOrdersModel.StockOrder state,
+      StockOrderEntity.StockSkuItemReleased event) {
     return effects().updateState(StockOrderEventHandler.handle(state, event));
   }
 

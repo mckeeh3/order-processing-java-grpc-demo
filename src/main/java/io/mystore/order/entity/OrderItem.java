@@ -1,6 +1,6 @@
 package io.mystore.order.entity;
 
-import com.akkaserverless.javasdk.valueentity.ValueEntityContext;
+import kalix.javasdk.valueentity.ValueEntityContext;
 import com.google.protobuf.Empty;
 
 import org.slf4j.Logger;
@@ -25,17 +25,20 @@ public class OrderItem extends AbstractOrderItem {
   }
 
   @Override
-  public Effect<Empty> createOrderItem(OrderItemEntity.OrderItemState state, OrderItemApi.CreateOrderItemCommand command) {
+  public Effect<Empty> createOrderItem(OrderItemEntity.OrderItemState state,
+      OrderItemApi.CreateOrderItemCommand command) {
     return handle(state, command);
   }
 
   @Override
-  public Effect<Empty> shippedOrderItem(OrderItemEntity.OrderItemState state, OrderItemApi.ShippedOrderItemCommand command) {
+  public Effect<Empty> shippedOrderItem(OrderItemEntity.OrderItemState state,
+      OrderItemApi.ShippedOrderItemCommand command) {
     return handle(state, command);
   }
 
   @Override
-  public Effect<OrderItemApi.GetOrderItemResponse> getOrderItem(OrderItemEntity.OrderItemState state, OrderItemApi.GetOrderItemRequest request) {
+  public Effect<OrderItemApi.GetOrderItemResponse> getOrderItem(OrderItemEntity.OrderItemState state,
+      OrderItemApi.GetOrderItemRequest request) {
     return effects().reply(toApi(state));
   }
 
@@ -55,7 +58,8 @@ public class OrderItem extends AbstractOrderItem {
         .thenReply(Empty.getDefaultInstance());
   }
 
-  private OrderItemEntity.OrderItemState updateState(OrderItemEntity.OrderItemState state, OrderItemApi.CreateOrderItemCommand command) {
+  private OrderItemEntity.OrderItemState updateState(OrderItemEntity.OrderItemState state,
+      OrderItemApi.CreateOrderItemCommand command) {
     return OrderItemEntity.OrderItemState
         .newBuilder()
         .setOrderId(command.getOrderId())
@@ -67,7 +71,8 @@ public class OrderItem extends AbstractOrderItem {
         .build();
   }
 
-  private OrderItemEntity.OrderItemState updateState(OrderItemEntity.OrderItemState state, OrderItemApi.ShippedOrderItemCommand command) {
+  private OrderItemEntity.OrderItemState updateState(OrderItemEntity.OrderItemState state,
+      OrderItemApi.ShippedOrderItemCommand command) {
     return state
         .toBuilder()
         .setShippedUtc(command.getShippedUtc())

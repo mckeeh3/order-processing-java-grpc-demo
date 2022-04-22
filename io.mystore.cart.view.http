@@ -1,5 +1,5 @@
 
-@urlPrefix = https://wispy-sun-4785.us-east1.akkaserverless.app
+@urlPrefix = https://wispy-sun-4785.us-east1.kalix.app
 @customerId = customer-1
 @fromDate = 2022-01-01T00:00:00.000-05:00
 @toDate = 2023-01-01T00:00:00.000-05:00

@@ -3,7 +3,7 @@ package io.mystore.cart.entity;
 import java.util.List;
 import java.util.Optional;
 
-import com.akkaserverless.javasdk.eventsourcedentity.EventSourcedEntityContext;
+import kalix.javasdk.eventsourcedentity.EventSourcedEntityContext;
 import com.google.protobuf.Empty;
 
 import org.slf4j.Logger;
@@ -171,7 +171,8 @@ public class ShoppingCart extends AbstractShoppingCart {
     return Optional.empty();
   }
 
-  private Optional<Effect<CartApi.ShoppingCart>> reject(CartEntity.CartState state, CartApi.GetShoppingCartRequest command) {
+  private Optional<Effect<CartApi.ShoppingCart>> reject(CartEntity.CartState state,
+      CartApi.GetShoppingCartRequest command) {
     if (state.getCartId().isEmpty()) {
       return Optional.of(effects().error("Shopping cart is empty"));
     }

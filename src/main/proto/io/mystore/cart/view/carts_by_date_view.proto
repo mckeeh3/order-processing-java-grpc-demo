@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package io.mystore.cart.view;
 
-import "akkaserverless/annotations.proto";
+import "kalix/annotations.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "io/mystore/cart/entity/shopping_cart_entity.proto";
@@ -11,12 +11,12 @@ import "io/mystore/cart/view/cart.proto";
 option java_outer_classname = "CartsByDateModel";
 
 service CartsByDate {
-  option (akkaserverless.service) = {
+  option (kalix.service) = {
     type: SERVICE_TYPE_VIEW
   };
 
   rpc GetCartsByDate(GetCartsByDateRequest) returns (GetCartsByDateResponse) {
-    option (akkaserverless.method).view.query = {
+    option (kalix.method).view.query = {
       query: "SELECT * AS carts"
              "  FROM carts_by_date"
              " WHERE checked_out_utc.seconds >= :`from_date.seconds`"
@@ -28,50 +28,50 @@ service CartsByDate {
   }
 
   rpc OnItemAdded(entity.ItemAdded) returns (Cart) {
-    option (akkaserverless.method).eventing.in = {
+    option (kalix.method).eventing.in = {
       event_sourced_entity: "shopping_cart"
     };
-    option (akkaserverless.method).view.update = {
+    option (kalix.method).view.update = {
       table: "carts_by_date"
       transform_updates: true
     };
   }
 
   rpc OnItemChanged(entity.ItemChanged) returns (Cart) {
-    option (akkaserverless.method).eventing.in = {
+    option (kalix.method).eventing.in = {
       event_sourced_entity: "shopping_cart"
     };
-    option (akkaserverless.method).view.update = {
+    option (kalix.method).view.update = {
       table: "carts_by_date"
       transform_updates: true
     };
   }
 
   rpc OnItemRemoved(entity.ItemRemoved) returns (Cart) {
-    option (akkaserverless.method).eventing.in = {
+    option (kalix.method).eventing.in = {
       event_sourced_entity: "shopping_cart"
     };
-    option (akkaserverless.method).view.update = {
+    option (kalix.method).view.update = {
       table: "carts_by_date"
       transform_updates: true
     };
   }
 
   rpc OnCartCheckedOut(entity.CartCheckedOut) returns (Cart) {
-    option (akkaserverless.method).eventing.in = {
+    option (kalix.method).eventing.in = {
       event_sourced_entity: "shopping_cart"
     };
-    option (akkaserverless.method).view.update = {
+    option (kalix.method).view.update = {
       table: "carts_by_date"
       transform_updates: true
     };
   }
 
   rpc OnCartDeleted(entity.CartDeleted) returns (Cart) {
-    option (akkaserverless.method).eventing.in = {
+    option (kalix.method).eventing.in = {
       event_sourced_entity: "shopping_cart"
     };
-    option (akkaserverless.method).view.update = {
+    option (kalix.method).view.update = {
       table: "carts_by_date"
       transform_updates: true
     };

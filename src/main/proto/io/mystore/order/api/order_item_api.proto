@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-import "akkaserverless/annotations.proto";
+import "kalix/annotations.proto";
 import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
@@ -10,7 +10,7 @@ package io.mystore.order.api;
 option java_outer_classname = "OrderItemApi";
 
 service OrderItemService {
-  option (akkaserverless.codegen) = {
+  option (kalix.codegen) = {
     value_entity: {
       name: "io.mystore.order.entity.OrderItem"
       entity_type: "order_item"
@@ -41,22 +41,22 @@ service OrderItemService {
 
 message CreateOrderItemCommand {
   string customer_id = 1;
-  string order_id = 2 [(akkaserverless.field).entity_key = true];
-  string sku_id = 3 [(akkaserverless.field).entity_key = true];
+  string order_id = 2 [(kalix.field).entity_key = true];
+  string sku_id = 3 [(kalix.field).entity_key = true];
   string sku_name = 4;
   int32 quantity = 5;
   google.protobuf.Timestamp ordered_utc = 6;
 }
 
 message ShippedOrderItemCommand {
-  string order_id = 1 [(akkaserverless.field).entity_key = true];
-  string sku_id = 2 [(akkaserverless.field).entity_key = true];
+  string order_id = 1 [(kalix.field).entity_key = true];
+  string sku_id = 2 [(kalix.field).entity_key = true];
   google.protobuf.Timestamp shipped_utc = 3;
 }
 
 message GetOrderItemRequest {
-  string order_id = 1 [(akkaserverless.field).entity_key = true];
-  string sku_id = 2 [(akkaserverless.field).entity_key = true];
+  string order_id = 1 [(kalix.field).entity_key = true];
+  string sku_id = 2 [(kalix.field).entity_key = true];
 }
 
 message GetOrderItemResponse {

@@ -4,7 +4,7 @@ package io.mystore.order.view;
 
 import "google/api/annotations.proto";
 import "google/protobuf/any.proto";
-import "akkaserverless/annotations.proto";
+import "kalix/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "io/mystore/order/entity/order_entity.proto";
 import "io/mystore/order/view/order.proto";
@@ -12,12 +12,12 @@ import "io/mystore/order/view/order.proto";
 option java_outer_classname = "OrdersByDateModel";
 
 service OrdersByDate {
-  option (akkaserverless.codegen) = {
+  option (kalix.codegen) = {
     view: {}
   };
 
   rpc GetOrdersByDate(OrdersByDateRequest) returns (OrdersByDateResponse) {
-    option (akkaserverless.method).view.query = {
+    option (kalix.method).view.query = {
       query: "SELECT * AS orders"
              "  FROM orders_by_date"
              " WHERE ordered_utc.seconds >= :`from_date.seconds`"
@@ -29,40 +29,40 @@ service OrdersByDate {
   }
 
   rpc OnOrdered(entity.OrderCreated) returns (Order) {
-    option (akkaserverless.method).eventing.in = {
+    option (kalix.method).eventing.in = {
       event_sourced_entity: "order"
     };
-    option (akkaserverless.method).view.update = {
+    option (kalix.method).view.update = {
       table: "orders_by_date"
       transform_updates: true
     };
   }
 
   rpc OnOrderShipped(entity.OrderShipped) returns (Order) {
-    option (akkaserverless.method).eventing.in = {
+    option (kalix.method).eventing.in = {
       event_sourced_entity: "order"
     };
-    option (akkaserverless.method).view.update = {
+    option (kalix.method).view.update = {
       table: "orders_by_date"
       transform_updates: true
     };
   }
 
   rpc OnOrderItemShipped(entity.OrderItemShipped) returns (Order) {
-    option (akkaserverless.method).eventing.in = {
+    option (kalix.method).eventing.in = {
       event_sourced_entity: "order"
     };
-    option (akkaserverless.method).view.update = {
+    option (kalix.method).view.update = {
       table: "orders_by_date"
       transform_updates: true
     };
   }
 
   rpc IgnoreOtherEvents(google.protobuf.Any) returns (Order) {
-    option (akkaserverless.method).eventing.in = {
+    option (kalix.method).eventing.in = {
       event_sourced_entity: "order"
     };
-    option (akkaserverless.method).view.update = {
+    option (kalix.method).view.update = {
       table: "orders_by_date"
       transform_updates: true
     };

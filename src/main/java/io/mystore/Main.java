@@ -1,6 +1,8 @@
 package io.mystore;
 
-import com.akkaserverless.javasdk.AkkaServerless;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.mystore.cart.entity.ShoppingCart;
 import io.mystore.cart.view.CartsByCustomerByDateView;
 import io.mystore.cart.view.CartsByCustomerView;
@@ -36,10 +38,9 @@ import io.mystore.stock.view.StockOrdersAvailableView;
 import io.mystore.stock.view.StockOrdersShippedView;
 import io.mystore.stock.view.StockSkuItemsAvailableView;
 import io.mystore.stock.view.StockSkuItemsShippedView;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import kalix.javasdk.Kalix;
 
-// This class was initially generated based on the .proto definition by Akka Serverless tooling.
+// This class was initially generated based on the .proto definition by Kalix tooling.
 //
 // As long as this file exists it will not be overwritten: you can maintain it yourself,
 // or delete it so it is regenerated as needed.
@@ -48,51 +49,51 @@ public final class Main {
 
   private static final Logger LOG = LoggerFactory.getLogger(Main.class);
 
-  public static AkkaServerless createAkkaServerless() {
-    // The AkkaServerlessFactory automatically registers any generated Actions, Views or Entities,
+  public static Kalix createKalix() {
+    // The KalixFactory automatically registers any generated Actions, Views or Entities,
     // and is kept up-to-date with any changes in your protobuf definitions.
     // If you prefer, you may remove this and manually register these components in a
-    // `new AkkaServerless()` instance.
-    return AkkaServerlessFactory.withComponents(
-      Order::new,
-      OrderItem::new,
-      OrderSkuItem::new,
-      Shipping::new,
-      ShoppingCart::new,
-      StockOrder::new,
-      StockSkuItem::new,
-      CartToOrderAction::new,
-      CartsByCustomerView::new,
-      CartsByCustomerByDateView::new,
-      CartsByDateView::new,
-      OrderSkuItemToShippingAction::new,
-      OrderSkuItemToStockSkuItemAction::new,
-      OrderSkuItemsBackOrderedBySkuView::new,
-      OrderSkuItemsByOrderView::new,
-      OrderSkuItemsNotShippedBySkuView::new,
-      OrderSkuItemsShippedBySkuView::new,
-      OrderToOrderItemAction::new,
-      OrderToShippingAction::new,
-      OrderedItemsByCustomerByDateView::new,
-      OrderedItemsByDateView::new,
-      OrderedItemsBySkuByDateView::new,
-      OrdersByCustomerByDateView::new,
-      OrdersByDateView::new,
-      ShippingByCustomerByDateView::new,
-      ShippingByDateView::new,
-      ShippingToOrderAction::new,
-      ShippingToOrderSkuItemAction::new,
-      StockOrderToStockSkuItemAction::new,
-      StockOrdersAvailableView::new,
-      StockOrdersShippedView::new,
-      StockSkuItemToOrderSkuItemAction::new,
-      StockSkuItemToStockOrderAction::new,
-      StockSkuItemsAvailableView::new,
-      StockSkuItemsShippedView::new);
+    // `new Kalix()` instance.
+    return KalixFactory.withComponents(
+        Order::new,
+        OrderItem::new,
+        OrderSkuItem::new,
+        Shipping::new,
+        ShoppingCart::new,
+        StockOrder::new,
+        StockSkuItem::new,
+        CartToOrderAction::new,
+        CartsByCustomerView::new,
+        CartsByCustomerByDateView::new,
+        CartsByDateView::new,
+        OrderSkuItemToShippingAction::new,
+        OrderSkuItemToStockSkuItemAction::new,
+        OrderSkuItemsBackOrderedBySkuView::new,
+        OrderSkuItemsByOrderView::new,
+        OrderSkuItemsNotShippedBySkuView::new,
+        OrderSkuItemsShippedBySkuView::new,
+        OrderToOrderItemAction::new,
+        OrderToShippingAction::new,
+        OrderedItemsByCustomerByDateView::new,
+        OrderedItemsByDateView::new,
+        OrderedItemsBySkuByDateView::new,
+        OrdersByCustomerByDateView::new,
+        OrdersByDateView::new,
+        ShippingByCustomerByDateView::new,
+        ShippingByDateView::new,
+        ShippingToOrderAction::new,
+        ShippingToOrderSkuItemAction::new,
+        StockOrderToStockSkuItemAction::new,
+        StockOrdersAvailableView::new,
+        StockOrdersShippedView::new,
+        StockSkuItemToOrderSkuItemAction::new,
+        StockSkuItemToStockOrderAction::new,
+        StockSkuItemsAvailableView::new,
+        StockSkuItemsShippedView::new);
   }
 
   public static void main(String[] args) throws Exception {
-    LOG.info("starting the Akka Serverless service");
-    createAkkaServerless().start();
+    LOG.info("starting the Kalix service");
+    BootStrap.createKalix().start();
   }
 }

@@ -1,7 +1,7 @@
 package io.mystore.order.action;
 
 import akka.stream.javadsl.Source;
-import com.akkaserverless.javasdk.testkit.ActionResult;
+import kalix.javasdk.testkit.ActionResult;
 import com.google.protobuf.Any;
 import com.google.protobuf.Empty;
 import io.mystore.cart.entity.CartEntity;
@@ -30,13 +30,15 @@ public class CartToOrderActionTest {
   @Test
   public void onCartCheckedOutTest() {
     CartToOrderActionTestKit testKit = CartToOrderActionTestKit.of(CartToOrderAction::new);
-    // ActionResult<Empty> result = testKit.onCartCheckedOut(CartEntity.CartCheckedOut.newBuilder()...build());
+    // ActionResult<Empty> result =
+    // testKit.onCartCheckedOut(CartEntity.CartCheckedOut.newBuilder()...build());
   }
 
   @Test
   public void ignoreOtherEventsTest() {
     CartToOrderActionTestKit testKit = CartToOrderActionTestKit.of(CartToOrderAction::new);
-    // ActionResult<Empty> result = testKit.ignoreOtherEvents(Any.newBuilder()...build());
+    // ActionResult<Empty> result =
+    // testKit.ignoreOtherEvents(Any.newBuilder()...build());
   }
 
 }

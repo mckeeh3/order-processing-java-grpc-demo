@@ -1,5 +1,5 @@
 
-@urlPrefix = https://spring-frog-8357.us-east1.akkaserverless.app
+@urlPrefix = https://spring-frog-8357.us-east1.kalix.app
 @skuId = sku-4
 
 ### io.mystore.stock.view.StockOrdersAvailable.GetStockOrdersAvailable

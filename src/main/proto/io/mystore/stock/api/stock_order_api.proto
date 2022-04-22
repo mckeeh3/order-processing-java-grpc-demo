@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-import "akkaserverless/annotations.proto";
+import "kalix/annotations.proto";
 import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
@@ -10,7 +10,7 @@ package io.mystore.stock.api;
 option java_outer_classname = "StockOrderApi";
 
 service StockOrderService {
-  option (akkaserverless.codegen) = {
+  option (kalix.codegen) = {
     event_sourced_entity: {
       name: "io.mystore.stock.entity.StockOrder"
       entity_type: "stock_order"
@@ -52,14 +52,14 @@ service StockOrderService {
 }
 
 message CreateStockOrderCommand {
-  string stock_order_id = 1 [(akkaserverless.field).entity_key = true];
+  string stock_order_id = 1 [(kalix.field).entity_key = true];
   string sku_id = 2;
   string sku_name = 3;
   int32 quantity = 4;
 }
 
 message ShippedStockSkuItemToStockOrderCommand {
-  string stock_order_id = 1 [(akkaserverless.field).entity_key = true];
+  string stock_order_id = 1 [(kalix.field).entity_key = true];
   string sku_id = 2;
   string stock_sku_item_id = 3;
   string order_id = 4;
@@ -68,7 +68,7 @@ message ShippedStockSkuItemToStockOrderCommand {
 }
 
 message ReleaseStockSkuItemFromStockOrderCommand {
-  string stock_order_id = 1 [(akkaserverless.field).entity_key = true];
+  string stock_order_id = 1 [(kalix.field).entity_key = true];
   string sku_id = 2;
   string stock_sku_item_id = 3;
   string order_id = 4;
@@ -76,7 +76,7 @@ message ReleaseStockSkuItemFromStockOrderCommand {
 }
 
 message GetStockOrderRequest {
-  string stock_order_id = 1 [(akkaserverless.field).entity_key = true];
+  string stock_order_id = 1 [(kalix.field).entity_key = true];
 }
 
 message StockOrder {
