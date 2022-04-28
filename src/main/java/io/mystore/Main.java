@@ -1,8 +1,5 @@
 package io.mystore;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import io.mystore.cart.entity.ShoppingCart;
 import io.mystore.cart.view.CartsByCustomerByDateView;
 import io.mystore.cart.view.CartsByCustomerView;
@@ -39,6 +36,8 @@ import io.mystore.stock.view.StockOrdersShippedView;
 import io.mystore.stock.view.StockSkuItemsAvailableView;
 import io.mystore.stock.view.StockSkuItemsShippedView;
 import kalix.javasdk.Kalix;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 // This class was initially generated based on the .proto definition by Kalix tooling.
 //
@@ -55,45 +54,45 @@ public final class Main {
     // If you prefer, you may remove this and manually register these components in a
     // `new Kalix()` instance.
     return KalixFactory.withComponents(
-        Order::new,
-        OrderItem::new,
-        OrderSkuItem::new,
-        Shipping::new,
-        ShoppingCart::new,
-        StockOrder::new,
-        StockSkuItem::new,
-        CartToOrderAction::new,
-        CartsByCustomerView::new,
-        CartsByCustomerByDateView::new,
-        CartsByDateView::new,
-        OrderSkuItemToShippingAction::new,
-        OrderSkuItemToStockSkuItemAction::new,
-        OrderSkuItemsBackOrderedBySkuView::new,
-        OrderSkuItemsByOrderView::new,
-        OrderSkuItemsNotShippedBySkuView::new,
-        OrderSkuItemsShippedBySkuView::new,
-        OrderToOrderItemAction::new,
-        OrderToShippingAction::new,
-        OrderedItemsByCustomerByDateView::new,
-        OrderedItemsByDateView::new,
-        OrderedItemsBySkuByDateView::new,
-        OrdersByCustomerByDateView::new,
-        OrdersByDateView::new,
-        ShippingByCustomerByDateView::new,
-        ShippingByDateView::new,
-        ShippingToOrderAction::new,
-        ShippingToOrderSkuItemAction::new,
-        StockOrderToStockSkuItemAction::new,
-        StockOrdersAvailableView::new,
-        StockOrdersShippedView::new,
-        StockSkuItemToOrderSkuItemAction::new,
-        StockSkuItemToStockOrderAction::new,
-        StockSkuItemsAvailableView::new,
-        StockSkuItemsShippedView::new);
+      Order::new,
+      OrderItem::new,
+      OrderSkuItem::new,
+      Shipping::new,
+      ShoppingCart::new,
+      StockOrder::new,
+      StockSkuItem::new,
+      CartToOrderAction::new,
+      CartsByCustomerView::new,
+      CartsByCustomerByDateView::new,
+      CartsByDateView::new,
+      OrderSkuItemToShippingAction::new,
+      OrderSkuItemToStockSkuItemAction::new,
+      OrderSkuItemsBackOrderedBySkuView::new,
+      OrderSkuItemsByOrderView::new,
+      OrderSkuItemsNotShippedBySkuView::new,
+      OrderSkuItemsShippedBySkuView::new,
+      OrderToOrderItemAction::new,
+      OrderToShippingAction::new,
+      OrderedItemsByCustomerByDateView::new,
+      OrderedItemsByDateView::new,
+      OrderedItemsBySkuByDateView::new,
+      OrdersByCustomerByDateView::new,
+      OrdersByDateView::new,
+      ShippingByCustomerByDateView::new,
+      ShippingByDateView::new,
+      ShippingToOrderAction::new,
+      ShippingToOrderSkuItemAction::new,
+      StockOrderToStockSkuItemAction::new,
+      StockOrdersAvailableView::new,
+      StockOrdersShippedView::new,
+      StockSkuItemToOrderSkuItemAction::new,
+      StockSkuItemToStockOrderAction::new,
+      StockSkuItemsAvailableView::new,
+      StockSkuItemsShippedView::new);
   }
 
   public static void main(String[] args) throws Exception {
     LOG.info("starting the Kalix service");
-    BootStrap.createKalix().start();
+    createKalix().start();
   }
 }
