@@ -4,10 +4,10 @@
 
   <groupId>io.mystore</groupId>
   <artifactId>order-processing-java-demo</artifactId>
-  <version>v2</version>
+  <version>v1</version>
   <packaging>jar</packaging>
 
-  <name>transactions-mystore</name>
+  <name>order-processing-java-demo</name>
     <properties>
 
     <!-- TODO Update to your own Docker repository or Docker Hub scope -->
@@ -18,7 +18,7 @@
     <jdk.target>16</jdk.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-    <kalix-sdk.version>1.0.0</kalix-sdk.version>
+    <kalix-sdk.version>1.0.1</kalix-sdk.version>
     <akka-grpc.version>2.1.2</akka-grpc.version>
   </properties>
 
@@ -121,6 +121,9 @@
               <build>
                 <!-- Base Docker image which contains jre-->
                 <from>docker.io/library/adoptopenjdk:${jdk.target}-jre-hotspot</from>
+                <createImageOptions>
+                  <platform>linux/amd64</platform>
+                </createImageOptions>
                 <tags>
                   <!-- tag for generated image -->
                   <tag>${dockerTag}</tag>
@@ -138,9 +141,6 @@
                   <arg>-jar</arg>
                   <arg>/maven/${project.build.finalName}.jar</arg>
                 </entryPoint>
-                <createImageOptions>
-                  <platform>linux/amd64</platform>
-                </createImageOptions>
               </build>
             </image>
           </images>

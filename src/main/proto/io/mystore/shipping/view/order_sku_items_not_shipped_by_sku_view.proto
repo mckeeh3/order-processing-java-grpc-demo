@@ -23,7 +23,7 @@ service OrderSkuItemsNotShippedBySku {
              "   AND sku_id = :sku_id"
     };
     option (google.api.http) = {
-      get: "/order-sku-items-not_shipped-by-sku"
+      get: "/order-sku-items-not-shipped-by-sku"
     };
   }
 

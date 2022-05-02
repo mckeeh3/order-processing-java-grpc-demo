@@ -1,9 +1,9 @@
 
-@urlPrefix = https://spring-frog-8357.us-east1.kalix.app
+@urlPrefix = https://yellow-wind-0368.us-east1.kalix.app
 @customerId = customer-1
 @cartId = cart-1
-@skuId = sku-4
-@skuName = sku name 4
+@skuId = sku-1
+@skuName = sku name 1
 @quantity = 4
 # @checkedOutUtc = 2022-01-01T00:00:00.000-0500
 @checkedOutUtc =

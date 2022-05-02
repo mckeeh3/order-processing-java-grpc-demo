@@ -1,9 +1,9 @@
 
-@urlPrefix = https://spring-frog-8357.us-east1.kalix.app
-@stockOrderId = stock-order-1
+@urlPrefix = https://yellow-wind-0368.us-east1.kalix.app
+@stockOrderId = stock-order-3
 @skuId = sku-4
 @skuName = sku name 4
-@quantity = 4
+@quantity = 2
 
 ### io.mystore.stock.api.StockOrderService.CreateStockOrder
 
