@@ -11,8 +11,8 @@ import "io/mystore/cart/view/cart.proto";
 option java_outer_classname = "CartsByCustomerByDateModel";
 
 service CartsByCustomerByDate {
-  option (kalix.service) = {
-    type: SERVICE_TYPE_VIEW
+  option (kalix.codegen) = {
+    view: {}
   };
 
   rpc GetCartsByCustomerByDate(CartsByCustomerByDateRequest) returns (CartsByCustomerByDateResponse) {
