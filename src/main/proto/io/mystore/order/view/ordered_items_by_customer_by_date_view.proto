@@ -21,8 +21,8 @@ service OrderedItemsByCustomerByDate {
       query: "SELECT * AS ordered_items"
              "  FROM ordered_items"
              " WHERE customer_id = :customer_id"
-             "   AND ordered_utc.seconds >= :`from_date.seconds`"
-             "   AND ordered_utc.seconds < :`to_date.seconds`"
+             "   AND ordered_utc >= :from_date"
+             "   AND ordered_utc < :to_date"
     };
     option (google.api.http) = {
       get: "/ordered-items-by-customer-by-date"
