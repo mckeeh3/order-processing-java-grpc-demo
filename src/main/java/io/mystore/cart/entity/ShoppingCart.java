@@ -231,7 +231,8 @@ public class ShoppingCart extends AbstractShoppingCart {
         .setQuantity(command.getQuantity())
         .build();
 
-    return CartEntity.ItemAdded.newBuilder()
+    return CartEntity.ItemAdded
+        .newBuilder()
         .setCartId(command.getCartId())
         .setCustomerId(command.getCustomerId())
         .setLineItem(lineItem)

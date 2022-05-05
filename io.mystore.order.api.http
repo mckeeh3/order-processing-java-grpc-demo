@@ -1,5 +1,6 @@
 
-@urlPrefix = https://small-frog-9412.us-east1.kalix.app
+@urlPrefix = https://yellow-wind-0368.us-east1.kalix.app
+# @urlPrefix = https://small-frog-9412.us-east1.kalix.app
 @customerId = customer-1
 @orderId = cart-2
 @skuId = sku-1

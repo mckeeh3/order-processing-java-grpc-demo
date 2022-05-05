@@ -1,7 +1,8 @@
 
 @urlPrefix = https://yellow-wind-0368.us-east1.kalix.app
+# @urlPrefix = https://yellow-wind-0368.us-east1.kalix.app
 @customerId = customer-1
-@skuId = sku-4
+@skuId = sku-1
 @orderId = cart-1
 @fromDate = 2022-01-01T00:00:00.000-05:00
 @toDate = 2023-01-01T00:00:00.000-05:00
