@@ -81,8 +81,7 @@ public class OrderSkuItemToStockSkuItemAction extends AbstractOrderSkuItemToStoc
     if (count > 0) {
       return orderRequestedJoinToStock(event, response.getStockSkuItemsList().get(random.nextInt(count)));
     } else {
-      log.info("No stock sku items available to join to order sku item {} {}", event.getSkuId(),
-          event.getOrderSkuItemId());
+      log.info("No stock sku items available to join to order sku item {} {}", event.getSkuId(), event.getOrderSkuItemId());
       return backOrderShipOrderItem(event);
     }
   }
