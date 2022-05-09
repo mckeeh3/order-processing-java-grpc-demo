@@ -53,8 +53,8 @@ public class ShoppingCart extends AbstractShoppingCart {
   }
 
   @Override
-  public Effect<CartApi.ShoppingCart> getCart(CartEntity.CartState state, CartApi.GetShoppingCartRequest command) {
-    return reject(state, command).orElseGet(() -> handle(state, command));
+  public Effect<CartApi.ShoppingCart> getCart(CartEntity.CartState state, CartApi.GetShoppingCartRequest request) {
+    return reject(state, request).orElseGet(() -> handle(state, request));
   }
 
   @Override
