@@ -10,8 +10,8 @@ import "io/mystore/cart/view/cart.proto";
 option java_outer_classname = "CartsByCustomerModel";
 
 service CartsByCustomer {
-  option (kalix.service) = {
-    type: SERVICE_TYPE_VIEW
+  option (kalix.codegen) = {
+    view: {}
   };
 
   rpc GetCartsByCustomer(GetCartsRequest) returns (GetCartsResponse) {

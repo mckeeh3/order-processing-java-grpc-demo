@@ -20,8 +20,8 @@ service OrderedItemsByDate {
     option (kalix.method).view.query = {
       query: "SELECT * AS ordered_items"
              "  FROM ordered_items"
-             " WHERE ordered_utc.seconds >= :`from_date.seconds`"
-             "   AND ordered_utc.seconds < :`to_date.seconds`"
+             " WHERE ordered_utc >= :from_date"
+             "   AND ordered_utc < :to_date"
     };
     option (google.api.http) = {
       get: "/ordered-items-by-date"

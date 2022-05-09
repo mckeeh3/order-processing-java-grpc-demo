@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import io.mystore.TimeTo;
 import io.mystore.cart.api.CartApi;
-// This class was initially generated based on the .proto definition by Akka Serverless tooling.
+// This class was initially generated based on the .proto definition by Kalix tooling.
 //
 // As long as this file exists it will not be overwritten: you can maintain it yourself,
 // or delete it so it is regenerated as needed.
@@ -231,7 +231,8 @@ public class ShoppingCart extends AbstractShoppingCart {
         .setQuantity(command.getQuantity())
         .build();
 
-    return CartEntity.ItemAdded.newBuilder()
+    return CartEntity.ItemAdded
+        .newBuilder()
         .setCartId(command.getCartId())
         .setCustomerId(command.getCustomerId())
         .setLineItem(lineItem)

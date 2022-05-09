@@ -1,6 +1,6 @@
 
-@urlPrefix = https://spring-frog-8357.us-east1.kalix.app
-@skuId = sku-4
+@urlPrefix = https://yellow-wind-0368.us-east1.kalix.app
+@skuId = sku-2
 
 ### io.mystore.stock.view.StockOrdersAvailable.GetStockOrdersAvailable
 

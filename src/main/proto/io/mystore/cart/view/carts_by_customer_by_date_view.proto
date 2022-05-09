@@ -11,8 +11,8 @@ import "io/mystore/cart/view/cart.proto";
 option java_outer_classname = "CartsByCustomerByDateModel";
 
 service CartsByCustomerByDate {
-  option (kalix.service) = {
-    type: SERVICE_TYPE_VIEW
+  option (kalix.codegen) = {
+    view: {}
   };
 
   rpc GetCartsByCustomerByDate(CartsByCustomerByDateRequest) returns (CartsByCustomerByDateResponse) {
@@ -20,8 +20,8 @@ service CartsByCustomerByDate {
       query: "SELECT * AS carts"
              "  FROM carts_by_customer_by_date"
              " WHERE customer_id = :customer_id"
-             "   AND checked_out_utc.seconds >= :`from_date.seconds`"
-             "   AND checked_out_utc.seconds < :`to_date.seconds`"
+             "   AND checked_out_utc >= :from_date"
+             "   AND checked_out_utc < :to_date"
     };
     option (google.api.http) = {
       get: "/carts-by-customer-by-date"

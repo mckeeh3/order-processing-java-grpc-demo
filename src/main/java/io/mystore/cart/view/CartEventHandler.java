@@ -17,7 +17,6 @@ public class CartEventHandler {
       return state.toBuilder()
           .setCartId(event.getCartId())
           .setCustomerId(event.getCustomerId())
-          .clearLineItems()
           .addLineItems(toLineItem(event.getLineItem()))
           .build();
     } else {
