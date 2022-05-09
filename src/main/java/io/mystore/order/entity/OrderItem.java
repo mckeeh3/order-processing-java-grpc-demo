@@ -25,8 +25,7 @@ public class OrderItem extends AbstractOrderItem {
   }
 
   @Override
-  public Effect<Empty> createOrderItem(OrderItemEntity.OrderItemState state,
-      OrderItemApi.CreateOrderItemCommand command) {
+  public Effect<Empty> createOrderItem(OrderItemEntity.OrderItemState state, OrderItemApi.CreateOrderItemCommand command) {
     return handle(state, command);
   }
 
