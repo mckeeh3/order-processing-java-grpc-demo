@@ -30,14 +30,12 @@ public class OrderItem extends AbstractOrderItem {
   }
 
   @Override
-  public Effect<Empty> shippedOrderItem(OrderItemEntity.OrderItemState state,
-      OrderItemApi.ShippedOrderItemCommand command) {
+  public Effect<Empty> shippedOrderItem(OrderItemEntity.OrderItemState state, OrderItemApi.ShippedOrderItemCommand command) {
     return handle(state, command);
   }
 
   @Override
-  public Effect<OrderItemApi.GetOrderItemResponse> getOrderItem(OrderItemEntity.OrderItemState state,
-      OrderItemApi.GetOrderItemRequest request) {
+  public Effect<OrderItemApi.GetOrderItemResponse> getOrderItem(OrderItemEntity.OrderItemState state, OrderItemApi.GetOrderItemRequest request) {
     return effects().reply(toApi(state));
   }
 
