@@ -82,7 +82,7 @@ public class OrderSkuItemToStockSkuItemAction extends AbstractOrderSkuItemToStoc
       return orderRequestedJoinToStock(event, response.getStockSkuItemsList().get(random.nextInt(count)));
     } else {
       log.info("No stock sku items available to join to order sku item {} {}", event.getSkuId(), event.getOrderSkuItemId());
-      return backOrderShipOrderItem(event);
+      return backOrderOrderSkuItem(event);
     }
   }
 
@@ -100,7 +100,7 @@ public class OrderSkuItemToStockSkuItemAction extends AbstractOrderSkuItemToStoc
         .execute();
   }
 
-  private CompletionStage<Empty> backOrderShipOrderItem(OrderSkuItemEntity.OrderRequestedJoinToStock event) {
+  private CompletionStage<Empty> backOrderOrderSkuItem(OrderSkuItemEntity.OrderRequestedJoinToStock event) {
     return components().orderSkuItem().backOrderOrderSkuItem(
         OrderSkuItemApi.BackOrderOrderSkuItemCommand
             .newBuilder()
