@@ -19,7 +19,7 @@ service OrderSkuItemsNotShippedBySku {
     option (kalix.method).view.query = {
       query: "SELECT * AS order_sku_items"
              "  FROM order_sku_items_not_shipped_by_sku OFFSET 0 LIMIT 100"
-             " WHERE shipped_utc.seconds = 0"
+             " WHERE shipped_utc IS NULL"
              "   AND sku_id = :sku_id"
     };
     option (google.api.http) = {
