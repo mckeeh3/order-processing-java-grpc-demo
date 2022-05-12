@@ -20,7 +20,7 @@ service StockSkuItemsAvailable {
       query: "SELECT * AS stock_sku_items"
              "  FROM stock_sku_items_available"
              " WHERE sku_id = :sku_id"
-             "   AND shipped_utc.seconds = 0"
+             "   AND shipped_utc IS NULL"
     };
     option (google.api.http) = {
       get: "/stock-sku-items-available"
