@@ -159,9 +159,6 @@ public class ShoppingCart extends AbstractShoppingCart {
     if (state.getCartId().isEmpty()) {
       return Optional.of(effects().error("Shopping cart is empty"));
     }
-    if (state.getDeliveredUtc().getSeconds() != 0) {
-      return Optional.of(effects().error("Cannot delete delivered order"));
-    }
     if (state.getCheckedOutUtc().getSeconds() > 0) {
       return Optional.of(effects().error("Cannot delete checked out order"));
     }

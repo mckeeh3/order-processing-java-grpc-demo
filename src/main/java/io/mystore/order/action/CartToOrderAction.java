@@ -28,9 +28,9 @@ public class CartToOrderAction extends AbstractCartToOrderAction {
   public Effect<Empty> onCartCheckedOut(CartEntity.CartCheckedOut command) {
     log.info("onCartCheckedOut: {}", command);
 
-    var getCartState = components().order().createOrder(toCreateOrderCommand(command.getCartState()));
+    var createOrderCommand = components().order().createOrder(toCreateOrderCommand(command.getCartState()));
 
-    return effects().forward(getCartState);
+    return effects().forward(createOrderCommand);
   }
 
   static OrderApi.CreateOrderCommand toCreateOrderCommand(CartState state) {

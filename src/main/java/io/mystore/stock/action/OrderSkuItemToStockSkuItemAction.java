@@ -48,16 +48,16 @@ public class OrderSkuItemToStockSkuItemAction extends AbstractOrderSkuItemToStoc
   public Effect<Empty> onStockRequestedJoinToOrderAccepted(OrderSkuItemEntity.StockRequestedJoinToOrderAccepted event) {
     log.info("onStockRequestedJoinToOrderAccepted: {}", event);
 
-    return effects().forward(components().stockSkuItem()
-        .stockRequestedJoinToOrderAccepted(toStockRequestedJoinToOrderAcceptedCommand(event)));
+    return effects().forward(
+        components().stockSkuItem().stockRequestedJoinToOrderAccepted(toStockRequestedJoinToOrderAcceptedCommand(event)));
   }
 
   @Override
   public Effect<Empty> onStockRequestedJoinToOrderRejected(OrderSkuItemEntity.StockRequestedJoinToOrderRejected event) {
     log.info("onStockRequestedJoinToOrderRejected: {}", event);
 
-    return effects().forward(components().stockSkuItem()
-        .stockRequestedJoinToOrderRejected(toStockRequestedJoinToOrderRejectedCommand(event)));
+    return effects().forward(
+        components().stockSkuItem().stockRequestedJoinToOrderRejected(toStockRequestedJoinToOrderRejectedCommand(event)));
   }
 
   @Override

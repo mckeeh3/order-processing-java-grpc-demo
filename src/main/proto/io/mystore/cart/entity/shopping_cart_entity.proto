@@ -36,9 +36,8 @@ message CartState {
   string cart_id = 1;
   string customer_id = 2;
   google.protobuf.Timestamp checked_out_utc = 3;
-  google.protobuf.Timestamp delivered_utc = 4;
-  google.protobuf.Timestamp deleted_utc = 5;
-  repeated LineItem line_items = 6;
+  google.protobuf.Timestamp deleted_utc = 4;
+  repeated LineItem line_items = 5;
 }
 
 message LineItem {
