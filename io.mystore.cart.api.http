@@ -46,5 +46,5 @@ curl -XDELETE -H "Content-Type: application/json"
 
 ### io.mystore.cart.api.ShoppingCartService.GetCart
 
-curl -XGET -H "Content-Type: application/json"
-  {{urlPrefix}}/cart/{{cartId}}
+GET {{urlPrefix}}/cart/{{cartId}}
+Content-Type: application/json
