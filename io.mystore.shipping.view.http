@@ -1,6 +1,5 @@
 
-@urlPrefix = https://yellow-wind-0368.us-east1.kalix.app
-# @urlPrefix = https://yellow-wind-0368.us-east1.kalix.app
+@urlPrefix = https://empty-moon-4960.us-east1.kalix.app
 @customerId = customer-1
 @skuId = sku-1
 @orderId = cart-1

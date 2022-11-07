@@ -1,10 +1,10 @@
 
-@urlPrefix = https://yellow-wind-0368.us-east1.kalix.app
+@urlPrefix = https://empty-moon-4960.us-east1.kalix.app
 @customerId = customer-1
-@cartId = cart-1
+@cartId = cart-2
 @skuId = sku-1
 @skuName = sku name 1
-@quantity = 1
+@quantity = 3
 # @checkedOutUtc = 2022-01-01T00:00:00.000-0500
 @checkedOutUtc =
 # @shippedUtc = 2022-01-01T00:00:00.000-0500
@@ -16,12 +16,15 @@
 
 ### io.mystore.cart.api.ShoppingCartService.AddItem
 
-curl -XPOST -H "Content-Type: application/json" -d '{
+POST {{urlPrefix}}/cart/{{cartId}}/items/add
+Content-Type: application/json
+
+{
   "customer_id":"{{customerId}}",
   "sku_id":"{{skuId}}",
   "sku_name":"{{skuName}}",
   "quantity":{{quantity}}
-  }' {{urlPrefix}}/cart/{{cartId}}/items/add
+}
 
 ### io.mystore.cart.api.ShoppingCartService.ChangeItem
 
@@ -38,6 +41,11 @@ curl -XDELETE -H "Content-Type: application/json"
 
 curl -XPUT -H "Content-Type: application/json"
   {{urlPrefix}}/cart/{{cartId}}/checkout
+
+###
+
+PUT {{urlPrefix}}/cart/{{cartId}}/checkout
+Content-Type: application/json
 
 ### io.mystore.cart.api.ShoppingCartService.DeleteCart
 

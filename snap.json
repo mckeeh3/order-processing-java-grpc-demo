@@ -1,0 +1,12 @@
+{
+  "customerId": "customer-1",
+  "orderId": "cart-1",
+  "orderSkuItemId": "ce75252e-394e-46e0-a2a7-2b4198e44485",
+  "skuId": "sku-1",
+  "skuName": "sku name 1",
+  "stockSkuItemId": "457e501c-eef2-4958-9613-3f4d23a5b496",
+  "stockOrderId": "",
+  "orderedUtc": "2022-09-06T15:21:53.916416705Z",
+  "shippedUtc": "2022-09-06T15:22:04.281713520Z",
+  "backOrderedUtc": "1970-01-01T00:00:00Z"
+}

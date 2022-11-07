@@ -1,26 +1,11 @@
 
-@urlPrefix = https://yellow-wind-0368.us-east1.kalix.app
-# @urlPrefix = https://small-frog-9412.us-east1.kalix.app
-@customerId = customer-1
-@orderId = cart-2
-@skuId = sku-1
-@skuName = sku name 1
-@quantity = 1
-# @checkedOutUtc = 2022-01-01T00:00:00.000-0500
-@checkedOutUtc =
-# @shippedUtc = 2022-01-01T00:00:00.000-0500
-@shippedUtc =
-# @deliveredUtc = 2022-01-01T00:00:00.000-0500
-@deliveredUtc =
-# @canceledUtc = 2022-01-12T00:00:00.000-0500
-@canceledUtc =
-# @returnedUtc = 2022-01-12T00:00:00.000-0500
-@returnedUtc =
+@urlPrefix = https://empty-moon-4960.us-east1.kalix.app
+@orderId = cart-1
 
 ### io.mystore.order.api.OrderService.ShippedOrder
 
-curl -XPUT -H "Content-Type: application/json"
-  {{urlPrefix}}/order/{{orderId}}/shipped
+PUT {{urlPrefix}}/order/{{orderId}}/shipped
+Content-Type: application/json
 
 ### io.mystore.order.api.OrderService.DeliveredOrder
 
@@ -37,12 +22,7 @@ curl -XPUT -H "Content-Type: application/json"
 curl -XPUT -H "Content-Type: application/json"
   {{urlPrefix}}/order/{{orderId}}/canceled
 
-### io.mystore.order.api.OrderService.ReturnededOrder
-
-curl -XPUT -H "Content-Type: application/json"
-  {{urlPrefix}}/order/{{orderId}}/returned
-
 ### io.mystore.order.api.OrderService.GetOrder
 
-curl -XGET -H "Content-Type: application/json"
-  {{urlPrefix}}/order/{{orderId}}
+GET {{urlPrefix}}/order/{{orderId}}
+Content-Type: application/json

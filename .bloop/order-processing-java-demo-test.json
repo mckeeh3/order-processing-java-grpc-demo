@@ -1,0 +1,1246 @@
+{
+    "version": "1.4.0",
+    "project": {
+        "name": "order-processing-java-demo-test",
+        "directory": "/Users/hxmc/Lightbend/kalix/java/order-processing-java-demo",
+        "workspaceDir": "/Users/hxmc/Lightbend/kalix/java/order-processing-java-demo",
+        "sources": [
+            "/Users/hxmc/Lightbend/kalix/java/order-processing-java-demo/src/test/java"
+        ],
+        "dependencies": [
+            "order-processing-java-demo"
+        ],
+        "classpath": [
+            "/Users/hxmc/Lightbend/kalix/java/order-processing-java-demo/target/test-classes",
+            "/Users/hxmc/Lightbend/kalix/java/order-processing-java-demo/target/classes",
+            "/Users/hxmc/.m2/repository/io/kalix/kalix-java-sdk/1.0.5/kalix-java-sdk-1.0.5.jar",
+            "/Users/hxmc/.m2/repository/org/scala-lang/scala-library/2.13.8/scala-library-2.13.8.jar",
+            "/Users/hxmc/.m2/repository/io/kalix/kalix-jvm-core-sdk/1.0.5/kalix-jvm-core-sdk-1.0.5.jar",
+            "/Users/hxmc/.m2/repository/com/thesamet/scalapb/scalapb-runtime_2.13/0.11.10/scalapb-runtime_2.13-0.11.10.jar",
+            "/Users/hxmc/.m2/repository/com/thesamet/scalapb/lenses_2.13/0.11.10/lenses_2.13-0.11.10.jar",
+            "/Users/hxmc/.m2/repository/org/scala-lang/modules/scala-collection-compat_2.13/2.6.0/scala-collection-compat_2.13-2.6.0.jar",
+            "/Users/hxmc/.m2/repository/com/lightbend/akka/grpc/akka-grpc-runtime_2.13/2.1.4/akka-grpc-runtime_2.13-2.1.4.jar",
+            "/Users/hxmc/.m2/repository/io/grpc/grpc-core/1.45.0/grpc-core-1.45.0.jar",
+            "/Users/hxmc/.m2/repository/com/google/android/annotations/4.1.1.4/annotations-4.1.1.4.jar",
+            "/Users/hxmc/.m2/repository/org/codehaus/mojo/animal-sniffer-annotations/1.19/animal-sniffer-annotations-1.19.jar",
+            "/Users/hxmc/.m2/repository/io/perfmark/perfmark-api/0.23.0/perfmark-api-0.23.0.jar",
+            "/Users/hxmc/.m2/repository/io/grpc/grpc-netty-shaded/1.45.0/grpc-netty-shaded-1.45.0.jar",
+            "/Users/hxmc/.m2/repository/io/grpc/grpc-stub/1.45.0/grpc-stub-1.45.0.jar",
+            "/Users/hxmc/.m2/repository/io/grpc/grpc-api/1.45.0/grpc-api-1.45.0.jar",
+            "/Users/hxmc/.m2/repository/io/grpc/grpc-context/1.45.0/grpc-context-1.45.0.jar",
+            "/Users/hxmc/.m2/repository/com/google/guava/guava/31.0.1-android/guava-31.0.1-android.jar",
+            "/Users/hxmc/.m2/repository/com/google/guava/failureaccess/1.0.1/failureaccess-1.0.1.jar",
+            "/Users/hxmc/.m2/repository/com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar",
+            "/Users/hxmc/.m2/repository/org/checkerframework/checker-qual/3.12.0/checker-qual-3.12.0.jar",
+            "/Users/hxmc/.m2/repository/org/checkerframework/checker-compat-qual/2.5.5/checker-compat-qual-2.5.5.jar",
+            "/Users/hxmc/.m2/repository/com/google/errorprone/error_prone_annotations/2.10.0/error_prone_annotations-2.10.0.jar",
+            "/Users/hxmc/.m2/repository/com/google/protobuf/protobuf-java/3.19.2/protobuf-java-3.19.2.jar",
+            "/Users/hxmc/.m2/repository/com/typesafe/akka/akka-stream_2.13/2.6.19/akka-stream_2.13-2.6.19.jar",
+            "/Users/hxmc/.m2/repository/com/typesafe/akka/akka-actor_2.13/2.6.19/akka-actor_2.13-2.6.19.jar",
+            "/Users/hxmc/.m2/repository/com/typesafe/config/1.4.2/config-1.4.2.jar",
+            "/Users/hxmc/.m2/repository/org/scala-lang/modules/scala-java8-compat_2.13/1.0.0/scala-java8-compat_2.13-1.0.0.jar",
+            "/Users/hxmc/.m2/repository/com/typesafe/akka/akka-protobuf-v3_2.13/2.6.19/akka-protobuf-v3_2.13-2.6.19.jar",
+            "/Users/hxmc/.m2/repository/org/reactivestreams/reactive-streams/1.0.3/reactive-streams-1.0.3.jar",
+            "/Users/hxmc/.m2/repository/com/typesafe/ssl-config-core_2.13/0.4.3/ssl-config-core_2.13-0.4.3.jar",
+            "/Users/hxmc/.m2/repository/org/scala-lang/modules/scala-parser-combinators_2.13/1.1.2/scala-parser-combinators_2.13-1.1.2.jar",
+            "/Users/hxmc/.m2/repository/com/typesafe/akka/akka-slf4j_2.13/2.6.19/akka-slf4j_2.13-2.6.19.jar",
+            "/Users/hxmc/.m2/repository/org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.jar",
+            "/Users/hxmc/.m2/repository/com/typesafe/akka/akka-discovery_2.13/2.6.19/akka-discovery_2.13-2.6.19.jar",
+            "/Users/hxmc/.m2/repository/com/typesafe/akka/akka-http_2.13/10.2.9/akka-http_2.13-10.2.9.jar",
+            "/Users/hxmc/.m2/repository/com/typesafe/akka/akka-http-core_2.13/10.2.9/akka-http-core_2.13-10.2.9.jar",
+            "/Users/hxmc/.m2/repository/com/typesafe/akka/akka-http-spray-json_2.13/10.2.9/akka-http-spray-json_2.13-10.2.9.jar",
+            "/Users/hxmc/.m2/repository/io/spray/spray-json_2.13/1.3.6/spray-json_2.13-1.3.6.jar",
+            "/Users/hxmc/.m2/repository/com/typesafe/akka/akka-http2-support_2.13/10.2.9/akka-http2-support_2.13-10.2.9.jar",
+            "/Users/hxmc/.m2/repository/com/typesafe/akka/akka-parsing_2.13/10.2.9/akka-parsing_2.13-10.2.9.jar",
+            "/Users/hxmc/.m2/repository/com/google/protobuf/protobuf-java-util/3.19.4/protobuf-java-util-3.19.4.jar",
+            "/Users/hxmc/.m2/repository/com/google/j2objc/j2objc-annotations/1.3/j2objc-annotations-1.3.jar",
+            "/Users/hxmc/.m2/repository/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar",
+            "/Users/hxmc/.m2/repository/com/google/code/gson/gson/2.8.6/gson-2.8.6.jar",
+            "/Users/hxmc/.m2/repository/io/kalix/kalix-sdk-protocol/1.0.15/kalix-sdk-protocol-1.0.15.jar",
+            "/Users/hxmc/.m2/repository/ch/qos/logback/logback-classic/1.2.11/logback-classic-1.2.11.jar",
+            "/Users/hxmc/.m2/repository/ch/qos/logback/logback-core/1.2.11/logback-core-1.2.11.jar",
+            "/Users/hxmc/.m2/repository/ch/qos/logback/contrib/logback-json-classic/0.1.5/logback-json-classic-0.1.5.jar",
+            "/Users/hxmc/.m2/repository/ch/qos/logback/contrib/logback-json-core/0.1.5/logback-json-core-0.1.5.jar",
+            "/Users/hxmc/.m2/repository/ch/qos/logback/contrib/logback-jackson/0.1.5/logback-jackson-0.1.5.jar",
+            "/Users/hxmc/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.13.2/jackson-core-2.13.2.jar",
+            "/Users/hxmc/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.13.2/jackson-annotations-2.13.2.jar",
+            "/Users/hxmc/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.13.2.2/jackson-databind-2.13.2.2.jar",
+            "/Users/hxmc/.m2/repository/com/fasterxml/jackson/datatype/jackson-datatype-jdk8/2.13.2/jackson-datatype-jdk8-2.13.2.jar",
+            "/Users/hxmc/.m2/repository/com/fasterxml/jackson/datatype/jackson-datatype-jsr310/2.13.2/jackson-datatype-jsr310-2.13.2.jar",
+            "/Users/hxmc/.m2/repository/com/fasterxml/jackson/module/jackson-module-parameter-names/2.13.2/jackson-module-parameter-names-2.13.2.jar",
+            "/Users/hxmc/.m2/repository/io/kalix/kalix-java-sdk-testkit/1.0.5/kalix-java-sdk-testkit-1.0.5.jar",
+            "/Users/hxmc/.m2/repository/org/testcontainers/testcontainers/1.17.1/testcontainers-1.17.1.jar",
+            "/Users/hxmc/.m2/repository/org/rnorth/duct-tape/duct-tape/1.0.8/duct-tape-1.0.8.jar",
+            "/Users/hxmc/.m2/repository/org/jetbrains/annotations/17.0.0/annotations-17.0.0.jar",
+            "/Users/hxmc/.m2/repository/com/github/docker-java/docker-java-api/3.2.13/docker-java-api-3.2.13.jar",
+            "/Users/hxmc/.m2/repository/com/github/docker-java/docker-java-transport-zerodep/3.2.13/docker-java-transport-zerodep-3.2.13.jar",
+            "/Users/hxmc/.m2/repository/com/github/docker-java/docker-java-transport/3.2.13/docker-java-transport-3.2.13.jar",
+            "/Users/hxmc/.m2/repository/net/java/dev/jna/jna/5.8.0/jna-5.8.0.jar",
+            "/Users/hxmc/.m2/repository/org/apache/commons/commons-compress/1.21/commons-compress-1.21.jar",
+            "/Users/hxmc/.m2/repository/junit/junit/4.13.2/junit-4.13.2.jar",
+            "/Users/hxmc/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar",
+            "/Users/hxmc/.m2/repository/org/scala-lang/scala-library/2.13.8/scala-library-2.13.8.jar"
+        ],
+        "out": "/Users/hxmc/Lightbend/kalix/java/order-processing-java-demo/target",
+        "classesDir": "/Users/hxmc/Lightbend/kalix/java/order-processing-java-demo/target/test-classes",
+        "resources": [
+            "/Users/hxmc/Lightbend/kalix/java/order-processing-java-demo/src/test/resources"
+        ],
+        "scala": {
+            "organization": "org.scala-lang",
+            "name": "scala-compiler",
+            "version": "2.13.8",
+            "options": [
+                
+            ],
+            "jars": [
+                "/Users/hxmc/.m2/repository/org/scala-lang/scala-compiler/2.13.8/scala-compiler-2.13.8.jar",
+                "/Users/hxmc/.m2/repository/org/scala-lang/scala-library/2.13.8/scala-library-2.13.8.jar",
+                "/Users/hxmc/.m2/repository/org/scala-lang/scala-reflect/2.13.8/scala-reflect-2.13.8.jar",
+                "/Users/hxmc/.m2/repository/org/jline/jline/3.21.0/jline-3.21.0.jar",
+                "/Users/hxmc/.m2/repository/net/java/dev/jna/jna/5.9.0/jna-5.9.0.jar"
+            ],
+            "setup": {
+                "order": "java->scala",
+                "addLibraryToBootClasspath": true,
+                "addCompilerToClasspath": false,
+                "addExtraJarsToClasspath": false,
+                "manageBootClasspath": true,
+                "filterLibraryFromClasspath": true
+            }
+        },
+        "java": {
+            "options": [
+                "-g",
+                "-encoding",
+                "UTF-8",
+                "-Xlint:deprecation"
+            ]
+        },
+        "test": {
+            "frameworks": [
+                {
+                    "names": [
+                        "com.novocode.junit.JUnitFramework"
+                    ]
+                },
+                {
+                    "names": [
+                        "org.scalatest.tools.Framework",
+                        "org.scalatest.tools.ScalaTestFramework"
+                    ]
+                },
+                {
+                    "names": [
+                        "org.scalacheck.ScalaCheckFramework"
+                    ]
+                },
+                {
+                    "names": [
+                        "org.specs.runner.SpecsFramework",
+                        "org.specs2.runner.Specs2Framework",
+                        "org.specs2.runner.SpecsFramework"
+                    ]
+                },
+                {
+                    "names": [
+                        "utest.runner.Framework"
+                    ]
+                },
+                {
+                    "names": [
+                        "munit.Framework"
+                    ]
+                }
+            ],
+            "options": {
+                "excludes": [
+                    
+                ],
+                "arguments": [
+                    {
+                        "args": [
+                            "-v",
+                            "-a"
+                        ],
+                        "framework": {
+                            "names": [
+                                "com.novocode.junit.JUnitFramework"
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        "platform": {
+            "name": "jvm",
+            "config": {
+                "home": "/Users/hxmc/.sdkman/candidates/java/17.0.2-tem",
+                "options": [
+                    
+                ]
+            },
+            "mainClass": [
+                
+            ]
+        },
+        "resolution": {
+            "modules": [
+                {
+                    "organization": "org.hamcrest",
+                    "name": "hamcrest-core",
+                    "version": "1.3",
+                    "artifacts": [
+                        {
+                            "name": "hamcrest-core",
+                            "path": "/Users/hxmc/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar"
+                        },
+                        {
+                            "name": "hamcrest-core",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "com.typesafe.akka",
+                    "name": "akka-protobuf-v3_2.13",
+                    "version": "2.6.19",
+                    "artifacts": [
+                        {
+                            "name": "akka-protobuf-v3_2.13",
+                            "path": "/Users/hxmc/.m2/repository/com/typesafe/akka/akka-protobuf-v3_2.13/2.6.19/akka-protobuf-v3_2.13-2.6.19.jar"
+                        },
+                        {
+                            "name": "akka-protobuf-v3_2.13",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/com/typesafe/akka/akka-protobuf-v3_2.13/2.6.19/akka-protobuf-v3_2.13-2.6.19-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "org.codehaus.mojo",
+                    "name": "animal-sniffer-annotations",
+                    "version": "1.19",
+                    "artifacts": [
+                        {
+                            "name": "animal-sniffer-annotations",
+                            "path": "/Users/hxmc/.m2/repository/org/codehaus/mojo/animal-sniffer-annotations/1.19/animal-sniffer-annotations-1.19.jar"
+                        },
+                        {
+                            "name": "animal-sniffer-annotations",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/org/codehaus/mojo/animal-sniffer-annotations/1.19/animal-sniffer-annotations-1.19-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "ch.qos.logback.contrib",
+                    "name": "logback-json-core",
+                    "version": "0.1.5",
+                    "artifacts": [
+                        {
+                            "name": "logback-json-core",
+                            "path": "/Users/hxmc/.m2/repository/ch/qos/logback/contrib/logback-json-core/0.1.5/logback-json-core-0.1.5.jar"
+                        },
+                        {
+                            "name": "logback-json-core",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/ch/qos/logback/contrib/logback-json-core/0.1.5/logback-json-core-0.1.5-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "ch.qos.logback.contrib",
+                    "name": "logback-jackson",
+                    "version": "0.1.5",
+                    "artifacts": [
+                        {
+                            "name": "logback-jackson",
+                            "path": "/Users/hxmc/.m2/repository/ch/qos/logback/contrib/logback-jackson/0.1.5/logback-jackson-0.1.5.jar"
+                        },
+                        {
+                            "name": "logback-jackson",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/ch/qos/logback/contrib/logback-jackson/0.1.5/logback-jackson-0.1.5-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "io.grpc",
+                    "name": "grpc-stub",
+                    "version": "1.45.0",
+                    "artifacts": [
+                        {
+                            "name": "grpc-stub",
+                            "path": "/Users/hxmc/.m2/repository/io/grpc/grpc-stub/1.45.0/grpc-stub-1.45.0.jar"
+                        },
+                        {
+                            "name": "grpc-stub",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/io/grpc/grpc-stub/1.45.0/grpc-stub-1.45.0-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "com.thesamet.scalapb",
+                    "name": "lenses_2.13",
+                    "version": "0.11.10",
+                    "artifacts": [
+                        {
+                            "name": "lenses_2.13",
+                            "path": "/Users/hxmc/.m2/repository/com/thesamet/scalapb/lenses_2.13/0.11.10/lenses_2.13-0.11.10.jar"
+                        },
+                        {
+                            "name": "lenses_2.13",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/com/thesamet/scalapb/lenses_2.13/0.11.10/lenses_2.13-0.11.10-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "com.typesafe.akka",
+                    "name": "akka-actor_2.13",
+                    "version": "2.6.19",
+                    "artifacts": [
+                        {
+                            "name": "akka-actor_2.13",
+                            "path": "/Users/hxmc/.m2/repository/com/typesafe/akka/akka-actor_2.13/2.6.19/akka-actor_2.13-2.6.19.jar"
+                        },
+                        {
+                            "name": "akka-actor_2.13",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/com/typesafe/akka/akka-actor_2.13/2.6.19/akka-actor_2.13-2.6.19-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "io.grpc",
+                    "name": "grpc-core",
+                    "version": "1.45.0",
+                    "artifacts": [
+                        {
+                            "name": "grpc-core",
+                            "path": "/Users/hxmc/.m2/repository/io/grpc/grpc-core/1.45.0/grpc-core-1.45.0.jar"
+                        },
+                        {
+                            "name": "grpc-core",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/io/grpc/grpc-core/1.45.0/grpc-core-1.45.0-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "com.google.code.gson",
+                    "name": "gson",
+                    "version": "2.8.6",
+                    "artifacts": [
+                        {
+                            "name": "gson",
+                            "path": "/Users/hxmc/.m2/repository/com/google/code/gson/gson/2.8.6/gson-2.8.6.jar"
+                        },
+                        {
+                            "name": "gson",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/com/google/code/gson/gson/2.8.6/gson-2.8.6-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "com.fasterxml.jackson.core",
+                    "name": "jackson-annotations",
+                    "version": "2.13.2",
+                    "artifacts": [
+                        {
+                            "name": "jackson-annotations",
+                            "path": "/Users/hxmc/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.13.2/jackson-annotations-2.13.2.jar"
+                        },
+                        {
+                            "name": "jackson-annotations",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.13.2/jackson-annotations-2.13.2-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "com.lightbend.akka.grpc",
+                    "name": "akka-grpc-runtime_2.13",
+                    "version": "2.1.4",
+                    "artifacts": [
+                        {
+                            "name": "akka-grpc-runtime_2.13",
+                            "path": "/Users/hxmc/.m2/repository/com/lightbend/akka/grpc/akka-grpc-runtime_2.13/2.1.4/akka-grpc-runtime_2.13-2.1.4.jar"
+                        },
+                        {
+                            "name": "akka-grpc-runtime_2.13",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/com/lightbend/akka/grpc/akka-grpc-runtime_2.13/2.1.4/akka-grpc-runtime_2.13-2.1.4-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "com.google.protobuf",
+                    "name": "protobuf-java-util",
+                    "version": "3.19.4",
+                    "artifacts": [
+                        {
+                            "name": "protobuf-java-util",
+                            "path": "/Users/hxmc/.m2/repository/com/google/protobuf/protobuf-java-util/3.19.4/protobuf-java-util-3.19.4.jar"
+                        },
+                        {
+                            "name": "protobuf-java-util",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/com/google/protobuf/protobuf-java-util/3.19.4/protobuf-java-util-3.19.4-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "org.scala-lang.modules",
+                    "name": "scala-collection-compat_2.13",
+                    "version": "2.6.0",
+                    "artifacts": [
+                        {
+                            "name": "scala-collection-compat_2.13",
+                            "path": "/Users/hxmc/.m2/repository/org/scala-lang/modules/scala-collection-compat_2.13/2.6.0/scala-collection-compat_2.13-2.6.0.jar"
+                        },
+                        {
+                            "name": "scala-collection-compat_2.13",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/org/scala-lang/modules/scala-collection-compat_2.13/2.6.0/scala-collection-compat_2.13-2.6.0-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "org.scala-lang.modules",
+                    "name": "scala-java8-compat_2.13",
+                    "version": "1.0.0",
+                    "artifacts": [
+                        {
+                            "name": "scala-java8-compat_2.13",
+                            "path": "/Users/hxmc/.m2/repository/org/scala-lang/modules/scala-java8-compat_2.13/1.0.0/scala-java8-compat_2.13-1.0.0.jar"
+                        },
+                        {
+                            "name": "scala-java8-compat_2.13",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/org/scala-lang/modules/scala-java8-compat_2.13/1.0.0/scala-java8-compat_2.13-1.0.0-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "junit",
+                    "name": "junit",
+                    "version": "4.13.2",
+                    "artifacts": [
+                        {
+                            "name": "junit",
+                            "path": "/Users/hxmc/.m2/repository/junit/junit/4.13.2/junit-4.13.2.jar"
+                        },
+                        {
+                            "name": "junit",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/junit/junit/4.13.2/junit-4.13.2-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "io.kalix",
+                    "name": "kalix-java-sdk-testkit",
+                    "version": "1.0.5",
+                    "artifacts": [
+                        {
+                            "name": "kalix-java-sdk-testkit",
+                            "path": "/Users/hxmc/.m2/repository/io/kalix/kalix-java-sdk-testkit/1.0.5/kalix-java-sdk-testkit-1.0.5.jar"
+                        },
+                        {
+                            "name": "kalix-java-sdk-testkit",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/io/kalix/kalix-java-sdk-testkit/1.0.5/kalix-java-sdk-testkit-1.0.5-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "ch.qos.logback",
+                    "name": "logback-classic",
+                    "version": "1.2.11",
+                    "artifacts": [
+                        {
+                            "name": "logback-classic",
+                            "path": "/Users/hxmc/.m2/repository/ch/qos/logback/logback-classic/1.2.11/logback-classic-1.2.11.jar"
+                        },
+                        {
+                            "name": "logback-classic",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/ch/qos/logback/logback-classic/1.2.11/logback-classic-1.2.11-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "com.typesafe.akka",
+                    "name": "akka-discovery_2.13",
+                    "version": "2.6.19",
+                    "artifacts": [
+                        {
+                            "name": "akka-discovery_2.13",
+                            "path": "/Users/hxmc/.m2/repository/com/typesafe/akka/akka-discovery_2.13/2.6.19/akka-discovery_2.13-2.6.19.jar"
+                        },
+                        {
+                            "name": "akka-discovery_2.13",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/com/typesafe/akka/akka-discovery_2.13/2.6.19/akka-discovery_2.13-2.6.19-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "org.jetbrains",
+                    "name": "annotations",
+                    "version": "17.0.0",
+                    "artifacts": [
+                        {
+                            "name": "annotations",
+                            "path": "/Users/hxmc/.m2/repository/org/jetbrains/annotations/17.0.0/annotations-17.0.0.jar"
+                        },
+                        {
+                            "name": "annotations",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/org/jetbrains/annotations/17.0.0/annotations-17.0.0-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "com.google.j2objc",
+                    "name": "j2objc-annotations",
+                    "version": "1.3",
+                    "artifacts": [
+                        {
+                            "name": "j2objc-annotations",
+                            "path": "/Users/hxmc/.m2/repository/com/google/j2objc/j2objc-annotations/1.3/j2objc-annotations-1.3.jar"
+                        },
+                        {
+                            "name": "j2objc-annotations",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/com/google/j2objc/j2objc-annotations/1.3/j2objc-annotations-1.3-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "com.github.docker-java",
+                    "name": "docker-java-api",
+                    "version": "3.2.13",
+                    "artifacts": [
+                        {
+                            "name": "docker-java-api",
+                            "path": "/Users/hxmc/.m2/repository/com/github/docker-java/docker-java-api/3.2.13/docker-java-api-3.2.13.jar"
+                        },
+                        {
+                            "name": "docker-java-api",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/com/github/docker-java/docker-java-api/3.2.13/docker-java-api-3.2.13-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "com.github.docker-java",
+                    "name": "docker-java-transport",
+                    "version": "3.2.13",
+                    "artifacts": [
+                        {
+                            "name": "docker-java-transport",
+                            "path": "/Users/hxmc/.m2/repository/com/github/docker-java/docker-java-transport/3.2.13/docker-java-transport-3.2.13.jar"
+                        },
+                        {
+                            "name": "docker-java-transport",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/com/github/docker-java/docker-java-transport/3.2.13/docker-java-transport-3.2.13-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "org.checkerframework",
+                    "name": "checker-qual",
+                    "version": "3.12.0",
+                    "artifacts": [
+                        {
+                            "name": "checker-qual",
+                            "path": "/Users/hxmc/.m2/repository/org/checkerframework/checker-qual/3.12.0/checker-qual-3.12.0.jar"
+                        },
+                        {
+                            "name": "checker-qual",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/org/checkerframework/checker-qual/3.12.0/checker-qual-3.12.0-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "org.apache.commons",
+                    "name": "commons-compress",
+                    "version": "1.21",
+                    "artifacts": [
+                        {
+                            "name": "commons-compress",
+                            "path": "/Users/hxmc/.m2/repository/org/apache/commons/commons-compress/1.21/commons-compress-1.21.jar"
+                        },
+                        {
+                            "name": "commons-compress",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/org/apache/commons/commons-compress/1.21/commons-compress-1.21-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "com.fasterxml.jackson.core",
+                    "name": "jackson-databind",
+                    "version": "2.13.2.2",
+                    "artifacts": [
+                        {
+                            "name": "jackson-databind",
+                            "path": "/Users/hxmc/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.13.2.2/jackson-databind-2.13.2.2.jar"
+                        },
+                        {
+                            "name": "jackson-databind",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.13.2.2/jackson-databind-2.13.2.2-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "com.google.protobuf",
+                    "name": "protobuf-java",
+                    "version": "3.19.2",
+                    "artifacts": [
+                        {
+                            "name": "protobuf-java",
+                            "path": "/Users/hxmc/.m2/repository/com/google/protobuf/protobuf-java/3.19.2/protobuf-java-3.19.2.jar"
+                        },
+                        {
+                            "name": "protobuf-java",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/com/google/protobuf/protobuf-java/3.19.2/protobuf-java-3.19.2-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "com.typesafe.akka",
+                    "name": "akka-http2-support_2.13",
+                    "version": "10.2.9",
+                    "artifacts": [
+                        {
+                            "name": "akka-http2-support_2.13",
+                            "path": "/Users/hxmc/.m2/repository/com/typesafe/akka/akka-http2-support_2.13/10.2.9/akka-http2-support_2.13-10.2.9.jar"
+                        },
+                        {
+                            "name": "akka-http2-support_2.13",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/com/typesafe/akka/akka-http2-support_2.13/10.2.9/akka-http2-support_2.13-10.2.9-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "io.kalix",
+                    "name": "kalix-java-sdk",
+                    "version": "1.0.5",
+                    "artifacts": [
+                        {
+                            "name": "kalix-java-sdk",
+                            "path": "/Users/hxmc/.m2/repository/io/kalix/kalix-java-sdk/1.0.5/kalix-java-sdk-1.0.5.jar"
+                        },
+                        {
+                            "name": "kalix-java-sdk",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/io/kalix/kalix-java-sdk/1.0.5/kalix-java-sdk-1.0.5-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "com.typesafe.akka",
+                    "name": "akka-http-spray-json_2.13",
+                    "version": "10.2.9",
+                    "artifacts": [
+                        {
+                            "name": "akka-http-spray-json_2.13",
+                            "path": "/Users/hxmc/.m2/repository/com/typesafe/akka/akka-http-spray-json_2.13/10.2.9/akka-http-spray-json_2.13-10.2.9.jar"
+                        },
+                        {
+                            "name": "akka-http-spray-json_2.13",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/com/typesafe/akka/akka-http-spray-json_2.13/10.2.9/akka-http-spray-json_2.13-10.2.9-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "com.google.guava",
+                    "name": "guava",
+                    "version": "31.0.1-android",
+                    "artifacts": [
+                        {
+                            "name": "guava",
+                            "path": "/Users/hxmc/.m2/repository/com/google/guava/guava/31.0.1-android/guava-31.0.1-android.jar"
+                        },
+                        {
+                            "name": "guava",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/com/google/guava/guava/31.0.1-android/guava-31.0.1-android-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "com.typesafe.akka",
+                    "name": "akka-slf4j_2.13",
+                    "version": "2.6.19",
+                    "artifacts": [
+                        {
+                            "name": "akka-slf4j_2.13",
+                            "path": "/Users/hxmc/.m2/repository/com/typesafe/akka/akka-slf4j_2.13/2.6.19/akka-slf4j_2.13-2.6.19.jar"
+                        },
+                        {
+                            "name": "akka-slf4j_2.13",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/com/typesafe/akka/akka-slf4j_2.13/2.6.19/akka-slf4j_2.13-2.6.19-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "com.typesafe",
+                    "name": "ssl-config-core_2.13",
+                    "version": "0.4.3",
+                    "artifacts": [
+                        {
+                            "name": "ssl-config-core_2.13",
+                            "path": "/Users/hxmc/.m2/repository/com/typesafe/ssl-config-core_2.13/0.4.3/ssl-config-core_2.13-0.4.3.jar"
+                        },
+                        {
+                            "name": "ssl-config-core_2.13",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/com/typesafe/ssl-config-core_2.13/0.4.3/ssl-config-core_2.13-0.4.3-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "com.fasterxml.jackson.module",
+                    "name": "jackson-module-parameter-names",
+                    "version": "2.13.2",
+                    "artifacts": [
+                        {
+                            "name": "jackson-module-parameter-names",
+                            "path": "/Users/hxmc/.m2/repository/com/fasterxml/jackson/module/jackson-module-parameter-names/2.13.2/jackson-module-parameter-names-2.13.2.jar"
+                        },
+                        {
+                            "name": "jackson-module-parameter-names",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/com/fasterxml/jackson/module/jackson-module-parameter-names/2.13.2/jackson-module-parameter-names-2.13.2-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "com.github.docker-java",
+                    "name": "docker-java-transport-zerodep",
+                    "version": "3.2.13",
+                    "artifacts": [
+                        {
+                            "name": "docker-java-transport-zerodep",
+                            "path": "/Users/hxmc/.m2/repository/com/github/docker-java/docker-java-transport-zerodep/3.2.13/docker-java-transport-zerodep-3.2.13.jar"
+                        },
+                        {
+                            "name": "docker-java-transport-zerodep",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/com/github/docker-java/docker-java-transport-zerodep/3.2.13/docker-java-transport-zerodep-3.2.13-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "io.spray",
+                    "name": "spray-json_2.13",
+                    "version": "1.3.6",
+                    "artifacts": [
+                        {
+                            "name": "spray-json_2.13",
+                            "path": "/Users/hxmc/.m2/repository/io/spray/spray-json_2.13/1.3.6/spray-json_2.13-1.3.6.jar"
+                        },
+                        {
+                            "name": "spray-json_2.13",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/io/spray/spray-json_2.13/1.3.6/spray-json_2.13-1.3.6-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "com.google.code.findbugs",
+                    "name": "jsr305",
+                    "version": "3.0.2",
+                    "artifacts": [
+                        {
+                            "name": "jsr305",
+                            "path": "/Users/hxmc/.m2/repository/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar"
+                        },
+                        {
+                            "name": "jsr305",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "com.typesafe.akka",
+                    "name": "akka-parsing_2.13",
+                    "version": "10.2.9",
+                    "artifacts": [
+                        {
+                            "name": "akka-parsing_2.13",
+                            "path": "/Users/hxmc/.m2/repository/com/typesafe/akka/akka-parsing_2.13/10.2.9/akka-parsing_2.13-10.2.9.jar"
+                        },
+                        {
+                            "name": "akka-parsing_2.13",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/com/typesafe/akka/akka-parsing_2.13/10.2.9/akka-parsing_2.13-10.2.9-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "ch.qos.logback",
+                    "name": "logback-core",
+                    "version": "1.2.11",
+                    "artifacts": [
+                        {
+                            "name": "logback-core",
+                            "path": "/Users/hxmc/.m2/repository/ch/qos/logback/logback-core/1.2.11/logback-core-1.2.11.jar"
+                        },
+                        {
+                            "name": "logback-core",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/ch/qos/logback/logback-core/1.2.11/logback-core-1.2.11-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "org.checkerframework",
+                    "name": "checker-compat-qual",
+                    "version": "2.5.5",
+                    "artifacts": [
+                        {
+                            "name": "checker-compat-qual",
+                            "path": "/Users/hxmc/.m2/repository/org/checkerframework/checker-compat-qual/2.5.5/checker-compat-qual-2.5.5.jar"
+                        },
+                        {
+                            "name": "checker-compat-qual",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/org/checkerframework/checker-compat-qual/2.5.5/checker-compat-qual-2.5.5-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "ch.qos.logback.contrib",
+                    "name": "logback-json-classic",
+                    "version": "0.1.5",
+                    "artifacts": [
+                        {
+                            "name": "logback-json-classic",
+                            "path": "/Users/hxmc/.m2/repository/ch/qos/logback/contrib/logback-json-classic/0.1.5/logback-json-classic-0.1.5.jar"
+                        },
+                        {
+                            "name": "logback-json-classic",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/ch/qos/logback/contrib/logback-json-classic/0.1.5/logback-json-classic-0.1.5-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "org.reactivestreams",
+                    "name": "reactive-streams",
+                    "version": "1.0.3",
+                    "artifacts": [
+                        {
+                            "name": "reactive-streams",
+                            "path": "/Users/hxmc/.m2/repository/org/reactivestreams/reactive-streams/1.0.3/reactive-streams-1.0.3.jar"
+                        },
+                        {
+                            "name": "reactive-streams",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/org/reactivestreams/reactive-streams/1.0.3/reactive-streams-1.0.3-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "com.fasterxml.jackson.datatype",
+                    "name": "jackson-datatype-jdk8",
+                    "version": "2.13.2",
+                    "artifacts": [
+                        {
+                            "name": "jackson-datatype-jdk8",
+                            "path": "/Users/hxmc/.m2/repository/com/fasterxml/jackson/datatype/jackson-datatype-jdk8/2.13.2/jackson-datatype-jdk8-2.13.2.jar"
+                        },
+                        {
+                            "name": "jackson-datatype-jdk8",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/com/fasterxml/jackson/datatype/jackson-datatype-jdk8/2.13.2/jackson-datatype-jdk8-2.13.2-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "org.scala-lang",
+                    "name": "scala-library",
+                    "version": "2.13.8",
+                    "artifacts": [
+                        {
+                            "name": "scala-library",
+                            "path": "/Users/hxmc/.m2/repository/org/scala-lang/scala-library/2.13.8/scala-library-2.13.8.jar"
+                        },
+                        {
+                            "name": "scala-library",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/org/scala-lang/scala-library/2.13.8/scala-library-2.13.8-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "com.google.android",
+                    "name": "annotations",
+                    "version": "4.1.1.4",
+                    "artifacts": [
+                        {
+                            "name": "annotations",
+                            "path": "/Users/hxmc/.m2/repository/com/google/android/annotations/4.1.1.4/annotations-4.1.1.4.jar"
+                        },
+                        {
+                            "name": "annotations",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/com/google/android/annotations/4.1.1.4/annotations-4.1.1.4-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "io.grpc",
+                    "name": "grpc-context",
+                    "version": "1.45.0",
+                    "artifacts": [
+                        {
+                            "name": "grpc-context",
+                            "path": "/Users/hxmc/.m2/repository/io/grpc/grpc-context/1.45.0/grpc-context-1.45.0.jar"
+                        },
+                        {
+                            "name": "grpc-context",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/io/grpc/grpc-context/1.45.0/grpc-context-1.45.0-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "org.testcontainers",
+                    "name": "testcontainers",
+                    "version": "1.17.1",
+                    "artifacts": [
+                        {
+                            "name": "testcontainers",
+                            "path": "/Users/hxmc/.m2/repository/org/testcontainers/testcontainers/1.17.1/testcontainers-1.17.1.jar"
+                        },
+                        {
+                            "name": "testcontainers",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/org/testcontainers/testcontainers/1.17.1/testcontainers-1.17.1-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "com.thesamet.scalapb",
+                    "name": "scalapb-runtime_2.13",
+                    "version": "0.11.10",
+                    "artifacts": [
+                        {
+                            "name": "scalapb-runtime_2.13",
+                            "path": "/Users/hxmc/.m2/repository/com/thesamet/scalapb/scalapb-runtime_2.13/0.11.10/scalapb-runtime_2.13-0.11.10.jar"
+                        },
+                        {
+                            "name": "scalapb-runtime_2.13",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/com/thesamet/scalapb/scalapb-runtime_2.13/0.11.10/scalapb-runtime_2.13-0.11.10-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "io.kalix",
+                    "name": "kalix-jvm-core-sdk",
+                    "version": "1.0.5",
+                    "artifacts": [
+                        {
+                            "name": "kalix-jvm-core-sdk",
+                            "path": "/Users/hxmc/.m2/repository/io/kalix/kalix-jvm-core-sdk/1.0.5/kalix-jvm-core-sdk-1.0.5.jar"
+                        },
+                        {
+                            "name": "kalix-jvm-core-sdk",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/io/kalix/kalix-jvm-core-sdk/1.0.5/kalix-jvm-core-sdk-1.0.5-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "org.rnorth.duct-tape",
+                    "name": "duct-tape",
+                    "version": "1.0.8",
+                    "artifacts": [
+                        {
+                            "name": "duct-tape",
+                            "path": "/Users/hxmc/.m2/repository/org/rnorth/duct-tape/duct-tape/1.0.8/duct-tape-1.0.8.jar"
+                        },
+                        {
+                            "name": "duct-tape",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/org/rnorth/duct-tape/duct-tape/1.0.8/duct-tape-1.0.8-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "com.typesafe",
+                    "name": "config",
+                    "version": "1.4.2",
+                    "artifacts": [
+                        {
+                            "name": "config",
+                            "path": "/Users/hxmc/.m2/repository/com/typesafe/config/1.4.2/config-1.4.2.jar"
+                        },
+                        {
+                            "name": "config",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/com/typesafe/config/1.4.2/config-1.4.2-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "org.scala-lang.modules",
+                    "name": "scala-parser-combinators_2.13",
+                    "version": "1.1.2",
+                    "artifacts": [
+                        {
+                            "name": "scala-parser-combinators_2.13",
+                            "path": "/Users/hxmc/.m2/repository/org/scala-lang/modules/scala-parser-combinators_2.13/1.1.2/scala-parser-combinators_2.13-1.1.2.jar"
+                        },
+                        {
+                            "name": "scala-parser-combinators_2.13",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/org/scala-lang/modules/scala-parser-combinators_2.13/1.1.2/scala-parser-combinators_2.13-1.1.2-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "org.slf4j",
+                    "name": "slf4j-api",
+                    "version": "1.7.36",
+                    "artifacts": [
+                        {
+                            "name": "slf4j-api",
+                            "path": "/Users/hxmc/.m2/repository/org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.jar"
+                        },
+                        {
+                            "name": "slf4j-api",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "com.google.guava",
+                    "name": "listenablefuture",
+                    "version": "9999.0-empty-to-avoid-conflict-with-guava",
+                    "artifacts": [
+                        {
+                            "name": "listenablefuture",
+                            "path": "/Users/hxmc/.m2/repository/com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "com.fasterxml.jackson.core",
+                    "name": "jackson-core",
+                    "version": "2.13.2",
+                    "artifacts": [
+                        {
+                            "name": "jackson-core",
+                            "path": "/Users/hxmc/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.13.2/jackson-core-2.13.2.jar"
+                        },
+                        {
+                            "name": "jackson-core",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.13.2/jackson-core-2.13.2-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "com.typesafe.akka",
+                    "name": "akka-stream_2.13",
+                    "version": "2.6.19",
+                    "artifacts": [
+                        {
+                            "name": "akka-stream_2.13",
+                            "path": "/Users/hxmc/.m2/repository/com/typesafe/akka/akka-stream_2.13/2.6.19/akka-stream_2.13-2.6.19.jar"
+                        },
+                        {
+                            "name": "akka-stream_2.13",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/com/typesafe/akka/akka-stream_2.13/2.6.19/akka-stream_2.13-2.6.19-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "com.google.errorprone",
+                    "name": "error_prone_annotations",
+                    "version": "2.10.0",
+                    "artifacts": [
+                        {
+                            "name": "error_prone_annotations",
+                            "path": "/Users/hxmc/.m2/repository/com/google/errorprone/error_prone_annotations/2.10.0/error_prone_annotations-2.10.0.jar"
+                        },
+                        {
+                            "name": "error_prone_annotations",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/com/google/errorprone/error_prone_annotations/2.10.0/error_prone_annotations-2.10.0-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "com.google.guava",
+                    "name": "failureaccess",
+                    "version": "1.0.1",
+                    "artifacts": [
+                        {
+                            "name": "failureaccess",
+                            "path": "/Users/hxmc/.m2/repository/com/google/guava/failureaccess/1.0.1/failureaccess-1.0.1.jar"
+                        },
+                        {
+                            "name": "failureaccess",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/com/google/guava/failureaccess/1.0.1/failureaccess-1.0.1-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "com.typesafe.akka",
+                    "name": "akka-http_2.13",
+                    "version": "10.2.9",
+                    "artifacts": [
+                        {
+                            "name": "akka-http_2.13",
+                            "path": "/Users/hxmc/.m2/repository/com/typesafe/akka/akka-http_2.13/10.2.9/akka-http_2.13-10.2.9.jar"
+                        },
+                        {
+                            "name": "akka-http_2.13",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/com/typesafe/akka/akka-http_2.13/10.2.9/akka-http_2.13-10.2.9-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "io.kalix",
+                    "name": "kalix-sdk-protocol",
+                    "version": "1.0.15",
+                    "artifacts": [
+                        {
+                            "name": "kalix-sdk-protocol",
+                            "path": "/Users/hxmc/.m2/repository/io/kalix/kalix-sdk-protocol/1.0.15/kalix-sdk-protocol-1.0.15.jar"
+                        },
+                        {
+                            "name": "kalix-sdk-protocol",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/io/kalix/kalix-sdk-protocol/1.0.15/kalix-sdk-protocol-1.0.15-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "com.fasterxml.jackson.datatype",
+                    "name": "jackson-datatype-jsr310",
+                    "version": "2.13.2",
+                    "artifacts": [
+                        {
+                            "name": "jackson-datatype-jsr310",
+                            "path": "/Users/hxmc/.m2/repository/com/fasterxml/jackson/datatype/jackson-datatype-jsr310/2.13.2/jackson-datatype-jsr310-2.13.2.jar"
+                        },
+                        {
+                            "name": "jackson-datatype-jsr310",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/com/fasterxml/jackson/datatype/jackson-datatype-jsr310/2.13.2/jackson-datatype-jsr310-2.13.2-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "io.grpc",
+                    "name": "grpc-api",
+                    "version": "1.45.0",
+                    "artifacts": [
+                        {
+                            "name": "grpc-api",
+                            "path": "/Users/hxmc/.m2/repository/io/grpc/grpc-api/1.45.0/grpc-api-1.45.0.jar"
+                        },
+                        {
+                            "name": "grpc-api",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/io/grpc/grpc-api/1.45.0/grpc-api-1.45.0-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "io.grpc",
+                    "name": "grpc-netty-shaded",
+                    "version": "1.45.0",
+                    "artifacts": [
+                        {
+                            "name": "grpc-netty-shaded",
+                            "path": "/Users/hxmc/.m2/repository/io/grpc/grpc-netty-shaded/1.45.0/grpc-netty-shaded-1.45.0.jar"
+                        },
+                        {
+                            "name": "grpc-netty-shaded",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/io/grpc/grpc-netty-shaded/1.45.0/grpc-netty-shaded-1.45.0-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "net.java.dev.jna",
+                    "name": "jna",
+                    "version": "5.8.0",
+                    "artifacts": [
+                        {
+                            "name": "jna",
+                            "path": "/Users/hxmc/.m2/repository/net/java/dev/jna/jna/5.8.0/jna-5.8.0.jar"
+                        },
+                        {
+                            "name": "jna",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/net/java/dev/jna/jna/5.8.0/jna-5.8.0-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "com.typesafe.akka",
+                    "name": "akka-http-core_2.13",
+                    "version": "10.2.9",
+                    "artifacts": [
+                        {
+                            "name": "akka-http-core_2.13",
+                            "path": "/Users/hxmc/.m2/repository/com/typesafe/akka/akka-http-core_2.13/10.2.9/akka-http-core_2.13-10.2.9.jar"
+                        },
+                        {
+                            "name": "akka-http-core_2.13",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/com/typesafe/akka/akka-http-core_2.13/10.2.9/akka-http-core_2.13-10.2.9-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "io.perfmark",
+                    "name": "perfmark-api",
+                    "version": "0.23.0",
+                    "artifacts": [
+                        {
+                            "name": "perfmark-api",
+                            "path": "/Users/hxmc/.m2/repository/io/perfmark/perfmark-api/0.23.0/perfmark-api-0.23.0.jar"
+                        },
+                        {
+                            "name": "perfmark-api",
+                            "classifier": "sources",
+                            "path": "/Users/hxmc/.m2/repository/io/perfmark/perfmark-api/0.23.0/perfmark-api-0.23.0-sources.jar"
+                        }
+                    ]
+                }
+            ]
+        },
+        "tags": [
+            "test"
+        ]
+    }
+}

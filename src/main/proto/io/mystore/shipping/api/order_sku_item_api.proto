@@ -71,7 +71,7 @@ service OrderSkuItemService {
 
   rpc GetOrderSkuItem(GetOrderSkuItemRequest) returns (GetOrderSkuItemResponse) {
     option (google.api.http) = {
-      get: "/order-sku-items"
+      get: "/order-sku-items/{order_sku_item_id}"
     };
   }
 }
